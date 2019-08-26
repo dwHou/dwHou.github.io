@@ -95,10 +95,11 @@
                             <div id="body">
                      
                                 <p>
-                                E-mail:    
+                                <b>E-mail:</b>    
                                 <font face="courier" id="email" style="display:inline;">
                                     dewanghou@gmail.com
-                                    <a href="#' onclick="emailScramble1.initAnimateBubbleSort();return false;">
+                                <b>Address:</b>    
+                                    <a href="#' onclick="emailScramble1.initAnimateBubbleSort();emailScramble2.initAnimateBubbleSort();insertpic();return false;">
                                         unscramble                                                                            
                                     </a> 
                                 </font>
@@ -107,21 +108,15 @@
                                      'emailScramble1','ac.hi@eodouamglwnmg',
                                      [4,17,16,7,14,10,2,8,1,18,9,13,19,11,15,3,5,12,6]);
                                 </script>                                                                                                                   
-
+                                <script>                                                                                                           
+                                     emailScramble2 = new scrambledString(document.getElementById('email'),                                                                        
+                                     'emailScramble2','Shenzhen,China',
+                                     [1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
+                                </script>   
                                 </p>
                                 
-                                <p>
-                                Address:
-                                <font face="courier" id="address" style="display:inline;">
-                                    Shenzhen
-                                    
-                                    
-                                    <a href="#" onclick="insertpic();return false;">
-                                        reveal
-                                    </a>
-                  
-                                   
-                                </font>
+                                
+                               
                                 <div id="insert"></div>
                                 
                                 <!-- 为什么onclick没反应 https://stackoverflow.com/questions/29980622/using-innerhtml-from-an-onclick-function 
