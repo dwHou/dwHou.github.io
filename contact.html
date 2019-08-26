@@ -54,9 +54,7 @@
 <script src="./js/hidebib.js"></script>   
 <script>
     function insertpic(){
-        var insertDiv = document.getElementById("insert");
-        alert(insertDiv.innerHTML);
-        insertDiv.innerHTML = "<p>This is inserted.</p>";
+        document.getElementById("insert").innerHTML = "<p>This is inserted.</p>";
         }
 </script>     
 
@@ -120,7 +118,7 @@
                                     
                                     <a href="#' onclick="insertpic()">
                       
-                                        revea
+                                        reveal
                   
                                     </a> 
                                 </font>
