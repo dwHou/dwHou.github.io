@@ -15,7 +15,7 @@ function scrambledString(tag, objName, initScrambledString, initScrambledStringI
 
     this.rescramble();
     //this.tag.innerHTML = this.string + '<br>[ <a href="#" onClick="' + this.objName + '.initAnimatedBubbleSort();return false;">reveal</a> ]';
-    this.tag.innerHTML = this.string + '<br>[ <a href="#" onClick="' + this.objName + '.initAnimatedBubbleSort();">reveal</a> ]';
+    this.tag.innerHTML = this.string + '<br>[ <a href="#" onClick="' + this.objName + '.initAnimatedBubbleSort();insertpic();return false;">reveal</a> ]';//加了个图片。。但这样把代码改得很乱，没有模块化。
 }
 
 function rescramble() {
