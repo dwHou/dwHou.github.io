@@ -51,7 +51,14 @@
 
 </script>
 <script src="./js/scramble.js"></script>
-<script src="./js/hidebib.js"></script>        
+<script src="./js/hidebib.js"></script>   
+<script>
+    function insertpic(){
+        var insertDiv = document.getElementById("insert")
+        alert（insertDiv.innerHTML）
+        insertDiv.innerHTML = "<p>This is inserted.</p>"
+        }
+</script>     
 
 
     </head>
@@ -110,13 +117,7 @@
                                 <font face="courier" id="address" style="display:inline;">
                                     Shenzhen
                                     
-                                    <script>
-                                    function insertpic(){
-                                          var insertDiv = document.getElementById("insert")
-                                          alert（insertDiv.innerHTML）
-                                          insertDiv.innerHTML = "<p>This is inserted.</p>"
-                                    }
-                                    </script>
+                                    
                                     <a href="#' onclick="insertpic()">
                       
                                         reveal
