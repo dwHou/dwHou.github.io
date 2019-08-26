@@ -14,7 +14,8 @@ function scrambledString(tag, objName, initScrambledString, initScrambledStringI
     this.bubbleSortBookmark = 0;
 
     this.rescramble();
-    this.tag.innerHTML = this.string + '<br>[ <a href="#" onClick="' + this.objName + '.initAnimatedBubbleSort();return false;">reveal</a> ]';
+    //this.tag.innerHTML = this.string + '<br>[ <a href="#" onClick="' + this.objName + '.initAnimatedBubbleSort();return false;">reveal</a> ]';
+    this.tag.innerHTML = this.string + '<br>[ <a href="#" onClick="' + this.objName + '.initAnimatedBubbleSort();">reveal</a> ]';
 }
 
 function rescramble() {
