@@ -110,15 +110,22 @@
                                 <font face="courier" id="address" style="display:inline;">
                                     Shenzhen
                                     
-                                    <br>
-                                    <a href="#' onclick="insertpic();">
+                                    <script>
+                                    function insertpic(){
+                                          var insertDiv = document.getElementById("insert")
+                                          alert（insertDiv.innerHTML）
+                                          insertDiv.innerHTML = "<p>This is inserted.</p>"
+                                    }
+                                    </script>
+                                    <a href="#' onclick="insertpic()">
                       
                                         reveal
                   
                                     </a> 
                                 </font>
-                                <img src="images/pkusz.png">
-                                
+                                <div id="insert"><p>This will be overwritten.</p></div>
+                                <!--<img src="images/pkusz.png"> -->
+                                <!-- JS插入HTML的方法 https://www.jianshu.com/p/f54897f689cf -->
                                                                                                                                                    
 
                                 </p>
