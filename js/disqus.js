@@ -1,6 +1,6 @@
 
 
-var disqus_shortname = 'colah'; 
+var disqus_shortname = 'dwhou'; 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
         dsq.src = 'http://disqus.com/forums/lambdaoinks/embed.js';
@@ -9,7 +9,7 @@ var disqus_shortname = 'colah';
 
     (function () {
       var s = document.createElement('script'); s.async = true;
-      s.src = 'http://disqus.com/forums/lambdaoinks/count.js';
+      s.src = 'https://dwhou.disqus.com/embed.js';
       (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
     }());
 
