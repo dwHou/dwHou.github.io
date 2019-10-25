@@ -151,7 +151,12 @@
      
   </ul>
 
-  
+  <h2>ffmpeg</h2>
+  <ul>
+
+  <li><b>示例:批量下采样</b> for %a in ("*.y4m") do ffmpeg -i "%a" -vf scale=iw/4:ih/4 -sws_flags bicubic "E:\...path...\%~na_bicubic_l.y4m"</li>
+  <li>注: 对yuv文件进行操作时要-s指明分辨率，因为它没有被封装，ffmpeg读不到这些信息</li>
+  </ul>
   
 
 
