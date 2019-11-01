@@ -118,6 +118,14 @@
     <li><b>A unified framework</b> suitable for image and video super-resolution tasks. It is also easy to adapt to other restoration tasks, e.g., deblurring, denoising, etc.</li>
     <li><b>State of the art:</b> It includes several winning methods in competitions: such as ESRGAN (PIRM18), EDVR (NTIRE19).</li>
     <li><b>Easy to extend:</b> It is easy to try new research ideas based on the code base.</li>
+
+数据集准备
+    为了更快的IO速度，训练数据使用了LDMB格式。不过验证/测试数据就直接读了(using image folder)。如果你不想使用LMDB，也可以使用image folder.
+    lightning memory-mapped database 基于B+树索引,高效快速的内存映射数据库。
+
+
+    
+    
  </pre>
   
 
