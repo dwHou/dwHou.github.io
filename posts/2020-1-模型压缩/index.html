@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>模型压缩</title>
+
+        <link rel="stylesheet" href="../../fonts/Serif/cmun-serif.css" />
+        <link rel="stylesheet" href="../../fonts/Serif-Slanted/cmun-serif-slanted.css" />
+
+        <!--BOOTSTRAP-->
+        <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <!--mobile first-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--removed html from url but still is html-->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <!--font awesome-->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+        <!--fonts: allan & cardo-->
+        <link href="http://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
+
+        <link href="../../css/sticky-footer-navbar.css" rel="stylesheet">
+
+        <link href="../../css/default.css" rel="stylesheet">
+
+        <link href="../../comments/inlineDisqussions.css" rel="stylesheet">
+
+        <!--Highlight-->
+        <link href="../../highlight/styles/github.css" rel="stylesheet">
+
+        <link href="../../favicon.ico" rel="shortcut icon" />
+
+        <!--<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+        <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <style>
+        .post{width:170px;min-height:175px;padding-left:5px;padding-right:5px;float:left;border-left:1px solid #CCC;background-color:white;}
+        div a:first-of-type .post { border-left: none; }
+        .post:hover {filter: brightness(90%);}
+        .post h3{margin:5px;font-size:75%;text-align:center}
+        .post h4{margin:0px;font-size:50%;text-align:center}
+        .post img{margin:0px;padding:2px;margin-bottom:10px;width:100%;height:155px}
+        </style>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-49811703-1', 'dwHou.github.io');
+          ga('require', 'linkid', 'linkid.js');
+          ga('require', 'displayfeatures');
+          ga('send', 'pageview');
+
+        </script>
+
+    </head>
+
+    <body>
+        <div id="wrap">
+            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+                <div class="container">
+                    <!--Toggle header for mobile-->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand active" href="../../" style="font-size:20px;">dwHou's blog</a>
+                    </div>
+                    <!--normal header-->
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="../../"><span class="glyphicon glyphicon-pencil"></span>  Blog</a></li>
+                            <li><a href="../../about.html"><span class="glyphicon glyphicon-user"></span>  About</a></li>
+                            <li><a href="../../contact.html"><span class="glyphicon glyphicon-envelope"></span>  Contact</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </nav>
+
+
+            <div id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1>模型压缩加速</h1>
+                            <div style="font-size: 170%;">持续更新</div>
+                            <br>
+                            <div class="info">
+    <p style="font-family:CMSS; font-size:120%">Posted on Oct.24, 2019</p>
+
+    <!--
+        by dwHou
+    -->
+</div>
+</br>
+
+  
+  <style>
+    ul li {
+      margin-top: 12px;
+    }
+
+    .tight-list li {
+      margin-top: 6px;
+    }
+  </style>
+
+  
+
+  <h2>剪枝和共享</h2>
+  <ul>
+   
+  <li>删除对准确率影响不大的参数</li>
+  
+     
+  </ul>
+
+  <h2>低秩分解</h2>
+  <ul> 
+  <li>使用矩阵对参数进行分解估计</li>   
+  </ul>
+  
+  <h2>转移、紧凑卷积核</h2>
+  <ul> 
+  <li>设计特别的卷积核来保存参数</li>   
+  </ul>
+  
+  <h2>知识蒸馏</h2>
+  <ul> 
+  <li>训练一个更紧凑的神经网络来从大的模型蒸馏知识</li>   
+  </ul>
+  
+  
+  <h2>论文</h2>
+  <ul> 
+  <li><a href="https://github.com/he-y/Awesome-Pruning" Awesome-Pruning and related links a></li>   
+  </ul>
+  
+  <h2>工业界项目</h2>
+  <ul> 
+  <li>Tencent-ncnn</li>
+  腾讯的移动端开源框架：<a href="https://github.com/he-y/Awesome-Pruning" a>
+  <li>Tencent-pocketFlow</li>
+  腾讯的专门用于模型压缩的框架 
+  <li>Nvidia-tensorRT</li>
+  有相当的集成度的框架，NVcaffe，可剪枝与量化，nvidia维护的caffe版本
+  <li>facebook-Glow</li>
+  用于推测时inference，集成于pytorch中
+  <li>intel-neon</li>
+  </ul>
+  
+  
+
+  <h2>新热点：神经网络架构搜索(NAS)</h2>
+  
+  
+  
+
+<!-- 加载出评论，是使用Disqus的论坛短名（shortname）
+A shortname is the unique identifier assigned to a Disqus site. 
+
+https://segmentfault.com/a/1190000005773009
+https://help.disqus.com/en/articles/1717111-what-s-a-shortname
+https://blog.csdn.net/weixin_34327761/article/details/89630337
+   -->
+
+<div id="disqus_thread"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+<script src="../../comments/inlineDisqussions.js"></script>
+<script src="../../js/disqus.js"></script>
+
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="footer">
+                <div class="container">
+                    Built by <a href="https://github.com/oinkina">Oinkina</a> with
+                    <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+                    using <a href="http://getbootstrap.com/">Bootstrap</a>,
+                    <a href="http://www.mathjax.org/">MathJax</a>,
+                    <a href="http://disqus.com/">Disqus</a>,
+                    <a href="https://github.com/unconed/MathBox.js">MathBox.js</a>,
+                    <a href="http://highlightjs.org/">Highlight.js</a>,
+                    and <a href="http://ignorethecode.net/blog/2010/04/20/footnotes/">Footnotes.js</a>.
+                </div>
+            </div>
+        </div>
+
+    <!-- jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+    <script src="../../bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="../../highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script src="../../js/footnotes.js"></script>
+
+    <script src="../../comments/inlineDisqussions.js"></script>
+
+    <noscript>Enable JavaScript for footnotes, Disqus comments, and other cool stuff.</noscript>
+
+    </body>
+
+</html>
