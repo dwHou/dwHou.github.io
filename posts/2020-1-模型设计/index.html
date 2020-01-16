@@ -104,6 +104,10 @@
 </div>
 </br>
 
+  <script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+  <!-- 为了数学公式更好显示，使用了mathjax -->
   
   <style>
     ul li {
@@ -132,8 +136,13 @@
   
   注1：统一假设输入和卷积核都是正方形。<br>
   注2：每层还包含1个Bias参数，这里为了简洁就省略了。<br>
+  注3：$$ M = (X - K + 2*Padding)/ Stride + 1 $$,X表示输入矩阵尺寸。
+  
   <li>1.2 卷积神经网络整体的时间复杂度</li>
   $$ Time\sim O(\sum_{l=1}^{D}M^{2}\cdot K^{2}\cdot C_{l-1}\cdot C_{l})$$
+  可见，CNN整体的时间复杂度并不神秘，只是所有卷积层的时间复杂度累加而已。
+  简而言之，层内连乘，层间累加。
+  
   </ul>
   
   
