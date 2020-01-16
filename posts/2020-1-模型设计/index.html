@@ -136,7 +136,7 @@
   
   注1：统一假设输入和卷积核都是正方形。<br>
   注2：每层还包含1个Bias参数，这里为了简洁就省略了。<br>
-  注3：$$ M = (X - K + 2*Padding)/ Stride + 1 $$,X表示输入矩阵尺寸。
+  注3：$$ M = (X - K + 2*Padding)/ Stride + 1 ,$$X表示输入矩阵尺寸。
   
   <li>1.2 卷积神经网络整体的时间复杂度</li>
   $$ Time\sim O(\sum_{l=1}^{D}M^{2}\cdot K^{2}\cdot C_{l-1}\cdot C_{l})$$
