@@ -231,7 +231,9 @@
     print(10 / n)
   </pre>
   <li>这就是logging的好处，它允许你指定记录信息的级别，有debug，info，warning，error等几个级别，当我们指定level=INFO时，logging.debug就不起作用了。</li>
-  
+  <li><b>总结</b>相比print，具备如下优点：</li>
+  <li>可以通过设置不同的日志等级，在release版本中只输出重要信息，而不必显示大量的调试信息；</li>
+  <li>print将所有信息都输出到标准输出中，严重影响开发者从标准输出中查看其它数据；logging则可以由开发者决定将信息输出到什么地方，以及怎么输出；</li>
   </ul>
 
 
