@@ -218,6 +218,19 @@
   <ul>
   <li>如果要比较爽地设置断点、单步执行，就需要一个支持调试功能的IDE。目前比较好的Python IDE有：VS Code，Pycharm</li>
   <li>虽然用IDE调试起来比较方便，但是最后你会发现，<font color="red"><b>logging</b></font>才是终极武器。</li>
+  <li>print()——打印，最大坏处是将来还要删掉它，不然运行结果会包含很多垃圾信息</li>
+  <li>assert——断言，程序中如果到处充斥着assert，和print()相比也好不到哪去。不过，启动Python解释器时可以用-O参数来关闭assert</li>
+  <li>logging——不会抛出错误，而且可以输出到文件</li>
+  <pre>
+    import logging
+    logging.basicConfig(level=logging.INFO)
+
+    s = '0'
+    n = int(s)
+    logging.info('n = %d' % n)
+    print(10 / n)
+  </pre>
+  <li>这就是logging的好处，它允许你指定记录信息的级别，有debug，info，warning，error等几个级别，当我们指定level=INFO时，logging.debug就不起作用了。</li>
   
   </ul>
 
