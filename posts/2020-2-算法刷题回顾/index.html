@@ -138,8 +138,9 @@
   <ul>
 
   <li><b>斐波那契数列(如:爬楼梯)</b></li>
-  <li></li>
-
+  <li>fib1 \(O(2^{n}\): f(n-1)+f(n-2)，因为n每增1，新增几乎成倍的重复计算</li>
+  <li>fib2 \(O(n)\): list.append(li[-1]+li[-2])，空间换时间</li>
+  <li>fib3 \(O(n)\): c=a+b a=b b=c，空间为O(1),速度也比fib2快(append略微耗时)</li>
   </ul>
  
 
