@@ -260,6 +260,42 @@
 
   </ul>
 
+  <h2>搜索</h2>
+  <ul>
+      <li><b>BFS</b></li>
+      <pre>
+          性价比之王的宽度优先搜索
+          <code>
+#字典存图
+graph = {
+    "A": ["B", "C"],
+    "B": ["A", "C", "D"],
+    "C": ["A", "B", "D", "E"],
+    "D": ["B", "C", "E", "F"],
+    "E": ["C", "D"],
+    "F": ["D"]
+}
+
+#传入参数，至少是图graph和起始点vertex
+def BFS(graph, s):
+    queue = []
+    queue.append(s)
+    #python里的集合，用的是哈希表(hash)。查找比数组要快些。
+    seen = {}
+    seen.add(s)
+
+    while (len(queue) > 0):
+        vertex = queue.pop(0)
+        nodes = graph[vertex]
+        for w in nodes:
+            if w not in seen:
+                queue.append(w)
+                seen.add(w)
+        print(vertex)
+          </code>
+      </pre>
+      <li><b>DFS</b></li>
+  </ul>
 
   <h2>leetcode使用</h2>
   <ul>
