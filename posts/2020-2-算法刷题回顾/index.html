@@ -281,7 +281,7 @@ def BFS(graph, s):
     queue = []
     queue.append(s)
     #python里的集合，用的是哈希表(hash)。查找比数组要快些。
-    seen = {}
+    seen = set()
     seen.add(s)
 
     while (len(queue) > 0):
