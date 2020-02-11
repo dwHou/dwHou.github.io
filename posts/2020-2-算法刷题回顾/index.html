@@ -429,6 +429,39 @@ class Solution:
 
         return -1 if dp[amount]==MAX else dp[amount]
        </code>
+  </pre>
+
+  <pre>
+      <b>LeetCode 42. 接雨水</b>
+      给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+      <b>思路：</b> <font color="#dc143c">每个位置上的盛水数目 = min(左侧最高，右侧最高) - 当前高度</font>
+      要每个索引位置来看待这个问题。这才是计算机思维。
+      <code>
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        if not height:
+            return 0
+
+        dp_left = self.max_left(height)
+        #list(reversed(s))也可用s[::-1]
+        dp_right = (self.max_left(list(reversed(height))))[::-1]
+        rain = 0
+        #要每个索引位置来看待这个问题。
+        for i in range(len(height)):
+            rain += min(dp_left[i], dp_right[i]) - height[i]
+        return rain
+
+
+    def max_left(self, height):
+        dp_left = [-100]*len(height)
+        #优化了一下代码，max_left是左侧及当前的最大位置。这样可以避免min(dp_left[i], dp_right[i]) - height[i]出现负数的情况，减少一个if语句。
+        dp_left[0] = height[0]
+        for i in range(1, len(height)):
+            dp_left[i] = max(dp_left[i-1], height[i])
+        return dp_left
+      </code>
+  </pre>
+<pre>
 1.确定状态
 <b>根据两个思想：①最后一步 ②子问题</b>
 f(X)=如:最少用多少枚硬币拼出X，X为问题规模
@@ -452,7 +485,7 @@ dp[i] = min{dp[i-2]+1,dp[i-5]+1,dp[i-7]+1}
 4.计算顺序
 一般按从小到大。
 比如这里，计算f[X]时，f[X-2]、f[X-5]、f[X-7]应该都已经得到结果了，它们在for循环里趟次靠前。
-   </pre>
+</pre>
   </ul>
 
 
