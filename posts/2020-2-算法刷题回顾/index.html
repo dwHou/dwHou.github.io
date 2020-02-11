@@ -331,14 +331,17 @@ class Solution:
         queue = []
         queue.append(student)
         while len(queue):
-            <font color="#dc143c">#出队列</font>
-            j = queue.pop(0)
-            #动作
-            M[j][j] = 2
-            for k in range(len(M[0])):
-                if M[j][k] == 1 and M[k][k] == 1:
-              #M[j][k]==1保证距离为1的入队，M[k][k]==1保证没有被遍历到的才<font color="#dc143c">入队</font>
-                      queue.append(k)
+            size = len(queue)
+            #你看这个i没用到。其实这个if写不写oj都能通过。但这条语句控制了每轮搜索的点到起点的距离相同。按距离一批一批地清晰划分出pop出队的点。
+            for i in range(0, size) :
+                <font color="#dc143c">#出队列</font>
+                j = queue.pop(0)
+                #动作
+                M[j][j] = 2
+                for k in range(len(M[0])):
+                    if M[j][k] == 1 and M[k][k] == 1:
+                  #M[j][k]==1保证距离为1的入队，M[k][k]==1保证没有被遍历到的才<font color="#dc143c">入队</font>
+                          queue.append(k)
           </code>
       </pre>
 
