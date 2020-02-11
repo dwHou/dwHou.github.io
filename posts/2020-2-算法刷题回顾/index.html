@@ -326,6 +326,30 @@ class Solution:
       </pre>
   </ul>
 
+  <h2>序列化</h2>
+  1.将内存中的数据持久化存储时 2.网络传输时 需要序列化。
+  <ul>
+      <li><b>什么是序列化</b><br>
+          将“内存”中结构化的数据变成“字符串”的过程<br>
+          序列化：object to string - 反序列化：string to object
+      </li>
+      <li><b>常用方式</b></li>
+      <p>    •XML</p>
+      <p>    •Json</p>
+      <p>    •Thrift(by Facebook)</p>
+      <p>    •ProtoBuf(by Google)</p>
+      <li><b>序列化算法</b></li>
+      一些序列化的例子：<br>
+• 比如一个数组， 里面都是整数， 我们可以简单的序列化为”[1,2,3]”<br>
+• 一个整数链表， 我们可以序列化为， ”1->2->3”<br>
+• 一个哈希表(HashMap)， 我们可以序列化为， ”{\”key\”: \”value\”}”<br>
+      <li>二叉树如何序列化</li>
+你可以使用任何你想要用的方法进行序列化， 只要保证能够解析回来即可。
+LintCode 采用的是 BFS 的方式对二叉树数据进行序列化， 这样的好处是， 你可以更为容易的自己画
+出整棵二叉树。
+      
+  </ul>
+
   <h2>leetcode使用</h2>
   <ul>
       <li><b>刷题清单</b> <a href="https://github.com/CyC2018/CS-Notes/blob/master/notes/Leetcode%20%E9%A2%98%E8%A7%A3%20-%20%E7%9B%AE%E5%BD%95.md">CS-Notes|Leetcode题解-目录.md</a></li>
