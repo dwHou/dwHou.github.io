@@ -295,6 +295,36 @@ def BFS(graph, s):
           </code>
       </pre>
       <li><b>DFS</b></li>
+      BFS遍历里queue改为stack，vertex = stack.pop()就成了DFS遍历。<br>
+      如果面试官不特别要求，dfs都可以用递归的方式来实现。<br>
+      注意三要素：<font color="#ff7f50" style="animation: ease-in">#定义 #出口 #拆解<font>
+      <pre>
+          <b>LeetCode 93. 复原IP地址</b> 给定一个只包含数字的字符串，复原它并返回所有可能的IP地址格式。
+          示例 输入: "25525511135"  输出: ["255.255.11.135", "255.255.111.35"]
+          <code>
+class Solution:
+    def restoreIpAddresses(self, s: str) -> List[str]:
+        #深度优先搜索
+        <font color="#dc143c">#定义</font>
+        def dfs(s, part, ips, ip):
+            <font color="#dc143c">#出口</font>
+            if part == 4:
+                if s == "":
+                    ips.append(ip[1:])
+                return
+            <font color="#dc143c">#拆解</font>
+            for i in range(1, 4):
+                if i <= len(s):
+                    if int(s[:i]) <= 255:
+                        dfs(s[i:], part+1, ips, ip+"."+s[:i])
+                    if s[0] == "0": break
+              
+        ips = []
+        dfs(s, 0, ips, "")
+        return ips
+          </code>
+
+      </pre>
   </ul>
 
   <h2>leetcode使用</h2>
