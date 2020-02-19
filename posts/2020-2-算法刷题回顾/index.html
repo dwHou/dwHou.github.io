@@ -505,7 +505,7 @@ class Solution:
     print(s)
 
 object1 = Solution()
-object1.print_name('绑定方法对象，实例是隐含的')
+object1.print_name('绑定方法对象，实例是隐含的') #lintcode后台就是这么做。
 
 object2 = Solution()
 Solution.print_name(object2, '未绑定的方法对象，需要传递一个实例')
