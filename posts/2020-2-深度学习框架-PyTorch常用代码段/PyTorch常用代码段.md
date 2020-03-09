@@ -2,6 +2,21 @@
 
 这里是PyTorch中常用代码段的一份整理，并且持续更新，初稿在参考资料[1](张皓：PyTorch Cookbook)的基础上进行编辑补充，方便使用时查阅。
 
+```python
+#本文需要用到以下包
+import collections
+import os
+import shutil
+import tqdm
+
+import numpy as np
+import PIL.Image
+import torch
+import torchvision
+```
+
+
+
 ## 1.基本配置
 ### 导入包和版本查询
 ```python
@@ -64,6 +79,71 @@ nvidia-smi --gpu-reset -i [gpu_id]
 ```
 
 ## 2.张量(Tensor)处理
+
+### 张量基本信息
+
+```python
+tensor.type()  #Data type
+tensor.size()  #Shape of tensor. 
+tensor.dim()   #Number of dimensions
+```
+
+### 数据类型转换
+
+```python
+#Set default tensor type. Float in PyTorch is much faster than double.
+torch.set_default_tensor_type(torch.FloatTensor) #or torch.cuda.FloatTensor
+
+#Type conversions.
+tensor = tensor.cuda()
+tensor = tensor.cpu()
+tensor = tensor.float()
+tensor = tensor.long()
+```
+
+### torch.Tensor↔np.ndarray
+
+除了CharTensor，其他所有CPU上的张量都支持转换为numpy格式然后转换回来。
+
+```python
+#torch.Tensor → np.ndarray.
+ndarray = tensor.cpu().numpy()
+
+#np.ndarray → torch.Tensor.
+tensor = torch.from_numpy(ndarray).float()
+tensor = torch.from_numpy(ndarray.copy()).float()  #If ndarray has negative stride.
+```
+
+### torch.Tensor↔PIL.Image
+
+PyTorch中的张量默认采用N×C×H×W的顺序，并且数据范围在[0, 1]，需要进行转置和规范化。
+
+```python
+# torch.Tensor → PIL.Image.
+image = PIL.Image.fromarray(torch.clamp(tensor*255, min=0,max=255).byte().permute(1,2,0).cpu().numpy())
+image = torchvision.transforms.functional.to_pil_image(tensor) #Equivalently way
+
+# PIL.Image → torch.Tensor.
+path = r'./figure.jpg' #r'string'是raw_string用来防止\ 自动转义的
+tensor = torch.from_numpy(np.asarray(PIL.Image.open(path))).permute(2,0,1).float()/255
+tensor = torchvision.transforms.functional.to_tensor(PIL.Image.open(path)) #Equivalently way
+```
+
+### np.ndarray↔PIL.Image
+
+```python
+# np.ndarray → PIL.Image.
+image = PIL.Image.fromarray(ndarray.astype(np.unit8))
+
+# PIL.Image → np.ndarray.
+ndarray = np.asarray(PIL.Image.open(path))
+```
+
+
+
+
+
+https://www.zhangshengrong.com/p/Ap1Zp295N0/
 
 ## 3.模型定义和操作
 
