@@ -166,7 +166,10 @@
   <ul>
       <li><a href="https://www.runoob.com/linux/linux-shell-variable.html">shell script编程</a> </li>
       <li>注1 ：变量名和等号之间不能有空格，这可能和你熟悉的所有编程语言都不一样。</li>
-      <li>注2 ：推荐给所有变量加上花括号，这是个好的编程习惯。lastname='hou' name=${lastname}'dewang'</li>
+      <li>注2 ：推荐给所有变量加上花括号，这是个好的编程习惯。${ }会比较精确的界定变量名称的范围。lastname='hou' name=${lastname}'dewang'</li>
+      <li>注3 ：使用变量的时候才加美元符（$）</li>
+      <li>注4 ：字符串可以用单引号，双引号，也可不用引号。但单引号有限制，双引号里则有①可以有变量②可以出现转义字符的优点</li>
+      <li>注5 ：建议使用$(). 反引号``和$()的作用相同，用于命令替换（command substitution），即完成引用命令的执行，将其结果替换出来，与变量替换${}差不多。反引号是一个老的用法，$()是新的用法</li>
   </ul>
 
   <h2>Chrome</h2>
