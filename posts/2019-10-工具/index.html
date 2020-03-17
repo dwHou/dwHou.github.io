@@ -167,9 +167,11 @@
       <li><a href="https://www.runoob.com/linux/linux-shell-variable.html">shell script编程</a> </li>
       <li>注1 ：变量名和等号之间不能有空格，这可能和你熟悉的所有编程语言都不一样。</li>
       <li>注2 ：推荐给所有变量加上花括号，这是个好的编程习惯。${ }会比较精确的界定变量名称的范围。lastname='hou' name=${lastname}'dewang'</li>
+      <li><a href="https://www.cnblogs.com/fengbohello/p/5954895.html">${}搭配→Linux Shell截取字符串</a> </li>
       <li>注3 ：使用变量的时候才加美元符（$）</li>
       <li>注4 ：字符串可以用单引号，双引号，也可不用引号。但单引号有限制，双引号里则有①可以有变量②可以出现转义字符的优点</li>
       <li>注5 ：建议使用$(). 反引号``和$()的作用相同，用于命令替换（command substitution），即完成引用命令的执行，将其结果替换出来，与变量替换${}差不多。反引号是一个老的用法，$()是新的用法</li>
+      <li>注6 ：LogFile="./output.txt"可以搭配>>$LogFile输出日志。</li>
   </ul>
 
   <h2>Chrome</h2>
@@ -206,7 +208,11 @@
   <li>注: 对yuv文件进行操作时要-s指明分辨率，因为它没有被封装，ffmpeg读不到这些信息</li>
   <li>使用ffmpeg视频编解码 <a href="https://trac.ffmpeg.org/wiki/Encode/H.265"> H.265指南 </a> </li>
  见Passing Options <a href="https://x265.readthedocs.io/en/default/cli.html#loop-filters">docs</a><br>
-      如可能为 -x265-params --no-sao
+      ffmpeg -i rawvideo.y4m -c:v libx265 -x265-params bframes=0:no-deblock=1:no-sao=1:qp=37 qp37.mp4<br>
+      不过编解码组不怎么用ffmpeg，而是用更好用的HM(HEVC Test Model)，修改cfg文件就好了。<br>
+      这两个是HEVC的两种编码配置，你用的HM的话，在cfg文件夹里面应该有各种编码配置。如果用的x265，需要自己通过命令行去配置各种参数。
+
+
   <li>ffplay -video_size 640x480 file.yuv</li>
 
   </ul>
