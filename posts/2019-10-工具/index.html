@@ -203,8 +203,18 @@
   Hadoop is the framework that has the storage and the processing unit. The storage unit of Hadoop is called HDFS - Hadoop Distributed File System. The processing unit is called MapReduce.
   <ul>
       <li>命令基本格式 hdfs dfs -cmd < args ></li>
-      <li><b>hdfs dfs <font color="red">VS</font> hadoop dfs <font color="red">VS</font> hadoop fs</b></li>
-      <li></li>
+      <li><b>hadoop fs <font color="red">VS</font> hadoop dfs <font color="red">VS</font> hdfs dfs</b></li>
+      three commands which appears same but have minute differences<br>
+      <pre>hadoop fs < args >
+          FS relates to a generic file system which can point to any file systems like local, HDFS etc. So this can be used when you are dealing with different file systems such as Local FS, (S)FTP, S3, and others.
+      </pre><br>
+      <pre>hadoop dfs < args >
+          dfs is very specific to HDFS. would work for operation relates to HDFS. This has been deprecated and we should use hdfs dfs instead.
+      </pre><br>
+      <pre>hdfs dfs < args >
+          same as 2nd i.e would work for all the operations related to HDFS and is the recommended command instead of hadoop dfs.
+      </pre><br>
+      <li><a href="https://hadoop.apache.org/docs/r1.0.4/cn/hdfs_shell.html#ls">hdfs shell命令</a> </li>
   </ul>
 
   <h2>ffmpeg</h2>
