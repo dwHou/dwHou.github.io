@@ -105,7 +105,7 @@
 </br>
 
   
-  <h2>Linux</h2>
+  <h2><a href="https://man.linuxde.net/">Linux</a></h2>
 
   <style>
     ul li {
@@ -135,11 +135,12 @@
   </ul>
     
   <h2>远程文件传输</h2>
-  scp sftp ftp
+  <a href="https://man.linuxde.net/scp">scp</a> sftp ftp
   <li><b>scp</b></li>
   <li>scp [-r如果是目录] localfile [remote_username@命令执行后只输入密码or用户名加密码]remote_ip:remote_folder(or remote_file如果指定文件名)</li>
   <li>从远程复制到本地的scp命令与上面雷同，只需后面2个参数互换顺序就行了</li>
   <li>本地多个文件用空格，远程多个文件用引号加空格。remote_ip:"remote_file1 remote_file2"</li>
+  <li>小tips: 用scp时不要先连上ssh，那样你进入远程的机器，"本地"和"远程"的角度就颠倒了。晕。</li>
 
   <h2>Latex</h2>
   <ul>
