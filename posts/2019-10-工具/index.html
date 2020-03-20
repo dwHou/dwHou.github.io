@@ -170,6 +170,18 @@
     
   </ul>
 
+  <h2>SSH</h2>
+  <ul>
+      <li>避免SSH长时间不操作而卡死</li>
+      SSH日常使用过程中经常出现的一个问题是：过长时间没有数据传输后SSH呈现卡死的状态
+      这是因为长时间没有数据传输的情况下，网络中间节点可能会强行断开连接
+      而SSH终端与服务器并不知情，于是此时操作就会出现卡死的现象。<br>
+      设置SSH服务器或客户端的心跳包功能即可
+      客户端：编辑/etc/ssh/ssh_config，增加一行配置<pre>ServerAliveInterval 60</pre><br>
+      服务端：编辑/etc/ssh/sshd_config，增加一行配置<pre>ClientAliveInterval 60</pre><br>
+      还可添加ServerAliveCountMax 3 表示服务器发出请求后客户端未响应次数达到一定值就自动断开,正常情况下,客户端会正常响应.
+  </ul>
+
   <h2>shell</h2>
   <ul>
       <li><a href="https://www.runoob.com/linux/linux-shell-variable.html">shell script编程</a> </li>
@@ -180,6 +192,8 @@
       <li>注4 ：字符串可以用单引号，双引号，也可不用引号。但单引号有限制，双引号里则有①可以有变量②可以出现转义字符的优点</li>
       <li>注5 ：建议使用$(). 反引号``和$()的作用相同，用于命令替换（command substitution），即完成引用命令的执行，将其结果替换出来，与变量替换${}差不多。反引号是一个老的用法，$()是新的用法</li>
       <li>注6 ：LogFile="./output.txt"可以搭配>>$LogFile输出日志。</li>
+      <li>注7 ：if条件判断的[ ... ]一定要前后留出空格，不然是bad pattern.</li>
+      <li>注8 ：<a href="https://www.cnblogs.com/linuxAndMcu/p/11120837.html">数学计算</a> </li>
   </ul>
 
   <h2>Chrome</h2>
