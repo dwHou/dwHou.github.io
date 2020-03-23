@@ -176,7 +176,7 @@
       SSH日常使用过程中经常出现的一个问题是：过长时间没有数据传输后SSH呈现卡死的状态
       这是因为长时间没有数据传输的情况下，网络中间节点可能会强行断开连接
       而SSH终端与服务器并不知情，于是此时操作就会出现卡死的现象。<br>
-      设置SSH服务器或客户端的心跳包功能即可
+      设置SSH服务器或客户端的心跳包功能即可<br>
       客户端：编辑/etc/ssh/ssh_config，增加一行配置<pre>ServerAliveInterval 60</pre><br>
       服务端：编辑/etc/ssh/sshd_config，增加一行配置<pre>ClientAliveInterval 60</pre><br>
       还可添加ServerAliveCountMax 3 表示服务器发出请求后客户端未响应次数达到一定值就自动断开,正常情况下,客户端会正常响应.
@@ -269,7 +269,11 @@
 
   <h2>pycharm</h2>
   <ul>
-
+  <li><a href="https://www.zhihu.com/question/37787004/answer/186042335"> pycharm技巧 </a> </li>
+        <pre>写 Python 代码时，你会严格遵守 pep8 规范么？
+            还是要遵守的，不然代码传到 github 或者知乎上被人怼就不好了。
+            但是如果靠肉眼去检查和注意的话，太累，靠 PyCharm 来做这事就好，
+            <font color="red">Command+Option+L</font>，一键 pep8 走起。</pre>
   <li><b>指定anaconda环境</b> File->Settings->Projector Interpretor，在Projector Interpretor中Add，选择Virtualenv或Conda Environment，Existing Environment，选择E:\Anaconda3\envs\py36torch\python.exe，再点击OK。</li>
   <li><b>整段缩进</b> tab,shift+tab</li>
   <li>pycharm默认具有自动保存功能的。习惯ctrl+S，可以更改设置。</li>
