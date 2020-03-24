@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>工具箱Toolboxs</title>
+
+        <link rel="stylesheet" href="../../fonts/Serif/cmun-serif.css" />
+        <link rel="stylesheet" href="../../fonts/Serif-Slanted/cmun-serif-slanted.css" />
+
+        <!--BOOTSTRAP-->
+        <link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <!--mobile first-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--removed html from url but still is html-->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <!--font awesome-->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+        <!--fonts: allan & cardo-->
+        <link href="http://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
+
+        <link href="../../css/sticky-footer-navbar.css" rel="stylesheet">
+
+        <link href="../../css/default.css" rel="stylesheet">
+
+        <link href="../../comments/inlineDisqussions.css" rel="stylesheet">
+
+        <!--Highlight-->
+        <link href="../../highlight/styles/github.css" rel="stylesheet">
+
+        <link href="../../favicon.ico" rel="shortcut icon" />
+
+        <!--<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+        <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <style>
+        .post{width:170px;min-height:175px;padding-left:5px;padding-right:5px;float:left;border-left:1px solid #CCC;background-color:white;}
+        div a:first-of-type .post { border-left: none; }
+        .post:hover {filter: brightness(90%);}
+        .post h3{margin:5px;font-size:75%;text-align:center}
+        .post h4{margin:0px;font-size:50%;text-align:center}
+        .post img{margin:0px;padding:2px;margin-bottom:10px;width:100%;height:155px}
+        </style>
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-49811703-1', 'dwHou.github.io');
+          ga('require', 'linkid', 'linkid.js');
+          ga('require', 'displayfeatures');
+          ga('send', 'pageview');
+
+        </script>
+
+    </head>
+
+    <body>
+        <div id="wrap">
+            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+                <div class="container">
+                    <!--Toggle header for mobile-->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand active" href="../../" style="font-size:20px;">dwHou's blog</a>
+                    </div>
+                    <!--normal header-->
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="../../"><span class="glyphicon glyphicon-pencil"></span>  Blog</a></li>
+                            <li><a href="../../about.html"><span class="glyphicon glyphicon-user"></span>  About</a></li>
+                            <li><a href="../../contact.html"><span class="glyphicon glyphicon-envelope"></span>  Contact</a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </nav>
+
+
+            <div id="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1>工具汇总</h1>
+                            <div style="font-size: 170%;">持续更新</div>
+                            <br>
+                            <div class="info">
+    <p style="font-family:CMSS; font-size:120%">Posted on Oct.24, 2019</p>
+
+    <!--
+        by dwHou
+    -->
+</div>
+</br>
+
+  
+  <h2><a href="https://man.linuxde.net/">Linux</a></h2>
+
+  <style>
+    ul li {
+      margin-top: 12px;
+    }
+
+    .tight-list li {
+      margin-top: 6px;
+    }
+  </style>
+
+  <ul>
+
+  <li><b><div align="left">Tmux-终端复用</div></b> https://www.cnblogs.com/kevingrace/p/6496899.html  https://www.cnblogs.com/lizhang4/p/7325086.html</li>
+  <li>tmux new -s sessionname ; <b>ctrl b</b> + ①% or " ; ②o ; ③ctrl+方向键</li>
+  <li><b>gpustat-基于nvidia-smi</b> https://github.com/wookayin/gpustat </li>
+  <li>watch --color -n1 gpustat --color</li>
+  <li>lsblk查看设备 mount进行挂载 就可以操作外接U盘、硬盘了</li>
+  <li><b>awk</b> 示例: awk '{print $5}' $fileName : 一行一行的读取指定的文件， 以空格作为分隔符，打印第五个字段</li>
+  <li>awk是一个强大的文本分析工具，相对于grep的查找，sed的编辑，awk在其对数据分析并生成报告时，显得尤为强大。简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。</li>
+  <li><b>命令大全</b> https://www.runoob.com/linux/linux-command-manual.html </li>
+  <li><a href="https://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html"> Linux Tools Quick Tutorial</a></li>
+      linux基础<br>
+      linux工具进阶<br>
+      工具参考篇<br>
+    
+  </ul>
+    
+  <h2>远程文件传输</h2>
+  <a href="https://man.linuxde.net/scp">scp</a> sftp ftp
+  <li><b>scp</b></li>
+  <li>scp [-r如果是目录] localfile [remote_username@命令执行后只输入密码or用户名加密码]remote_ip:remote_folder(or remote_file如果指定文件名)</li>
+  <li>从远程复制到本地的scp命令与上面雷同，只需后面2个参数互换顺序就行了</li>
+  <li>本地多个文件用空格，远程多个文件用引号加空格。remote_ip:"remote_file1 remote_file2"</li>
+  <li>小tips: 用scp时不要先连上ssh，那样你进入远程的机器，"本地"和"远程"的角度就颠倒了。晕。</li>
+
+  <h2>Latex</h2>
+  <ul>
+
+  <li><b>Latex表格</b> http://www.tablesgenerator.com/latex_tables#  正确用法:在Excel里画好，导入进去自动生成latex</li>
+  <li><b>论文压缩篇幅</b> https://blog.csdn.net/u011089523/article/details/83578005  https://blog.csdn.net/gokeyhps/article/details/46984497 </li>
+  
+    
+  </ul>
+ 
+  <h2>overleaf</h2>
+  <ul>
+
+  <li><b>自动查错</b> 下划红色波浪线的部分可能有拼写错误。虽然overleaf的拼写检查功能不完善。 </li>
+  
+    
+  </ul>
+
+
+  <h2>Pytorch/Tensorflow</h2>
+  https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/linux-64/
+  
+  <h2>Docker</h2>
+  <ul>
+
+  <li><b>Docker从入门到实践</b> https://yeasy.gitbooks.io/docker_practice/content/ </li>
+    
+  </ul>
+
+  <h2>SSH</h2>
+  <ul>
+      <li>避免SSH长时间不操作而卡死</li>
+      SSH日常使用过程中经常出现的一个问题是：过长时间没有数据传输后SSH呈现卡死的状态
+      这是因为长时间没有数据传输的情况下，网络中间节点可能会强行断开连接
+      而SSH终端与服务器并不知情，于是此时操作就会出现卡死的现象。<br>
+      设置SSH服务器或客户端的心跳包功能即可<br>
+      客户端：编辑/etc/ssh/ssh_config，增加一行配置<pre>ServerAliveInterval 60</pre><br>
+      服务端：编辑/etc/ssh/sshd_config，增加一行配置<pre>ClientAliveInterval 60</pre><br>
+      还可添加ServerAliveCountMax 3 表示服务器发出请求后客户端未响应次数达到一定值就自动断开,正常情况下,客户端会正常响应.
+  </ul>
+
+  <h2>shell</h2>
+  <ul>
+      <li><a href="https://www.runoob.com/linux/linux-shell-variable.html">shell script编程</a> </li>
+      <li>注1 ：变量名和等号之间不能有空格，这可能和你熟悉的所有编程语言都不一样。</li>
+      <li>注2 ：推荐给所有变量加上花括号，这是个好的编程习惯。${ }会比较精确的界定变量名称的范围。lastname='hou' name=${lastname}'dewang'</li>
+      <li><a href="https://www.cnblogs.com/fengbohello/p/5954895.html">${}搭配→Linux Shell截取字符串</a> </li>
+      <li>注3 ：使用变量的时候才加美元符（$）</li>
+      <li>注4 ：字符串可以用单引号，双引号，也可不用引号。但单引号有限制，双引号里则有①可以有变量②可以出现转义字符的优点</li>
+      <li>注5 ：建议使用$(). 反引号``和$()的作用相同，用于命令替换（command substitution），即完成引用命令的执行，将其结果替换出来，与变量替换${}差不多。反引号是一个老的用法，$()是新的用法</li>
+      <li>注6 ：LogFile="./output.txt"可以搭配>>$LogFile输出日志。</li>
+      <li>注7 ：if条件判断的[ ... ]一定要前后留出空格，不然是bad pattern.</li>
+      <li>注8 ：<a href="https://www.cnblogs.com/linuxAndMcu/p/11120837.html">数学计算</a> </li>
+  </ul>
+
+  <h2>Chrome</h2>
+  <ul>
+
+  <li><b>插件</b> Octotree</li>
+     
+  </ul>
+  
+  
+  <h2>vim</h2>
+  <ul>
+
+  <li><b>命令</b> https://www.runoob.com/linux/linux-vim.html </li>
+     
+  </ul>
+  
+  <h2>visio</h2>
+  <ul>
+   
+  <li><b>自动对齐</b> ctrl多选 ；开始→排列 ；开始→位置 </li>
+  <li><b>画水平直线</b> 压住shift再拉长度。 这个会经常用到 </li>
+  <li><b>手动调整</b> 视图→视觉帮助→对齐(取消) ；视图→网格(勾选) </li>
+  <li><b>输出保存png</b> 文件→另存为可移植网络图形（*.png）</li>
+     
+  </ul>
+
+  <h2>HDFS</h2>
+  Hadoop is the framework that has the storage and the processing unit. The storage unit of Hadoop is called HDFS - Hadoop Distributed File System. The processing unit is called MapReduce.
+  <ul>
+      <li>命令基本格式 hdfs dfs -cmd < args ></li>
+      <li><b>hadoop fs <font color="red">VS</font> hadoop dfs <font color="red">VS</font> hdfs dfs</b></li>
+      three commands which appears same but have minute differences.<br>
+      <pre>hadoop fs < args ></pre>
+          FS relates to a generic file system which can point to any file systems like local, HDFS etc. So this can be used when you are dealing with different file systems such as Local FS, (S)FTP, S3, and others.<br>
+
+      <pre>hadoop dfs < args ></pre>
+          dfs is very specific to HDFS. would work for operation relates to HDFS. This has been deprecated and we should use hdfs dfs instead.<br>
+
+      <pre>hdfs dfs < args ></pre>
+          same as 2nd i.e would work for all the operations related to HDFS and is the recommended command instead of hadoop dfs.<br>
+      <li>hadoop shell命令
+          <a href="https://hadoop.apache.org/docs/r1.0.4/cn/hdfs_shell.html#ls">参考1</a>
+          <a href="https://segmentfault.com/a/1190000002672666">参考2</a> </li>
+  </ul>
+
+  <h2>ffmpeg</h2>
+  <ul>
+  <li><a href="https://github.com/feixiao/ffmpeg">tutorial</a></li>
+  <li><a href="https://blog.csdn.net/TCH8502/article/details/37696713">常用参数</a></li>
+  <li><b>示例:批量下采样</b> for %a in ("*.y4m") do ffmpeg -i "%a" -vf scale=iw/4:ih/4 -sws_flags bicubic "E:\...path...\%~na_bicubic_l.y4m"</li>
+  <li>注: 对yuv文件进行操作时要-s指明分辨率，因为它没有被封装，ffmpeg读不到这些信息</li>
+  <li>使用ffmpeg视频编解码 <a href="https://trac.ffmpeg.org/wiki/Encode/H.265"> H.265指南 </a> </li>
+ 见Passing Options <a href="https://x265.readthedocs.io/en/default/cli.html#loop-filters">docs</a><br>
+      ffmpeg -i rawvideo.y4m -c:v libx265 -x265-params bframes=0:no-deblock=1:no-sao=1:qp=37 qp37.mp4<br>
+      不过编解码组不怎么用ffmpeg，而是用更好用的HM(HEVC Test Model)，修改cfg文件就好了。<br>
+      这两个是HEVC的两种编码配置，你用的HM的话，在cfg文件夹里面应该有各种编码配置。如果用的x265，需要自己通过命令行去配置各种参数。
+
+
+  <li>ffplay -video_size 640x480 file.yuv</li>
+  <li><a href="https://zhuanlan.zhihu.com/p/85895180">ffmpeg抽帧</a> IBP帧，场景转换帧，均匀抽帧，特定时间抽帧</li>
+
+  </ul>
+  
+  <h2>vscode</h2>
+  <ul>
+
+  <li><b>带参数调试</b> Debug->Open Configurations(打开配置) 在对应的代码块中添加args,注意参数之间需要用字符串分割开，用空格是不行的"--model","EDVR"</li>
+  <li><b>整段缩进</b> Ctrl+[ ]</li>
+  <li><b>养成太长换行习惯</b> \ </li>
+  <li><b>打开多个文件夹</b> 将文件夹添加到工作区 </li>
+  </ul>
+
+  <h2>pycharm</h2>
+  <ul>
+  <li><a href="https://www.zhihu.com/question/37787004/answer/186042335"> pycharm技巧 </a> </li>
+        <pre>写 Python 代码时，你会严格遵守 pep8 规范么？
+            还是要遵守的，不然代码传到 github 或者知乎上被人怼就不好了。
+            但是如果靠肉眼去检查和注意的话，太累，靠 PyCharm 来做这事就好，
+            <font color="red">Command+Option+L</font>，一键 pep8 走起。</pre>
+  <li><b>指定anaconda环境</b> File->Settings->Projector Interpretor，在Projector Interpretor中Add，选择Virtualenv或Conda Environment，Existing Environment，选择E:\Anaconda3\envs\py36torch\python.exe，再点击OK。</li>
+  <li><b>整段缩进</b> tab,shift+tab</li>
+  <li>pycharm默认具有自动保存功能的。习惯ctrl+S，可以更改设置。</li>
+  <li><b>注释</b> 成段的注释or取消注释，可以先框选，然后<font color="blue">Command + /</font>(Mac)或<font color="blue">Ctrl + /</font>(Windows)</li>
+  <pre>其他: 
+       Ctrl + D 复制上一行；</pre>
+
+  </ul>
+  
+  <h2>调试</h2>
+  写程序最痛苦的事情莫过于调试，程序往往会以你意想不到的流程来运行，你期待执行的语句其实根本没有执行，这时候，就需要调试了。
+  <ul>
+  <li>如果要比较爽地设置断点、单步执行，就需要一个支持调试功能的IDE。目前比较好的Python IDE有：VS Code，Pycharm</li>
+      <a href="https://www.jianshu.com/p/d2829bd4f9d0"><b>Debug心得</b></a>
+      <br><b>|Step Over|Step Into|Step Out|Resume Program到下个断点|Run to Cursor到光标|</b>
+  <li>虽然用IDE调试起来比较方便，但是最后你会发现，<a href="https://www.cnblogs.com/nancyzhu/p/8551506.html"><font color="red"><b>logging</b></font></a>才是终极武器。</li>
+  <li>print()——打印，最大坏处是将来还要删掉它，不然运行结果会包含很多垃圾信息</li>
+  <li>assert——断言，程序中如果到处充斥着assert，和print()相比也好不到哪去。不过，启动Python解释器时可以用-O参数来关闭assert</li>
+  <li>logging——不会抛出错误，而且可以输出到文件</li>
+  <pre>
+    import logging
+    logging.basicConfig(level=logging.INFO)
+
+    s = '0'
+    n = int(s)
+    logging.info('n = %d' % n)
+    print(10 / n)
+  </pre>
+  <li>这就是logging的好处，它允许你指定记录信息的级别，有debug，info，warning，error等几个级别，当我们指定level=INFO时，logging.debug就不起作用了。</li>
+  <li><b>总结</b>相比print，具备如下优点：</li>
+  <li>可以通过设置不同的日志等级，在release版本中只输出重要信息，而不必显示大量的调试信息；</li>
+  <li>print将所有信息都输出到标准输出中，严重影响开发者从标准输出中查看其它数据；logging则可以由开发者决定将信息输出到什么地方，以及怎么输出；</li>
+  </ul>
+
+
+  <h2>github开源项目</h2>
+  <ul>
+   
+  <li><b>组合搜索</b> ①in:name/description/readme 超分 ②satrs:>1000 ③pushed:>2020-1-15 ④language:python  </li>
+  
+     
+  </ul>
+
+
+
+<!-- 加载出评论，是使用Disqus的论坛短名（shortname）
+A shortname is the unique identifier assigned to a Disqus site. 
+
+https://segmentfault.com/a/1190000005773009
+https://help.disqus.com/en/articles/1717111-what-s-a-shortname
+https://blog.csdn.net/weixin_34327761/article/details/89630337
+   -->
+
+<div id="disqus_thread"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+<script src="../../comments/inlineDisqussions.js"></script>
+<script src="../../js/disqus.js"></script>
+
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="footer">
+                <div class="container">
+                    Built by <a href="https://github.com/oinkina">Oinkina</a> with
+                    <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+                    using <a href="http://getbootstrap.com/">Bootstrap</a>,
+                    <a href="http://www.mathjax.org/">MathJax</a>,
+                    <a href="http://disqus.com/">Disqus</a>,
+                    <a href="https://github.com/unconed/MathBox.js">MathBox.js</a>,
+                    <a href="http://highlightjs.org/">Highlight.js</a>,
+                    and <a href="http://ignorethecode.net/blog/2010/04/20/footnotes/">Footnotes.js</a>.
+                </div>
+            </div>
+        </div>
+
+    <!-- jQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+    <script src="../../bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="../../highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script src="../../js/footnotes.js"></script>
+
+    <script src="../../comments/inlineDisqussions.js"></script>
+
+    <noscript>Enable JavaScript for footnotes, Disqus comments, and other cool stuff.</noscript>
+
+    </body>
+
+</html>
