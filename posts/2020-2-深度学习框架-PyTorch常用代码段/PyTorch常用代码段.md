@@ -78,6 +78,146 @@ kill -9 [pid]
 nvidia-smi --gpu-reset -i [gpu_id]
 ```
 
+
+
+### 多gpu并行训练
+
+我一般在使用多GPU的时候, 会喜欢使用`os.environ['CUDA_VISIBLE_DEVICES']`来限制使用的GPU个数, 例如我要使用第0和第3编号的GPU, 那么只需要在程序中设置:
+
+```python
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,3'
+```
+
+**1.单机多卡**
+**DataParallel (DP) :**  Parameter Server模式，一张卡位reducer，实现也超级简单，一行代码。
+
+```python
+#模型
+if torch.cuda.is_available():
+    model.cuda()
+
+if torch.cuda.device_count() > 1:
+    print("Let's use", torch.cuda.device_count(), "GPUs!")
+    # 就这一行
+    model = nn.DataParallel(model)
+    
+#数据    
+inputs = inputs.cuda()
+labels = labels.cuda()
+```
+
+
+
+**2.多机多卡**
+
+**DistributeDataParallel (DDP) :**  All-Reduce模式，本意是用来分布式训练，但是也可用于单机多卡。
+
+```python
+import torch.multiprocessing as mp
+#import torch.distributed as dist
+from apex.parallel import DistributedDataParallel as DDP
+from apex import amp
+```
+
+1.初始化后端
+
+```python
+torch.distributed.init_process_group(backend="nccl")
+```
+
+2.模型并行化
+
+```python
+model=torch.nn.parallel.DistributedDataParallel(model)
+```
+
+**最小例程与解释**
+
+☞训练一个MNIST分类的简单卷积网络。
+
+```python
+parser.add_argument('-n', '--nodes', default=1, type=int, metavar='N')
+
+parser.add_argument('-g', '--gpus', default=1, type=int,
+                        help='number of gpus per node')
+                        
+parser.add_argument('-nr', '--nr', default=0, type=int,
+                        help='ranking within the nodes')
+
+args = parser.parse_args()
+train(0, args)
+#训练是这么定义的
+def train(gpu, args):
+#上述代码中肯定有一些我们还不需要的额外的东西(例如gpu和节点的数量)，但是将整个框架放置到位是很有帮助的。
+之后在命令行输入 python src/mnist.py -n 1 -g 1 -nr 0
+就可以在一个结点上的单个GPU上训练啦~
+```
+
+☞加上MultiProcessing
+
+<font size=3>(我们需要一个脚本，用来启动一个进程的每一个GPU。每个进程需要知道使用哪个GPU，以及它在所有正在运行的进程中的阶序（rank）。而且，我们需要**在每个节点上运行脚本**。)</font>
+
+- - args.nodes 是我们使用的结点数
+  - args.gpus 是每个结点的GPU数.
+  - args.nr 是当前结点的阶序rank，取值范围是 0 到 args.nodes - 1.
+
+```python
+		args = parser.parse_args()
+    #########################################################
+14  args.world_size = args.gpus * args.nodes                #
+15  os.environ['MASTER_ADDR'] = '10.57.23.164'              #
+16  os.environ['MASTER_PORT'] = '8888'                      #
+17  mp.spawn(train, nprocs=args.gpus, args=(args,))         #
+    #########################################################
+```
+
+- [比较复杂，还是用到时查看这篇tutorial](https://zhuanlan.zhihu.com/p/105755472)
+
+**3.Apex混合精度训练**
+
+***(在2的基础上)***
+
+```python
+from apex import amp
+model, optimizer = amp.initialize(model, optimizer, opt_level="O1") # 这里是“欧一”，不是“零一”
+with amp.scale_loss(loss, optimizer) as scaled_loss:
+    scaled_loss.backward()
+```
+
+最近Apex更新了API，只需上述三行代码即可实现**混合精度加速**。
+
+https://zhuanlan.zhihu.com/p/79887894
+
+
+
+
+
+
+
+- **DP**是基于Parameter server的算法，负载不均衡的问题比较严重，有时在模型较大的时候（比如bert-large），reducer的那张卡会多出3-4g的显存占用。
+
+  [优秀的tutorial](https://zhuanlan.zhihu.com/p/105755472)
+
+  <font color='blue'>nn.DataParallel</font>使用起来更加简单（通常只要封装模型然后跑训练代码就ok了）。但是在每个训练批次（batch）中，因为模型的权重都是在 一个进程上先算出来 然后再把他们分发到每个GPU上，所以网络通信就成为了一个瓶颈，而GPU使用率也通常很低。
+
+  
+
+- 官方建议用新的**DDP**，采用all-reduce算法，本来设计主要是为了多机多卡使用，但是单机上也能用。
+
+  <font color='blue'>nn.DistributedDataParallel</font>进行Multiprocessing可以在多个gpu之间复制该模型，每个gpu由一个进程控制。每个进程都执行相同的任务，并且每个进程与所有其他进程通信。只有梯度会在进程/GPU之间传播，这样网络通信就不至于成为一个瓶颈了。
+
+  <font size=1><font color='red'>注：</font>训练过程中，每个进程从磁盘加载自己的小批（minibatch）数据，并将它们传递给自己的GPU。每个GPU都做它自己的前向计算，然后梯度在GPU之间全部约简。每个层的梯度不仅仅依赖于前一层，因此梯度全约简与并行计算反向传播，进一步缓解网络瓶颈。在反向传播结束时，每个节点都有平均的梯度，确保模型权值保持同步（synchronized）。</font>
+
+  
+
+- 混合精度训练，即组合浮点数 (FP32)和半精度浮点数 (FP16)进行训练，允许我们使用更大的batchsize，并利用[NVIDIA张量核](https://link.zhihu.com/?target=https%3A//www.nvidia.com/en-us/data-center/tensorcore/)进行更快的计算。
+
+  我们只需要修改 train 函数即可
+
+
+
+
+
 ## 2.张量(Tensor)处理
 
 ### 张量基本信息
