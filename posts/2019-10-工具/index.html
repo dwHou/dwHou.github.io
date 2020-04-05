@@ -121,6 +121,12 @@
 
   <li><b><div align="left">Tmux-终端复用</div></b> https://www.cnblogs.com/kevingrace/p/6496899.html  https://www.cnblogs.com/lizhang4/p/7325086.html</li>
   <li>tmux new -s sessionname ; <b>ctrl b</b> + ①% or " ; ②o ; ③ctrl+方向键</li>
+      <li>恢复会话：
+          tmux at [-t 会话名]
+          列出所有会话：
+          tmux ls
+          关闭会话：
+          tmux kill-session -t 会话名</li>
   <li><b>gpustat-基于nvidia-smi</b> https://github.com/wookayin/gpustat </li>
   <li>watch --color -n1 gpustat --color</li>
   <li>lsblk查看设备 mount进行挂载 就可以操作外接U盘、硬盘了</li>
@@ -320,6 +326,7 @@
   <h2>EffectiveMac</h2>
   <ul>
       <li><a href="http://mac.bestswifter.com/">Mac</a> </li>
+      <li>brew install tree</li>
   </ul>
 
 
