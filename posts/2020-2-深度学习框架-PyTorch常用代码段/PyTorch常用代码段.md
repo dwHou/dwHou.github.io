@@ -287,7 +287,47 @@ https://www.zhangshengrong.com/p/Ap1Zp295N0/
 
 ## 3.模型定义和操作
 
+### 加载模型
+**GPU → CPU**
 
+```python
+model.load_state_dict(torch.load('model.pth', map_location='cpu'))
+```
+或
+```python
+model.load_state_dict(torch.load('model.pth', map_location=lambda storage, loc: storage))
+```
+
+**CPU → GPU**
+```python
+model.load_state_dict(torch.load('model.pth', map_location=lambda storage, loc: storage.cuda(1)))
+# 加载到GPU1中
+```
+
+**GPU→GPU**
+```python
+model.load_state_dict(torch.load('model.pth', map_location={'cuda:1':'cuda:0'}))
+```
+
+**多GPU → CPU** 
+保存了模型nn.DataParallel，该模型将模型存储在该模型中module，而现在您正试图加载模型DataParallel。您可以nn.DataParallel在网络中暂时添加一个加载目的，也可以加载权重文件，创建一个没有module前缀的新的有序字典，然后加载它。
+```python
+# original saved file with DataParallel
+state_dict = torch.load('myfile.pth.tar')
+# create new OrderedDict that does not contain `module.`
+from collections import OrderedDict
+new_state_dict = OrderedDict()
+for k, v in state_dict.items():
+    name = k[7:] # remove `module.`
+    new_state_dict[name] = v
+# load params
+model.load_state_dict(new_state_dict)
+```
+
+
+注: 引用https://blog.csdn.net/shanglianlm/article/details/85060862
+
+关于lambda函数用法https://www.cnblogs.com/kaishirenshi/p/8611358.html
 
 
 
