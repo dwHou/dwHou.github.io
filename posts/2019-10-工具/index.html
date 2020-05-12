@@ -154,12 +154,23 @@
   我们可以想象下，更优雅的方式应该是在脚本里自己配置密码，当屏幕交互需要输入时自动输入进去，要达到这样的效果就需要用到expect.
   <pre>
       1、安装expect
+
       2、script:
       #! /usr/bin/expect -f
+
+      set passward "123456"
       spawn scp [-r如果是目录] localfile [remote_username@命令执行后只输入密码or用户名加密码]remote_ip:remote_folder
       expect "*password:"
-      send "your password\r"
-      expect eof 
+      # set timeout 300
+      send "$password\r"
+      expect eof
+
+      3、expect scptest.sh
+
+      4、expect脚本我们都知道，首先spawn我们要执行的命令，然后就给出一堆expect的屏幕输出，
+      如果输出match了我们的expect的东西，我们就会send一个命令上去，模拟用户输入。
+      但是expect中等待命令的输出信息是有一个timeout的设定的，默认是10秒。这个特性是防止那些执行死机的命令的。
+      一旦到了这个timeout，还是没有屏幕输出的话，expect脚本中下面的代码就会执行。
 
   </pre>
 
