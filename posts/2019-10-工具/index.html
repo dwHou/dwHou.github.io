@@ -160,10 +160,16 @@
 
       set passward "123456"
       spawn scp [-r如果是目录] localfile [remote_username@命令执行后只输入密码or用户名加密码]remote_ip:remote_folder
-      expect "*password:"
-      # set timeout 300
-      send "$password\r"
-      expect eof
+      expect {
+                "(yes/no)?" {
+                    send "yes\r"
+	                expect "passward:"
+	                send "$passward\r"
+                }
+                "*password:" {
+                    send "$passward\r"
+                }
+        }
 
       3、expect scptest.sh
 
