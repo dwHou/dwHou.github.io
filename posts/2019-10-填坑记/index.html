@@ -202,6 +202,15 @@
     <li><b>|tee log.txt</b> 可以将终端内容输出记录到文本</li>
     <li><b>Compare</b> IDE中 Select for Compare & Compare with Selected</li>
   </ul>
+
+  <h2>关于OpenCV</h2>
+  <ul>
+      <li>PIP3依赖有：opencv-python-headless, opencv-python, opencv-contrib-python</li>
+      <li>这三者在完整性上是递增的，常用的opencv-python，如果你的环境报错缺少libSM，这是图形界面的库，
+      如果你的环境不需要，可以把opencv-python的依赖改成opencv-python-headless。如果要用一些有专利
+      收费的算法，则使用opencv-contrib-python.
+      </li>
+  </ul>
   
 
 
