@@ -142,6 +142,14 @@
       <li>find [path] -type f/d | wc -l</li>
       <li>ls -l [path] | grep "^-/d" | wc -l</li>
       <li>python: len(os.listdir(path))</li>
+
+  <li><b>查看目录树</b></li>
+      <li>文件树</li>
+      <pre>find . -print 2>/dev/null|awk '!/\.$/ {for (i=1;i<NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;printf("%"d"s","|")}
+print "---"$NF}' FS='/'</pre>
+      <li>目录树</li>
+      <pre>find . -type d -print 2>/dev/null|awk '!/\.$/ {for (i=1;i<NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;
+printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   </ul>
     
   <h2>远程文件传输</h2>
@@ -316,6 +324,7 @@
       <li><a href="https://blog.csdn.net/leixiaohua1020/article/details/15811977">雷霄骅的-从零开始-博客</a> </li>
   <li><a href="https://github.com/feixiao/ffmpeg">tutorial</a></li>
   <li><a href="https://blog.csdn.net/TCH8502/article/details/37696713">常用参数</a></li>
+  <li><a href="https://blog.csdn.net/qq26983255/article/details/94590018">常用命令小笔记</a></li>
   <li><b>示例:批量下采样</b> for %a in ("*.y4m") do ffmpeg -i "%a" -vf scale=iw/4:ih/4 -sws_flags bicubic "E:\...path...\%~na_bicubic_l.y4m"</li>
   <li>注: 对yuv文件进行操作时要-s指明分辨率，因为它没有被封装，ffmpeg读不到这些信息</li>
   <li>使用ffmpeg视频编解码 <a href="https://trac.ffmpeg.org/wiki/Encode/H.265"> H.265指南 </a> </li>
