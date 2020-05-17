@@ -143,6 +143,10 @@
       <li>ls -l [path] | grep "^-/d" | wc -l</li>
       <li>python: len(os.listdir(path))</li>
 
+  <li>只查看一级目录统计的空间占用</li>
+      <li>du -h -d1</li>
+      <li>-d1 表示只进入下一级目录</li>
+
   <li><b>查看目录树</b></li>
       <li>文件树</li>
       <pre>find . -print 2>/dev/null|awk '!/\.$/ {for (i=1;i<NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;printf("%"d"s","|")}
@@ -181,6 +185,7 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
                     send "$passward\r"
                 }
         }
+      expect eof
 
       3、expect scptest.sh
 
@@ -188,6 +193,24 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       如果输出match了我们的expect的东西，我们就会send一个命令上去，模拟用户输入。
       但是expect中等待命令的输出信息是有一个timeout的设定的，默认是10秒。这个特性是防止那些执行死机的命令的。
       一旦到了这个timeout，还是没有屏幕输出的话，expect脚本中下面的代码就会执行。
+
+  </pre>
+  <pre>
+      关于建立信任连接：
+
+      一、实现原理
+      使用一种被称为"公私钥"认证的方式来进行ssh登录。"公私钥"认证方式简单的解释是：
+      首先在客户端上创建一对公私钥（公钥文件：~/.ssh/id_rsa.pub；私钥文件：~/.ssh/id_rsa），
+      然后把公钥放到服务器上（~/.ssh/authorized_keys），自己保留好私钥。当ssh登录时，ssh程序会发送私钥去和服务器上的公钥做匹配。如果匹配成功就可以登录了。
+
+      step 1 : A机生成证书 ssh-keygen -t rsa
+      step 2 : 查看~/.ssh 私钥id_rsa 公钥id_rsa.pub
+      step 3 : A对B建立信任，将id_rsa.pub拷贝到B机的~/.ssh/authorized_keys里，>是覆盖，>>是追加。cat id_rsa.pub >> authorized_keys
+      step 4 : 成功，A信任B，把公钥交给B。 A一般为服务器，可以从B免密登录
+
+      二.
+      注意，不是root用户，.ssh都在~/.ssh
+
 
   </pre>
 
@@ -333,7 +356,9 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       不过编解码组不怎么用ffmpeg，而是用更好用的HM(HEVC Test Model)，修改cfg文件就好了。<br>
       这两个是HEVC的两种编码配置，你用的HM的话，在cfg文件夹里面应该有各种编码配置。如果用的x265，需要自己通过命令行去配置各种参数。
 
-
+  <li>抽帧</li>
+  <li>-vf select='eq(pict_type\,I) 抽I帧</li>
+  <li>-vf select='not(mod(n\,25)) 隔25帧抽</li>
   <li>ffplay -video_size 640x480 file.yuv</li>
   <li><a href="https://zhuanlan.zhihu.com/p/85895180">ffmpeg抽帧</a> IBP帧，场景转换帧，均匀抽帧，特定时间抽帧</li>
 

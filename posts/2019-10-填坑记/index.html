@@ -211,6 +211,16 @@
       收费的算法，则使用opencv-contrib-python.
       </li>
   </ul>
+
+  <h2>nvidia-smi显存被占用,却没显示进程</h2>
+  <ul>
+      <li>使用fuser命令</li>
+      fuser用于显示哪些进程正在使用给定的文件、文件系统或unix套接字
+      <li>fuser -v /dev/nvidia*</li>
+      查看占用指定显卡的进程id之后，kill掉就好了
+      <li>kill -9 PID</li>
+  </ul>
+
   
 
 
