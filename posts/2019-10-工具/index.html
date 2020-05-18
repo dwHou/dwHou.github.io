@@ -174,6 +174,7 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       #! /usr/bin/expect -f
 
       set passward "123456"
+      set timeout -1
       spawn scp [-r如果是目录] localfile [remote_username@命令执行后只输入密码or用户名加密码]remote_ip:remote_folder
       expect {
                 "(yes/no)?" {
@@ -310,6 +311,7 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   <ul>
 
   <li><b>命令</b> https://www.runoob.com/linux/linux-vim.html </li>
+  <li>:set nu 行号对于调试还是很重要的</li>
      
   </ul>
   
