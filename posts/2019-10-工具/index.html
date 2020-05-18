@@ -361,6 +361,13 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   <li>抽帧</li>
   <li>-vf select='eq(pict_type\,I) 抽I帧</li>
   <li>-vf select='not(mod(n\,25)) 隔25帧抽</li>
+  <li>抽帧记得使用-vsync 0</li>
+  <li>查看帧类型</li>
+  <li>ffprobe -v quiet -show_frames 151_264.mp4|grep "pict_type"</li>
+  <li>查看I帧编号</li>
+  <li> ffprobe -select_streams v -show_frames -show_entries frame=pict_type -of csv 151_264.mp4 | grep -n I | cut -d ':' -f 1 > frame_indices.txt </li>
+
+
   <li>ffplay -video_size 640x480 file.yuv</li>
   <li><a href="https://zhuanlan.zhihu.com/p/85895180">ffmpeg抽帧</a> IBP帧，场景转换帧，均匀抽帧，特定时间抽帧</li>
 
