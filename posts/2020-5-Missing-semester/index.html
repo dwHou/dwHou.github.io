@@ -117,10 +117,21 @@
 to be an effective computer scientist and programmer.
 
 
- <h2>Lecture 1 : Course Overview + The Shell </h2>
- <ul>
-     <li>待更新</li>
- </ul>
+<h2>Lecture 1 : Course Overview + The Shell </h2>
+<ul>
+    <li>待更新</li>
+</ul>
+
+<h2>Lecture 2 : Shell Tools and Scripting</h2>
+<ul>
+    <h4>source、sh、bash、./区别</h4>
+    <li>source a.sh</li>
+    在当前shell内去读取、执行a.sh，而a.sh不需要有"执行权限"。source命令可以简写为".": . a.sh
+    <li>sh/bash a.sh</li>
+    都是打开一个subshell去读取、执行a.sh，而a.sh不需要有"执行权限"。subshell里运行的脚本里设置变量，不会影响到父shell的。
+    <li>./</li>
+    打开一个subshell去读取、执行a.sh，但a.sh需要有"执行权限"。可以用chmod +x添加执行权限。
+</ul>
 
 
 

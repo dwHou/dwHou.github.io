@@ -222,9 +222,59 @@
       <li>kill -9 PID</li>
   </ul>
 
-  
-
-
+  <h2>远程终端标准输出的恢复</h2>
+  如果使用<font color="red">tmux</font>、<a href="https://www.jianshu.com/p/26cf6f0c6801">screen</a>、supervisor，它们有进程托管的功能可以很好的恢复。但关闭普通的远程终端，如何恢复标准输出呢？
+  <li><a href="https://blog.csdn.net/mountzf/article/details/51735691">tty/pts详解</a> </li>
+  <li>先ps ef找到进程号PID，这时也能看到TTY(与进程关联的终端),STAT是检查的状态R运行，S睡眠，l空闲。</li>
+  <li>首先找到进程号，然后获取进程的标准输出。linux一切到可以看作文件，/proc/pid/fd/1 就是pid进程的标准输出。</li>
+  Maybe these schema can clarify the situation. This is the usual setting:
+  <pre>
+      Terminal  (/dev/ttyX or /dev/pts/x)
+                                device
+                                   |
+                    (screen)<--[<output]----x-------(stdout) Process1
+        Terminal  (keyboard)---[input >]---o-\----->(stdin)
+                                            \ \
+(hardware console or                         \ `----(stdout) Process2
+ virtual console or terminal                  `---->(stdin)
+ emulators like xterm, …)
+  </pre>
+  And there is no way to plug some new Process3 like this:
+  <pre>
+      Terminal
+                              device
+                                 |
+             (screen)<---o---[<output]--x------(stdout) Process1
+  Terminal (keyboard)---/-x--[input >]-o-\---->(stdin)
+                       | /              \ \
+                       | |               \ `---(stdout) Process2
+                       | |                `--->(stdin)
+                       | |
+                       \ `---------------------(stdout) Process3
+                        `--------------------->(stdin)
+  </pre>
+  What screen (and others) does is allocating some pseudo terminal device (like xterm does)
+  and redirect it to one or more "real" terminals (physical, virtual, or emulated):
+  <pre>
+      Terminal                   pseudo
+             devices              ,--> Terminal (/dev/pts/x)
+                |         _______/      device
+Terminal <--[<output]--- |       |        |
+ 1       ---[input >]--> |screen | <--[<output]---x-----(stdout) Process1
+                         |Process| ---[input >]--o-\--->(stdin)
+Terminal <--[<output]--- |       |                \ \
+ 2       ---[input >]--> |_______|                 \ `--(stdout) Process2
+                                                    `-->(stdin)
+  </pre>
+  Using screen -x you can attach one more terminal, xterm, whatever (say Terminal 3) to the screen session.<br>
+  So no, you can't communicate directly through stdin/stdout with processes attached to a different terminal.
+  You can only do so through the process that is controlling this terminal if it happens to be a pseudo terminal,
+  and if this process was concieved to do so (like screen is).
+  https://unix.stackexchange.com/questions/17838/how-can-i-switch-between-ttys-without-using-screen
+  <li>
+      所以最好是使用tmux:<br>
+      The simple answer is that if you want to reconnect to a terminal from a different place, use screen or tmux.
+  </li>
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
 A shortname is the unique identifier assigned to a Disqus site. 
