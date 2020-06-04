@@ -134,6 +134,8 @@
       <li>in-place操作</li>
       in-place operation在pytorch中是指改变一个tensor的值的时候，不经过复制操作，而是直接在原来的内存上改变它的值。可以把它成为原地操作符。
       在pytorch中经常加后缀“_”来代表原地in-place operation，比如说.add_() 或者.scatter()。python里面的+=，*=也是in-place operation。
+      PyTorch旧版本有提示：除非您在内存压力很大的情况下，否则您可能永远不需要使用它们。
+      当时的原因是１．覆盖梯度计算所需的值。２．每个in-place操作实际上需要实现重写计算图。
       <pre>
           卷积这些操作不是in-place，
           relu可选in-place，
