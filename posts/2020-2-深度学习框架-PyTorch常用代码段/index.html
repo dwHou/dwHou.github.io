@@ -132,6 +132,21 @@
   <h2>遇到的坑/bug</h2>
   <ul>
       <li>in-place操作</li>
+      in-place operation在pytorch中是指改变一个tensor的值的时候，不经过复制操作，而是直接在原来的内存上改变它的值。可以把它成为原地操作符。
+      在pytorch中经常加后缀“_”来代表原地in-place operation，比如说.add_() 或者.scatter()。python里面的+=，*=也是in-place operation。
+      <pre>
+          卷积这些操作不是in-place，
+          relu可选in-place，
+          -=,+=这类是in-place，
+          CAIN实现的改版的meanshift——sub_mean()就也是in-place的。
+          因为你进入网络就进行了原地操作，所以prediction = model(input)会改动到input.
+          解决方案就是，进入网络后
+          foward(x):
+                x = x.clone()
+          RCAN、EDSR这些DIV2k数据集上的Meanshift是用卷积方式实现的，就不存在这个问题。
+
+          <font color="red">总结:</font> 不想受到in-place影响的变量，可以拷贝x.copy()，或者如果是张量可以x.clone()。
+      </pre>
   </ul>
 
 
