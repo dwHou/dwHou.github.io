@@ -312,8 +312,18 @@ model.load_state_dict(torch.load('model.pth', map_location={'cuda:1':'cuda:0'}))
 **多GPU → CPU** 
 保存了模型nn.DataParallel，该模型将模型存储在该模型中module，而现在您正试图加载模型DataParallel。您可以nn.DataParallel在网络中暂时添加一个加载目的，也可以加载权重文件，创建一个没有module前缀的新的有序字典，然后加载它。
 ```python
+解决方案有两个：
+1：此时的训练加入torch.nn.DataParallel()即可。
+2：创建一个没有module.的新字典，即将原来字典中module.删除掉。
+解决方案1：
+
+model = torch.nn.DataParallel(model)
+cudnn.benchmark = True
+
+
+解决方案2：
 # original saved file with DataParallel
-state_dict = torch.load('myfile.pth.tar')
+state_dict = torch.load('myfile.pth')
 # create new OrderedDict that does not contain `module.`
 from collections import OrderedDict
 new_state_dict = OrderedDict()
@@ -322,14 +332,10 @@ for k, v in state_dict.items():
     new_state_dict[name] = v
 # load params
 model.load_state_dict(new_state_dict)
+
+解决方案3：
+model.load_state_dict({k.replace('module.',''):v for k,v in torch.load('myfile.pth').items()})
 ```
-
-
-注: 引用https://blog.csdn.net/shanglianlm/article/details/85060862
-
-关于lambda函数用法https://www.cnblogs.com/kaishirenshi/p/8611358.html
-
-
 
 
 
