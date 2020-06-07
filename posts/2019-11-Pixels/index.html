@@ -124,8 +124,10 @@
 
 <h2>Global-skip-connection and Meanshift</h2>
 <pre>
-Global-skip-connection 全局残差区分高低频，改变优化目标
-Meanshift 均值归一，增加样本稳定性
+Global-skip-connection 全局残差区分高低频，改变优化目标。
+Meanshift 均值归一，增加样本稳定性。我认为是对超分任务不用BN层的一种补偿。
+According to the experience of Lim et al., it should help stabilize the training
+but doesn't affect the PSNR obviously.  thstkdgus35/EDSR-PyTorch#71、#94
 1、
 def forward(self, x):
         x = self.sub_mean(x)

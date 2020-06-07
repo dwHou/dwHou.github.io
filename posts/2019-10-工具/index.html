@@ -347,8 +347,20 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
           <a href="https://segmentfault.com/a/1190000002672666">参考2</a> </li>
   </ul>
 
+
+  <h2>Jenkins</h2>
+  <ul>
+      <li>进度条</li>
+      进度条通常是空的，在建立进度时填充蓝色。
+      进度条填写的时间是根据估计的工作持续时间。这个估计通常是基于最后几次成功建成的平均持续时间。
+      如果没有以前的工作数据进行时间估计，进度条将显示一条带状蓝色的动画。
+      当构建执行器“可能卡住”（“卡住”定义为建造时间比估计长十倍。如果没有估计，任何长于24小时的建设被认为是卡住的。）时，
+      红色属性被设置，即它比预计完成的时间要长得多。
+  </ul>
+
   <h2>ffmpeg</h2>
   <ul>
+      ffmpeg所有的参数都是作用于紧跟其后的文件，因此参数的顺序相当重要。
       <li><a href="https://blog.csdn.net/leixiaohua1020/article/details/15811977">雷霄骅的-从零开始-博客</a> </li>
   <li><a href="https://github.com/feixiao/ffmpeg">tutorial</a></li>
   <li><a href="https://blog.csdn.net/TCH8502/article/details/37696713">常用参数</a></li>
