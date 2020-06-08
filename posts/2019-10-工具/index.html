@@ -149,10 +149,10 @@
 
   <li><b>查看目录树</b></li>
       <li>文件树</li>
-      <pre>find . -print 2>/dev/null|awk '!/\.$/ {for (i=1;i<NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;printf("%"d"s","|")}
+      <pre>find . -print 2>/dev/null|awk '!/\.$/ {for (i=1;i < NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;printf("%"d"s","|")}
 print "---"$NF}' FS='/'</pre>
       <li>目录树</li>
-      <pre>find . -type d -print 2>/dev/null|awk '!/\.$/ {for (i=1;i<NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;
+      <pre>find . -type d -print 2>/dev/null|awk '!/\.$/ {for (i=1;i < NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;
 printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   </ul>
     
