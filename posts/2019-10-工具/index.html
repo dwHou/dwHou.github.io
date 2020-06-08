@@ -360,7 +360,14 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
 
   <h2>ffmpeg</h2>
   <ul>
-      ffmpeg所有的参数都是作用于紧跟其后的文件，因此参数的顺序相当重要。
+      <li>ffmpeg所有的参数都是作用于紧跟其后的文件，因此参数的顺序相当重要。</li>
+      <pre>
+          # input seeking
+          ffmpeg -ss 00:1:05 -i gemfield.mp4 -frames:v 1 out.jpg
+          # output seeking
+          ffmpeg -i gemfield.mp4 -ss 00:1:05 -frames:v 1 out1.jpg
+          上述两种就是有区别的。
+      </pre>
       <li><a href="https://blog.csdn.net/leixiaohua1020/article/details/15811977">雷霄骅的-从零开始-博客</a> </li>
   <li><a href="https://github.com/feixiao/ffmpeg">tutorial</a></li>
   <li><a href="https://blog.csdn.net/TCH8502/article/details/37696713">常用参数</a></li>
