@@ -178,6 +178,19 @@
 
   </ul>
 
+  <h2>PyTorch奇怪的报错</h2>
+    RuntimeError: cuDNN error: CUDNN_STATUS_NOT_SUPPORTED.
+    This error may appear if you passed in a non-contiguous input.
+  <ul>
+      <li>
+          原因：版本不匹配
+      </li>
+      <li>
+          解决方法：
+          使用torch.backends.cudnn.enabled = False
+      </li>
+  </ul>
+
 
   <h2>anaconda</h2>
 
