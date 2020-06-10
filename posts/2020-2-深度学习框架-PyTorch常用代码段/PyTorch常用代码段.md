@@ -186,7 +186,13 @@ with amp.scale_loss(loss, optimizer) as scaled_loss:
 
 最近Apex更新了API，只需上述三行代码即可实现**混合精度加速**。
 
-https://zhuanlan.zhihu.com/p/79887894
+[基于Apex的混合精度加速](https://zhuanlan.zhihu.com/p/79887894)
+
+[混合精度训练与模型并行适配](https://bindog.github.io/blog/2020/04/12/model-parallel-with-apex/)
+
+
+
+
 
 
 

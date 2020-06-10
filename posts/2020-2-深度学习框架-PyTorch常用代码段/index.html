@@ -119,7 +119,7 @@
   <h2>Pytorch常用代码段</h2>
   <ul>
 
-  <li><a href="./PyTorch常用代码段withstyle.html"> 📓Cookbook </a></li>
+  <li><a href="./PyTorch常用代码段.html"> 📓Cookbook </a></li>
     
   </ul>
 
@@ -151,6 +151,11 @@
       </pre>
       <li>初始化</li>
       <pre>PyTorch Module自带的默认初始化方法往往更可靠。</pre>
+      <li>数据集输入问题</li>
+      <pre>把训练集dataloader的shuffle关掉，溯源找到数据集对应元素。例如优酷超分数据集就有2048x1152分辨率的视频。
+           要记得数据集是有shuffle的，在处理数据逻辑时一定要意识64到。
+      </pre>
+
   </ul>
 
 
