@@ -197,7 +197,27 @@
       <li>torch.cuda.synchronize()</li>
         等待当前设备上所有流中的所有核心完成。 如果不加syn, forward会马上返回。
         但加上syn后，cpu会等待模型实际运行完再获取数据.实际使用时，如果不逐段统计时间，可以不加这个sync.
+        <pre>
+            <font color="#2E86C1">
+            #
+            from contextlib import contextmanager
 
+            @contextmanager
+            def timer(self, name):
+                start = torch.cuda.Event(enable_timing=True)
+                end = torch.cuda.Event(enable_timing=True)
+
+                start.record()
+                yield
+                end.record()
+
+                torch.cuda.synchronize()
+                print(f'[{name}] done in {start.elapsed_time(end):.3f} ms')
+
+            with timer('GTX 1080 Ti 720p inference'):
+                    out = model(input)
+            </font>
+        </pre>
 
 
   </ul>
