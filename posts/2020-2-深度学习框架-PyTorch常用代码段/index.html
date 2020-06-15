@@ -155,6 +155,50 @@
       <pre>把训练集dataloader的shuffle关掉，溯源找到数据集对应元素。例如优酷超分数据集就有2048x1152分辨率的视频。
            要记得数据集是有shuffle的，在处理数据逻辑时一定要意识64到。
       </pre>
+      <li>模型验证集挺好的，结果测试色偏、失真特别奇怪</li>
+      <pre>很有可能就是忘了model.load_state_dict()，是按默认初始化跑的图片。psnr直接会降到十几二十。</pre>
+      <li>PyTorch测试模型执行计算耗费的时间</li>
+      <pre>
+          <font color="#D4E6F1">一般我们都会使用这种方式一测试时间</font>
+
+          # 方式一:
+          star = time.time()
+          result = model(input)
+          end = time.time()
+
+          <font color="#D4E6F1">但正确的应该是下边这种方式二</font>
+
+          # 方式二:
+          torch.cuda.synchronize()
+          start = time.time()
+          result = model(input)
+          torch.cuda.synchronize()
+          end = time.time()
+
+          <font color="#D4E6F1">为什么这样呢？
+          在pytorch里面，程序的执行都是异步的。如果采用第一种方式，测试的时间会很短，因为执行完end=time.time()程序就退出了，后台的cu也因为python的退出退出了；
+              如果采用第二种方式，代码会同步cu的操作，等待gpu上的操作都完成了再继续计算end = time.time()</font>
+
+          <font color="#D4E6F1">如果将方式一代码改为方式三：</font>
+
+          # 方式三:
+          start = time.time()
+          result = model(input)
+          print(result) #或 result.cpu()
+          end = time.time()
+
+          <font color="#D4E6F1">这时候会发现方式三和方式二的时间是类似的，因为方式三会等待gpu上的结果执行完传给print函数，所以此时间就和方式二同步操作的时间基本上是一致的了。
+              将print(result)换成result.cpu()也可以得到相同的结果。</font>
+
+
+          <font color="#D2B4DE">来自作者：几时见得清梦 的简书笔记</font>
+
+      </pre>
+      <li>torch.cuda.synchronize()</li>
+        等待当前设备上所有流中的所有核心完成。 如果不加syn, forward会马上返回。
+        但加上syn后，cpu会等待模型实际运行完再获取数据.实际使用时，如果不逐段统计时间，可以不加这个sync.
+
+
 
   </ul>
 
