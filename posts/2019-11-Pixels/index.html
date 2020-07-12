@@ -152,6 +152,9 @@ def forward(self, x):
 1、2方案在插值前后进行全局残差，区别不大。效果一定程度等价。
 </pre>
 
+<h2>Training</h2>
+<pre>感受野足够大的话，增大patchsize接着训是会涨点的。训练集loss不一定降，但patchsize更接近验证集的尺寸，有助于验证集指标提升。</pre>
+
 
 <h2>MMSR</h2>
 <pre>

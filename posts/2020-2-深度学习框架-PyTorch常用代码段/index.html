@@ -220,6 +220,11 @@
             </font>
             这样结果才一致的惹。
         </pre>
+      <li>对比试验的优化器和lr更新策略</li>
+      <pre>①不使用scheduler, Adam + 一个大的epoch训下去。这样比较公平。
+           ②ReduceLROnPlateau有点运气成分，要么就在loss是否下降上做。如果是验证集PSNR，那最好将容忍度设很大。
+           ③余弦退火。策略一致就是可以的。
+      </pre>
 
 
   </ul>
