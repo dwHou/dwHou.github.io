@@ -226,6 +226,12 @@
            ③余弦退火。策略一致就是可以的。
       </pre>
 
+      <li>train 与 val 的区别</li>
+      <pre>
+          model.train() ：启用 BatchNormalization 和 Dropout
+          model.eval() ：不启用 BatchNormalization 和 Dropout
+          val时会加上 with torch.no_grad()
+      </pre>
 
   </ul>
 
