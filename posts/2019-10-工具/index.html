@@ -391,6 +391,7 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       这两个是HEVC的两种编码配置，你用的HM的话，在cfg文件夹里面应该有各种编码配置。如果用的x265，需要自己通过命令行去配置各种参数。
 
   <li>抽帧</li>
+  <li>从某一帧开始ffmpeg -start_number 500 -i </li>
   <li>-vf select='eq(pict_type\,I) 抽I帧</li>
   <li>-vf select='not(mod(n\,25)) 隔25帧抽</li>
   <li>抽帧记得使用-vsync 0</li>
