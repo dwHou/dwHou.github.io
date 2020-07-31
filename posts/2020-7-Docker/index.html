@@ -4,7 +4,7 @@
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>深度学习框架</title>
+        <title>Docker</title>
 
         <link rel="stylesheet" href="../../fonts/Serif/cmun-serif.css" />
         <link rel="stylesheet" href="../../fonts/Serif-Slanted/cmun-serif-slanted.css" />
@@ -92,11 +92,11 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8">
-                            <h1>PyTorch</h1>
-                            <div style="font-size: 170%;">持续更新</div>
+                            <h1>Docker实践</h1>
+                            <div style="font-size: 170%;">容器技术，划时代的开源项目</div>
                             <br>
                             <div class="info">
-    <p style="font-family:CMSS; font-size:120%">Posted on Feb.19, 2020</p>
+    <p style="font-family:CMSS; font-size:120%">Posted on Feb.4, 2020</p>
 
     <!--
         by dwHou
@@ -116,129 +116,21 @@
   </style>
 
 
-  <h2>Pytorch常用代码段</h2>
-  <ul>
-
-  <li><a href="./PyTorch常用代码段.html"> 📓Cookbook </a></li>
     
-  </ul>
 
 
-  <h2>框架使用经验</h2>
+  <h2>Docker</h2>
   <ul>
 
+  <li><b>斐波那契数列(如:爬楼梯)</b></li>
+      <li>fib1 \(O(2^{n})\): f(n-1)+f(n-2)，因为n每增1，新增几乎成倍的重复计算 [递归]</li>
+      <li>fib2 \(O(n)\): list.append(li[-1]+li[-2])，空间换时间 [迭代]</li>
+      <li>fib3 \(O(n)\): c=a+b a=b b=c，空间为O(1),速度也比fib2快(append略微耗时) [迭代]</li>
+  <li><b>汉诺塔</b></li>
+      <li>更典型：大问题可以靠几部分小问题完成，而小问题本质上和大问题是一个问题，只是规模小。</li>
+      <li>二分查找、斐波那契还可以通过非递归的方式解决。但汉诺塔问题是不用递归就很难解决的。</li>
   </ul>
 
-  <h2>遇到的坑/bug</h2>
-  <ul>
-      <li>in-place操作</li>
-      in-place operation在pytorch中是指改变一个tensor的值的时候，不经过复制操作，而是直接在原来的内存上改变它的值。可以把它成为原地操作符。
-      在pytorch中经常加后缀“_”来代表原地in-place operation，比如说.add_() 或者.scatter()。python里面的+=，*=也是in-place operation。
-      PyTorch旧版本有提示：除非您在内存压力很大的情况下，否则您可能永远不需要使用它们。
-      当时的原因是１．覆盖梯度计算所需的值。２．每个in-place操作实际上需要实现重写计算图。
-      <pre>
-          卷积这些操作不是in-place，
-          relu可选in-place，
-          -=,+=这类是in-place，
-          CAIN实现的改版的meanshift——sub_mean()就也是in-place的。
-          因为你进入网络就进行了原地操作，所以prediction = model(input)会改动到input.
-          解决方案就是，进入网络后
-          foward(x):
-                x = x.clone()
-          RCAN、EDSR这些DIV2k数据集上的Meanshift是用卷积方式实现的，就不存在这个问题。
-
-          <font color="red">总结:</font> 不想受到in-place影响的变量，可以拷贝x.copy()，或者如果是张量可以x.clone()。
-      </pre>
-      <li>初始化</li>
-      <pre>PyTorch Module自带的默认初始化方法往往更可靠。</pre>
-      <li>数据集输入问题</li>
-      <pre>把训练集dataloader的shuffle关掉，溯源找到数据集对应元素。例如优酷超分数据集就有2048x1152分辨率的视频。
-           要记得数据集是有shuffle的，在处理数据逻辑时一定要意识到。
-      </pre>
-      <li>模型验证集挺好的，结果测试色偏、失真特别奇怪</li>
-      <pre>很有可能就是忘了model.load_state_dict()，是按默认初始化跑的图片。psnr直接会降到十几二十。</pre>
-      <li>PyTorch测试模型执行计算耗费的时间</li>
-      <pre>
-          <font color="#D2B4DE">一般我们都会使用这种方式一测试时间</font>
-
-          # 方式一:
-          star = time.time()
-          result = model(input)
-          end = time.time()
-
-          <font color="#D2B4DE">但正确的应该是下边这种方式二</font>
-
-          # 方式二:
-          torch.cuda.synchronize()
-          start = time.time()
-          result = model(input)
-          torch.cuda.synchronize()
-          end = time.time()
-
-          <font color="#D2B4DE">为什么这样呢？
-          在pytorch里面，程序的执行都是异步的。如果采用第一种方式，测试的时间会很短，因为执行完end=time.time()程序就退出了，后台的cu也因为python的退出退出了；
-              如果采用第二种方式，代码会同步cu的操作，等待gpu上的操作都完成了再继续计算end = time.time()</font>
-
-          <font color="#D2B4DE">如果将方式一代码改为方式三：</font>
-
-          # 方式三:
-          start = time.time()
-          result = model(input)
-          print(result) #或 result.cpu()
-          end = time.time()
-
-          <font color="#D2B4DE">这时候会发现方式三和方式二的时间是类似的，因为方式三会等待gpu上的结果执行完传给print函数，所以此时间就和方式二同步操作的时间基本上是一致的了。
-              将print(result)换成result.cpu()也可以得到相同的结果。</font>
-
-
-          <font color="#D2B4DE">来自作者：几时见得清梦 的简书笔记</font>
-
-      </pre>
-      <li>torch.cuda.synchronize()</li>
-        等待当前设备上所有流中的所有核心完成。 如果不加syn, forward会马上返回。
-        但加上syn后，cpu会等待模型实际运行完再获取数据.实际使用时，如果不逐段统计时间，可以不加这个sync.
-        <pre>
-
-            #<font color="#D4E6F1"></font>
-            <font color="#2E86C1">
-            from contextlib import contextmanager
-
-            @contextmanager
-            def timer(self, name):
-                start = torch.cuda.Event(enable_timing=True)
-                end = torch.cuda.Event(enable_timing=True)
-
-                start.record()
-                yield
-                end.record()
-
-                torch.cuda.synchronize()
-                print(f'[{name}] done in {start.elapsed_time(end):.3f} ms')
-
-            with timer('GTX 1080 Ti 720p inference'):
-                    out = model(input)
-            </font>
-            这样结果才一致的惹。
-        </pre>
-      <li>对比试验的优化器和lr更新策略</li>
-      <pre>①不使用scheduler, Adam + 一个大的epoch训下去。这样比较公平。
-           ②ReduceLROnPlateau有点运气成分，要么就在loss是否下降上做。如果是验证集PSNR，那最好将容忍度设很大。
-           ③余弦退火。策略一致就是可以的。
-      </pre>
-
-      <li>train 与 val 的区别</li>
-      <pre>
-          model.train() ：启用 BatchNormalization 和 Dropout
-          model.eval() ：不启用 BatchNormalization 和 Dropout
-          val时会加上 with torch.no_grad()
-      </pre>
-
-      <li> torch.nn 与 torch.nn.functional</li>
-      <pre>
-
-      </pre>
-
-  </ul>
 
 
 
