@@ -127,8 +127,16 @@
       Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 OverlayFS 类的 Union FS 等技术，
       对进程进行封装隔离，属于 操作系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容器。
   </pre>
-      
-  <li><b>汉诺塔</b></li>
+
+  <li><b>Docker和传统虚拟化方式(虚拟机技术)的不同</b></li>
+  <pre>
+      传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；
+      容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便。
+  </pre>
+  <img src="virtualization.png">
+  <img src="docker.png">
+
+  <li><b>为什么要用Docker</b></li>
 
   </ul>
 
