@@ -289,6 +289,21 @@ Terminal <--[<output]--- |       |                \ \
       The simple answer is that if you want to reconnect to a terminal from a different place, use screen or tmux.
   </li>
 
+  <h2>磁盘推出</h2>
+  <ul>
+  <li>磁盘没有被推出，因为一个或多个程序可能正在使用它。</li>
+      <pre>
+          df -lh 查看硬盘编号，如/dev/disk2s1
+
+          lsof /Volumes/Seagate/
+
+          打开活动监视器 Activity Monitor，找到 QuickLook，强制退出
+          如果 lsof /Volumes/Seagate/ 没有输出的话，加上 sudo 再执行 sudo lsof /Volumes/Seagate/，
+          估计会发现是 mds 和 mds_store 在后台搞鬼, 这两个是 SpotLight 的进程，强退之！
+      </pre>
+      <li> lsof : lists openfiles 列出打开文件。 <font color="red">注：</font>在Unix中一切（包括网络套接口）都是文件。</li>
+  </ul>
+
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
 A shortname is the unique identifier assigned to a Disqus site. 
 
