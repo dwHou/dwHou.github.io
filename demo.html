@@ -139,9 +139,12 @@
                         vid.posterImage.show();
                         vid.bigPlayButton.show();
                         vid.currentTime(0);
-                        $('vid.vjs-poster').fadeIn();
                         });
-
+                        vid.on("ended", function(){
+                        $('vid.vjs-poster').fadeIn();
+                        vid.posterImage.show();
+                        vid.bigPlayButton.show();
+                        });
                         });
                            </script>
 
