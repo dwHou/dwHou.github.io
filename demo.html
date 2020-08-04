@@ -116,7 +116,7 @@ function resetVideo() {
                             <h3>Reference-based restoration for mixed-resolution video decoding</h3>
                             示例: 参考帧为第一帧
                             <video
-                                id="my-video"
+                                id="r3n-video"
                                 class="video-js  vjs-big-play-centered vjs-fluid "
                                 controls
                                 preload="auto"
@@ -136,6 +136,21 @@ function resetVideo() {
                                   >
                                 </p>
                             </video>
+
+                            <script>
+                            videojs("r3n-video").ready(function(){
+
+                            var vid = this;
+                            vid.on("ended", function(){
+                            alert ("I have triggered");
+                            vid.posterImage.show();
+                            vid.bigPlayButton.show();
+                            vid.currentTime(0);
+                            });
+
+                            });
+                            </script>
+
 
                             <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
 
