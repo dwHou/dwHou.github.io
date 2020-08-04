@@ -134,19 +134,22 @@
                         videojs("r3n-video").ready(function(){
 
                         var vid = this;
-                        vid.on("ended", function(){
-                        alert ("I have triggered");
-                        vid.posterImage.show();
-                        vid.bigPlayButton.show();
-                        vid.currentTime(0);
-                        });
-                        vid.off("ended", function(){
-                        alert ("ok");
-                        $('vid.vjs-poster').fadeIn();
-                        vid.posterImage.show();
-                        vid.bigPlayButton.show();
-                        });
-                        });
+                        vid.on("ended", function()
+                            {
+                                vid.posterImage.show(); //shows your poster image//
+                                vid.currentTime(0);
+                                vid.controlBar.hide(); //hides your controls//
+                                vid.bigPlayButton.show(); //shows your play button//
+                                vid.cancelFullScreen(); //cancels your fullscreen//
+                                document.mozCancelFullScreen(); //cancels your fullscreen in firefox//
+                            });
+                        vid.on("play", function()  //function to play the video again//
+                            {
+                                vid.posterImage.hide(); //hides your poster//
+                                vid.controlBar.show(); //shows your controls//
+                                vid.bigPlayButton.hide(); //hides your play button//
+                            });
+                        };
                            </script>
 
 
