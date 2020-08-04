@@ -140,7 +140,7 @@
                         vid.bigPlayButton.show();
                         vid.currentTime(0);
                         });
-                        vid.on("ended", function(){
+                        vid.off("ended", function(){
                         $('vid.vjs-poster').fadeIn();
                         vid.posterImage.show();
                         vid.bigPlayButton.show();
