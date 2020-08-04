@@ -61,6 +61,7 @@
 </script>
 
 <!-- https://videojs.com/getting-started -->
+<!-- https://www.awaimai.com/2053.html video.js使用技巧 -->
 <link href="https://vjs.zencdn.net/7.8.4/video-js.css" rel="stylesheet" />
 <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
 <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
@@ -73,7 +74,7 @@ function resetVideo() {
     // resets the video element by resetting the source
     this.src = this.src
 }
-</script>              
+</script>
 
 
     </head>
@@ -113,7 +114,7 @@ function resetVideo() {
                             <h2>Video Enhancement</h2>
 
                             <h3>Reference-based restoration for mixed-resolution video decoding</h3>
-
+                            示例: 参考帧为第一帧
                             <video
                                 id="my-video"
                                 class="video-js"
@@ -123,6 +124,7 @@ function resetVideo() {
                                 height="540"
                                 poster="images/R3N.png"
                                 data-setup="{}"
+                                onended="showImg()"
                               >
                                 <source src="video/R3N_5.mp4" type="video/mp4" />
                                 <!-- <source src="video/.webm" type="video/webm" /> -->
