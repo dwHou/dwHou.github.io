@@ -117,7 +117,7 @@
                                 data-setup="{}"
                                 onended="showImg()"
                               >
-                                <source src="video/R3N_5.mp4" type="video/mp4" />
+                                <source src="video/compare.mp4" type="video/mp4" />
                                 <!-- <source src="video/.webm" type="video/webm" /> -->
                                 <p class="vjs-no-js">
                                   To view this video please enable JavaScript, and consider upgrading to a
@@ -135,10 +135,10 @@
 
                             var vid = this;
                             vid.on("ended", function(){
-                            alert ("I have triggered");
                             vid.posterImage.show();
                             vid.bigPlayButton.show();
                             vid.currentTime(0);
+                            video_player.cancelFullScreen();
                             });
 
                             });
