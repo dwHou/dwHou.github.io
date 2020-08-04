@@ -130,27 +130,26 @@
 
                             <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
 
-                            <script>
-                        videojs("r3n-video").ready(function(){
 
-                        var vid = this;
-                        vid.on("ended", function()
-                            {
-                                vid.posterImage.show(); //shows your poster image//
-                                vid.currentTime(0);
-                                vid.controlBar.hide(); //hides your controls//
-                                vid.bigPlayButton.show(); //shows your play button//
-                                vid.cancelFullScreen(); //cancels your fullscreen//
-                                document.mozCancelFullScreen(); //cancels your fullscreen in firefox//
-                            });
-                        vid.on("play", function()  //function to play the video again//
-                            {
-                                vid.posterImage.hide(); //hides your poster//
-                                vid.controlBar.show(); //shows your controls//
-                                vid.bigPlayButton.hide(); //hides your play button//
-                            });
-                        };
-                           </script>
+                            <script type="text/javascript">
+                                var vid = videojs("r3n-video");
+                                vid.on("ended", function()
+                                    {
+                                        vid.posterImage.show(); //shows your poster image//
+                                        vid.currentTime(0);
+                                        vid.controlBar.hide(); //hides your controls//
+                                        vid.bigPlayButton.show(); //shows your play button//
+                                        vid.cancelFullScreen(); //cancels your fullscreen//
+                                        document.mozCancelFullScreen(); //cancels your fullscreen in firefox//
+                                    });
+                                vid.on("play", function()  //function to play the video again//
+                                    {
+                                        vid.posterImage.hide(); //hides your poster//
+                                        vid.controlBar.show(); //shows your controls//
+                                        vid.bigPlayButton.hide(); //hides your play button//
+                                    });
+                                };
+                            </script>
 
 
 
