@@ -108,7 +108,7 @@
                             <li>示例: 参考帧为第一帧</li>
                             <video
                                 id="r3n-video"
-                                class="video-js  vjs-big-play-centered vjs-fluid "
+                                class="video-js vjs-fluid "
                                 controls
                                 preload="auto"
                                 width="960"
@@ -128,28 +128,16 @@
                             </video>
 
                             <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
-
-
+                            
                             <script type="text/javascript">
                                 var vid = videojs("r3n-video");
                                 vid.on("ended", function()
                                     {
-                                        vid.poster.show(); //shows your poster image//
-                                        vid.currentTime(0);
-                                        vid.controlBar.hide(); //hides your controls//
-                                        vid.bigPlayButton.show(); //shows your play button//
-                                        vid.cancelFullScreen(); //cancels your fullscreen//
-                                        document.mozCancelFullScreen(); //cancels your fullscreen in firefox//
-                                    });
-                                vid.on("play", function()  //function to play the video again//
-                                    {
-                                        vid.posterImage.hide(); //hides your poster//
-                                        vid.controlBar.show(); //shows your controls//
-                                        vid.bigPlayButton.hide(); //hides your play button//
+                                        vid.hasStarted(false);
                                     });
                             </script>
 
-
+                           
 
                         </div>
                         <div class="col-md-4" id="toc-wrapper">
