@@ -292,6 +292,8 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       客户端：编辑/etc/ssh/ssh_config，增加一行配置<pre>ServerAliveInterval 60</pre><br>
       服务端：编辑/etc/ssh/sshd_config，增加一行配置<pre>ClientAliveInterval 60</pre><br>
       还可添加ServerAliveCountMax 3 表示服务器发出请求后客户端未响应次数达到一定值就自动断开,正常情况下,客户端会正常响应.
+      <li>ssh -v</li>
+      用ssh -v去连有问题的服务器，这时会有比较详细的调试信息在屏幕上输出，可以帮助判断是哪一步出了问题。
   </ul>
 
   <h2>shell</h2>
