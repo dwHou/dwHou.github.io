@@ -256,6 +256,21 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       <li><b>作图</b> 和overleaf搭配是写论文的神器。并且GoogleDrive云端存储，跨平台友好。</li>
   </ul>
 
+  <h2>epstool</h2>
+  <ul>
+      <li><b>转换到eps格式</b>和overleaf,draw.io搭配是写论文的神器。 EPS文件格式又被称为带有预视图象的PS格式， 在Mac和PC环境下的图形和版面设计中广泛使用。</li>
+      <pre>brew install epstool
+           png转eps
+           epstopdf --hires --outfile=output.eps input_file.png
+           去除白边
+           epstool --copy --bbox output.eps output_cut.eps
+           上述的操作流程可以写成一个脚本
+           epstopdf --hires --outfile=output.eps $1
+           epstool --copy --bbox output.eps $2
+           rm output.eps
+      </pre>
+  </ul>
+
 
   <h2>Pytorch/Tensorflow</h2>
   https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/linux-64/
