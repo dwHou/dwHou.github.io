@@ -127,8 +127,38 @@
                                 </p>
                             </video>
 
+                            <li>消融: 可变形卷积增加鲁棒性</li>
+                            <video
+                                id="r2n_r3n"
+                                class="video-js vjs-fluid "
+                                controls
+                                preload="auto"
+                                width="1920"
+                                height="540"
+                                poster="images/R2vsR3.png"
+                                data-setup="{}"
+                              >
+                                <source src="video/R2vsR3.mp4" type="video/mp4" />
+                                <!-- <source src="video/.webm" type="video/webm" /> -->
+                                <p class="vjs-no-js">
+                                  To view this video please enable JavaScript, and consider upgrading to a
+                                  web browser that
+                                  <a href="https://videojs.com/html5-video-support/" target="_blank"
+                                    >supports HTML5 video</a
+                                  >
+                                </p>
+                            </video>
+
                             <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
                             
+                            <script type="text/javascript">
+                                var vid = videojs("r2n_r3n");
+                                vid.on("ended", function()
+                                    {
+                                        vid.hasStarted(false);
+                                    });
+                            </script>
+
                             <script type="text/javascript">
                                 var vid = videojs("r3n-video");
                                 vid.on("ended", function()
