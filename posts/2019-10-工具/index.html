@@ -256,20 +256,20 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       <li><b>作图</b> 和overleaf搭配是写论文的神器。并且GoogleDrive云端存储，跨平台友好。</li>
   </ul>
 
-  <h2>epstool</h2>
+  <h2></h2>
+  EPS文件格式又被称为带有预视图象的PS格式， 在Mac和PC环境下的图形和版面设计中广泛使用。
   <ul>
-      <li><b>转换到eps格式</b>和overleaf,draw.io搭配是写论文的神器。 EPS文件格式又被称为带有预视图象的PS格式， 在Mac和PC环境下的图形和版面设计中广泛使用。</li>
+      <li><b>epstool</b> eps处理以及转换到其他格式</li>
       <pre>
-          <i>brew install epstool</i>
-           png转eps
-           epstopdf --hires --outfile=output.eps input_file.png
-           去除白边
-           epstool --copy --bbox output.eps output_cut.eps
-           上述的操作流程可以写成一个脚本
-           epstopdf --hires --outfile=output.eps $1
-           epstool --copy --bbox output.eps $2
-           rm output.eps
+          <a href="https://www.jianshu.com/p/43fc0256aa7d">brew install epstool</a>
       </pre>
+      <li><b>ImageMagick</b> 创建，编辑，撰写，或转换位图图像, 在Apache 2.0许可下分发的免费软件</li>
+      <pre>
+          <a href="https://blog.csdn.net/cuma2369/article/details/107665709">brew install ImageMagick</a>
+          convert image.png image.eps
+          # For other image formats, the command is similar.
+      </pre>
+
   </ul>
 
 
