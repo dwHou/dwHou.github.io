@@ -305,6 +305,17 @@ Terminal <--[<output]--- |       |                \ \
       <li> lsof : lists openfiles 列出打开文件。 <font color="red">注：</font>在Unix中一切（包括网络套接口）都是文件。</li>
   </ul>
 
+  <h2>跳板机掉线</h2>
+  <ul>
+      <li>检查机器是否设置永不休眠</li>
+      <pre>
+      Mac os 在设置关闭显示器不休眠中有两个状态分别为“电池”与“电源适配器”
+      Step1：系统编好设置 — 节能——电池，勾选“当显示器关闭时，防止电脑自动进入睡眠”，取消“如果可能，使硬盘自动进入睡眠”。
+      Step1：系统编好设置 — 节能——电源适配器，勾选“当显示器关闭时，防止电脑自动进入睡眠”，取消“如果可能，使硬盘自动进入睡眠”。
+      </pre>
+      <li>检查客户端是否设置保持活动状态</li>
+  </ul>
+
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
 A shortname is the unique identifier assigned to a Disqus site. 
 
