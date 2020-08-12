@@ -316,6 +316,17 @@ Terminal <--[<output]--- |       |                \ \
       <li>检查客户端是否设置保持活动状态</li>
   </ul>
 
+  <h2>Shell下不能使用Tab补全命令</h2>
+  <ul>
+      这是因为/etc/passwd中该用户的默认shell不是/bin/bash
+      <li>修改方式 1. chsh命令</li>
+      <li>修改方式 2. sudo vim /etc/passwd</li>
+      /home/hdw:/bin/bash
+      <li>修改方式 3. usermod - s /bin/bash 用户名</li>
+      -s 修改用户登入后所使用的shell。
+  </ul>
+
+
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
 A shortname is the unique identifier assigned to a Disqus site. 
 
