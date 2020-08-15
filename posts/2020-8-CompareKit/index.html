@@ -106,6 +106,7 @@
 
 
     <h2><font color="#8B0012">CompareKit</font></h2>
+    <hr>
 	<label><input id="radioImageTypeVideo" type="radio" name="radioGroupImageType" value="video" checked>Video file</label>
 	<label><input id="radioImageTypeStills" type="radio" name="radioGroupImageType" value="stills">Still files</label>
 	<br>
@@ -120,6 +121,15 @@
 	<button id="buttonBack"><i class="fa fa-backward" style="color:#0352DB"></i></button>
 	<button id="buttonNext"><i class="fa fa-forward" style="color:#0352DB"></i></button>
 	<hr>
+    <input type="button" value="复制分享地址" onClick="copyUrl()">
+    <script type="text/javascript">
+    function copyUrl(){
+     var url = document.getElementById("url").value;
+     window.clipboardData.setData("Text",url);
+     alert("成功复制到剪切板");
+    }
+    </script>
+    <hr>
 
     <div class="form-inline">
         <video id="video0"
