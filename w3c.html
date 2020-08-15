@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>点击复制链接</title>
+</head>
+<body>
+<input type="text" size="30" id="url" value="https://www.jb51.net/">
+<input type="button" value="复制链接1" onClick="copyUrl()">
+<script type="text/javascript">
+function copyUrl(){
+ var url = document.getElementById("url").value;
+ window.clipboardData.setData("Text",url);
+ alert("复制链接成功！");
+}
+</script>
+<input type="button" value="复制链接2" onClick="url.select();document.execCommand('Copy')">
+<br/><br/>
+脚本之家提供两种简单复制链接的方法，相信总有一款适合您~O(∩_∩)O~
+</body>
+</html>
+
