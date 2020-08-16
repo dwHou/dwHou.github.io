@@ -130,26 +130,51 @@
     }
     </script>
     <hr>
-    <!-- from-inline 希望在一行进行比较，左右结构 -->
-    <div class="form-group">
+
+
+    <!-- style 希望在一行进行比较，左右结构 -->
+    <style type="text/css">
+
+    #container{overflow: hidden;}/* 清除浮动 */
+
+    #container div{width:49%;height:49%;}
+
+    .box1{float: left;}
+
+    .box2{float:left;}
+
+    </style>
+    <div class="box1">
         <video id="video0"
                controls
                muted
                width="49%"
         ></video>
+    </div>
 
+    <div class="box2">
         <video id="video1"
                muted
                width="49%"
         ></video>
     </div>
 
-	<img id="img0">
-	<img id="img1">
+    <div class="box1">
+	    <img id="img0">
+    </div>
+
+    <div class="box1">
+	    <img id="img1">
+    </div>
 	<br>
 
-	<select id="selectImg0" size="10"></select>
-	<select id="selectImg1" size="10"></select>
+    <div class="box1">
+	    <select id="selectImg0" size="10"></select>
+    </div>
+
+    <div class="box1">
+	    <select id="selectImg1" size="10"></select>
+    </div>
 	<br>
 
 
