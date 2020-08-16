@@ -65,7 +65,7 @@
     <body>
         <div id="wrap">
             <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-                <div class="container">
+                <div class="container" style="width:100%;">
                     <!--Toggle header for mobile-->
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -89,8 +89,8 @@
             </nav>
 
 
-            <div id="content">
-                <div class="container">
+            <div id="content" style="width:100%;>
+                <div class="container" style="width:100%;">
                     <div class="row">
                         <div class="col-md-8">
 
@@ -121,60 +121,45 @@
 	<button id="buttonBack"><i class="fa fa-backward" style="color:#0352DB"></i></button>
 	<button id="buttonNext"><i class="fa fa-forward" style="color:#0352DB"></i></button>
     <!-- 复制当前网页链接 -->
-    <input type="button" value="复制分享地址" onClick="cpUrl()">
     <script type="text/javascript">
-    function cpUrl(){
-     var url = "https://dwhou.github.io/posts/2020-8-CompareKit/";
-     window.clipboardData.setData("Text",url);
-     alert("成功复制到剪切板☀️️");
+    function cpUrl() {
+        // 获得要复制的链接
+        var content = "https://dwhou.github.io/posts/2020-8-CompareKit/";
+        $("body").after("<textarea cols='1' rows='1' id='copyContent'>" + content + " </textarea>");
+        var link = document.getElementById("copyContent");
+        link.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        $("#copyContent").remove();
+        alert("成功复制到剪切板~️");
     }
     </script>
+    <input type="button" value="复制分享地址" onClick="cpUrl()">
+
     <hr>
 
 
-    <!-- style 希望在一行进行比较，左右结构 -->
-    <style type="text/css">
 
-    #container{overflow: hidden;}/* 清除浮动 */
 
-    #container div{width:49.9%;height:49.9%;}
+    <video id="video0"
+           controls
+           muted
+           width:auto
+    ></video>
 
-    .box1{float: left;}
 
-    .box2{float:right;}
 
-    </style>
-    <div class="box1">
-        <video id="video0"
-               controls
-               muted
-               width="49%"
-        ></video>
-    </div>
+    <video id="video1"
+           muted
+           width:auto
+    ></video>
 
-    <div class="box2">
-        <video id="video1"
-               muted
-               width="49%"
-        ></video>
-    </div>
-
-    <div class="box1">
+    <br>
 	    <img id="img0">
-    </div>
-
-    <div class="box1">
 	    <img id="img1">
-    </div>
 	<br>
-
-    <div class="box1">
 	    <select id="selectImg0" size="10"></select>
-    </div>
-
-    <div class="box1">
 	    <select id="selectImg1" size="10"></select>
-    </div>
+
 	<br>
 
 
@@ -191,7 +176,7 @@ https://segmentfault.com/a/1190000005773009
 https://help.disqus.com/en/articles/1717111-what-s-a-shortname
 https://blog.csdn.net/weixin_34327761/article/details/89630337
    -->
-
+<br><br><br><br><br><br><br><br>
 <div id="disqus_thread"></div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
