@@ -105,7 +105,7 @@
 </div>
 </br>
 
-                            
+
 
   <h2><a href="https://man.linuxde.net/">Linux</a></h2>
 
@@ -133,6 +133,9 @@
 
   <li><b>nohup</b></li>
       <li>nohup [command] & 挂在后台运行也是ok的 <a href="https://blog.csdn.net/ianly123/article/details/85113539"> 日志信息 </a> </li>
+      <li><pre>日志信息进阶：nohup python3 -u src/main.py --cuda >./training.log 2>&1 &
+          <font color="red">-u 参数</font> 解决python执行有缓存输出的问题~
+      </pre></li>
   <li><b>gpustat-基于nvidia-smi</b> https://github.com/wookayin/gpustat </li>
   <li>watch --color -n1 gpustat --color</li>
   <li>lsblk查看设备 mount进行挂载 就可以操作外接U盘、硬盘了</li>
