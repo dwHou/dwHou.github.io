@@ -240,9 +240,9 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       解压tar -xf name.tar ———— x: extract, f: file <br>
       压缩tar -czf name.gz dir/ ———— c: create, z: gzip, f: file <br>
       检查tar -tf name.tar ———— t: list <br>
-      检查图片数目tar -tf name.gz | grep png | wc -l
-      检查压缩包顺序tar -tf name.gz | head
-      只压缩文件，不要父目录tar -czvf name.gz test/*/*
+      检查图片数目tar -tf name.gz | grep png | wc -l <br>
+      检查压缩包顺序tar -tf name.gz | head <br>
+      只压缩文件，不要父目录tar -czvf name.gz test/*/* <br>
 
       <pre>
       由于linux系统中的大多压缩程序只能对一个文件进行压缩，所以想要压缩一堆文件，就必须先进行打包，
