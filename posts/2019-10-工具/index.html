@@ -474,17 +474,20 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   <li>logging——不会抛出错误，而且可以输出到文件</li>
   <pre>
     import logging
-    logging.basicConfig(level=logging.INFO)
-
-    s = '0'
-    n = int(s)
-    logging.info('n = %d' % n)
-    print(10 / n)
+    logging.basicConfig(filename='./LOG/training.log', level=logging.INFO)
+    logging.info("info message")
   </pre>
   <li>这就是logging的好处，它允许你指定记录信息的级别，有debug，info，warning，error等几个级别，当我们指定level=INFO时，logging.debug就不起作用了。</li>
   <li><b>总结</b>相比print，具备如下优点：</li>
   <li>可以通过设置不同的日志等级，在release版本中只输出重要信息，而不必显示大量的调试信息；</li>
   <li>print将所有信息都输出到标准输出中，严重影响开发者从标准输出中查看其它数据；logging则可以由开发者决定将信息输出到什么地方，以及怎么输出；</li>
+      <li>python logging日志模块以及多进程日志<font color="red">（important）</font></li>
+      <pre>
+          <a href="https://www.jianshu.com/p/d615bf01e37b">简书</a>
+          logging遇到多进程
+          python中由于某种历史原因，多线程的性能基本可以无视。所以一般情况下python要实现并行操作或者并行计算的时候都是使用多进程。但是 python 中logging 并不支持多进程，所以会遇到不少麻烦。
+          logging 模块是线程安全的，但不能保证多进程安全。
+      </pre>
   </ul>
 
 
