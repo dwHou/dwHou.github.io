@@ -161,11 +161,11 @@
                 btn.onclick = function() {
                     if (onOff) {
                         content.innerHTML = str.substr(0, 50) + "......";
-                        btn.innerHTML = '>>>reveal'
+                        btn.innerHTML = '>>>展开'
                     } else {
                         //说明当前状态是收缩的，需要展开
                         content.innerHTML = str
-                        btn.innerHTML = '<<<hid';
+                        btn.innerHTML = '<<<收缩';
                     }
                     onOff = !onOff; //每点击一次，改变一次展开、收缩状态
                     return false; //阻止a标签的默认事件
