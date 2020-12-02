@@ -127,7 +127,9 @@
     这是一种统一的神经网络模型定义和保存方式，上面提到的除了tensorflow之外的其他框架官方应该都对onnx做了支持，而ONNX自己开发了对tensorflow的支持。
     从深度学习框架方面来说，这是各大厂商对抗谷歌tensorflow垄断地位的一种有效方式；从研究人员和开发者方面来说，这可以使开发者轻易地在不同机器学习工具之间进行转换，并为项目选择最好的组合方式，加快从研究到生产的速度。
 </pre>
-        <pre id="list_content">
+
+                            <span>
+                            <pre id="list_content">
     现在tensorRT支持的层有：
     Activation: ReLU, tanh and sigmoid
     Concatenation : Link together multiple tensors across the channel dimension.
@@ -147,8 +149,9 @@
     Unary: Supported operations are exp, log, sqrt, recip, abs and neg
     Plugin: integrate custom layer implementations that TensorRT does not natively support.
     基本上比较经典的层比如，卷积，反卷积，全连接，RNN，softmax等，在tensorRT中都是有对应的实现方式的，tensorRT是可以直接解析的。
+                            </pre>
             <a href="javascript:;" id="btn">
-        <<<收缩 </a>
+            <<<收缩 </a>
             <script type="text/javascript">
                 //获取button按钮
                 var btn = document.getElementById('btn');
@@ -171,7 +174,8 @@
                     return false; //阻止a标签的默认事件
                 }
             </script>
-        </pre>
+                                </span>
+
 <pre>
     基本上比较经典的层比如，卷积，反卷积，全连接，RNN，softmax等，在tensorRT中都是有对应的实现方式的，tensorRT是可以直接解析的。
     但是由于现在深度学习技术发展日新月异，各种不同结构的自定义层（比如：STN）层出不穷，所以tensorRT是不可能全部支持当前存在的所有层的。那对于这些自定义的层该怎么办？
