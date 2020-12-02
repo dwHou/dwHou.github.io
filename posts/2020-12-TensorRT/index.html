@@ -128,8 +128,7 @@
     从深度学习框架方面来说，这是各大厂商对抗谷歌tensorflow垄断地位的一种有效方式；从研究人员和开发者方面来说，这可以使开发者轻易地在不同机器学习工具之间进行转换，并为项目选择最好的组合方式，加快从研究到生产的速度。
 </pre>
         <pre id="list_content">
-            现在tensorRT支持的层有：
-
+    现在tensorRT支持的层有：
     Activation: ReLU, tanh and sigmoid
     Concatenation : Link together multiple tensors across the channel dimension.
     Convolution: 3D，2D
@@ -159,7 +158,7 @@
                 //获取p中的内容
                 var str = content.innerHTML;
                 //定义一个变量，表示当前的状态（收缩、展开）
-                var onOff = false; // true表示展开
+                var onOff = true; // true表示展开
                 btn.onclick = function() {
                     if (onOff) {
                         content.innerHTML = str.substr(0, 50) + "......";
@@ -176,94 +175,12 @@
 
 <h2>2.优化方式</h2>
 <pre>
-Global-skip-connection 全局残差区分高低频，改变优化目标。
-Meanshift 均值归一，增加样本稳定性。我认为是对超分任务不用BN层的一种补偿。
-According to the experience of Lim et al., it should help stabilize the training
-but doesn't affect the PSNR obviously.  thstkdgus35/EDSR-PyTorch#71、#94
-1、
-def forward(self, x):
-        x = self.sub_mean(x)
 
-        x = self.head(x)
-        res = self.body(x)
-        res += x
-        x = self.tail(res)
-
-        x = self.add_mean(x)
-2、
-def forward(self, x):
-        x = self.sub_mean(x)
-        base = F.interpolate(x, scale_factor=4, mode='bilinear', align_corners=False)
-
-        x = self.head(x)
-        x = self.body(x)
-        x = self.tail(x)
-        x += base
-
-        x = self.add_mean(x)
-1、2方案在插值前后进行全局残差，区别不大。效果一定程度等价。
 </pre>
 
 <h2>Training</h2>
 <pre>感受野足够大的话，增大patchsize接着训是会涨点的。训练集loss不一定降，但patchsize更接近验证集的尺寸，有助于验证集指标提升。</pre>
-
-<h2>Testing</h2>
-<pre>
-1. 对Metircs的方差进行分析，可以挑选出具备更好泛化性能的模型。
-2. 网络插值 ：在MSE、GAN; different noise levels and blur kernels; different aesthetic flavors. 这三种取舍中有很好的表现。
-3. 网络插值的变种 ：历史平均，对不同epoch产生的中间模型求参数均值，生成一个新的模型，经测试该模型泛化效果更好，生成的图片多样性更强。
-</pre>
-
-
-<h2>MMSR</h2>
-<pre>
-港中文mmlab的项目，基于实验室之前的工作:BasicSR、ESRGAN和EDVR.
- 
-Highlights
-    <li><b>A unified framework</b> suitable for image and video super-resolution tasks. It is also easy to adapt to other restoration tasks, e.g., deblurring, denoising, etc.</li>
-    <li><b>State of the art:</b> It includes several winning methods in competitions: such as ESRGAN (PIRM18), EDVR (NTIRE19).</li>
-    <li><b>Easy to extend:</b> It is easy to try new research ideas based on the code base.</li>
-
-数据集准备
-    为了更快的IO速度，训练数据使用了LDMB格式。不过验证/测试数据就直接读了(using image folder)。如果你不想使用LMDB，也可以使用image folder.
-    lightning memory-mapped database 基于B+树索引,高效快速的内存映射数据库。
-    
-测试
-    关于data_mode,
-    vid4 就是Vimeo90k超分的。
-    sharp_bicubic|blur_bicubic|blur|blur_comp 是REDS的四个赛道。
-    对二者训练的主要区别就是vid4适合7帧输入，REDS适合5帧。(可能说REDS运动更剧烈，更难对齐)
-    现在我们测试自己的testset，比如来自aicomp的或者优酷的，就按照sharp_bicubic替换就好了。
-</pre>
-
-<h2>Reading list</h2>
-<pre>
-<a href="https://github.com/ChaofWang/Awesome-Super-Resolution">ChaofWang / Awesome-Super-Resolution</a>
-</pre>
-
-<h2>Computer Vision</h2>
-<ul>
-    <li>Kornia</li>
-    <pre>基于PyTorch的可微计算机视觉库 <a href="https://kornia.readthedocs.io/en/latest/index.html"> kornia </a> </pre>
-</ul>
-
-<h2>大赛方案</h2>
-<pre>
-扩展: 优酷天池超分大赛
-      巧改EDVR方案<a href="https://www.leiphone.com/news/201909/4dcpVMfyOonzN1ez.html">报告链接</a>
-      EDVR详细分析<a href="https://www.jianshu.com/p/05abb917ae57">简书链接</a>
-
-      首届全国人工智能大赛
-      AI+4K HDR方案分享<a href="https://www.kesci.com/home/project/5e58acb10e2b66002c26267e">报告链接</a>
-</pre>
-
-<h2>Leaderboards</h2>
-Usually the benchmarks are single-image super-resolution (SISR) tasks.
-<li>图像超分</li>
-<pre>
-    各benchmarks榜单 <a href="https://paperswithcode.com/task/image-super-resolution">入口</a>
-</pre>
-
+                            
   
 
   
