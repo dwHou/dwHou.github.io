@@ -175,7 +175,11 @@
 <pre>
     基本上比较经典的层比如，卷积，反卷积，全连接，RNN，softmax等，在tensorRT中都是有对应的实现方式的，tensorRT是可以直接解析的。
     但是由于现在深度学习技术发展日新月异，各种不同结构的自定义层（比如：STN）层出不穷，所以tensorRT是不可能全部支持当前存在的所有层的。那对于这些自定义的层该怎么办？
-    <b>tensorRT中有一个 Plugin 层，这个层提供了 API 可以由用户自己定义tensorRT不支持的层。</b>
+    <b>tensorRT中有一个 Plugin 层，这个层提供了 API 可以由用户自己定义tensorRT不支持的层。如下图：</b>
+</pre>
+<img src="TensorRT-plugin.png">
+<pre>
+    这就解决了适应不同用户的自定义层的需求。
 </pre>
 
 <h2>2.优化方式</h2>
