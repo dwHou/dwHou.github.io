@@ -127,7 +127,7 @@
     这是一种统一的神经网络模型定义和保存方式，上面提到的除了tensorflow之外的其他框架官方应该都对onnx做了支持，而ONNX自己开发了对tensorflow的支持。
     从深度学习框架方面来说，这是各大厂商对抗谷歌tensorflow垄断地位的一种有效方式；从研究人员和开发者方面来说，这可以使开发者轻易地在不同机器学习工具之间进行转换，并为项目选择最好的组合方式，加快从研究到生产的速度。
 </pre>
-<span id="content">
+<span id="list_content">
         现在tensorRT支持的层有：
 
 Activation: ReLU, tanh and sigmoid
@@ -155,19 +155,19 @@ Plugin: integrate custom layer implementations that TensorRT does not natively s
                 //获取button按钮
                 var btn = document.getElementById('btn');
                 //获取p
-                var content = document.getElementById('content');
+                var content = document.getElementById('list_content');
                 //获取p中的内容
                 var str = content.innerHTML;
                 //定义一个变量，表示当前的状态（收缩、展开）
-                var onOff = true; // true表示展开
+                var onOff = false; // true表示展开
                 btn.onclick = function() {
                     if (onOff) {
                         content.innerHTML = str.substr(0, 50) + "......";
-                        btn.innerHTML = '>>>展开'
+                        btn.innerHTML = '>>>reveal'
                     } else {
                         //说明当前状态是收缩的，需要展开
                         content.innerHTML = str
-                        btn.innerHTML = '<<<收缩';
+                        btn.innerHTML = '<<<hid';
                     }
                     onOff = !onOff; //每点击一次，改变一次展开、收缩状态
                     return false; //阻止a标签的默认事件
