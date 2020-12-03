@@ -4,7 +4,7 @@
     
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Contact - Dew Hou's blog</title>
+        <title>About Me</title>
 
         <link rel="shortcut icon" href="images/favicon.ico"/>
         
@@ -27,7 +27,7 @@
         <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
 
         <link href="./css/sticky-footer-navbar.css" rel="stylesheet">
-        <link href="./css/bootstrap.min.css" rel="stylesheet">
+
         <link href="./css/default.css" rel="stylesheet">
 
         <link href="./css/bootstrap-carousel.css" rel="stylesheet">
@@ -54,18 +54,34 @@
   ga('send', 'pageview');
 
 </script>
-<script src="./js/scramble.js"></script>
-<script src="./js/hidebib.js"></script>   
-<script>
-    function insertpic(){
-        document.getElementById("insert").innerHTML = "<p><font face=\"courier\" style=\"display:inline;\">Peking University, University Town of Shenzhen, Nanshan District <\font></p><img src=\"images/pkusz.png\">";
-        }
-</script>     
+
+<style>
+
+.profile {
+    background-color:rgba(245,245,245,.9);
+    width:45%;
+    margin-left:50%;
+    margin-top:5%;
+    padding:20px;
+    border-radius: 20px;
+}
+
+.profile h2 {
+    margin-top: 10px;
+    font-size: 175%;
+}
+
+.profile p {
+    font-size: 150%;
+}
+
+
+</style>
 
 
     </head>
 
-    <body>
+    <body style="background: #ffffff url('images/AboutBG.jpg') no-repeat center center fixed;-moz-background-size:cover;-webkit-background-size:cover;-o-background-size:cover;background-size:cover; min-width: 394px;">
         <div id="wrap">
             <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
                 <div class="container">
@@ -91,66 +107,32 @@
                 </div>
             </nav>
 
-            
-            <div id="content">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-8">
+          
 
-                            <h1>Contact</h1>
-                            <div id="body">
-                     
-                                <p>                                   
-                                <font face="courier" id="email" style="display:inline;">
-                                    dewanghou@gmail.com                                                                                                                                   
-                                
-                                <a href="#' onclick="emailScramble1.initAnimateBubbleSort();return false;">  <!--;insertpic();return false;">-->
-                                        unscramble                                                                            
-                                </a>
-                                 
-                                <script>                                                                                                           
-                                     emailScramble1 = new scrambledString(document.getElementById('email'),                                                                        
-                                     'emailScramble1','ac.hi@eodouamglwnmg',
-                                     [4,17,16,7,14,10,2,8,1,18,9,13,19,11,15,3,5,12,6]);
-                                </script>
-                                </font>                                  
-                                </p>
-                                
-                              
-                                <!-- <div id="insert"></div> -->
+            <div class="profile">
+                <h2>Dew Hou</h2>
 
-                                <!-- 为什么onclick没反应 https://stackoverflow.com/questions/29980622/using-innerhtml-from-an-onclick-function 
-                                https://stackoverflow.com/questions/43458130/insert-html-image-when-button-is-clicked-using-javascript-innerhtml
-                                双引号，里面必须是单引号-->
-
-
-                                <!-- 这google自动获取的矢量图不好看 <a href="https://weibo.com/u/2102134461">
-                                <img src="http://www.google.com/s2/u/0/favicons?domain=https://weibo.com/u/2102134461" style="width:30px;height:36px;" /></a> -->
+                <p>A consistent learner.</p>
+                <a href="cv.pdf"><i class="fa fa-grav" style="text-align:right; font-size:36px;color:#191970;margin-right:20px"></i></a>
+                <a href="https://weibo.com/u/"><i class="fa fa-weibo" style="font-size:36px;color:red;margin-right:20px"></i></a>
+                <a href="images/QQ QR.jpeg"><i class="fa fa-qq" style="font-size:36px;color:#6495ED;margin-right:20px"></i></a>
+                <a href="images/Wechat QR.gif"><i class="fa fa-wechat" style="font-size:36px;color:#00FF7F;margin-right:20px"></i></a>
+                <a href="posts/2020-9-CloudGaming/game.html"><i class="fa fa-gamepad" style="font-size:36px;color:#FFAD86;margin-right:20px"></i></a>
 
 
 
-                            </div>
-
-                        </div>
-                        <div class="col-md-4" id="toc-wrapper">
-                        </div>
-                    </div>
-                </div>
-
+                </p>
+                <!-- 这google自动获取的矢量图不好看 <a href="https://weibo.com/u/2102134461">
+                <img src="http://www.google.com/s2/u/0/favicons?domain=https://weibo.com/u/2102134461" style="width:30px;height:36px;" /></a> -->
             </div>
-        
 
-            <div id="footer">
-                <div class="container">
-                    Subscribe to the <a href="./rss.xml">RSS feed</a>.
-                    </br>
-                    Built by <a href="https://github.com/oinkina">Oinkina</a> with
-                    <a href="http://jaspervdj.be/hakyll">Hakyll</a> 
-                    using <a href="http://getbootstrap.com/">Bootstrap</a>, 
-                    <a href="http://www.mathjax.org/">MathJax</a>, and
-                    <a href="http://disqus.com/">Disqus</a>.
-                </div>
-            </div>
+
+            <div class="col-md-4" id="toc-wrapper">
+            </div>  
+
+
+
+
         </div>
 
     <!-- jQuery-->
@@ -173,13 +155,5 @@
     <noscript>Enable JavaScript for footnotes, Disqus comments, and other cool stuff.</noscript>
 
     </body>
-    <script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
-    <!-- 动态线条 HTML5 canvas-nest
-    count  ：线条数量。
-    zindex ：层级。 放在顶层吧还是。
-    opacity：透明度。
-    color   ：线条颜色。最好用RGB颜色。
-
-    <script type="text/javascript" color="47,135,193" opacity='0.5' count="199" src="http://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
-    -->
+    <script type="text/javascript" color="#FCFCFC" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
 </html>
