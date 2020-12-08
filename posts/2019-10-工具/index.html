@@ -305,6 +305,13 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
             豆瓣(douban) http://pypi.douban.com/simple/
             中国科学技术大学 http://pypi.mirrors.ustc.edu.cn/simple/
       </pre>
+      <pre>
+          有些linux服务器处于内网，并且没有公网ip，故要想与外网进行http/https通信只能通过nat或者加proxy的方式。
+          这样的服务器可能就没法访问anaconda、pypi的官方源以及国内的清华源、科大源。
+          解决方法只有 ①打听公司内网的源，②export http/https_proxy代理。
+
+          env | grep -i proxy 可以查看代理的情况。
+      </pre>
       <li>清华TUNA协会很不错</li>
   </ul>
 
