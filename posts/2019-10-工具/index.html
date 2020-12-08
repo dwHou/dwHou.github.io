@@ -310,6 +310,9 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
           这样的服务器可能就没法访问anaconda、pypi的官方源以及国内的清华源、科大源。
           解决方法只有 ①打听公司内网的源，②export http/https_proxy代理。
 
+          在/etc/bashrc或者/etc/profile中添加如下环境变量：
+          export http_proxy=http://1.1.1.1:8082
+          export https_proxy=http://1.1.1.1:8082
           env | grep -i proxy 可以查看代理的情况。
       </pre>
       <li>清华TUNA协会很不错</li>
