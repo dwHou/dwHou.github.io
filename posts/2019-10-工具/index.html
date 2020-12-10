@@ -528,7 +528,24 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       <img src="git.gif">
       <li><a href="https://marklodato.github.io/visual-git-guide/index-zh-cn.html">图解Git</a></li>
       <li><a href="https://learngitbranching.js.org/?locale=zh_CN">Learn Git Branching</a></li>
+      <li>最简workflow</li>
+      <pre>
+          0.查看是否登录
+          git config --list
+          1.登录
+          git config --global user.name "github用户名"
+          git config --global user.email "邮箱地址"
+          2.准备提交的本地项目
+          git init "path"
+          git add . (提交所有)  or  git add +文件名 (提交单个文件)
+          git commit -m "First commit"
+          3.绑定远程仓库
+          git remote add origin git@github.com:dwhou/xxx.git
+          4.推到master分支
+          git push -u origin master
 
+
+      </pre>
 
 
   </ul>
