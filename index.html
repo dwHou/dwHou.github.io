@@ -39,6 +39,7 @@
 
         <!-- <link href="./favicon.ico" rel="shortcut icon" /> -->
 
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -372,18 +373,35 @@
 <p>
     <b>3-</b>只要不断按着梯度来，最差也可以进入局部最优解。
 </p>    
-<br>						
+<br>
+
+<script language="JavaScript" type="text/JavaScript">
+    function    MM_jumpMenu(targ,selObj,restore){    //v3.0
+    //本窗口打开
+      //eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+" ' ");
+      //alert(selObj.options[selObj.selectedIndex].value)
+      //新窗口打开
+    window.open(selObj.options[selObj.selectedIndex].value);
+      if (restore) selObj.selectedIndex=0
+    }
+</script>
+
+<select name="select"onChange="MM_jumpMenu('parent',this,1)">
+    <option selected="selected">Blogroll</option>
+    <option value="https://www.xpixel.group">X-Pixel</option>
+    <option value="http://www4.comp.polyu.edu.hk/~cslzhang/">张磊 </option>
+    <option value="https://renyang-home.github.io">杨韧 </option>
+    <option value="https://sites.google.com/site/shuhanggu/home">顾舒航</option>
+    <option value="http://homepage.hit.edu.cn/wangmengzuo">左旺孟</option>
+    <option value="https://engineering.nyu.edu/faculty/yao-wang">Yao Wang</option>
+</select>
+
+
+
 <h2 style="margin-top: 8px;">Blogroll</h2>
 <p>
-    <b>🔢</b><a href="https://me.csdn.net/Cyiano">Cyiano   </a><br>
     <b>⚒</b><a href="https://www.xpixel.group">X-Pixel    </a><br>
-    <b>⚔</b><a href="https://xinntao.github.io/">Xintao Wang    </a><br>
-    <b>⚓</b><a href="https://www.aiuai.cn/">AIUAI    </a><br> <b>⚖</b><a href="https://morvanzhou.github.io/">莫烦python    </a><br>
-    <b>🎏</b><a href="http://spytensor.com/">buaaZhu    </a><br>
-    <b>♟</b><a href="https://cloud.tencent.com/developer/search/article-%E4%B8%93%E7%9F%A5-PyTorch%E6%89%8B%E6%8A%8A%E6%89%8B%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%95%99%E7%A8%8B">动手教程</a><br>
-    <b>🌈</b><a href="https://www.cnblogs.com/bupt213/">北邮唠嗑    </a><br>
-    <b>⏲</b><a href="https://haomood.github.io/homepage/">张皓-优图 </a><br>
-    <b>🗓</b><a href="https://it-hao.github.io">耗子-超分 </a><br>
+    <b>⚓</b><a href="https://www.aiuai.cn/">AIUAI    </a><br>
     <b>🗓</b><a href="https://mkfmiku.github.io">Kangfu Mei-超分 </a><br>
     <b>🧸</b><a href="https://guidewsp.github.io/">TCLer-low level</a><br>
     <b>🍀</b>科大滴同学<br>
@@ -410,15 +428,7 @@
     <br>
 </p>   
 <br>
-
-<h2 style="margin-top: 8px;">Image/video restoration</h2>
-<p>
-    <b>⚒</b><a href="http://www4.comp.polyu.edu.hk/~cslzhang/">张磊    </a><br>
-    <b>🍉</b><a href="https://renyang-home.github.io">杨韧    </a><br>
-    <b>⚔</b><a href="https://sites.google.com/site/shuhanggu/home">顾舒航    </a><br>
-    <b>⚓</b><a href="http://homepage.hit.edu.cn/wangmengzuo">左旺孟    </a><br>
-    <b>🦢</b><a href="https://engineering.nyu.edu/faculty/yao-wang">Yao Wang </a><br>
-</p>
+    
 
 <h2 style="margin-top: 8px;">Engineering</h2>
 <p>
@@ -434,7 +444,7 @@
 <h2 style="margin-top: 8px;">Intelligent Arts</h2>
 <p>
     <b>👩🏻‍🎤</b><a href="https://www.justinpinkney.com/">Justin Pinkney - AI生成艺术和漫画脸特效</a><br>
-    <b>👩🏻‍🎤</b><a href="https://neural.love/">Denis Shiryaev - AI老片修复，艺术作品人物讲话</a><br>
+    <b>‍🦢</b><a href="https://neural.love/">Denis Shiryaev - AI老片修复，艺术作品人物讲话</a><br>
 </p>
 
 <!-- 容器(div....)用float 里面的东西用text-align -->
