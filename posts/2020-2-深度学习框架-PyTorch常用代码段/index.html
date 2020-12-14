@@ -259,6 +259,16 @@
           将结果输出到 > module.txt看，宽度缩小到单栏，然后顺着网络层排查是哪儿的代码没对上。
       </pre>
 
+      <li>层层检查shape变化</li>
+      <pre>
+          image = torch.zeros((1, 3, 64, 64))
+          out = image
+          for name, op in resnet18.items():
+            out = op(out)
+            print(name, out.shape)
+          不过这需要定义和foward出现的先后顺序一致。
+      </pre>
+
   </ul>
 
 
