@@ -257,6 +257,9 @@
                   new_state_dict[name] = v
               print(new_state_dict.keys())
           将结果输出到 > module.txt看，宽度缩小到单栏，然后顺着网络层排查是哪儿的代码没对上。
+          或
+          for k in state_dict.keys():
+            print(k)
 
           def print_network(net):
             num_params = 0
