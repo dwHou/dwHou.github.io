@@ -218,6 +218,18 @@
     <li><b>Compare</b> IDE中 Select for Compare & Compare with Selected</li>
   </ul>
 
+
+  <h2>关于GCC</h2>
+  <ul>
+      <li>有许多模型算子，对部署的GCC版本有要求。比如某些DCNv2，需要gcc 5以上</li>
+      <pre>
+          yum install centos-release-scl scl-utils -y
+          yum install devtoolset-4-gcc.x86_64 devtoolset-4-gcc-c++.x86_64 devtoolset-4-gcc-gdb-plugin.x86_64 -y
+          scl enable devtoolset-4 bash
+      </pre>
+      <li>以上方式可以在当前用户下，创建一个gcc 5.3的环境。而不影响root环境，也不影响当前用户其他环境。只是替换了编译器。</li>
+  </ul>
+
   <h2>关于OpenCV</h2>
   <ul>
       <li>PIP3依赖有：opencv-python-headless, opencv-python, opencv-contrib-python</li>
