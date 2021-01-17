@@ -246,6 +246,12 @@
           没对上的话，PSNR肯定低，但对于LPIPS这样的指标影响则不大。
       </pre>
 
+      <li>PyTorch1.6训练保存的模型在1.4低版本无法加载</li>
+      <pre>
+          在1.6:  torch.save(model_.state_dict(), 'model_best_bacc.pth.tar', _use_new_zipfile_serialization=False)
+          https://github.com/pytorch/pytorch/issues/48915
+      </pre>
+
       <li>模型和保存点不匹配</li>
       <pre>
           在排除了GPU/CPU和单卡多卡的问题之后，怀疑到是代码变动。
