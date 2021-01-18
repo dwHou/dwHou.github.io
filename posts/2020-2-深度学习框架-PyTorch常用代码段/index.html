@@ -257,6 +257,7 @@
       <pre>
           在1.6:  torch.save(model_.state_dict(), 'model_best_bacc.pth.tar', _use_new_zipfile_serialization=False)
           https://github.com/pytorch/pytorch/issues/48915
+          注： 这种方式转换过的模型，字典关键词会移除多卡的标识'module'
       </pre>
 
       <li>模型和保存点不匹配</li>
