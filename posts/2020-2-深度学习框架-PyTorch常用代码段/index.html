@@ -150,6 +150,13 @@
 
           <font color="red">总结:</font> 不想受到in-place影响的变量，可以拷贝x.copy()，或者如果是张量可以x.clone()。
       </pre>
+
+      <li>检测inplace异常</li>
+      <pre>
+          # detect inplace-error
+          torch.autograd.set_detect_anomaly(True)
+      </pre>
+
       <li>初始化</li>
       <pre>PyTorch Module自带的默认初始化方法往往更可靠。</pre>
       <li>数据集输入问题</li>
