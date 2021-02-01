@@ -242,6 +242,8 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       解压tar -xf name.tar ———— x: extract, f: file <br>
       压缩tar -czf name.gz dir/ ———— c: create, z: gzip, f: file <br>
       检查tar -tf name.tar ———— t: list <br>
+      对压缩包分割split -b 4000M -d(表示后缀是数字) -a 1(表示后缀1位数字，默认为两位) xx.gz xx.gz. <br>
+      分割后的压缩包解压cat xx.gz.* | tar -xfv
       检查图片数目tar -tf name.gz | grep png | wc -l <br>
       检查压缩包顺序tar -tf name.gz | head <br>
       只压缩文件，不要父目录tar -czvf name.gz test/*/* <br>
