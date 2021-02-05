@@ -192,7 +192,7 @@ PyTorch还支持基于RPC的分布式训练(RPC)，它更通用，集体通信(c
     </pre>
 
     <li>nn.DataParallel</li>
-    <pre>虽然很简易应用，它没法提供最好的性能。因为DataParallel在每次传播过程中都需要复制模型，并且单进程-多线程的并行会遭受GIL的冲突问题</pre>
+    <pre>虽然很简易应用，它没法提供最好的性能。因为DataParallel在每次传播过程中都需要复制模型，并且单进程-多线程的并行会遭受GIL的冲突问题（GIL-thrashing）</pre>
     <li>nn.DistributedDataParallel</li>
     <pre>相比DataParallel，DistributedDataParallel需要多一步来设置，即初始化进程组(init_process_group).DDP使用多进程并行，所以在模型副本间没有GIL冲突，另外还运用了多种性能优化策略，可见论文<a href="https://arxiv.org/abs/2006.15704">VLDB'20</a>
 DDP可以和模型并行很好结合，模型并行是在模型体积很大(如bert)时使用的。
