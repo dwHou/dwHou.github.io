@@ -30,16 +30,6 @@
 
         <link href="../../comments/inlineDisqussions.css" rel="stylesheet">
 
-        <!-- SHJS0.5+ Syntax Highlighting in JavaScript-->
-        <link href="../../plugins/shjs-0.6/css/sh_blacknblue.css" rel="stylesheet">
-        <link href="../../plugins/shjs-0.6/css/sh_laruence.css" rel="stylesheet">
-        <script type="text/javascrip" src="../../plugins/shjs-0.6/sh_main.js"></script>
-        <script type="text/javascript">
-            $(function () {
-                sh_highlightDocument(/plugins/shjs-0.6/lang/‘, ‘.js’);
-            });
-        </script>
-
 
         <!--Highlight-->
         <link href="../../highlight/styles/github.css" rel="stylesheet">
@@ -216,44 +206,44 @@ DDP可以和模型并行很好结合，模型并行是在模型体积很大(如b
       </ul>
 
     <li>基础用例(8卡)</li>
-    首先需要合理的初始化配置进程组。
-    <pre class="sh_python">
-import os
-import sys
-import tempfile
+    以torch.nn.Linear作一个模型为例，对其使用DDP，完成一次正反向传播，和权值更新。
+    <pre>
 import torch
 import torch.distributed as dist
+import torch.multiprocessing as mp
 import torch.nn as nn
 import torch.optim as optim
-import torch.multiprocessing as mp
-
 from torch.nn.parallel import DistributedDataParallel as DDP
 
 
-def setup(rank, world_size):
-    if sys.platform == 'win32':
-        # Distributed package only covers collective communications with Gloo
-        # backend and FileStore on Windows platform. Set init_method parameter
-        # in init_process_group to a local file.
-        # Example init_method="file:///f:/libtmp/some_file"
-        init_method="file:///{your local file path}"
+def example(rank, world_size):
+    # create default process group
+    dist.init_process_group(backend="nccl", rank=rank, world_size=world_size)
+    # create local model
+    model = nn.Linear(10, 10).to(rank)
+    # construct DDP model
+    ddp_model = DDP(model, device_ids=[rank])
+    # define loss function and optimizer
+    loss_fn = nn.MSELoss()
+    optimizer = optim.SGD(ddp_model.parameters(), lr=0.001)
 
-        # initialize the process group
-        dist.init_process_group(
-            "gloo",
-            init_method=init_method,
-            rank=rank,
-            world_size=world_size
-        )
-    else:
-        os.environ['MASTER_ADDR'] = 'localhost'
-        os.environ['MASTER_PORT'] = '12355'
+    # forward pass
+    outputs = ddp_model(torch.randn(20, 10).to(rank))
+    labels = torch.randn(20, 10).to(rank)
+    # backward pass
+    loss_fn(outputs, labels).backward()
+    # update parameters
+    optimizer.step()
 
-        # initialize the process group
-        dist.init_process_group("gloo", rank=rank, world_size=world_size)
+def main():
+    world_size = 2
+    mp.spawn(example,
+        args=(world_size,),
+        nprocs=world_size,
+        join=True)
 
-def cleanup():
-    dist.destroy_process_group()
+if __name__=="__main__":
+    main()
     </pre>
 
 
