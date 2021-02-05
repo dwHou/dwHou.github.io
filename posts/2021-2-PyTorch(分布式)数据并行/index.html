@@ -178,6 +178,7 @@
 Distributed Data-Parallel Training，能负责梯度的通信，来保障模型副本同步，并且通过并行计算加速训练。
 PyTorch还支持基于RPC的分布式训练(RPC)，它更通用，集体通信(c10d)等特性，略。
     </pre>
+    <img src="communication.png">
 
     <li>数据并行</li>
     <pre>有多种选项。按照从简单到复杂，从原型到产品的思路，开发的路线将是：
@@ -223,7 +224,7 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 
 def setup(rank, world_size):
     # initialize the process group
-    # os.environ['MASTER_ADDR'] = 'localhost'
+    # os.environ['MASTER_ADDR'] = 'localhost' # or '127.0.0.1'
     # os.environ['MASTER_PORT'] = '12355'
     dist.<font color="red">init_process_group</font>(backend="gloo", rank=rank, world_size=world_size)
 
