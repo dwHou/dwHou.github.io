@@ -173,12 +173,10 @@
 <ul>
     <li>介绍</li>
     torch.distributed的功能
-    <ul>
-        <li>分布式并行训练(DDP)</li>
-        <pre>Distributed Data-Parallel Training，能负责梯度的通信，来保障模型副本同步，并且通过并行计算加速训练。
+        <pre>分布式并行训练(DDP)
+Distributed Data-Parallel Training，能负责梯度的通信，来保障模型副本同步，并且通过并行计算加速训练。
 PyTorch还支持基于RPC的分布式训练(RPC)、集体通信(c10d)等特性，略。
         </pre>
-    </ul>
 
     <li>数据并行</li>
     <pre>有多种选项。按照从简单到复杂，从原型到产品的思路，开发的路线将是：
@@ -194,7 +192,6 @@ PyTorch还支持基于RPC的分布式训练(RPC)、集体通信(c10d)等特性�
     <pre>虽然很简易应用，它没法提供最好的性能。因为DataParallel在每次传播过程中都需要复制模型，并且单进程-多线程的并行会遭受GIL的冲突问题</pre>
     <li>nn.DistributedDataParallel</li>
     <pre>相比DataParallel，DistributedDataParallel需要多一步来设置，即初始化进程组(init_process_group).DDP使用多进程并行，所以在模型副本间没有GIL冲突，另外还运用了多种性能优化策略，可见论文<a href="https://arxiv.org/abs/2006.15704">VLDB'20</a></pre>
-
 
 
 
