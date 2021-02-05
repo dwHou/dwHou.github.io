@@ -30,6 +30,18 @@
 
         <link href="../../comments/inlineDisqussions.css" rel="stylesheet">
 
+        <!-- SHJS0.5+ Syntax Highlighting in JavaScript-->
+        <link type=”text/css” rel=”stylesheet” href=”/plugins/shjs-0.6/css/sh_blacknblue.css”>
+        <link type=”text/css” rel=”stylesheet” href=”/plugins/shjs-0.6/css/sh_laruence.css”>
+        <script type=”text/javascript” src=”/plugins/shjs-0.6/sh_main.js”></script>
+        <script type=”text/javascript”>
+            $(function () {
+                // 自动加载荧光
+                sh_highlightDocument(/plugins/shjs-0.6/lang/‘, ‘.js’);
+            });
+        </script>
+
+
         <!--Highlight-->
         <link href="../../highlight/styles/github.css" rel="stylesheet">
 
@@ -175,7 +187,7 @@
     torch.distributed的功能
     <pre>分布式并行训练(DDP)
 Distributed Data-Parallel Training，能负责梯度的通信，来保障模型副本同步，并且通过并行计算加速训练。
-PyTorch还支持基于RPC的分布式训练(RPC)，集体通信(c10d)等特性，略。
+PyTorch还支持基于RPC的分布式训练(RPC)，它更通用，集体通信(c10d)等特性，略。
     </pre>
 
     <li>数据并行</li>
@@ -204,8 +216,11 @@ DDP可以和模型并行很好结合，模型并行是在模型体积很大(如b
           <li><a href="https://pytorch.org/docs/master/notes/ddp.html">笔记</a></li>
       </ul>
 
-    <li>用例(8卡)</li>
-    
+    <li>基础用例(8卡)</li>
+    <pre class="sh_python">
+        
+    </pre>
+
 
 
 </ul>
