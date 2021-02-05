@@ -213,7 +213,7 @@ DDP可以和模型并行很好结合，模型并行是在模型体积很大(如b
 ◦ <font color="green">group:</font> 即进程组。默认情况下，只有一个组，一个 job 即为一个组，也即一个 world。当需要进行更加精细的通信时，可以通过 new_group 接口，使用 word 的子集，创建新组，用于集体通信等。
 ◦ <font color="green">world size:</font> 表示全局进程个数。
 ◦ <font color="green">rank:</font> 表示进程序号，用于进程间通讯，表征进程优先级。rank = 0 的主机为 master 节点。
-◦ <font color="green">local rank:</font> 进程内，GPU 编号，非显式参数，由 torch.distributed.launch 内部指定。比方说， rank = 3，local_rank = 0 表示第 3 个进程内的第 1 块 GPU。
+◦ （<font color="green">local rank:</font> 进程内，GPU 编号，非显式参数，由 torch.distributed.launch 内部指定。比方说， rank = 3，local_rank = 0 表示第 3 个进程内的第 1 块 GPU。但一般rank足够，一个GPU上一个进程。）
 
 import torch
 import torch.distributed as dist
