@@ -201,9 +201,13 @@
       <li>分布式几个概念</li>
       <ul class = "level_2">
           <li>group</li>
+          <pre>即进程组。默认情况下，只有一个组，一个 job 即为一个组，也即一个 world。当需要进行更加精细的通信时，可以通过 new_group 接口，使用 word 的子集，创建新组，用于集体通信等。</pre>
           <li>world size</li>
+          <pre>表示全局进程个数。</pre>
           <li>rank</li>
+          <pre>表示进程序号，用于进程间通讯，表征进程优先级。rank = 0 的主机为 master 节点。</pre>
           <li>local_rank</li>
+          <pre>进程内，GPU 编号，非显式参数，由 torch.distributed.launch 内部指定。比方说， rank = 3，local_rank = 0 表示第 3 个进程内的第 1 块 GPU。</pre>
       </ul>
 
 
