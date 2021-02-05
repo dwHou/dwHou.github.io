@@ -225,7 +225,7 @@ def setup(rank, world_size):
     # initialize the process group
     # os.environ['MASTER_ADDR'] = 'localhost'
     # os.environ['MASTER_PORT'] = '12355'
-    dist.init_process_group(backend="gloo", rank=rank, world_size=world_size)
+    dist.<font color="red">init_process_group</font>(backend="gloo", rank=rank, world_size=world_size)
 
 def cleanup():
     dist.destroy_process_group()
@@ -236,25 +236,37 @@ def demo_basic(rank, world_size):
 
     # create model and move it to GPU with id rank
 
-    model = nn.Linear(10, 10).to(rank)
-    ddp_model = DDP(model, device_ids=[rank])
+    model = nn.Linear(10, 5).<font color="red">to(rank)</font>
+    ddp_model = <font color="red">DDP</font>(model, device_ids=[rank])
 
     loss_fn = nn.MSELoss()
     optimizer = optim.SGD(ddp_model.parameters(), lr=0.001)
 
     optimizer.zero_grad()
     outputs = ddp_model(torch.randn(20, 10))
-    labels = torch.randn(20, 5).to(rank)
+    labels = torch.randn(20, 5).<font color="red">to(rank)</font>
     loss_fn(outputs, labels).backward()
     optimizer.step()
 
     cleanup()
 
-def run_demo(demo_fn, world_size):
-    mp.spawn(demo_fn,
+def run_demo(demo_basic, world_size):
+    <font color="red">mp.spawn</font>(demo_basic,
              args=(world_size,),
              nprocs=world_size,
              join=True)
+    </pre>
+
+    <li>保存和加载checkpoint</li>
+    一个策略是只在某一个进程中保存ckp，并能加载到所有进程中。注意一定要设置好map_location。
+    <pre>
+if rank == 0:
+    # Saving it in one process is sufficient.
+    torch.save(ddp_model.state_dict(), CHECKPOINT_PATH)
+
+map_location = {'cuda:%d' % 0: 'cuda:%d' % rank}
+ddp_model.load_state_dict(torch.load(ckp_path, map_location=<font color="red">map_location</font>))
+
     </pre>
 
 
