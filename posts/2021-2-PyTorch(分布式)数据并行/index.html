@@ -167,7 +167,38 @@
 每个进程拥有独立的解释器和 GIL，消除了来自单个 Python 进程中的多个执行线程，模型副本或 GPU 的额外解释器开销和 GIL-thrashing ，因此可以减少解释器和GIL 使用冲突。这对于严重依赖 Python runtime 的 models 而言，比如说包含 RNN 层或大量小组件的models 而言，这尤为重要。
       </pre>
 
-      <li>分布式几个概念</li>
+  </ul>
+
+<h2>PyTorch并行和分布式训练</h2>
+<ul>
+    <li>介绍</li>
+    torch.distributed的功能
+    <ul>
+        <li>分布式并行训练(DDP)</li>
+        <pre>Distributed Data-Parallel Training，能负责梯度的通信，来保障模型副本同步，并且通过并行计算加速训练。
+PyTorch还支持基于RPC的分布式训练(RPC)、集体通信(c10d)等特性，略。
+        </pre>
+    </ul>
+
+    <li>数据并行</li>
+    <pre>有多种选项。按照从简单到复杂，从原型到产品的思路，开发的路线将是：
+1. 单卡训练
+2. 单机多卡 DataParallel，如果想以最小的代码改动来加速训练
+3. <a href="https://pytorch.org/tutorials/intermediate/model_parallel_tutorial.html">单机多卡</a> DistributedDataParallel，如果想更进一步加速
+4. 多机多卡 DistributedDataParallel和<a href="https://github.com/pytorch/examples/blob/master/distributed/ddp/README.md">launching script</a>，如果想突破单机的限制
+5. 弹性 torchelastic，训练中资源可以动态地加入和离开，可以容忍OOM错误.
+（6. 数据并行可以和自带混合精度<a href="https://pytorch.org/docs/master/notes/amp_examples.html#">AMP</a>搭配使用）
+    </pre>
+
+    <li>nn.DataParallel</li>
+    <pre>虽然很简易应用，它没法提供最好的性能。因为DataParallel在每次传播过程中都需要复制模型，并且单进程-多线程的并行会遭受GIL的冲突问题</pre>
+    <li>nn.DistributedDataParallel</li>
+    <pre>相比DataParallel，DistributedDataParallel需要多一步来设置，即初始化进程组(init_process_group).DDP使用多进程并行，所以在模型副本间没有GIL冲突，另外还运用了多种性能优化策略，可见论文<a href="https://arxiv.org/abs/2006.15704">VLDB'20</a></pre>
+
+
+
+
+    <li>分布式几个概念</li>
       <ul class = "level_2">
           <li>group</li>
           <pre>即进程组。默认情况下，只有一个组，一个 job 即为一个组，也即一个 world。当需要进行更加精细的通信时，可以通过 new_group 接口，使用 word 的子集，创建新组，用于集体通信等。</pre>
@@ -179,14 +210,9 @@
           <pre>进程内，GPU 编号，非显式参数，由 torch.distributed.launch 内部指定。比方说， rank = 3，local_rank = 0 表示第 3 个进程内的第 1 块 GPU。</pre>
       </ul>
 
-      <li>使用流程</li>
+</ul>
 
 
-
-
-
-
-  </ul>
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
 A shortname is the unique identifier assigned to a Disqus site. 
