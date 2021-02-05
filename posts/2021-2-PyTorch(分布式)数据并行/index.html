@@ -180,7 +180,7 @@
           进程。分别在n个GPU上运行，不再有主GPU，每个GPU执行相同的
           任务。
       </pre>
-      <pre>
+          <pre>
           <font color="red">对比</font>DataParallel，DistributedDataParallel的优势如下：
           1. 每个进程对应一个独立的训练过程，且只对梯度等少量数据进行信息交换。
              在各进程梯度计算完成之后，各进程需要将梯度进行汇总平均，然后再由 rank=0 的进程，
@@ -196,7 +196,7 @@
              模型副本或 GPU 的额外解释器开销和 GIL-thrashing ，因此可以减少解释器和 GIL 使用冲突。
              这对于严重依赖 Python runtime 的 models 而言，比如说包含 RNN 层或大量小组件的
              models 而言，这尤为重要。
-      </pre>
+          </pre>
 
       <li>分布式几个概念</li>
       <ul class = "level_2">
@@ -211,7 +211,7 @@
       </ul>
 
       <li>使用流程</li>
-      
+
 
 
 
