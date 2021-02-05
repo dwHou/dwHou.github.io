@@ -98,7 +98,7 @@
                             <div style="font-size: 170%;">个人理解和总结</div>
                             <br>
                             <div class="info">
-    <p style="font-family:CMSS; font-size:120%">Posted on Feb.19, 2020</p>
+    <p style="font-family:CMSS; font-size:120%">Posted on Feb.5, 2021</p>
 
     <!--
         by dwHou
@@ -208,6 +208,11 @@ DDP可以和模型并行很好结合，模型并行是在模型体积很大(如b
     <li>基础用例(8卡)</li>
     以torch.nn.Linear作一个模型为例，对其使用DDP，完成一次正反向传播，和权值更新。
     <pre>
+◦ <font color="green">group:</font>
+◦ <font color="green">world size:</font>
+◦ <font color="green">rank:</font>
+◦ <font color="green">local rank:</font>
+
 import torch
 import torch.distributed as dist
 import torch.multiprocessing as mp
