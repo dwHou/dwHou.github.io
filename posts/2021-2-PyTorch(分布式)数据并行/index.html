@@ -119,14 +119,24 @@
 
 
 
-  <h2>遇到的坑/bug</h2>
+  <h2>pytorch并行</h2>
+  <a href="https://www.cnblogs.com/yh-blog/p/12877922.html">*</a>
   <ul>
 
-      <li>检测inplace异常</li>
-      <pre>
-          # detect inplace-error
-          torch.autograd.set_detect_anomaly(True)
+      <li>模型并行</li>
+      <pre>简易实现：略</pre>
+      <li>数据并行</li>
+      <pre>为nn.DataParallel的底层，包括并行数据加载，
+          每个GPU本地副本对一批数据正/反向传播，梯度发送到主进程，
+          reduce归约操作计算平均梯度。然后将平均梯度结果发送回GPU，
+          更新模型参数。
+
+          后端使用数据并行性和有效的网络通信软件库(例如NCCL)，可以
+          实现使训练时间几乎线性减少。
       </pre>
+      <li>nn.DataParallel</li>
+
+
 
   </ul>
 
