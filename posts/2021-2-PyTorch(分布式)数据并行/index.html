@@ -154,8 +154,8 @@
           再将计算任务下发给其他GPU。
 
           <font color="green">低效率</font>在于1.冗余数据副本, 2.在前向传播之前跨GPU进行模型复制,
-          3.主GPU不必要地收集所有的output, 4.在前向传播之前跨GPU进行模型复制, 5.梯度减少流水线机会未开发,
-          6.GPU利用率不均
+          3.主GPU不必要地收集所有的output, 4.在前向传播之前跨GPU进行模型复制,
+          5.梯度减少流水线机会未开发, 6.GPU利用率不均
       </pre>
   </ul>
 
@@ -169,10 +169,18 @@
           分布式并行支持all-reduce, broadcast, send和receive等。
           通过MPI实现CPU通信，NCCL实现GPU通信。可用于单/多机器多卡。
 
-          由于distributed相对于上述的nn.DataParallel是一个底层的API，
-          所以
+          由于distributed相对于上述的nn.DataParallel是一个<font color="blue">底层</font>的API，
+          所以我们要修改代码，使其能够独立运行在机器(节点)中。
       </pre>
+      <img src="distributed.png">
 
+      <pre>
+          不同于DataParallel的单进程控制多GPU，在distributed的
+          帮助下，我们只需编写一份代码，torch就会自动将其分配给n个
+          进程。分别在n个GPU上运行，不再有主GPU，每个GPU执行相同的
+          任务。
+
+      </pre>
   </ul>
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
