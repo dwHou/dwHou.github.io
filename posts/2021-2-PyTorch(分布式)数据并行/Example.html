@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>Example</title></head>
+<body><pre><code class='language-python' lang='python'># -*- coding:utf8 -*-
+from __future__ import print_function
+import datetime
+import argparse
+from math import log10
+import os
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+from torch.utils.data import DataLoader
+from model.EMGA import EMGA
+from option import opt
+from tqdm import tqdm
+import logging
+from data.dataset import get_training_set, get_test_set
+import time
+from tensorboardX import SummaryWriter
+from loss import L1_Charbonnier_loss, MultiScaleLoss
+import torch.distributed as dist
+
+from torch.nn.parallel import DistributedDataParallel as DDP
+
+if __name__ == &#39;__main__&#39;:
+    os.environ[&#39;CUDA_VISIBLE_DEVICES&#39;] = f&#39;{opt.local_rank}&#39;
+    local_rank = opt.local_rank
+
+    if local_rank == 0:
+        logging.basicConfig(filename=&#39;./LOG/&#39; + &#39;LatestVersion&#39; + &#39;.log&#39;, level=logging.INFO)
+        tb_logger = SummaryWriter(&#39;./LOG/&#39;)
+
+    opt = opt
+    print(opt)
+
+    if opt.cuda and not torch.cuda.is_available():
+        raise Exception(&quot;No GPU found, please run without --cuda&quot;)
+
+    torch.manual_seed(opt.seed)
+
+    device = torch.device(&quot;cuda&quot; if opt.cuda else &quot;cpu&quot;)
+
+    print(&#39;===&gt; Loading datasets&#39;)
+
+# initial backend as NCCL
+    dist.init_process_group(backend=&#39;nccl&#39;)
+    ngpu_per_node = torch.cuda.device_count()
+    # batchsize_per_node = int(opt.batchSize / ngpu_per_node)
+    batchsize_per_node = opt.batchSize
+    train_set = get_training_set()
+    test_set = get_test_set()
+
+    train_sampler = torch.utils.data.distributed.DistributedSampler(train_set)
+
+    training_loader = DataLoader(dataset=train_set, num_workers=opt.threads, batch_size=batchsize_per_node, pin_memory=True, shuffle=(train_sampler is None), sampler=train_sampler)
+
+    testing_loader = DataLoader(dataset=test_set, num_workers=opt.threads, batch_size=opt.testBatchSize,
+                                     shuffle=False)
+
+
+    print(&#39;===&gt; Building model&#39;)
+    model = EMGA().to(device)
+
+    if torch.cuda.device_count() &gt; 1:
+        print(&quot;Let&#39;s use&quot;, torch.cuda.device_count(), &quot;GPUs!&quot;)
+        # model = nn.DataParallel(model)
+        model = nn.parallel.DistributedDataParallel(model, find_unused_parameters=True)
+
+    if not (opt.pre_train is None):
+        print(&#39;load model from %s ...&#39; % opt.pre_train)
+        # model.load_state_dict(torch.load(opt.pre_train))
+        model.load_state_dict({k.replace(&#39;module.&#39;,&#39;&#39;):v for k,v in torch.load(opt.pre_train).items()})
+        print(&#39;success!&#39;)
+
+
+
+
+    # criterion = Loss(opt)
+    # criterion = nn.L1Loss()
+    # criterion = MultiScaleLoss()
+    # criterion = L1_Charbonnier_loss()
+    # criterion_l2 = nn.MSELoss()
+    MSE = nn.MSELoss()
+
+    optimizer = optim.Adam(model.parameters(), lr=opt.lr)
+
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, &#39;max&#39;, factor=0.7, verbose=True, patience=7)
+
+    def train(epoch):
+        epoch_loss = 0
+        for iteration, batch in enumerate(training_loader, 1):
+            inputs, target, info, pqf = batch[0].to(device), batch[1].to(device), batch[2].to(device), batch[3].to(device)
+            optimizer.zero_grad()
+            # detect inplace-error
+            # torch.autograd.set_detect_anomaly(True)
+
+            prediction = model(inputs, info, pqf)
+
+            loss_car = criterion(prediction, target)
+            epoch_loss += loss_car.item()
+            loss_car.backward()
+            optimizer.step()
+
+            niter = epoch * len(training_loader) + iteration
+
+            if local_rank == 0:
+                tb_logger.add_scalars(&#39;EMGA&#39;, {&#39;train_loss&#39;: loss_car.data.item()}, niter)
+
+            print(
+                &#39;===&gt; Epoch[{}]({}/{}): Loss: {:.6f}&#39;.format(epoch, iteration, len(training_loader), loss_car.item()))
+        print(&#39;===&gt; Epoch {} Complete, Avg. Loss: {:.6f}&#39;.format(epoch, epoch_loss / len(training_loader)))
+        if local_rank == 0:
+            logging.info(&#39;Epoch Avg. Loss : {:.6f}&#39;.format(epoch_loss / len(training_loader)))
+
+
+    def test():
+        cost_time = 0
+        psnr_lst = []
+
+        with torch.no_grad():
+            for batch in tqdm(testing_loader):
+                inputs, target, info, pqf = batch[0].to(device), batch[1].to(device), batch[2].to(device), batch[3].to(device)
+                torch.cuda.synchronize()
+                begin = time.time()
+
+                prediction = model(inputs, info, pqf)
+
+                torch.cuda.synchronize()
+                end = time.time()
+                cost_time += end - begin
+
+                mse = MSE(prediction[4], target)
+                # 0, 1, 2, 3, 4, 5, 6
+                # mse = MSE(inputs[:, 4, :, :, :], target)
+
+                psnr = 10 * log10(1 / mse.item())
+                psnr_lst.append(psnr)
+                print(&#39;psnr: {:.2f}&#39;.format(psnr))
+
+            #   ---------------------------------------------------------------
+
+        psnr_var = np.var(psnr_lst)
+        psnr_sum = np.sum(psnr_lst)
+        # wandb.log({&quot;Avg. PSNR&quot;: avg_psnr / len(testing_data_loader)})
+
+        print(&#39;===&gt; Avg. PSNR: {:.4f} dB, per frame use {} ms&#39;.format( \
+        psnr_sum / len(testing_loader) , cost_time * 1000 / len(testing_loader)))
+        if local_rank == 0:
+            logging.info(&#39;frames avg. psnr {:.4f} dB with var{:.2f}&#39;.format(psnr_sum / len(testing_loader), psnr_var))
+
+
+        return psnr_sum / len(testing_loader), psnr_var
+
+    def checkpoint(epoch):
+        model_path = os.path.join(&#39;.&#39;, &#39;experiment&#39;, &#39;latestckp&#39;, &#39;latest.pth&#39;)
+        torch.save(model.state_dict(), model_path)
+        print(&#39;Checkpoint saved to {}&#39;.format(model_path))
+
+
+
+    # 记录实验时间
+    nowTime = datetime.datetime.now().strftime(&#39;%Y-%m-%d %H:%M:%S&#39;)
+    if local_rank == 0:
+        logging.info(&#39;\n experiment in {}&#39;.format(nowTime))
+
+    lr = opt.lr
+    best_psnr = 25.0
+    # psnr, var = test()
+    # w = [1.0 / 2.0, 1.0 / 4.0, 1.0 / 8.0, 1.0 / 16.0, 1.0 / 32.0]
+    w = [0.28, 0.17, 0.125, 0.16, 0.28]
+
+    # psnr, var = test()
+
+    for epoch in range(1, opt.nEpochs + 1):
+        if epoch % 10 == 0:
+            w = np.sum([np.array(w), np.array([-0.02, -0.015, 0, 0.015, 0.02])], axis=0)
+            w = w.tolist()
+            w = [i if i &gt; 0.03 else 0.03 for i in w]
+            print(&#39;====&gt; changing loss weights to&#39;, w)
+            if local_rank == 0:
+                logging.info(f&#39;====&gt; changing loss weights to {w}&#39;)
+
+        criterion = MultiScaleLoss(weights = w)
+        train(epoch)
+
+        if local_rank == 0:
+
+            logging.info(&#39;===&gt; in {}th epochs&#39;.format(epoch))
+            psnr, var = test()
+
+            scheduler.step(psnr)
+
+            if lr != optimizer.param_groups[0][&#39;lr&#39;]:
+                lr = optimizer.param_groups[0][&#39;lr&#39;]
+                logging.info(&#39;reducing lr of group 0 to {:.3e}&#39;.format(lr))
+
+
+            if psnr &gt; best_psnr:
+                best_psnr = psnr
+                model_path = os.path.join(&#39;.&#39;, &#39;experiment&#39;, &#39;M_distributed_{:.2f}dB_{:.2f}.pth&#39;.format(psnr, var))
+                logging.info(&#39;===&gt; save the best Model: reach {:.2f}dB PSNR&#39;.format(best_psnr))
+                 # torch.save(model, model_best_path)
+                torch.save(model.state_dict(), model_path)
+
+            checkpoint(epoch)
+</code></pre>
+</body>
+</html>
