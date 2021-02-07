@@ -103,7 +103,8 @@ if __name__ == '__main__':
             epoch_loss += loss_car.item()
             loss_car.backward()
             optimizer.step()
-
+            dist.barrier()
+            
             niter = epoch * len(training_loader) + iteration
 
             if local_rank == 0:
