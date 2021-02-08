@@ -274,7 +274,7 @@ ddp_model.load_state_dict(torch.load(ckp_path, map_location=<font color="red">ma
     <li>实际用例</li>
     see <a href="Example.html">train_distributed.py</a>
     <pre><font color="red">Notes</font> 1. dist.barrier() 2. nn.SyncBatchNorm.convert_sync_batchnorm()</pre>
-    <pre>nohup python -u -m torch.distributed.launch --nproc_per_node=8 train.py --cuda >training.log 2>&1 &</pre>
+    <pre>nohup CUDA_VISIBLE_DEVICES=0,1,2,3 python -u -m torch.distributed.launch --nproc_per_node=8 train.py --cuda >training.log 2>&1 &</pre>
 
 
 
