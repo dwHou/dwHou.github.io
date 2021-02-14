@@ -38,7 +38,11 @@ if __name__ == '__main__':
     if opt.cuda and not torch.cuda.is_available():
         raise Exception("No GPU found, please run without --cuda")
 
+    # torch.manual_seed(opt.seed)
     torch.manual_seed(opt.seed)
+		torch.backends.cudnn.deterministic = True
+		torch.backends.cudnn.benchmark = False
+		np.random.seed(opt.seed)
 
     device = torch.device("cuda" if opt.cuda else "cpu")
 
@@ -185,6 +189,7 @@ if __name__ == '__main__':
                 logging.info(f'====> changing loss weights to {w}')
 
         criterion = MultiScaleLoss(weights = w)
+        train_sampler.set_epoch(epoch)
         train(epoch)
 
         if local_rank == 0:
