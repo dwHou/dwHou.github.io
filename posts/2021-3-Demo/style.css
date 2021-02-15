@@ -3,7 +3,8 @@
 
 body {
     position: relative;
-    background-color: #FFFFFF;
+    /* background-color: #DDDDDD; */
+    background-color: #DDDDDD;
     font-family: 'helvetica', sans-serif;
     font-weight: lighter;
     color: #555;
