@@ -102,8 +102,79 @@
                     <div class="row">
                         <div class="col-md-8">
 
-                            <li><a href="posts/2021-3-Demo/demo1.html">Reference-based restoration for mixed-resolution video coding</a></li>
 
+                            <h2>Video Enhancement</h2>
+                            <!--
+                            <a href="https://www.encoding.com/">
+                            <i class="glyphicon glyphicon-flash" style="transform: rotate(0deg); transform-origin: 50% 50%;"> Playout Graphics and Editing </i>
+                        </a> -->
+
+                            <h3>Reference-based restoration for mixed-resolution video coding</h3>
+                            <li>示例: 参考帧为第一帧</li>
+                            <video
+                                id="r3n-video"
+                                class="video-js vjs-fluid "
+                                controls
+                                preload="auto"
+                                width="960"
+                                height="540"
+                                poster="images/R3N.png"
+                                data-setup="{}"
+                              >
+                                <source src="video/compare.mp4" type="video/mp4" />
+                                <!-- <source src="video/.webm" type="video/webm" /> -->
+                                <p class="vjs-no-js">
+                                  To view this video please enable JavaScript, and consider upgrading to a
+                                  web browser that
+                                  <a href="https://videojs.com/html5-video-support/" target="_blank"
+                                    >supports HTML5 video</a
+                                  >
+                                </p>
+                            </video>
+
+                            <br>
+
+                            <li>消融: 可变形卷积增加鲁棒性</li>
+                            <video
+                                id="r2n_r3n"
+                                class="video-js vjs-fluid "
+                                controls
+                                preload="auto"
+                                width="960"
+                                height="270"
+                                poster="images/R2vsR3.png"
+                                data-setup="{}"
+                              >
+                                <source src="video/R2vsR3.mp4" type="video/mp4" />
+                                <!-- <source src="video/.webm" type="video/webm" /> -->
+                                <p class="vjs-no-js">
+                                  To view this video please enable JavaScript, and consider upgrading to a
+                                  web browser that
+                                  <a href="https://videojs.com/html5-video-support/" target="_blank"
+                                    >supports HTML5 video</a
+                                  >
+                                </p>
+                            </video>
+
+                            <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
+                            
+                            <script type="text/javascript">
+                                var r2_3 = videojs("r2n_r3n");
+                                r2_3.on("ended", function()
+                                    {
+                                        r2_3.hasStarted(false);
+                                    });
+                            </script>
+
+                            <script type="text/javascript">
+                                var cmp = videojs("r3n-video");
+                                cmp.on("ended", function()
+                                    {
+                                        cmp.hasStarted(false);
+                                    });
+                            </script>
+
+                           
 
                         </div>
                         <div class="col-md-4" id="toc-wrapper">
