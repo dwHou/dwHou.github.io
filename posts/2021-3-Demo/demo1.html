@@ -4,7 +4,9 @@
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>数据并行</title>
+        <title>Contact - Dew Hou's blog</title>
+
+        <link rel="shortcut icon" href="images/favicon.ico"/>
 
         <link rel="stylesheet" href="../../fonts/Serif/cmun-serif.css" />
         <link rel="stylesheet" href="../../fonts/Serif-Slanted/cmun-serif-slanted.css" />
@@ -25,41 +27,46 @@
         <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
 
         <link href="../../css/sticky-footer-navbar.css" rel="stylesheet">
-
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/default.css" rel="stylesheet">
 
-        <link href="../../comments/inlineDisqussions.css" rel="stylesheet">
+        <link href="../../css/bootstrap-carousel.css" rel="stylesheet">
 
+
+        <link href="../../css/inlineDisqussions.css" rel="stylesheet">
 
         <!--Highlight-->
         <link href="../../highlight/styles/github.css" rel="stylesheet">
 
         <link href="../../favicon.ico" rel="shortcut icon" />
 
-        <!--<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-        <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        <style>
-        .post{width:170px;min-height:175px;padding-left:5px;padding-right:5px;float:left;border-left:1px solid #CCC;background-color:white;}
-        div a:first-of-type .post { border-left: none; }
-        .post:hover {filter: brightness(90%);}
-        .post h3{margin:5px;font-size:75%;text-align:center}
-        .post h4{margin:0px;font-size:50%;text-align:center}
-        .post img{margin:0px;padding:2px;margin-bottom:10px;width:100%;height:155px}
-        </style>
+  ga('create', 'UA-49811703-1', 'dwHou.github.io');
+  ga('require', 'linkid', 'linkid.js');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
 
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+</script>
+<script src="../../js/scramble.js"></script>
+<script src="../../js/hidebib.js"></script>
+<script>
+    function insertpic(){
+        document.getElementById("insert").innerHTML = "<p><font face=\"courier\" style=\"display:inline;\">Peking University, University Town of Shenzhen, Nanshan District <\font></p><img src=\"images/pkusz.png\">";
+        }
+</script>
 
-          ga('create', 'UA-49811703-1', 'dwHou.github.io');
-          ga('require', 'linkid', 'linkid.js');
-          ga('require', 'displayfeatures');
-          ga('send', 'pageview');
+<!-- https://videojs.com/getting-started -->
+<!-- https://www.awaimai.com/2053.html video.js使用技巧 -->
+<link href="https://vjs.zencdn.net/7.8.4/video-js.css" rel="stylesheet" />
+<!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
+<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
 
-        </script>
+
 
     </head>
 
@@ -75,7 +82,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand active" href="../../" style="font-size:20px;">De's blog</a>
+                        <a class="navbar-brand active" href="../../" id="home">De's blog</a>
                     </div>
                     <!--normal header-->
                     <div class="navbar-collapse collapse">
@@ -94,124 +101,84 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8">
-                            <h1>Distributed-DataParallel</h1>
-                            <div style="font-size: 170%;">个人理解和总结</div>
-                            <br>
-                            <div class="info">
-    <p style="font-family:CMSS; font-size:120%">Posted on Feb.5, 2021</p>
-
-    <!--
-        by dwHou
-    -->
-</div>
-</br>
 
 
-  <style>
-    ul li {
-      margin-top: 12px;
-    }
-
-    .tight-list li {
-      margin-top: 6px;
-    }
-  </style>
-
-
-  <h2>Video Enhancement</h2>
-                        <!--
-                        <a href="https://www.encoding.com/">
-                        <i class="glyphicon glyphicon-flash" style="transform: rotate(0deg); transform-origin: 50% 50%;"> Playout Graphics and Editing </i>
+                            <h2>Video Enhancement</h2>
+                            <!--
+                            <a href="https://www.encoding.com/">
+                            <i class="glyphicon glyphicon-flash" style="transform: rotate(0deg); transform-origin: 50% 50%;"> Playout Graphics and Editing </i>
                         </a> -->
 
-    <h3>Reference-based restoration for mixed-resolution video coding</h3>
-    <li>示例: 参考帧为第一帧</li>
-    <video
-        id="r3n-video"
-        class="video-js vjs-fluid "
-        controls
-        preload="auto"
-        width="960"
-        height="540"
-        poster="images/R3N.png"
-        data-setup="{}"
-      >
-        <source src="video/compare.mp4" type="video/mp4" />
-        <!-- <source src="video/.webm" type="video/webm" /> -->
-        <p class="vjs-no-js">
-          To view this video please enable JavaScript, and consider upgrading to a
-          web browser that
-          <a href="https://videojs.com/html5-video-support/" target="_blank"
-            >supports HTML5 video</a
-          >
-        </p>
-    </video>
+                            <h3>Reference-based restoration for mixed-resolution video coding</h3>
+                            <li>示例: 参考帧为第一帧</li>
+                            <video
+                                id="r3n-video"
+                                class="video-js vjs-fluid "
+                                controls
+                                preload="auto"
+                                width="960"
+                                height="540"
+                                poster="images/R3N.png"
+                                data-setup="{}"
+                              >
+                                <source src="video/compare.mp4" type="video/mp4" />
+                                <!-- <source src="video/.webm" type="video/webm" /> -->
+                                <p class="vjs-no-js">
+                                  To view this video please enable JavaScript, and consider upgrading to a
+                                  web browser that
+                                  <a href="https://videojs.com/html5-video-support/" target="_blank"
+                                    >supports HTML5 video</a
+                                  >
+                                </p>
+                            </video>
 
-    <br>
+                            <br>
 
-    <li>消融: 可变形卷积增加鲁棒性</li>
-    <video
-        id="r2n_r3n"
-        class="video-js vjs-fluid "
-        controls
-        preload="auto"
-        width="960"
-        height="270"
-        poster="images/R2vsR3.png"
-        data-setup="{}"
-      >
-        <source src="video/R2vsR3.mp4" type="video/mp4" />
-        <!-- <source src="video/.webm" type="video/webm" /> -->
-        <p class="vjs-no-js">
-          To view this video please enable JavaScript, and consider upgrading to a
-          web browser that
-          <a href="https://videojs.com/html5-video-support/" target="_blank"
-            >supports HTML5 video</a
-          >
-        </p>
-    </video>
+                            <li>消融: 可变形卷积增加鲁棒性</li>
+                            <video
+                                id="r2n_r3n"
+                                class="video-js vjs-fluid "
+                                controls
+                                preload="auto"
+                                width="960"
+                                height="270"
+                                poster="images/R2vsR3.png"
+                                data-setup="{}"
+                              >
+                                <source src="video/R2vsR3.mp4" type="video/mp4" />
+                                <!-- <source src="video/.webm" type="video/webm" /> -->
+                                <p class="vjs-no-js">
+                                  To view this video please enable JavaScript, and consider upgrading to a
+                                  web browser that
+                                  <a href="https://videojs.com/html5-video-support/" target="_blank"
+                                    >supports HTML5 video</a
+                                  >
+                                </p>
+                            </video>
 
-    <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
+                            <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
 
-    <script type="text/javascript">
-        var r2_3 = videojs("r2n_r3n");
-        r2_3.on("ended", function()
-            {
-                r2_3.hasStarted(false);
-            });
-    </script>
+                            <script type="text/javascript">
+                                var r2_3 = videojs("r2n_r3n");
+                                r2_3.on("ended", function()
+                                    {
+                                        r2_3.hasStarted(false);
+                                    });
+                            </script>
 
-    <script type="text/javascript">
-        var cmp = videojs("r3n-video");
-        cmp.on("ended", function()
-            {
-                cmp.hasStarted(false);
-            });
-    </script>
-
-
+                            <script type="text/javascript">
+                                var cmp = videojs("r3n-video");
+                                cmp.on("ended", function()
+                                    {
+                                        cmp.hasStarted(false);
+                                    });
+                            </script>
 
 
-
-
-<!-- 加载出评论，是使用Disqus的论坛短名（shortname）
-A shortname is the unique identifier assigned to a Disqus site. 
-
-https://segmentfault.com/a/1190000005773009
-https://help.disqus.com/en/articles/1717111-what-s-a-shortname
-https://blog.csdn.net/weixin_34327761/article/details/89630337
-   -->
-
-<div id="disqus_thread"></div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-
-<script src="../../comments/inlineDisqussions.js"></script>
-<script src="../../js/disqus.js"></script>
 
                         </div>
-                        <div class="col-md-4"></div>
+                        <div class="col-md-4" id="toc-wrapper">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -219,14 +186,13 @@ https://blog.csdn.net/weixin_34327761/article/details/89630337
 
             <div id="footer">
                 <div class="container">
+                    Subscribe to the <a href="../../rss.xml">RSS feed</a>.
+                    </br>
                     Built by <a href="https://github.com/oinkina">Oinkina</a> with
                     <a href="http://jaspervdj.be/hakyll">Hakyll</a>
                     using <a href="http://getbootstrap.com/">Bootstrap</a>,
-                    <a href="http://www.mathjax.org/">MathJax</a>,
-                    <a href="http://disqus.com/">Disqus</a>,
-                    <a href="https://github.com/unconed/MathBox.js">MathBox.js</a>,
-                    <a href="http://highlightjs.org/">Highlight.js</a>,
-                    and <a href="http://ignorethecode.net/blog/2010/04/20/footnotes/">Footnotes.js</a>.
+                    <a href="http://www.mathjax.org/">MathJax</a>, and
+                    <a href="http://disqus.com/">Disqus</a>.
                 </div>
             </div>
         </div>
@@ -241,11 +207,22 @@ https://blog.csdn.net/weixin_34327761/article/details/89630337
     <script>hljs.initHighlightingOnLoad();</script>
 
     <script src="../../js/footnotes.js"></script>
+    <script src="../../js/bootstrap-carousel.js"></script>
+    <script src="../../js/inlineDisqussions.js"></script>
+    <script src="../../js/toc.js"></script>
 
-    <script src="../../comments/inlineDisqussions.js"></script>
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
     <noscript>Enable JavaScript for footnotes, Disqus comments, and other cool stuff.</noscript>
 
     </body>
-
+    <script type="text/javascript" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+    <!-- 动态线条 HTML5 canvas-nest
+    count  ：线条数量。
+    zindex ：层级。 放在顶层吧还是。
+    opacity：透明度。
+    color   ：线条颜色。最好用RGB颜色。
+    <script type="text/javascript" color="47,135,193" opacity='0.5' count="199" src="http://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+    -->
 </html>
