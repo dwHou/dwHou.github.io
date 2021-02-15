@@ -103,83 +103,76 @@
                         <div class="col-md-8">
 
 
-            <div class="comparison-slider-wrapper outlined">
-            <div class="image-selector">
-                <!-- JS-generated -->
-                <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-            </div>
-            <div class="comparison-slider noselect">
-                <div id="loading-placeholder" class="tall"></div>
-                <div id="right-imgs" showing="loading">
-                    <!-- JS-generated img tag here -->
-                </div>
-                <div class="right-selector">
-                    <div class="btn-group-vertical" role="group">
-                    <!-- JS-generated -->
-                    <button type="button" class="btn btn-dark btn-block active">JPG</button>
-                    </div>
-                </div>
-                <div class="resize noselect" id="left-img">
-                    <!-- JS-generated img tag with id "left" here -->
-                </div>
-                <div class="left-selector">
-                    <div class="btn-group-vertical" role="group">
-                        <button type="button" class="btn btn-dark btn-block disabled-button highlighted" id="left-info-button" disabled>HiFiC (Ours)</button>
-                    </div>
-                </div>
-                <div class="img-info">
-                    <div class="btn-group-vertical" role="group">
-                        <button type="button" class="btn btn-sm btn-dark btn-block disabled-button" id="img-info-button" disabled>CLIC2020</button>
-                    </div>
-                </div>
-                <div class="divider"></div>
-                <div class="divider-info">Loading...</div>
-            </div>
-            <div>
-                <div class="row no-gutters">
-                    <div class="col-3">
-                        <div class="bpp-bytes-sel">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="bpp-bytes-radio" id="bytes" value="bytes" checked>
-                                <label class="form-check-label" for="bytes">
-                                    Kilobyte (kB)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="bpp-bytes-radio" id="bpp" value="bpp">
-                                <label class="form-check-label" for="bpp">
-                                    Bits per pixel (bpp)
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="image-selector">
-                            <!-- JS-generated -->
-                            <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                            <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                            <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                            <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                            <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                            <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                            <img class="thumb" src="https://storage.googleapis.com/hific/data/img/thumb_loading.png"/>
-                        </div>
-                    </div>
+                            <h2>Video Enhancement</h2>
+                            <!--
+                            <a href="https://www.encoding.com/">
+                            <i class="glyphicon glyphicon-flash" style="transform: rotate(0deg); transform-origin: 50% 50%;"> Playout Graphics and Editing </i>
+                        </a> -->
 
-                    <div class="col-3 full-res-wrapper">
-                        <a target="_blank" href="#" id="view-full-res" data-title="Shows the image 1:1, instead of fit to the window size.">
-                            View Full Res</a>
-                    </div>
-                </div>
-            </div>
-            </div>
+                            <h3>Reference-based restoration for mixed-resolution video coding</h3>
+                            <li>示例: 参考帧为第一帧</li>
+                            <video
+                                id="r3n-video"
+                                class="video-js vjs-fluid "
+                                controls
+                                preload="auto"
+                                width="960"
+                                height="540"
+                                poster="images/R3N.png"
+                                data-setup="{}"
+                              >
+                                <source src="video/compare.mp4" type="video/mp4" />
+                                <!-- <source src="video/.webm" type="video/webm" /> -->
+                                <p class="vjs-no-js">
+                                  To view this video please enable JavaScript, and consider upgrading to a
+                                  web browser that
+                                  <a href="https://videojs.com/html5-video-support/" target="_blank"
+                                    >supports HTML5 video</a
+                                  >
+                                </p>
+                            </video>
 
+                            <br>
+
+                            <li>消融: 可变形卷积增加鲁棒性</li>
+                            <video
+                                id="r2n_r3n"
+                                class="video-js vjs-fluid "
+                                controls
+                                preload="auto"
+                                width="960"
+                                height="270"
+                                poster="images/R2vsR3.png"
+                                data-setup="{}"
+                              >
+                                <source src="video/R2vsR3.mp4" type="video/mp4" />
+                                <!-- <source src="video/.webm" type="video/webm" /> -->
+                                <p class="vjs-no-js">
+                                  To view this video please enable JavaScript, and consider upgrading to a
+                                  web browser that
+                                  <a href="https://videojs.com/html5-video-support/" target="_blank"
+                                    >supports HTML5 video</a
+                                  >
+                                </p>
+                            </video>
+
+                            <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
+                            
+                            <script type="text/javascript">
+                                var r2_3 = videojs("r2n_r3n");
+                                r2_3.on("ended", function()
+                                    {
+                                        r2_3.hasStarted(false);
+                                    });
+                            </script>
+
+                            <script type="text/javascript">
+                                var cmp = videojs("r3n-video");
+                                cmp.on("ended", function()
+                                    {
+                                        cmp.hasStarted(false);
+                                    });
+                            </script>
 
                            
 
