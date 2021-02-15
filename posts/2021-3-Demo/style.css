@@ -3,13 +3,13 @@
 
 body {
     position: relative;
-    background-color: #DDDDDD;
+    background-color: #FFFFFF;
     font-family: 'helvetica', sans-serif;
     font-weight: lighter;
     color: #555;
     margin: 0;
     padding: 0;
-    min-width: 320px;
+    min-width: 90%;
 }
 a { font-weight: 500; }
 /* Fix weird flickering in Safari */
