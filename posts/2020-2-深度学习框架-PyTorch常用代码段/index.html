@@ -298,8 +298,12 @@ You can do it, nobody says you can’t, just that ppl would consider it “cheat
 
 结论：我们一定要推理用eval()。至于momentum、track_running_stats到底怎么用，就不一而足了，不是原则问题，
 怎么效果好怎么来。我的经验是，历史信息一般是有用的。一般来说track_running_stats开着会有帮助。
+历史信息什么情况越来越没用呢，甚至负面作用呢，就是分布变化大、batchsize小(也使得分布波动大)的时候，
+历史与当前的Gap太大，就不好了。
 至于那些eval()之后性能还下降的，首先它们一开始数据泄露了，不值得提倡。其次track_running_stats=False罢，历史信息负面帮助。
-终究track_running_stats=True or False对比便知。
+终究track_running_stats=True or False对比便知, <font color="red">择优</font>。
+
+我觉得最好就是，训练完成后，再大batch的只forward，不backward，再保存模型。让历史信息充分发挥作用！！！
 </b>
 
 但也有人说这其实不是不对的。
