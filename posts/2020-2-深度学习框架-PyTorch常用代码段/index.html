@@ -287,7 +287,7 @@ During evaluation, this running mean/variance is used for normalization.
 I mean, why is it better to use model.eval and
 take the running statistics and not rely on the current test image statistics?
 那为什么以为有帮助的eval()还导致性能下降呢。就是历史信息其实起了负面影响。
-但有时eval()是有帮助的，会提升效果。你可以通过同样的checkpoint，推理时是否开启model.eval()来判断。
+但有时eval()是有帮助的，会提升效果。你可以通过同样的checkpoint，推理时改变track_running_stats来判断。
 最后<font color="red">择优</font>。
 if you compute test stat, then you are basically “train” on test set,
 because stat in this case is a trained param.
@@ -297,7 +297,9 @@ You can do it, nobody says you can’t, just that ppl would consider it “cheat
 这是为什么用eval()的原因。可以防止"在测试集过拟合"。至于用它反而性能下降就是上面说的历史信息反而不好。
 
 结论：我们一定要推理用eval()。至于momentum、track_running_stats到底怎么用，就不一而足了，不是原则问题，
-怎么效果好怎么来。
+怎么效果好怎么来。我的经验是，历史信息一般是有用的。一般来说track_running_stats开着会有帮助。
+至于那些eval()之后性能还下降的，首先它们一开始数据泄露了，不值得提倡。其次track_running_stats=False罢，历史信息负面帮助。
+终究track_running_stats=True or False对比便知。
 </b>
 
 但也有人说这其实不是不对的。
