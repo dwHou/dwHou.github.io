@@ -229,9 +229,10 @@
             这样结果才一致的惹。
         </pre>
       <li>对比试验的优化器和lr更新策略</li>
-      <pre>①不使用scheduler, Adam + 一个大的epoch训下去。这样比较公平。
-           ②ReduceLROnPlateau有点运气成分，要么就在loss是否下降上做。如果是验证集PSNR，那最好将容忍度设很大。
-           ③余弦退火。策略一致就是可以的。
+      <pre>
+①不使用scheduler, Adam + 一个大的epoch训下去。这样比较公平。
+②ReduceLROnPlateau有点运气成分，要么就在loss是否下降上做。如果是验证集PSNR，那最好将容忍度设很大。
+③余弦退火。策略一致就是可以的。
       </pre>
 
       <li>train 与 val 的区别</li>
@@ -239,6 +240,68 @@
           model.train() ：启用 BatchNormalization 和 Dropout
           model.eval() ：不启用 BatchNormalization 和 Dropout
           val时会加上 with torch.no_grad()
+      </pre>
+
+      <li>model.val() 的注意事项</li>
+      <pre>
+<a href="https://discuss.pytorch.org/t/model-eval-gives-incorrect-loss-for-model-with-batchnorm-layers/7561/2">Model.eval() gives incorrect loss for model with batchnorm layers</a>
+有人说set the track_running_stats=False for all batch norm layers in the model.
+for child in model.children():
+    for ii in range(len(child)):
+        if type(child[ii])==nn.BatchNorm2d:
+            child[ii].track_running_stats = False
+有人说这似乎就是回到了不用model.eval()，uses the current batch’s
+mean and variance to do the normalization，我认为这就相当于momentum=0。不受历史的影响。
+<b>而出现这个情况的原因，就是数据集不适合用batchnorm，比如太多noisy了(我任务确实如此)，batchsize太小了(DDP时确实)，分布相差太大啦，
+所以这里要把momentum设小，甚至设为0，即track_running_stats = False。</b>
+
+但也有人说这其实不是不对的。
+<font color="red">我的观点，或许这和任务以及你的训练batch大小有关，如果任务不讲究batch，
+训练时batch又小，本来就不稳定，或许不需要加model.eval()了。</font>
+
+Batch Normalization里有一个momentum参数, 该参数作用于mean和variance的计算上,
+这里保留了历史batch里的mean和variance值,即 moving_mean和moving_variance,
+借鉴优化算法里的momentum算法将历史batch里的mean和variance的作用延续到当前batch.
+一般momentum的值为0.9 , 0.99等. 多个batch后, 即多个0.9连乘后,最早的batch的影响会变弱.
+
+所以也有建议，在遇到non-stationary training时，<font color="red">把momentum设小一些。</font>
+def evaluate_batch(net, batch, output, shouldeval):
+        if shouldeval:
+            net.eval()
+            net.bn1.train()
+            # 我感觉这更要绝，不仅不用eval()了，还不留任何历史影响。是否矫枉过正了，我不用eval就是了。
+            net.bn1.momentum = 0.0
+        else:
+            net.train()
+...
+        #before returning
+        net.bn1.momentum = 0.1
+
+下面这段是我看到最清晰直接、讲明白原理本质的解释了。
+「The high validation loss is due to the wrong estimates of the running stats.
+Since you are feeding a constant tensor (batchone: mean=1, std=0) and a random tensor (batchtwo: mean~=0, std~=1), the running estimates will be shaky and wrong for both inputs.
+
+During training the current batch stats will be used to compute the output, so that the model might converge.
+However, during evaluation the batchnorm layer tries to normalize both inputs with skewed running estimates, which yields the high loss values.
+Usually we assume that all inputs are from the same domain and thus have approx. the same statistics.
+
+If you set track_running_stats=False in your BatchNorm layer, the batch statistics will also be used during evaluation, which will reduce the eval loss significantly.」
+
+
+If you turn track_running_stats off (as suggested in the post) you will instead
+use the mean and std of the batch in eval mode. This is flawed and incorrect usage,
+since you will get an inference result which is based on the data in your batch.
+所以提出这个观点的人认为就不要用batchnorm了，而是用groupnorm。
+
+很多人遇到这个问题无计可施，也都提到不用model.eval()就没问题。
+I tried:
+・change the momentum term in BatchNorm constructor to higher.
+・before you set model.eval() , run a few inputs through model (just forward pass, you dont need to backward). This will help stabilize the running_mean / running_std values.
+・increase Batchsize
+Nothing helped. 不过这人发现自己是在不同地方用了同样的batchnorm.
+In the end I saw I was indeed using the same BatchNorm layers in different parts of the network.
+Once I changed that it worked again.
+
       </pre>
 
       <li> torch.nn 与 torch.nn.functional</li>
