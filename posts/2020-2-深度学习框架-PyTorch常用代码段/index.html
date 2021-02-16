@@ -276,6 +276,19 @@ track_running_stats=False也是这个作用，只利用当前batch的统计信�
 综上，去高斯噪声这样的、high-level这样的，特征其实分布很有特点，变化不大。是适合用batchnorm，并且momentum大一点。
 至于对齐、光流这样的，momentum小一点保险。超分辨率，不用batchnorm更好。
 用或者不用都好说，最不希望的是训练时其他模块配合batchnorm"过拟合"到正太，但你推理时batchnorm又效果不好，到不了正太。
+
+至于model.eval()对其的影响，
+During training, this layer keeps a running estimate of its computed mean and variance.
+The running sum is kept with a default momentum of 0.1.
+
+During evaluation, this running mean/variance is used for normalization.
+意思就是eval()时，才把所有历史信息拿出来用。这些都是训练(running)时按momentum来存着的。
+为什么要开启它呢，认为历史信息有帮助。
+I mean, why is it better to use model.eval and
+take the running statistics and not rely on the current test image statistics?
+那为什么以为有帮助的eval()还导致性能下降呢。就是历史信息其实起了负面影响。
+但有时eval()是有帮助的，会提升效果。你可以通过同样的checkpoint，推理时是否开启model.eval()来判断。
+最后<font color="red">择优</font>。
 </b>
 
 但也有人说这其实不是不对的。
