@@ -244,6 +244,7 @@
 
       <li>model.val() 的注意事项</li>
       <pre>
+首先看看官方<a href="https://pytorch.org/docs/stable/generated/torch.nn.BatchNorm2d.html?highlight=batchnorm#torch.nn.BatchNorm2d">Doc</a>接口
 <a href="https://discuss.pytorch.org/t/model-eval-gives-incorrect-loss-for-model-with-batchnorm-layers/7561/2">Model.eval() gives incorrect loss for model with batchnorm layers</a>
 有人说set the track_running_stats=False for all batch norm layers in the model.
 for child in model.children():
