@@ -158,7 +158,7 @@
 由于distributed相对于上述的nn.DataParallel是一个<font color="blue">底层</font>的API，所以我们要修改代码，使其能够独立运行在机器(节点)中。
       </pre>
       <img src="distributed.png">
-      <pre>图1</pre>
+      <pre>(图1)</pre>
       <pre>不同于DataParallel的单进程控制多GPU，在distributed的帮助下，我们只需编写一份代码，torch就会自动将其分配给n个进程。分别在n个GPU上运行，不再有主GPU，每个GPU执行相同的任务。
       </pre>
 
