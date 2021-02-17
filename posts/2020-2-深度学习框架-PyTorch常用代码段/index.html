@@ -284,6 +284,7 @@ The running sum is kept with a default momentum of 0.1.
 During evaluation, this running mean/variance is used for normalization.
 意思就是eval()时，才把所有历史信息拿出来用。这些都是训练(running)时按momentum来存着的。
 为什么要开启它呢，认为历史信息有帮助。
+这叫做<font color="red">"贝塞尔校正"</font>
 I mean, why is it better to use model.eval and
 take the running statistics and not rely on the current test image statistics?
 那为什么以为有帮助的eval()还导致性能下降呢。就是历史信息其实起了负面影响。
@@ -301,7 +302,7 @@ You can do it, nobody says you can’t, just that ppl would consider it “cheat
 历史信息什么情况越来越没用呢，甚至负面作用呢，就是分布变化大、batchsize小(也使得分布波动大)的时候，
 历史与当前的Gap太大，就不好了。
 至于那些eval()之后性能还下降的，首先它们一开始数据泄露了，不值得提倡。其次track_running_stats=False罢，历史信息负面帮助。
-终究track_running_stats=True or False对比便知, <font color="red">择优</font>。
+终究track_running_stats=True or False对比便知, 或者momentum=0来试, <font color="red">择优</font>。
 
 我觉得最好就是，训练完成后，再大batch的只forward，不backward，再保存模型。让历史信息充分发挥作用！！！
 </b>

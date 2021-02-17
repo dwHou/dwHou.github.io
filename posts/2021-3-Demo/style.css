@@ -102,7 +102,7 @@ h4 {
     opacity: 100%;
 }
 .btn.disabled-button.highlighted:disabled {
-    border: 2px white solid;
+    /* border: 2px white solid; */
 }
 .codec-info {
     font-size: 90%;
@@ -207,7 +207,7 @@ h4 {
     left: -13px;
     top: 50%;
     margin-top: -10px;
-    background: white url("img_other/arrows.svg") no-repeat center center;
+    background: white url("images/arrows.svg") no-repeat center center;
     -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
     -webkit-transition: all 0.1s ease-in-out;
