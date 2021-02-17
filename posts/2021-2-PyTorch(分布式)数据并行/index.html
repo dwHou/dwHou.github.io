@@ -281,7 +281,7 @@ ddp_model.load_state_dict(torch.load(ckp_path, map_location=<font color="red">ma
 3. train_sampler.set_epoch(epoch)
 4. 先rank==0 model.load_state_dict() 后nn.parallel.DistributedDataParallel() </pre>
     <pre>CUDA_VISIBLE_DEVICES=0,1,2 nohup python -u -m torch.distributed.launch --nproc_per_node=3 train.py --cuda >training.log 2>&1 &</pre>
-    <pre>dist.barrier()应置于反向传播之后。DP 需要传输 “数据”、“模型”、“输出”、“损失”、“梯度”。DDP只传输 “梯度”。见图1，step4</pre>
+    <pre>dist.barrier()应置于反向传播之后。DP 需要传输 “数据”、“模型”、“输出”、“损失”、“梯度”。DDP只传输 “梯度”。见图1，step4。</pre>
 
 </ul>
 
