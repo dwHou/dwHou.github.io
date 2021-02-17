@@ -158,7 +158,7 @@
 由于distributed相对于上述的nn.DataParallel是一个<font color="blue">底层</font>的API，所以我们要修改代码，使其能够独立运行在机器(节点)中。
       </pre>
       <img src="distributed.png">
-
+      <pre>图1</pre>
       <pre>不同于DataParallel的单进程控制多GPU，在distributed的帮助下，我们只需编写一份代码，torch就会自动将其分配给n个进程。分别在n个GPU上运行，不再有主GPU，每个GPU执行相同的任务。
       </pre>
 
@@ -180,7 +180,7 @@ Distributed Data-Parallel Training，能负责梯度的通信，来保障模型�
 PyTorch还支持基于RPC的分布式训练(RPC)，它更通用，集体通信(c10d)等特性，略。
     </pre>
     <img src="communication.png">
-    (图collective communication，相对的概念是point-to-point communication)
+    <pre>(图2 collective communication，相对的概念是point-to-point communication)</pre>
 
     <li>数据并行</li>
     <pre>有多种选项。按照从简单到复杂，从原型到产品的思路，开发的路线将是：
@@ -279,7 +279,7 @@ ddp_model.load_state_dict(torch.load(ckp_path, map_location=<font color="red">ma
     2'. 有batchnorm或dropout，model.eval()/train() 3. train_sampler.set_epoch(epoch)
     4. 先model.load_state_dict() 后nn.parallel.DistributedDataParallel() </pre>
     <pre>CUDA_VISIBLE_DEVICES=0,1,2 nohup python -u -m torch.distributed.launch --nproc_per_node=3 train.py --cuda >training.log 2>&1 &</pre>
-
+    <pre>dist.barrier应置于反向传播之后。DP 需要传输 “数据”、“模型”、“输出”、“损失”、“梯度”。DDP只传输 “梯度”。见图1，step4</pre>
 
 </ul>
 
