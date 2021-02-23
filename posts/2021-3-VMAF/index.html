@@ -34,6 +34,7 @@
         <link href="../../highlight/styles/github.css" rel="stylesheet">
 
         <link href="../../favicon.ico" rel="shortcut icon" />
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
 
         <!--<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
         <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -114,27 +115,46 @@
       margin-top: 6px;
     }
   </style>
-
+VMAF: The Journey Continues <br>
 
   <h2>背景</h2>
   <ul>
   <li><b></b></li>
   <pre>
-在评价静态图像主观质量失真方面，SSIM比PSNR有一些优势，在视频方面优势不明显。而VMAF是为视频质量评价而设计，值得关注。
-  </pre>
+在评价静态图像主观质量失真方面，SSIM比PSNR有一些优势，在视频方面优势不明显。而VMAF是一种将人类视觉模型与机器学习相结合的视频质量评价指标。
+目前能够达到商用级的评价指标非常少，学术界的评价指标主要都是针对有非常明确边界条件约束的场景。而Netflix提出的VMAF作为商用级的评价指标，值得我们关注。</pre>
+
+<b><font color="red">VMAF</font>: <font color="red">V</font>ideo <font color="red">M</font>ultimethod <font color="red">A</font>ssessment <font color="red">F</font>usion</b>
+  <pre>
+<b>VMAF: 未毕之旅</b>
+与南加大(USC)合作启动 ◎ 2014年 首度在Netflix上线使用 ◎ 2015年 与南特大学(U.Nantes)，德州大学奥斯汀分校(UT Austin)合作
+◎ 2016年 在Github开源，并发布技术博客 ◎ 2017年 版本发布增加移动端画质模型，libvmaf发布；被FFmpeg支持 ◎ 2018年 速度优化，增加4K画质模型，增加置信度</pre>
   </ul>
 
    
   <h2>原理</h2>
   <ul>
-  <li><b></b>  </li>
-
+  <li><b>How VMAF Works</b>  </li>
+  <a href="https://github.com/Netflix/vmaf/blob/master/resource/doc/references.md"><i class="fa fa-file-pdf-o"></i></a>
   </ul>
 
   <h2>亮点</h2>
   <ul>
   <li><b></b> </li>
 
+  </ul>
+
+  <h2>问题</h2>
+  <ul>
+  <li><b>Hacking VMAF</b> 来自<a href=" https://docs.google.com/document/d/1dJczEhXO0MZjBSNyKmd3ARiCTdFVMNPBykH4_HMPoyY/edit# ">VMAF讨论组</a> </li>
+  <pre>
+我概括一下这篇文档里面描述的我们近期的一些工作。VMAF的特性决定了其能够预测一些图像增强处理对主观质量的提升。
+这是VMAF与PSNR和SSIM等传统工具的一大区别。但当过度使用一些图像增强效果的时候（比如过度锐化），主观质量反而会降低，
+但VMAF的值会继续提高，也就是说在过度增强的情况下，VMAF并不能真实反映主观图像质量。我们近期的工作主要是在VMAF的两个
+主要feature也就是VIF和DLM里，引入了两个参数，来限制图像增强能够对VMAF产生影响的上限。具体来讲，引入的参数是vif_enhn_gain_limit和adm_enhn_gain_limit。
+当它们的值设置为很大的时候（比如都为100)，则对VMAF的值没有影响。而当它们的值都为1的话，则能最大限制图像增强对VMAF的值的提升。
+而当设置一些适当值（比如稍大于1）的话，则可以一定程度地引入图像增强的提升但又不会过度。具体什么为适当值的问题，我们留到后续版本的VMAF模型里来解决。
+  </pre>
   </ul>
 
 
