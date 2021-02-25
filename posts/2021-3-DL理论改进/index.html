@@ -157,6 +157,7 @@
 对神经网络边的权重 weights 使用滑动平均，得到对应的影子变量shadow_weights。在训练过程仍然使用原来不带滑动平均的权重 weights，
 以得到 weights 下一步更新的值，进而求下一步 weights 的影子变量 shadow_weights。之后在测试过程中使用shadow_weights 来代替
 weights 作为神经网络边的权重，这样在测试数据上效果更好。</pre>
+<pre>使用EMA可能对BN层有帮助。减少BN层对batchsize的敏感。<a href="https://www.zhihu.com/question/269576836"><i class="fa fa-external-link"></i></a></pre>
   </ul>
 
 
