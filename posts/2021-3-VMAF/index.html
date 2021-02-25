@@ -128,7 +128,8 @@ VMAF: The Journey Continues <br>
   <pre>
 <b>VMAF: 未毕之旅</b>
 与南加大(USC)合作启动 ◎ 2014年 首度在Netflix上线使用 ◎ 2015年 与南特大学(U.Nantes)，德州大学奥斯汀分校(UT Austin)合作
-◎ 2016年 在Github开源，并发布技术博客 ◎ 2017年 版本发布增加移动端画质模型，libvmaf发布；被FFmpeg支持 ◎ 2018年 速度优化，增加4K画质模型，增加置信度</pre>
+◎ 2016年 在Github开源，并发布技术博客 ◎ 2017年 版本发布增加移动端画质模型(同样码率，移动端得分会更高)，
+libvmaf发布；被FFmpeg支持 ◎ 2018年 速度优化，增加4K画质模型，增加置信度，准备HDR模型</pre>
   </ul>
 
    
@@ -136,11 +137,27 @@ VMAF: The Journey Continues <br>
   <ul>
   <li><b>How VMAF Works</b>  </li>
   <a href="https://github.com/Netflix/vmaf/blob/master/resource/doc/references.md"><i class="fa fa-file-pdf-o"></i></a>
+  <img src="VMAF_framework.png">
+  <pre><b>Visual Information Fidelity</b> : Sheikh H R, Bovik A C. A visual information fidelity approach to video quality assessment[C]
+<b>Detail Loss Measure</b> : Li S, et al. Image quality assessment by separately evaluating detail losses and additive impairments[J].
+<b>Temporal Information</b> : average pixel difference between adj, frames</pre>
   </ul>
 
   <h2>亮点</h2>
   <ul>
   <li><b></b> </li>
+
+  </ul>
+
+  <h2>改进</h2>
+  <ul>
+  VMAF具有一些性质，所以值得我们去研究、改进它。
+  <li>Evolvability</li>
+  <pre>可以轻松地加入新的指标，来提升评价准确性。</pre>
+  <li>Limited applicability</li>
+  <pre>泛化能力没完全保证，但Netflix也在不断增加数据多样性(分辨率、观看环境)</pre>
+  <li>Customizability</li>
+  <pre>可以定制化，剪裁掉不需要的指标/训练数据</pre>
 
   </ul>
 
@@ -162,7 +179,8 @@ VMAF: The Journey Continues <br>
 
   <h2>代码</h2>
   <ul>
-  <li></li>
+  <li><b>基础使用</b></li>
+  <pre></pre>
   <li></li>
 
   </ul>
