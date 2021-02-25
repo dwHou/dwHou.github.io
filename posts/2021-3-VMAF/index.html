@@ -129,7 +129,7 @@ VMAF: The Journey Continues <br>
 <b>VMAF: 未毕之旅</b>
 与南加大(USC)合作启动 ◎ 2014年 首度在Netflix上线使用 ◎ 2015年 与南特大学(U.Nantes)，德州大学奥斯汀分校(UT Austin)合作
 ◎ 2016年 在Github开源，并发布技术博客 ◎ 2017年 版本发布增加移动端画质模型(同样码率，移动端得分会更高)，
-libvmaf发布；被FFmpeg支持 ◎ 2018年 速度优化，增加4K画质模型，增加置信度，准备HDR模型</pre>
+libvmaf发布；被FFmpeg支持 ◎ 2018年 速度优化，增加4K画质模型，增加置信区间，准备HDR模型</pre>
   </ul>
 
    
@@ -141,11 +141,12 @@ libvmaf发布；被FFmpeg支持 ◎ 2018年 速度优化，增加4K画质模型�
   <pre><b>Visual Information Fidelity</b> : Sheikh H R, Bovik A C. A visual information fidelity approach to video quality assessment[C]
 <b>Detail Loss Measure</b> : Li S, et al. Image quality assessment by separately evaluating detail losses and additive impairments[J].
 <b>Temporal Information</b> : average pixel difference between adj, frames</pre>
+
   </ul>
 
   <h2>亮点</h2>
   <ul>
-  <li><b></b> </li>
+  <li><b>置信区间</b> 自助法(Bootstrapping)</li>
 
   </ul>
 
@@ -170,8 +171,20 @@ libvmaf发布；被FFmpeg支持 ◎ 2018年 速度优化，增加4K画质模型�
 但VMAF的值会继续提高，也就是说在过度增强的情况下，VMAF并不能真实反映主观图像质量。我们近期的工作主要是在VMAF的两个
 主要feature也就是VIF和DLM里，引入了两个参数，来限制图像增强能够对VMAF产生影响的上限。具体来讲，引入的参数是vif_enhn_gain_limit和adm_enhn_gain_limit。
 当它们的值设置为很大的时候（比如都为100)，则对VMAF的值没有影响。而当它们的值都为1的话，则能最大限制图像增强对VMAF的值的提升。
-而当设置一些适当值（比如稍大于1）的话，则可以一定程度地引入图像增强的提升但又不会过度。具体什么为适当值的问题，我们留到后续版本的VMAF模型里来解决。
-  </pre>
+而当设置一些适当值（比如稍大于1）的话，则可以一定程度地引入图像增强的提升但又不会过度。具体什么为适当值的问题，我们留到后续版本的VMAF模型里来解决。</pre>
+
+  <li><b>可解释性</b></li>
+  <pre>
+VMAF通过融合多个基本的指标，使用非线性回归(如SVM)，来预测视频质量。
+但如果有能力<font colo="red">解释</font>各个基本的指标对最终得分的贡献，对我们设计算法会很有帮助。
+○ 就类似一个线性回归会比较nice，"权重"能表示重要性。</pre>
+
+  <pre>LIME - Local Interpretable Model-Agnositc Explanation</pre>
+  <img src="LIME.png">
+  <pre>
+概括：
+○ 在本地实例上，"线性化"一个非线性分类器<b>C</b>/回归器<b>R</b>。
+○ "线性"分类器<b>C</b>/回归器<b>R</b>的系数可以视为各特征的权重。</pre>
   </ul>
 
 
