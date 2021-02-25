@@ -133,9 +133,9 @@
 
   <li><b>nohup</b></li>
       <li>nohup [command] & 挂在后台运行也是ok的 <a href="https://blog.csdn.net/ianly123/article/details/85113539"> 日志信息 </a> </li>
-      <li><pre>日志信息进阶：nohup python3 -u src/main.py --cuda >./training.log 2>&1 &
-          <font color="red">-u 参数</font> 解决python执行有缓存输出的问题~
-      </pre></li>
+      <pre>日志信息进阶：nohup python3 -u src/main.py --cuda >./training.log 2>&1 &
+<font color="red">-u 参数</font> 解决python执行有缓存输出的问题~</pre>
+  <pre>查看log：训练日志可能很长，使用cat比较费时，可以使用tail -n 5 training.log，来查看最后5行。更方便与watch搭配</pre>
   <li><b>gpustat-基于nvidia-smi</b> https://github.com/wookayin/gpustat </li>
   <li>nvidia-smi 指标中P0~P10表示频率， nvidia-smi dmon则可以看更详尽的指标</li>
   <li>watch --color -n1 gpustat --color</li>
@@ -157,11 +157,11 @@
       <li>-d1 表示只进入下一级目录</li>
 
   <li><b>查看目录树</b></li>
-      <li>文件树</li>
-      <pre>find . -print 2>/dev/null|awk '!/\.$/ {for (i=1;i < NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;printf("%"d"s","|")}
+  <li>文件树</li>
+  <pre>find . -print 2>/dev/null|awk '!/\.$/ {for (i=1;i < NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;printf("%"d"s","|")}
 print "---"$NF}' FS='/'</pre>
-      <li>目录树</li>
-      <pre>find . -type d -print 2>/dev/null|awk '!/\.$/ {for (i=1;i < NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;
+  <li>目录树</li>
+  <pre>find . -type d -print 2>/dev/null|awk '!/\.$/ {for (i=1;i < NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;
 printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   </ul>
     
@@ -178,52 +178,48 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   但这并不是常规的解决方案，如果是ftp连接就没辙了，况且，你不可能为了执行某些命令去给每个你要连接的主机都手动建立ssh信任.
   我们可以想象下，更优雅的方式应该是在脚本里自己配置密码，当屏幕交互需要输入时自动输入进去，要达到这样的效果就需要用到expect.
   <pre>
-      1、安装expect
+1、安装expect
 
-      2、script:
-      #! /usr/bin/expect -f
+2、script:
+#! /usr/bin/expect -f
 
-      set passward "123456"
-      set timeout -1
-      spawn scp [-r如果是目录] localfile [remote_username@命令执行后只输入密码or用户名加密码]remote_ip:remote_folder
-      expect {
-                "(yes/no)?" {
-                    send "yes\r"
-	                expect "passward:"
-	                send "$passward\r"
-                }
-                "*password:" {
-                    send "$passward\r"
-                }
+set passward "123456"
+set timeout -1
+spawn scp [-r如果是目录] localfile [remote_username@命令执行后只输入密码or用户名加密码]remote_ip:remote_folder
+expect {
+        "(yes/no)?" {
+            send "yes\r"
+            expect "passward:"
+            send "$passward\r"
         }
-      expect eof
+        "*password:" {
+            send "$passward\r"
+        }
+}
+expect eof
 
-      3、expect scptest.sh
+3、expect scptest.sh
 
-      4、expect脚本我们都知道，首先spawn我们要执行的命令，然后就给出一堆expect的屏幕输出，
-      如果输出match了我们的expect的东西，我们就会send一个命令上去，模拟用户输入。
-      但是expect中等待命令的输出信息是有一个timeout的设定的，默认是10秒。这个特性是防止那些执行死机的命令的。
-      一旦到了这个timeout，还是没有屏幕输出的话，expect脚本中下面的代码就会执行。
+4、expect脚本我们都知道，首先spawn我们要执行的命令，然后就给出一堆expect的屏幕输出，
+如果输出match了我们的expect的东西，我们就会send一个命令上去，模拟用户输入。
+但是expect中等待命令的输出信息是有一个timeout的设定的，默认是10秒。这个特性是防止那些执行死机的命令的。
+一旦到了这个timeout，还是没有屏幕输出的话，expect脚本中下面的代码就会执行。</pre>
 
-  </pre>
   <pre>
-      关于建立信任连接：
+关于建立信任连接：
 
-      一、实现原理
-      使用一种被称为"公私钥"认证的方式来进行ssh登录。"公私钥"认证方式简单的解释是：
-      首先在客户端上创建一对公私钥（公钥文件：~/.ssh/id_rsa.pub；私钥文件：~/.ssh/id_rsa），
-      然后把公钥放到服务器上（~/.ssh/authorized_keys），自己保留好私钥。当ssh登录时，ssh程序会发送私钥去和服务器上的公钥做匹配。如果匹配成功就可以登录了。
+一、实现原理
+使用一种被称为"公私钥"认证的方式来进行ssh登录。"公私钥"认证方式简单的解释是：
+首先在客户端上创建一对公私钥（公钥文件：~/.ssh/id_rsa.pub；私钥文件：~/.ssh/id_rsa），
+然后把公钥放到服务器上（~/.ssh/authorized_keys），自己保留好私钥。当ssh登录时，ssh程序会发送私钥去和服务器上的公钥做匹配。如果匹配成功就可以登录了。
 
-      step 1 : A机生成证书 ssh-keygen -t rsa
-      step 2 : 查看~/.ssh 私钥id_rsa 公钥id_rsa.pub
-      step 3 : A对B建立信任，将id_rsa.pub拷贝到B机的~/.ssh/authorized_keys里，>是覆盖，>>是追加。cat id_rsa.pub >> authorized_keys
-      step 4 : 成功，A信任B，把公钥交给B。 A一般为服务器，可以从B免密登录
+step 1 : A机生成证书 ssh-keygen -t rsa
+step 2 : 查看~/.ssh 私钥id_rsa 公钥id_rsa.pub
+step 3 : A对B建立信任，将id_rsa.pub拷贝到B机的~/.ssh/authorized_keys里，>是覆盖，>>是追加。cat id_rsa.pub >> authorized_keys
+step 4 : 成功，A信任B，把公钥交给B。 A一般为服务器，可以从B免密登录
 
-      二.
-      注意，不是root用户，.ssh都在~/.ssh
-
-
-  </pre>
+二.
+注意，不是root用户，.ssh都在~/.ssh</pre>
 
 
 
@@ -250,9 +246,10 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       批量解压ls *.tar.gz | xargs -n1 tar xzvf <a href="https://blog.csdn.net/silentwolfyh/article/details/53909518">◎</a> <br>
 
       <pre>
-      由于linux系统中的大多压缩程序只能对一个文件进行压缩，所以想要压缩一堆文件，就必须先进行打包，
-      把他们打包成一个tar类型的文件包裹，然后再对这个tar文件进行压缩。所以不管打包、解包、压缩、解压的命令都是以tar开头的，而到底是打包、解包、压缩、还是解压？是由tar命令的选项决定的。
-      z就是用gzip这种方式压缩，所以czf就是把一堆文件创建成gzip形式的压缩文件。gz是gzip的简写。
+由于linux系统中的大多压缩程序只能对一个文件进行压缩，所以想要压缩一堆文件，就必须先进行打包，
+把他们打包成一个tar类型的文件包裹，然后再对这个tar文件进行压缩。所以不管打包、解包、压缩、解压的命令都是以tar开头的，
+而到底是打包、解包、压缩、还是解压？是由tar命令的选项决定的。
+z就是用gzip这种方式压缩，所以czf就是把一堆文件创建成gzip形式的压缩文件。gz是gzip的简写。
       </pre>
   </ul>
 
@@ -273,15 +270,12 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   EPS文件格式又被称为带有预视图象的PS格式， 在Mac和PC环境下的图形和版面设计中广泛使用。
   <ul>
       <li><b>epstool</b> eps处理以及转换到其他格式</li>
-      <pre>
-          <a href="https://www.jianshu.com/p/43fc0256aa7d">brew install epstool</a>
-      </pre>
+      <pre><a href="https://www.jianshu.com/p/43fc0256aa7d">brew install epstool</a></pre>
       <li><b>ImageMagick</b> 创建，编辑，撰写，或转换位图图像, 在Apache 2.0许可下分发的免费软件</li>
       <pre>
-          <a href="https://blog.csdn.net/cuma2369/article/details/107665709">brew install ImageMagick</a>
-          convert image.png image.eps
-          # For other image formats, the command is similar.
-      </pre>
+<a href="https://blog.csdn.net/cuma2369/article/details/107665709">brew install ImageMagick</a>
+convert image.png image.eps
+# For other image formats, the command is similar.</pre>
 
   </ul>
 
@@ -302,22 +296,21 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
           conda config --set show_channel_urls yes</li>
       <li>pip/pip3 install xx -i url</li>
       <pre>
-            清华大学 https://pypi.tuna.tsinghua.edu.cn/simple/
-            阿里云 http://mirrors.aliyun.com/pypi/simple/
-            中国科技大学 https://pypi.mirrors.ustc.edu.cn/simple/
-            豆瓣(douban) http://pypi.douban.com/simple/
-            中国科学技术大学 http://pypi.mirrors.ustc.edu.cn/simple/
-      </pre>
+清华大学 https://pypi.tuna.tsinghua.edu.cn/simple/
+阿里云 http://mirrors.aliyun.com/pypi/simple/
+中国科技大学 https://pypi.mirrors.ustc.edu.cn/simple/
+豆瓣(douban) http://pypi.douban.com/simple/
+中国科学技术大学 http://pypi.mirrors.ustc.edu.cn/simple/</pre>
       <pre>
-          有些linux服务器处于内网，并且没有公网ip，故要想与外网进行http/https通信只能通过nat或者加proxy的方式。
-          这样的服务器可能就没法访问anaconda、pypi的官方源以及国内的清华源、科大源。
-          解决方法只有 ①打听公司内网的源，②export http/https_proxy代理。
+有些linux服务器处于内网，并且没有公网ip，故要想与外网进行http/https通信只能通过nat或者加proxy的方式。
+这样的服务器可能就没法访问anaconda、pypi的官方源以及国内的清华源、科大源。
+解决方法只有 ①打听公司内网的源，②export http/https_proxy代理。
 
-          在/etc/bashrc或者/etc/profile中添加如下环境变量：
-          export http_proxy=http://1.1.1.1:8082
-          export https_proxy=http://1.1.1.1:8082
-          env | grep -i proxy 可以查看代理的情况。
-      </pre>
+在/etc/bashrc或者/etc/profile中添加如下环境变量：
+export http_proxy=http://1.1.1.1:8082
+export https_proxy=http://1.1.1.1:8082
+env | grep -i proxy 可以查看代理的情况。</pre>
+
       <li>清华TUNA协会很不错</li>
   </ul>
 
@@ -415,11 +408,11 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   <ul>
       <li>ffmpeg所有的参数都是作用于紧跟其后的文件，因此参数的顺序相当重要。</li>
       <pre>
-          # input seeking
-          ffmpeg -ss 00:1:05 -i gemfield.mp4 -frames:v 1 out.jpg
-          # output seeking
-          ffmpeg -i gemfield.mp4 -ss 00:1:05 -frames:v 1 out1.jpg
-          上述两种就是有区别的。
+# input seeking
+ffmpeg -ss 00:1:05 -i gemfield.mp4 -frames:v 1 out.jpg
+# output seeking
+ffmpeg -i gemfield.mp4 -ss 00:1:05 -frames:v 1 out1.jpg
+上述两种就是有区别的。
       </pre>
       <li><a href="https://slhck.info/video/2017/03/01/rate-control.html">关于码控</a> </li>
       <li><a href="https://blog.csdn.net/leixiaohua1020/article/details/15811977">雷霄骅的-从零开始-博客</a> </li>
@@ -463,16 +456,16 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   <h2>pycharm</h2>
   <ul>
   <li><a href="https://www.zhihu.com/question/37787004/answer/186042335"> pycharm技巧 </a> </li>
-        <pre>写 Python 代码时，你会严格遵守 pep8 规范么？
-            还是要遵守的，不然代码传到 github 或者知乎上被人怼就不好了。
-            但是如果靠肉眼去检查和注意的话，太累，靠 PyCharm 来做这事就好，
-            <font color="red">Command+Option+L</font>，一键 pep8 走起。</pre>
+<pre>写 Python 代码时，你会严格遵守 pep8 规范么？
+还是要遵守的，不然代码传到 github 或者知乎上被人怼就不好了。
+但是如果靠肉眼去检查和注意的话，太累，靠 PyCharm 来做这事就好，
+<font color="red">Command+Option+L</font>，一键 pep8 走起。</pre>
   <li><b>指定anaconda环境</b> File->Settings->Projector Interpretor，在Projector Interpretor中Add，选择Virtualenv或Conda Environment，Existing Environment，选择E:\Anaconda3\envs\py36torch\python.exe，再点击OK。</li>
   <li><b>整段缩进</b> tab,shift+tab</li>
   <li>pycharm默认具有自动保存功能的。习惯ctrl+S，可以更改设置。</li>
   <li><b>注释</b> 成段的注释or取消注释，可以先框选，然后<font color="blue">Command + /</font>(Mac)或<font color="blue">Ctrl + /</font>(Windows)</li>
-  <pre>其他: 
-       Ctrl + D 复制上一行；</pre>
+  <pre>其他:
+Ctrl + D 复制上一行；</pre>
 
   </ul>
   
@@ -487,9 +480,9 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   <li>assert——断言，程序中如果到处充斥着assert，和print()相比也好不到哪去。不过，启动Python解释器时可以用-O参数来关闭assert</li>
   <li>logging——不会抛出错误，而且可以输出到文件</li>
   <pre>
-    import logging
-    logging.basicConfig(filename='./LOG/training.log', level=logging.INFO)
-    logging.info("info message")
+import logging
+logging.basicConfig(filename='./LOG/training.log', level=logging.INFO)
+logging.info("info message")
   </pre>
   <li>这就是logging的好处，它允许你指定记录信息的级别，有debug，info，warning，error等几个级别，当我们指定level=INFO时，logging.debug就不起作用了。</li>
   <li><b>总结</b>相比print，具备如下优点：</li>
@@ -497,10 +490,10 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   <li>print将所有信息都输出到标准输出中，严重影响开发者从标准输出中查看其它数据；logging则可以由开发者决定将信息输出到什么地方，以及怎么输出；</li>
       <li>python logging日志模块以及多进程日志<font color="red">（important）</font></li>
       <pre>
-          <a href="https://www.jianshu.com/p/d615bf01e37b">简书</a>
-          logging遇到多进程
-          python中由于某种历史原因，多线程的性能基本可以无视。所以一般情况下python要实现并行操作或者并行计算的时候都是使用多进程。但是 python 中logging 并不支持多进程，所以会遇到不少麻烦。
-          logging 模块是线程安全的，但不能保证多进程安全。
+<a href="https://www.jianshu.com/p/d615bf01e37b">简书</a>
+logging遇到多进程
+python中由于某种历史原因，多线程的性能基本可以无视。所以一般情况下python要实现并行操作或者并行计算的时候都是使用多进程。但是 python 中logging 并不支持多进程，所以会遇到不少麻烦。
+logging 模块是线程安全的，但不能保证多进程安全。
       </pre>
   </ul>
 
@@ -532,25 +525,24 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
       <li><a href="https://learngitbranching.js.org/?locale=zh_CN">Learn Git Branching</a></li>
       <li>最简workflow</li>
       <pre>
-          0.查看是否登录
-          git config --list
-          1.登录
-          git config --global user.name "github用户名"
-          git config --global user.email "邮箱地址"
-          2.准备提交的本地项目
-          git init "path"
-          git add . (提交所有)  or  git add +文件名 (提交单个文件)
-          git commit -m "First commit"
-          3.绑定远程仓库
-          git remote add origin git@github.com:dwhou/xxx.git
-          4.推到master分支
-          git push -u origin master
+0.查看是否登录
+git config --list
+1.登录
+git config --global user.name "github用户名"
+git config --global user.email "邮箱地址"
+2.准备提交的本地项目
+git init "path"
+git add . (提交所有)  or  git add +文件名 (提交单个文件)
+git commit -m "First commit"
+3.绑定远程仓库
+git remote add origin git@github.com:dwhou/xxx.git
+4.推到master分支
+git push -u origin master
 
-          仅添加文件、文件夹到已有仓库某路径下
-          0. above ; 1. above ;
-          +  git clone git@github.com:dwHou/xx.git
-          2. above ; 3. above; 4. above.
-
+仅添加文件、文件夹到已有仓库某路径下
+0. above ; 1. above ;
++  git clone git@github.com:dwHou/xx.git
+2. above ; 3. above; 4. above.
 
       </pre>
 
