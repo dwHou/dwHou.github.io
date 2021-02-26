@@ -147,6 +147,12 @@ libvmaf发布；被FFmpeg支持 ◎ 2018年 速度优化，增加4K画质模型�
   <h2>亮点</h2>
   <ul>
   <li><b>置信区间</b> 自助法(Bootstrapping)</li>
+  <pre>
+<h6>出发点，</h6>
+1. 因为MOS没反映评分的置信度，比如说没有统计评分的方差。2. 机器学习的训练集并没有包罗万象。
+<h6>自助法，</h6>
+Bootstrapping - "Resampling with Replacement"
+  </pre>
 
   </ul>
 
@@ -188,7 +194,13 @@ VMAF通过融合多个基本的指标，使用非线性回归(如SVM)，来预�
   </ul>
 
 
+  <h2>用途</h2>
+  <ul>
+  <li><b>VMAF @ Netflix</b></li>
+  <pre>在网飞，VMAF被用来 ①比较编解码器 ②编码优化 </pre>
+  <li></li>
 
+  </ul>
 
   <h2>代码</h2>
   <ul>
@@ -198,7 +210,8 @@ VMAF通过融合多个基本的指标，使用非线性回归(如SVM)，来预�
 
   </ul>
 
-
+  <h2>小知识</h2>
+  <pre>最佳测试条件 Optimal viewing 是根据人眼敏感频率(cycles/degree, <i>i.e. </i>2 pixels/degree)设计出来的。</pre>
 
 
 
