@@ -211,12 +211,18 @@ VMAF通过融合多个基本的指标，使用非线性回归(如SVM)，来预�
   <pre>Absolute Category Rating (ACR) Scale
 ——— <20 ——— Bad = 20 ——— Poor = 40 ——— Fair = 60 ——— Good = 80 ——— Excellent = 100
 且观看条件为optimal viewing模型，例如：一个1080p，在显示器高度的3倍距离观看时，VMAF得分70的视频可以被解释为平均投票介于"good"和"fair"</pre>
+  <li><b>平均VMAF/b></li>
+  <pre>算术平均 & 调和平均， 前者更忠实整体视频主观感受，后者能反映出个别帧的bad cases.</pre>
   <li></li>
 
   </ul>
 
   <h2>小知识</h2>
-  <pre>最佳测试条件 Optimal viewing 是根据人眼敏感频率(cycles/degree, <i>i.e. </i>2 pixels/degree)设计出来的。</pre>
+  <pre>最佳测试条件 Optimal viewing 是根据人眼敏感频率(cycles/degree, <i>i.e. </i>2 pixels/degree)设计出来的。
+这里的默认模型就是在"60 pixels/degree"收集的。所以如果要在比如540p的视频上解释VMAF，就需要在6.4H距离:
+60 * (arctan(1/6.4 * 2)) * 2 * 180 / π) = 536.1
+  </pre>
+
 
 
 
