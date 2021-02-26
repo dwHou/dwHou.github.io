@@ -112,7 +112,18 @@
   <ul>
   <li><a href="https://arxiv.org/pdf/1803.05407.pdf"><b class="fa fa-file-pdf-o"></b></a> arXiv:2102.02808v1 [cs.CV] 4 Feb 2021 <b>Multi-Stage Progressive Image Restoration</b></li>
   <i>Inception Institute of AI, UAE</i>
+  <pre>
+<h6>分析现有方法:</h6>
+1. encoder-decoder结构 ：<b>优：</b>更宽的上下文信息，<b>劣：</b>保持细节不足。
+2. single-scale pipeline ：<b>优：</b>保持空间上的精确细节，<b>劣：</b>语义上不太可靠。
 
+<h6>该文观点:</h6>
+1. 在multi-stage结构中，结合encoder-decoder与single-scale pipeline，是必要的。
+2. multi-stage不仅仅是上一阶段的输出作为下一阶段的输入。
+3. 每一阶段都用上监督信息是很重要的，渐进式学习。由此，设计supervised attention module (SAM)模块。
+4. 该文提出了将上一阶段特征(contextualized)传递给下一阶段。由此，设计cross-stage feature fusion (CSFF)方法。
+
+  </pre>
 
 
   </ul>
