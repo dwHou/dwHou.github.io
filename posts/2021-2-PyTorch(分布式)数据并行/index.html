@@ -286,6 +286,21 @@ ddp_model.load_state_dict(torch.load(ckp_path, map_location=<font color="red">ma
     <pre>CUDA_VISIBLE_DEVICES=0,1,2 nohup python -u -m torch.distributed.launch --nproc_per_node=3 train.py --cuda >training.log 2>&1 &</pre>
     <pre>dist.barrier()应置于反向传播之后。DP 需要传输 “数据”、“模型”、“输出”、“损失”、“梯度”。DDP只传输 “梯度”。见图1，step4。</pre>
 
+<pre>
+必须禁用模型初始化中的任何随机性。
+SEED = 53
+np.random.seed(SEED)
+torch.manual_seed(SEED)
+torch.cuda.manual_seed_all(SEED)
+torch.backends.cudnn.benchmark = False
+torch.backends.cudnn.deterministic = True
+
+（1）You can seed the global NumPy RNG with np.random.seed(SEED).
+（2）You can use torch.manual_seed(SEED) to seed the RNG for all devices (both CPU and CUDA).
+（3）torch.cuda.manual_seed_all(SEED) sets the seed for generating random numbers on all GPUs. It’s safe to call this function if CUDA is not available; in that case, it is silently ignored.
+（4）Disabling the benchmarking feature with torch.backends.cudnn.benchmark = False causes cuDNN to deterministically select an algorithm, possibly at the cost of reduced performance.
+（5）While disabling CUDA convolution benchmarking (discussed above) ensures that CUDA selects the same algorithm each time an application is run, that algorithm itself may be nondeterministic, unless either torch.set_deterministic(True) or torch.backends.cudnn.deterministic = True is set.
+</pre>
 </ul>
 
 
