@@ -283,6 +283,7 @@ ddp_model.load_state_dict(torch.load(ckp_path, map_location=<font color="red">ma
 5. Maybe loss /= world_size ?, see <a href="https://discuss.pytorch.org/t/is-average-the-correct-way-for-the-gradient-in-distributeddataparallel-with-multi-nodes/34260">this issue</a>
 6. Facebook Research遇到过同样的问题，他们解决办法是是使用<a href="https://github.com/facebookresearch/maskrcnn-benchmark/issues/267">FrozenBatchNorm2d</a>
 7. 据说sync BN刚出来时，实现是有问题的，不同于mxnet、tf、caffe2</pre>
+关于第5点的学习率，可能需要核查是不是所有学习参数满足loss /= world_size 来保证DDP和DP的grad一致。see <a href="ddp_lr.html">ddp_lr.py</a>
     <pre>CUDA_VISIBLE_DEVICES=0,1,2 nohup python -u -m torch.distributed.launch --nproc_per_node=3 train.py --cuda >training.log 2>&1 &</pre>
     <pre>dist.barrier()应置于反向传播之后。DP 需要传输 “数据”、“模型”、“输出”、“损失”、“梯度”。DDP只传输 “梯度”。见图1，step4。</pre>
 
