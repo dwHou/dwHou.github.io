@@ -204,6 +204,20 @@ https://zhuanlan.zhihu.com/p/23599229
     <pre>查看Docker的帮助信息：# docker --help。各种命令的用法也不再赘述，后边用到哪些命令时会作出一定的解释。</pre>
 
   <h3>关于镜像的基本操作</h3>
+  <h3>关于容器的基本操作</h3>
+  <pre>
+      docker run -it --runtime=nvidia -p 9999:22 --restart=always --ipc=host -v /data/houdewang/containers-shared:/containers-shared --name=super-resolution hdw-pytorch:1.7.0 bash
+      通过宿主机的9999端口可以ssh登录到容器中 (和vscode的remote-SSH功能搭配使用，很方便)
+      -v 把宿主机上的目录映射到容器内
+  </pre>
+  <pre>
+      退出容器并结束容器运行 exit
+      返回容器 先start,再attach
+      退出容器但容器仍运行 Ctrl+P+Q 
+      返回容器 docker attach container_id (或 docker exec -it container_id bashShell)
+  </pre>
+
+
   
 
 
