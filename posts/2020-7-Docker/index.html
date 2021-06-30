@@ -216,6 +216,23 @@ https://zhuanlan.zhihu.com/p/23599229
       退出容器但容器仍运行 Ctrl+P+Q 
       返回容器 docker attach container_id (或 docker exec -it container_id bashShell)
   </pre>
+  <h3>关于vscode进入远程容器</h3>
+  <pre>
+    设置管理员密码
+    passwd root
+    
+    enable管理员远程登录
+    sudo service ssh start
+    sudo vim /etc/ssh/sshd_config
+    PermitRootLogin 改为yes
+    
+    容器内open-ssh开机自动启动
+    sudo service ssh restart
+    sudo apt update && apt install systemd && systemd enable ssh
+
+    Open SSH Configuration File... HostName和宿主机一致，端口用9999
+    Connect to Host...
+  </pre>
 
 
   
