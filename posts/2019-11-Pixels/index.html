@@ -160,6 +160,29 @@ def forward(self, x):
 会对一路直播流进行分布式的拆分，路由到多台GPU节点进行处理，而在分布式超分的场景中，使用Y通道传输可以节省带宽的消耗。
 </pre>
 
+<pre>
+YUV和RGB互转要考虑的东西有两个
+
+一个是<b>Matrix</b>，是BT601还是BT709,还是4K时代的BT2020，,Ycgco
+
+不同的matrix的色彩范围不一样 数值也有差
+
+一般HD视频(1080p)使用BT601 转换, UHDTV(4k或8K)使用BT2020协议转换 , 若视频信号中无色域标志或者色彩转换矩阵 , 默认使用BT601即可, 
+ffmpeg转rgb也是这样操作的
+    
+第二个是<b>range</b>，YUV里TV和PC显示器的数值范围不一样
+
+YUV和RGB互转有两套公式，对应两种range
+
+8bit位深的情况下
+
+TVrange是16-235(Y)、16-240(UV) 称为limited range
+
+PCrange是0-255 称为full range
+
+而RGB没有range之分，全是0-255
+</pre>
+
 <h2>Training</h2>
 <pre>感受野足够大的话，增大patchsize接着训是会涨点的。训练集loss不一定降，但patchsize更接近验证集的尺寸，有助于验证集指标提升。</pre>
 
