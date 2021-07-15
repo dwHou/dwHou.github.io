@@ -181,6 +181,10 @@ TVrange是16-235(Y)、16-240(UV) 称为limited range
 PCrange是0-255 称为full range
 
 而RGB没有range之分，全是0-255
+
+YUV ： YUV是一种模拟型号， Y∈ [0,1]   U,V∈[-0.5,0.5] 
+YCbCr ：也叫YCC,  YCbCr 是数字信号， 它包含两种形式， 分别为TV range 和 full range
+我们平时接触到的绝大多数都是 YCbCr （tv range） ， ffmpeg 解码出来的数据绝大多数也是这个， 虽然ffmpeg 里面将它的格式描述成YUV420P ， 实际上它是YCbCr tv range
 </pre>
 
 <h2>Training</h2>
