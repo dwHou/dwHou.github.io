@@ -138,7 +138,12 @@
   <ul>
   <li><b>概览</b></li>
   使用Core ML可以将机器学习模型集成到苹果平台(Mac/ios)的app中。
-  <li></li>
+  <pre>
+  Core ML模型的获得方式：
+  1. 在Xcode中直接使用Create ML app进行创建和训练，得到的模型将会是Core ML格式。
+  2. 可以使用各种各样的机器学习库，然后通过Core ML Tools将模型转换到Core ML格式。
+  3. 在1、2基础上获得的模型可以被用来重新训练或者fine-tune，在所部署的用户设备上。
+  </pre>
   </ul>
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
