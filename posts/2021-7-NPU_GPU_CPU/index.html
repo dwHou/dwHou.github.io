@@ -97,7 +97,7 @@
                             <div style="font-size: 170%;">NPU、CPU和GPU</div>
                             <br>
                             <div class="info">
-    <p style="font-family:CMSS; font-size:120%">Posted on July.21, 2021</p>
+    <p style="font-family:CMSS; font-size:120%">Posted on Jul.21, 2021</p>
 
     <!--
         by dwHou
@@ -138,11 +138,52 @@
   <ul>
   <li><b>概览</b></li>
   使用Core ML可以将机器学习模型集成到苹果平台(Mac/ios)的app中。
+  它能对CPU、GPU和苹果神经元引擎(ANE)上的模型进行优化部署，使用更小的存储和功耗。
   <pre>
   Core ML模型的获得方式：
   1. 在Xcode中直接使用Create ML app进行创建和训练，得到的模型将会是Core ML格式。
   2. 可以使用各种各样的机器学习库，然后通过Core ML Tools将模型转换到Core ML格式。
   3. 在1、2基础上获得的模型可以被用来重新训练或者fine-tune，在所部署的用户设备上。
+  </pre>
+  <li><b>主题</b></li>
+  <li><b>第一步</b> 获得一个Core ML模型</li>
+  <pre>
+  Core ML支持多样的机器学习模型，包括神经网络、决策树集成、支持向量机和广义线性模型。
+  Core ML需要以 .mlmodel 为后缀的模型格式。
+
+  使用coremltools转换模型到Core ML.
+  </pre>
+  <img src='./coremltools.png'>
+  <pre>
+    <a href="https://developer.apple.com/videos/play/tech-talks/10154/">WWDC大会上 PyTorch转CoreML的介绍</a>
+    <a href="https://mybinder.org/v2/gh/ContinuumIO/coreml-demo/HEAD">Core ML Tools Jupyter上手学习</a>
+  </pre>
+  <li><b>Core ML Tools</b></li>
+  <li>1. 转换第三方库和框架的模型到Core ML</li>
+  <li>2. 阅读、编写和优化Core ML模型</li>
+  <li><b>.mlmodel → .mlpackage</b></li>
+  <pre>
+  安装：
+  pip install coremltools==5.0b2
+  快速示例：
+  1. 下载模型
+  2. 转换模型
+  3. 设置元数据：可以便于使用Xcode预览和Xcode的其他特性
+  4. 进行推理
+  5. 保存和加载模型
+  6. 在Xcode中使用模型：例如部署到app中
+  </pre>
+
+  <pre>
+  后者是新出来的，相对原始的.mlmodel,它的结构更清晰，容器包括了：
+  Metadata(json), Interface/Architecture(protobuf), Learned-Parameters(binary)
+  转换不会改变模型的类型和运作方式。
+
+  # coremltools 5
+  model.save("my_model.mlpackage")
+
+  # coremltools 4
+  model.save("my_model.mlmodel")
   </pre>
   </ul>
 
