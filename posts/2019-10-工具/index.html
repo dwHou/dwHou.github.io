@@ -531,6 +531,10 @@ logging 模块是线程安全的，但不能保证多进程安全。
       <li><a href="https://learngitbranching.js.org/?locale=zh_CN">Learn Git Branching</a></li>
       <li>最简workflow</li>
       <pre>
+首先Connecting to GitHub/GitLab with SSH
+<a href="https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh">参照</a>
+      </pre>
+      <pre>
 0.查看是否登录
 git config --list
 1.登录
@@ -550,10 +554,37 @@ git push -u origin master
 +  git clone git@github.com:dwHou/xx.git
 2. above ; 3. above; 4. above.
 
+1、git clone 与 git pull 相同点
+相同点：都是从远程服务器拉取代码到本地
+
+2、git clone 与 git pull 不同点
+git clone
+是在本地没有版本库的时候，从远程服务器克隆整个版本库到本地，是一个本地从无到有的过程。
+
+git pull
+在本地有版本库的情况下，从远程库获取最新commit 数据（如果有的话），并merge（合并）到本地。
+
+git pull = git fetch + git merge
+
+3、使用场景
+通常情况下，远程操作的第一步，是使用git clone从远程主机克隆一个版本库到本地。
+
+本地修改代码后，每次从本地仓库push到远程仓库之前都要先进行git pull操作，保证push到远程仓库时没有版本冲突。
+
       </pre>
 
 
   </ul>
+
+  <h2>Git内部原理</h2>
+  <pre>
+  经常有人说Git简单，Pull&Commit&Push，又经常有人说Git复杂难懂。最经常听到的抱怨是Git的命令容易混淆。
+  如果你不懂一个东西的内部原理，有时它会变得十分混乱。
+  https://www.bilibili.com/video/BV1RJ411X7kh
+  1.Git是如何存储信息的？
+    
+  </pre>
+
 
   <h2>EffectiveMac</h2>
   <ul>
