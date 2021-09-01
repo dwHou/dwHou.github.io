@@ -207,13 +207,39 @@ int main()
 
 #### 1.2 注释
 
+1.单行注释：**//**   
+
+2.多行注释：**/***  和  ***/ ** 不能嵌套，不然 /* 只会匹配左数出现的第一个 */ 导致错误
+
+小tips：
+
+- At the library, program, or function level, use comments to describe *what*.
+- Inside the library, program, or function, use comments to describe *how*.
+- At the statement level, use comments to describe *why*.
+
+① 好的注释是解释why，而不是描述what。前者表达你的思想、决策，后者只能说明你的代码易读性差，要重新书写。当然对于初学者或者出于教学目的，可以写what型的注释。
+
+② 更好的实践是用更长的变量名称，让它表达自己的含义，即**self documenting code**。
+
+③ 注释掉代码：这个也是常用的做法。不过如果遇到需要嵌套使用多行注释时，也可以考虑使用 **#if 0** 预处理语句，后面会讲到。
 
 
 
+#### 1.3 介绍对象和变量
 
+前面提到语句构成函数，来运行产生结果。那结果怎么来的呢？必然要操纵（读、改、写）数据。**数据**就是一切可以被计算机移动、处理或存储的信息。
 
+所有计算机都有内存，称作**RAM**。存在内存里的数据也叫值。一些老的语言，比如Apple Basic，是可以直接存取某某号内存的。但在C++中，是不允许直接访存的，而是间接地用一个对象（object）。它是一个内存区域，包括了值和属性。
 
+即：
 
+Apple Basic：*go get the value stored in mailbox number 7532.*
+
+C++：*go get the value stored by this object*.
+
+意味着我们可以使用对象来存储和检索值，而不用操心到底是放在哪一号内存里。
+
+**对象**可以被命名或者未命名。一个被命名的对象被称作**变量**，它的名字也叫标识符。在我们的程序里大多数对象都是这种变量。
 
 
 
