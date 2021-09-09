@@ -241,27 +241,40 @@ C++：*go get the value stored by this object*.
 
 **对象**可以被命名或者未命名。一个被命名的对象被称作**变量**，它的名字也叫标识符。在我们的程序里大多数对象都是这种变量。
 
+对象在程序运行期间会被实例化，也就是创建并分配内存地址；一个被实例化的对象称作**实例**。
+
+**数据类型**告诉编译器，变量将存储什么类型的值。除了内置的类型，C++也支持用户定义的类型。这是C++强大的原因之一。所以我们介绍了变量的三个很基础的要素： 标识符，类型 和 值
 
 
 
+#### 1.4 变量的分配和初始化
+
+把定义（**define**）和分配（**assign**）一起做，就称作初始化（**initialize**）。
+
+```c++
+int a; // no initializer
+int b = 5; // initializer after equals sign
+int c( 6 ); // initializer in parenthesis
+int d { 7 }; // initializer in braces
+```
+
+其中使用赋值运算符的，也称作拷贝初始化（**copy initialization**），这个很熟悉，是沿袭C语言而来的；
+
+其中使用圆括号的，称作直接初始化（**direct initialization**）；
+
+其中使用花括号的，称作大括号初始化（**list initialization** (also sometimes called **uniform initialization** or **brace initialization**））。
+
+> 简单的数据类型，使用拷贝初始化就ok了，但复杂的数据类型，还是直接初始化效率更高。不过直接初始化不支持列表类型，所以提出列表初始化这样一个统一的形式。
+
+最佳实践建议：
+
+① 只要有机会就使用大括号初始化。不过另一方面对于单独的分配而言，C++只有拷贝分配，没有所谓的直接分配和大括号分配。
+
+② 创建变量时就做初始化。除非故意，最好还是别只定义一个未分配的变量。
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#### 1.5 介绍iostream
 
 
 
