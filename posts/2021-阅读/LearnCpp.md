@@ -276,7 +276,7 @@ int d { 7 }; // initializer in braces
 
 #### 1.5 介绍iostream
 
-
+io库是C++标准库的一部分。
 
 
 
