@@ -369,6 +369,18 @@ env | grep -i proxy 可以查看代理的情况。</pre>
   <li>:set nu 行号对于调试还是很重要的</li>
      
   </ul>
+
+  <h2>crontab</h2>
+  <ul>
+
+  <li><b>定时执行程序</b></li>
+  <li>crontab -e 编辑</li>
+  <li>crontab -l 查看</li>
+  <pre>
+  0  *   * * *   top -b | head -n 20 >>/data/devonn/watchcpu.log 2>&1 每小时查看一下top，有点特殊的是需要使用-b参数，才能让top的输出传到另一个文件
+  0  *   * * *   nvidia-smi >>/data/devonn/watchgpu.log 2>&1 每小时查看一下nvidia-smi
+ </pre>
+  </ul>
   
   <h2>visio</h2>
   <ul>
