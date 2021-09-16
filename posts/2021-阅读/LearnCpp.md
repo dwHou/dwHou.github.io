@@ -278,6 +278,8 @@ int d { 7 }; // initializer in braces
 
 io库是C++标准库的一部分。
 
+std:cout << 
+
 
 
 
