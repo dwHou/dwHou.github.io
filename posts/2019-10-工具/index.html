@@ -379,6 +379,7 @@ env | grep -i proxy 可以查看代理的情况。</pre>
   <pre>
   0  *   * * *   top -b | head -n 20 >>/data/devonn/watchcpu.log 2>&1 每小时查看一下top，有点特殊的是需要使用-b参数，才能让top的输出传到另一个文件
   0  *   * * *   nvidia-smi >>/data/devonn/watchgpu.log 2>&1 每小时查看一下nvidia-smi
+  /var/spool/cron/crontabs/ 查看每个用户的定时任务，然后如果是定时记录log，注意别冲突了，写成同一个路径的文件。
  </pre>
   </ul>
   
