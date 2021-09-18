@@ -321,9 +321,80 @@ C++ I/O库不支持一种不需要按回车就能从键盘接收输入的方式�
 
 
 
-#### 1.7 关键字
+#### 1.7 关键字和如何命名标识符
 
 C++ 20 有92个关键字，也称保留字。
+
+标识符的命名**规则**：① 不能是关键字 ② 由字母、数字、下划线组成 ③ 首位只能是字母或下划线 ④ 大小写敏感
+
+标识符的命名**习惯**：① 变量的首位用小写字母 ② 函数的首位用小写字母，接着蛇形或**驼峰**命名法 ③ 用户定义的类型（如结构体、类、枚举）首位采用大写字母
+
+<font color="red">注1：</font>不过如果你要在一个现有代码上进行工作，更好地还是延续这份代码的命名风格，而不是生硬地照搬之前的习惯。
+
+<font color="red">注2：</font>避免用下划线开头的标识符，这一般是留给操作系统、库和编译器用的。
+
+<font color="red">注3：</font>令标识符有含义，并且琐碎的、不重要的标识符用短一点的名字如*i*；广泛用到的标识符用长一点的、描述性的名字如*openFileOnDisk*；
+
+<font color="red">注3’：</font>避免使用缩略词，虽然能减少你写代码的时间，但是易读性会大大降低，令你更难维护。**代码被读的次数会比写的次数多。**IDE的自动补全照样可以帮你写快。
+
+> Code is read more often than it is written, the time you saved while writing the code is time that every reader, including the future you, wastes when reading it. 
+
+
+
+#### 1.8 空格和格式
+
+空格是用来组成格式的。包括了spaces，tabs 和 newlines。
+
+编译器会无视空格，所以我们称C++是空格无关（independent）的语言。
+
+如果一个很长的语句被分为多行，操作符应该放在前面：
+
+```cpp
+std::cout << 3 + 4
+    + 5 + 6
+    * 7 * 8;
+```
+
+漂亮的写法：
+
+```cpp
+cost          = 57;
+pricePerItem  = 24;
+value         = 5;
+numberOfItems = 17;
+```
+
+养成好习惯（second nature）
+
+Code -> Preferences -> Keyboard Shortcuts 可以找到VS Code关于**auto-format**的快捷键，Mac上默认是 Option/ALT + Shift + F.
+
+
+
+#### 1.9 字面量，操作符
+
+在计算机科学中，**字面量（literals）**就是指这个量本身，比如字面量3。也就是指3。字面量是相对变量常量等定义的。
+
+string x=“ABC” 意思是把字面量”ABC” 赋值给变量 x。const string y=”cbd”. 意思是把字面量”cbd” 赋值给了常量y。字面量，即自己描述自己的量。
+
+有的**操作符（operators）**是一个符号（+、*、=），有的是多个符号（>>、==），有的是词语（new、delete、throw）。按操作数个数，又可以分为一元、二元、三元操作符。
+
+
+
+#### 1.10 表达式
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
