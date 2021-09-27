@@ -483,7 +483,11 @@ int main()
 
 #### 2.5 函数的用处
 
+Organization、Reusability、Testing、Extensibility、Abstraction
 
+
+
+#### 2.6 声明和定义
 
 
 
