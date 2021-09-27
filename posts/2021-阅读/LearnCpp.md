@@ -433,33 +433,55 @@ C++不允许显式地调用main()函数。
 
 #### 2.3 函数的参数
 
+形参 parameter 实参 argument  
+
+当函数被调用时，所有形参会被创建为变量，并且实参的值会传递给形参。
 
 
 
+#### 2.4 局部
+
+函数的形参和定义在函数体中的变量，都称作局部变量。
+
+```cpp
+int add(int x, int y) // function parameters x and y are local variables
+{
+    int z{ x + y }; // z is a local variable too
+    return z;
+} // z, y, and x destroyed here
+```
+
+大多数时候，局部变量是在进入函数时创建，在离开函数时销毁。但有的特别的编译器可以决定更早创建和更晚销毁（注：但不会改变后文提到的local scope），来达到优化的目的。
+
+```cpp
+#include <iostream>
+
+void doSomething()
+{
+    std::cout << "Hello!\n";
+}
+
+int main()
+{
+    int x{ 0 }; // x's lifetime begins here
+
+    doSomething(); // x is still alive during this function call
+
+    return 0;
+} // x's lifetime ends here
+```
+
+**Local scope 局部范围**
+
+一个标识符的范围 决定了源码中这个标识符在哪处可以访问到。
+
+这是编译时就确定的属性，如果尝试在该范围外用到某个标识符，便会报错。
+
+好习惯：最好在尽可能接近要使用的地方定义局部变量。
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#### 2.5 函数的用处
 
 
 
