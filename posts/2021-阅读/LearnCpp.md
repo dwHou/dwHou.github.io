@@ -487,13 +487,22 @@ Organization、Reusability、Testing、Extensibility、Abstraction
 
 
 
-#### 2.6 声明和定义
+#### 2.6 前向声明
 
+**前向声明**（**Forward Declaration**），是指声明标识符(表示编程的实体，如数据类型、变量、函数)时还没有给出完整的定义。
 
+因为：如果函数B调用函数A，那编译器必须要先知道A是什么，所以A要先定义。但如果A和B相互调用咋办（循环依赖）？→ 前向声明
 
+前向声明函数时，只需要函数原型：返回值、名字、形参，不需要函数体，直接分号结束。
 
+```cpp
+int add(int x, int y); // forward declaration of add() (using a function prototype)
+int add(int, int); // valid function prototype
+```
 
+而且可以不用写形参的名字（但习惯上还是会写，为了易读性）
 
+前向声明函数是最常见的，也可以用于变量、用户定义的数据类型。语法有一点差别，在之后的章节会介绍。
 
 
 
