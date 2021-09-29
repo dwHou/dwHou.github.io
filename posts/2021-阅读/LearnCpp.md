@@ -506,37 +506,83 @@ int add(int, int); // valid function prototype
 
 
 
+<font color="red">**冷知识：**</font>所有的定义也是声明。
+
+声明能满足编译器，但光只是声明不能满足链接器。
+
+定义能满足编译器（所以它也是声明）、链接器。
+
+对于变量，如`int x;`，就既是定义也是声明。
+
+> 我们平时语境下说的声明就是纯粹的声明 pure declarations，不是定义，不能满足链接器的。
+
+只能**一处定义**，可以多处声明（但多处是冗余的）。
+
+对于同一标识符、不同参数的函数，是视为不同函数的。遇到这种情况不叫重复定义，不会报错的。这个叫**重载**。
 
 
 
+#### 2.7 包含多个文件的程序
+
+大型程序都会包含多个文件，得以更好地组织和复用。
+
+面对多文件的项目代码，IDE会很方便。
+
+1. 用前向声明，不同文件里的函数就能够互相调用。
+2. 不同的文件是独立编译的，不存在先后顺序。
+3. 文件要加到项目里才算。
 
 
 
+#### 2.8 命名空间
+
+前面提过，不同的文件是独立编译的。
+
+但是在链接的时候，如果有同名的函数，就会报错。哪怕都编译通过了。只能**一处定义**。
 
 
 
+**命名冲突**大多发生在函数和全局变量上。
 
+**命名空间**（namespace）可以解决这个问题。某个命名空间声明的标识符，不会被误认为是声明在另一个范围的同名标识符。
 
+**The global namespace**
 
+在C++中，任何没有定义在一个类、函数或命名空间中的标识符，会被认为是在全局命名空间。比如main函数就通常在全局命名空间。
 
+**The std namespace**
 
+起初发明C++语言时，标准库是在全局命名空间的，不需要使用std::。可想而知，带了非常多的麻烦。就改成了现在的样子。
 
+使用方式1：
 
+```cpp
+#include <iostream>
 
+int main()
+{
+    std::cout << "Hello world!"; // when we say cout, we mean the cout defined in the std namespace
+    return 0;
+}
+```
 
+*std::cout* 可以念做 “the *cout* that lives in namespace *std*“
 
+使用方式2：
 
+```cpp
+#include <iostream>
 
+using namespace std; // this is a using directive telling the compiler to check the std namespace when resolving identifiers with no prefix
 
+int main()
+{
+    cout << "Hello world!"; // cout has no prefix, so the compiler will check to see if cout is defined locally or in namespace std
+    return 0;
+}
+```
 
-
-
-
-
-
-
-
-
+不推荐使用方式2，那就重蹈覆辙，C++语言发明之处的那些麻烦又要经历一遍。最糟糕的是现在不报错，未来在用C++新版时却报错，仅仅因为标准新增了几个标识符。
 
 
 
