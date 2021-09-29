@@ -586,11 +586,24 @@ int main()
 
 
 
+#### 2.9 预处理
+
+在编译之前，其实还进行了一个称作**translation**的操作。而translation中最值得注意的是它涉及到了预处理**preprocessor**。
+
+预处理也是短暂地在内存中进行的，它并不会改变原来的代码文本。
 
 
 
+常见的预处理指令（他们许多和C++的语法不同）：
 
-
+- **Includes**
+- **Macro defines**
+- **Object-like macros with substitution text**
+- **Object-like macros without substitution text**
+- **Object-like macros without substitution text**
+- **#if 0**
+- **Object-like macros don’t affect other preprocessor directives**
+- **The scope of defines**
 
 
 
