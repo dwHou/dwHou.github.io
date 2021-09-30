@@ -597,27 +597,110 @@ int main()
 常见的预处理指令（他们许多和C++的语法不同）：
 
 - **Includes**
+
+  语法示例：
+
+  ```c++
+  #include <iostream>
+  ```
+
+  作用：#include指令将该处替换为具体文件的内容。几乎都是用于头文件。
+
+  
+
 - **Macro defines**
-- **Object-like macros with substitution text**
-- **Object-like macros without substitution text**
-- **Object-like macros without substitution text**
-- **#if 0**
-- **Object-like macros don’t affect other preprocessor directives**
-- **The scope of defines**
+
+  语法示例：
+
+  ```cpp
+  #define identifier substitution_text
+  #define identifier
+  ```
+
+  作用：
+
+  Function-like macros比较危险，尽量不使用，而且普通函数都能取代它，这里就不讨论了。
+
+  Object-like macros with substitution text这里的标识符一般全用大写字母，预处理后全部被替换文本。如`#define MY_NAME "Alex"` 。它过去被作为常数（constant variables）的一种便捷的替代方法。除了一些遗留代码，现在基本不这么用了。
+
+  Object-like macros without substitution text会将标识符替换成空白，也就是去掉这个内容。在接下来介绍的**Conditional compilation**中可以发挥特别的用处。
+
+  <font color="red">Tips:</font>
+
+  宏指令只替换C++代码中的标识符，不会替换其他预处理指令出现的该标识符。
+
+  
+
+- **Conditional compilation**
+
+  语法示例：
+
+  ```cpp
+  #include <iostream>
+  
+  #define PRINT_JOE
+  
+  int main()
+  {
+  #ifdef PRINT_JOE
+      std::cout << "Joe\n"; // if PRINT_JOE is defined, compile this code
+  #endif
+  
+  #ifdef PRINT_BOB
+      std::cout << "Bob\n"; // if PRINT_BOB is defined, compile this code
+  #endif
+    
+  #ifndef PRINT_BOB
+      std::cout << "Bob\n"; // if PRINT_BOB is not defined, compile this code
+  #endif
+  
+      return 0;
+  }
+  ```
+
+  可以控制哪些部分编译，哪些部分不编译。
+
+  #ifdef PRINT_BOB与#ifndef PRINT_BOB也可以写成 
+
+  #if defined(PRINT_BOB)与#if !defined(PRINT_BOB)
+
+  **#if 0**也属于条件编译的预处理指令，它可以当作一种特殊的注释方式。避免了多重注释不能嵌套的问题。
+
+  ```cpp
+  #include <iostream>
+  
+  int main()
+  {
+      std::cout << "Joe\n";
+  
+  #if 0 // Don't compile anything starting here
+      std::cout << "Bob\n";
+      /* Some
+       * multi-line
+       * comment here
+       */
+      std::cout << "Steve\n";
+  #endif // until this point
+  
+      return 0;
+  }
+  ```
+
+最后，预处理都会在编译之前结束，宏指令的标识符则会被丢弃。所以一个文件里定义的宏指令，另一个文件是感知不到的。
 
 
 
+#### 2.10 头文件
 
+**Headers**
 
+当程序越来越大，文件越来越多。需要前向声明的函数就会非常冗长。
 
+有没有一种方法，就是**将前向声明都放在一个位置**，然后任何要用到的地方引用它就好？
 
+这就是C++中第二种最常见的文件：**头文件**（后缀.h，也有.hpp或无后缀的，如`iostream`）
 
-
-
-
-
-
-
+头文件帮助我们省下了很多打重复代码的精力。
 
 
 
