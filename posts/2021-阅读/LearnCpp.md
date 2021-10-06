@@ -278,23 +278,429 @@ int d { 7 }; // initializer in braces
 
 io库是C++标准库的一部分。
 
+std::cout << 
+
+还可以多个 << 连用，把一串控制台输出连起来，如：
+
+```cpp
+int x{ 5 };
+std::cout << "x is equal to: " << x;
+```
+
+std::endl
+
+换行。\n 也是换行，而且效率更高。因为endl多一个刷新输出的工作，而这个不是必要的，并且cout也会做这个工作。
+
+std::cin >>
+
+从键盘得到的输入必须存在一个变量中。还可以多个 >> 连用，接收多个输入，中间由空格相隔，如：
+
+```cpp
+std::cin >> x >> y; // get two numbers and store in variable x and y respectively
+```
+
+C++ I/O库不支持一种不需要按回车就能从键盘接收输入的方式。不过一些第三方库有实现这个函数功能。
+
+小**tips**：<<、>>并不难记，它们表明了数据的传递方向。
 
 
 
+#### 1.6 未初始化的变量和未定义的行为
+
+不像其他编程语言，C++并不会自动初始化一个给定的值（比如0）。未初始化意味着，默认的值会变成所分配内存里本来存的一些无用（garbage）的值。
+
+历史渊源：
+
+早期计算机速度很慢，由于初始化每个变量会影响速度，而且大多时候这些变量的初始值是会被写覆盖的。所以C语言默认就不进行初始化了（C++继承了这点）。当然，以现在计算机的性能已经几乎不用考虑这点资源消耗，除非你在需要极致优化的时候故意这么做。
+
+未定义的行为(**UB**)指执行结果没有被C++语言定义的行为，未初始化变量就是其中一种。它可能出现许多症状，比如：
+
+程序每次运行结果不定；程序崩溃；有的编译器可以正常编译，有的却不行；你修改代码一个不相干的地方，却影响了执行结果；等等
+
+所以务必要避免**未定义行为**。
 
 
 
+#### 1.7 关键字和如何命名标识符
+
+C++ 20 有92个关键字，也称保留字。
+
+标识符的命名**规则**：① 不能是关键字 ② 由字母、数字、下划线组成 ③ 首位只能是字母或下划线 ④ 大小写敏感
+
+标识符的命名**习惯**：① 变量的首位用小写字母 ② 函数的首位用小写字母，接着蛇形或**驼峰**命名法 ③ 用户定义的类型（如结构体、类、枚举）首位采用大写字母
+
+<font color="red">注1：</font>不过如果你要在一个现有代码上进行工作，更好地还是延续这份代码的命名风格，而不是生硬地照搬之前的习惯。
+
+<font color="red">注2：</font>避免用下划线开头的标识符，这一般是留给操作系统、库和编译器用的。
+
+<font color="red">注3：</font>令标识符有含义，并且琐碎的、不重要的标识符用短一点的名字如*i*；广泛用到的标识符用长一点的、描述性的名字如*openFileOnDisk*；
+
+<font color="red">注3’：</font>避免使用缩略词，虽然能减少你写代码的时间，但是易读性会大大降低，令你更难维护。**代码被读的次数会比写的次数多。**IDE的自动补全照样可以帮你写快。
+
+> Code is read more often than it is written, the time you saved while writing the code is time that every reader, including the future you, wastes when reading it. 
 
 
 
+#### 1.8 空格和格式
+
+空格是用来组成格式的。包括了spaces，tabs 和 newlines。
+
+编译器会无视空格，所以我们称C++是空格无关（independent）的语言。
+
+如果一个很长的语句被分为多行，操作符应该放在前面：
+
+```cpp
+std::cout << 3 + 4
+    + 5 + 6
+    * 7 * 8;
+```
+
+漂亮的写法：
+
+```cpp
+cost          = 57;
+pricePerItem  = 24;
+value         = 5;
+numberOfItems = 17;
+```
+
+养成好习惯（second nature）
+
+Code -> Preferences -> Keyboard Shortcuts 可以找到VS Code关于**auto-format**的快捷键，Mac上默认是 Option/ALT + Shift + F.
 
 
 
+#### 1.9 字面量，操作符
+
+在计算机科学中，**字面量（literals）**就是指这个量本身，比如字面量3。也就是指3。字面量是相对变量常量等定义的。
+
+string x=“ABC” 意思是把字面量”ABC” 赋值给变量 x。const string y=”cbd”. 意思是把字面量”cbd” 赋值给了常量y。字面量，即自己描述自己的量。
+
+有的**操作符（operators）**是一个符号（+、*、=），有的是多个符号（>>、==），有的是词语（new、delete、throw）。按操作数个数，又可以分为一元、二元、三元操作符。
 
 
 
+#### 1.10 表达式
+
+表达式是字面量、变量、操作符和显式函数调用的组合，这个组合应当输出一个值。
 
 
+
+#### 1.11 程序
+
+不要试图一次写完。可以写一部分，编译通过，再添加一部分代码。也不是一次写得漂亮，写完能正常工作后，再进行优化。
+
+
+
+#### 1.x 第一章总结
+
+
+
+## 函数和文件
+
+
+
+#### 2.1 函数的介绍
+
+前面介绍过一个函数是许多语句顺序执行的集合。但这个定义没有提供函数的用处，这里更新一下定义：**函数是设计用于完成特定工作的可复用语句序列。**
+
+```cpp
+return-type identifier() // 函数头
+{
+// Your code here 括号连同里面的代码称为函数体
+}
+```
+
+函数不能嵌套定义，即函数不可以在另一个函数里定义。
+
+小tips：词语“foo”常用来占位作为一个不重要、讲解概念用的函数的名称，它本身没有啥意义。
+
+<font color="red">**可复用**</font>既是定义也是目的。<font color="red">Follow the DRY best practice: “don’t repeat yourself”.</font> 
+
+
+
+#### 2.2 函数的返回值
+
+返回值不一定是字面量，**可以是任何表达式。**但要与你的返回值类型吻合，不然造成未定义行为了。
+
+当函数不需要返回值时，使用返回值类型void，然后就不要写return语句。
+
+main函数的返回值也称作状态码，因为它能反映程序有没有成功执行。一般返回**0**表示正常运行。
+
+C++不允许显式地调用main()函数。
+
+
+
+#### 2.3 函数的参数
+
+形参 parameter 实参 argument  
+
+当函数被调用时，所有形参会被创建为变量，并且实参的值会传递给形参。
+
+
+
+#### 2.4 局部
+
+函数的形参和定义在函数体中的变量，都称作局部变量。
+
+```cpp
+int add(int x, int y) // function parameters x and y are local variables
+{
+    int z{ x + y }; // z is a local variable too
+    return z;
+} // z, y, and x destroyed here
+```
+
+大多数时候，局部变量是在进入函数时创建，在离开函数时销毁。但有的特别的编译器可以决定更早创建和更晚销毁（注：但不会改变后文提到的local scope），来达到优化的目的。
+
+```cpp
+#include <iostream>
+
+void doSomething()
+{
+    std::cout << "Hello!\n";
+}
+
+int main()
+{
+    int x{ 0 }; // x's lifetime begins here
+
+    doSomething(); // x is still alive during this function call
+
+    return 0;
+} // x's lifetime ends here
+```
+
+**Local scope 局部范围**
+
+一个标识符的范围 决定了源码中这个标识符在哪处可以访问到。
+
+这是编译时就确定的属性，如果尝试在该范围外用到某个标识符，便会报错。
+
+好习惯：最好在尽可能接近要使用的地方定义局部变量。
+
+
+
+#### 2.5 函数的用处
+
+Organization、Reusability、Testing、Extensibility、Abstraction
+
+
+
+#### 2.6 前向声明
+
+**前向声明**（**Forward Declaration**），是指声明标识符(表示编程的实体，如数据类型、变量、函数)时还没有给出完整的定义。
+
+因为：如果函数B调用函数A，那编译器必须要先知道A是什么，所以A要先定义。但如果A和B相互调用咋办（循环依赖）？→ 前向声明
+
+前向声明函数时，只需要函数原型：返回值、名字、形参，不需要函数体，直接分号结束。
+
+```cpp
+int add(int x, int y); // forward declaration of add() (using a function prototype)
+int add(int, int); // valid function prototype
+```
+
+而且可以不用写形参的名字（但习惯上还是会写，为了易读性）
+
+前向声明函数是最常见的，也可以用于变量、用户定义的数据类型。语法有一点差别，在之后的章节会介绍。
+
+
+
+<font color="red">**冷知识：**</font>所有的定义也是声明。
+
+声明能满足编译器，但光只是声明不能满足链接器。
+
+定义能满足编译器（所以它也是声明）、链接器。
+
+对于变量，如`int x;`，就既是定义也是声明。
+
+> 我们平时语境下说的声明就是纯粹的声明 pure declarations，不是定义，不能满足链接器的。
+
+只能**一处定义**，可以多处声明（但多处是冗余的）。
+
+对于同一标识符、不同参数的函数，是视为不同函数的。遇到这种情况不叫重复定义，不会报错的。这个叫**重载**。
+
+
+
+#### 2.7 包含多个文件的程序
+
+大型程序都会包含多个文件，得以更好地组织和复用。
+
+面对多文件的项目代码，IDE会很方便。
+
+1. 用前向声明，不同文件里的函数就能够互相调用。
+2. 不同的文件是独立编译的，不存在先后顺序。
+3. 文件要加到项目里才算。
+
+
+
+#### 2.8 命名空间
+
+前面提过，不同的文件是独立编译的。
+
+但是在链接的时候，如果有同名的函数，就会报错。哪怕都编译通过了。只能**一处定义**。
+
+
+
+**命名冲突**大多发生在函数和全局变量上。
+
+**命名空间**（namespace）可以解决这个问题。某个命名空间声明的标识符，不会被误认为是声明在另一个范围的同名标识符。
+
+**The global namespace**
+
+在C++中，任何没有定义在一个类、函数或命名空间中的标识符，会被认为是在全局命名空间。比如main函数就通常在全局命名空间。
+
+**The std namespace**
+
+起初发明C++语言时，标准库是在全局命名空间的，不需要使用std::。可想而知，带了非常多的麻烦。就改成了现在的样子。
+
+使用方式1：
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    std::cout << "Hello world!"; // when we say cout, we mean the cout defined in the std namespace
+    return 0;
+}
+```
+
+*std::cout* 可以念做 “the *cout* that lives in namespace *std*“
+
+使用方式2：
+
+```cpp
+#include <iostream>
+
+using namespace std; // this is a using directive telling the compiler to check the std namespace when resolving identifiers with no prefix
+
+int main()
+{
+    cout << "Hello world!"; // cout has no prefix, so the compiler will check to see if cout is defined locally or in namespace std
+    return 0;
+}
+```
+
+不推荐使用方式2，那就重蹈覆辙，C++语言发明之处的那些麻烦又要经历一遍。最糟糕的是现在不报错，未来在用C++新版时却报错，仅仅因为标准新增了几个标识符。
+
+
+
+#### 2.9 预处理
+
+在编译之前，其实还进行了一个称作**translation**的操作。而translation中最值得注意的是它涉及到了预处理**preprocessor**。
+
+预处理也是短暂地在内存中进行的，它并不会改变原来的代码文本。
+
+
+
+常见的预处理指令（他们许多和C++的语法不同）：
+
+- **Includes**
+
+  语法示例：
+
+  ```c++
+  #include <iostream>
+  ```
+
+  作用：#include指令将该处替换为具体文件的内容。几乎都是用于头文件。
+
+  
+
+- **Macro defines**
+
+  语法示例：
+
+  ```cpp
+  #define identifier substitution_text
+  #define identifier
+  ```
+
+  作用：
+
+  Function-like macros比较危险，尽量不使用，而且普通函数都能取代它，这里就不讨论了。
+
+  Object-like macros with substitution text这里的标识符一般全用大写字母，预处理后全部被替换文本。如`#define MY_NAME "Alex"` 。它过去被作为常数（constant variables）的一种便捷的替代方法。除了一些遗留代码，现在基本不这么用了。
+
+  Object-like macros without substitution text会将标识符替换成空白，也就是去掉这个内容。在接下来介绍的**Conditional compilation**中可以发挥特别的用处。
+
+  <font color="red">Tips:</font>
+
+  宏指令只替换C++代码中的标识符，不会替换其他预处理指令出现的该标识符。
+
+  
+
+- **Conditional compilation**
+
+  语法示例：
+
+  ```cpp
+  #include <iostream>
+  
+  #define PRINT_JOE
+  
+  int main()
+  {
+  #ifdef PRINT_JOE
+      std::cout << "Joe\n"; // if PRINT_JOE is defined, compile this code
+  #endif
+  
+  #ifdef PRINT_BOB
+      std::cout << "Bob\n"; // if PRINT_BOB is defined, compile this code
+  #endif
+    
+  #ifndef PRINT_BOB
+      std::cout << "Bob\n"; // if PRINT_BOB is not defined, compile this code
+  #endif
+  
+      return 0;
+  }
+  ```
+
+  可以控制哪些部分编译，哪些部分不编译。
+
+  #ifdef PRINT_BOB与#ifndef PRINT_BOB也可以写成 
+
+  #if defined(PRINT_BOB)与#if !defined(PRINT_BOB)
+
+  **#if 0**也属于条件编译的预处理指令，它可以当作一种特殊的注释方式。避免了多重注释不能嵌套的问题。
+
+  ```cpp
+  #include <iostream>
+  
+  int main()
+  {
+      std::cout << "Joe\n";
+  
+  #if 0 // Don't compile anything starting here
+      std::cout << "Bob\n";
+      /* Some
+       * multi-line
+       * comment here
+       */
+      std::cout << "Steve\n";
+  #endif // until this point
+  
+      return 0;
+  }
+  ```
+
+最后，预处理都会在编译之前结束，宏指令的标识符则会被丢弃。所以一个文件里定义的宏指令，另一个文件是感知不到的。
+
+
+
+#### 2.10 头文件
+
+**Headers**
+
+当程序越来越大，文件越来越多。需要前向声明的函数就会非常冗长。
+
+有没有一种方法，就是**将前向声明都放在一个位置**，然后任何要用到的地方引用它就好？
+
+这就是C++中第二种最常见的文件：**头文件**（后缀.h，也有.hpp或无后缀的，如`iostream`）
+
+头文件帮助我们省下了很多打重复代码的精力。
 
 
 
