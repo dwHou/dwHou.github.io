@@ -702,29 +702,54 @@ int main()
 
 头文件帮助我们省下了很多打重复代码的精力。
 
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20211014125548688.png" alt="image-20211014125548688" style="zoom:50%;" />
 
+最佳实践：
 
+① 头文件一般不要出现函数和变量的定义，以免日后违背“一处定义”的问题。
 
+② 源代码一般都会#include它自个儿的头文件。这样编译器能在编译时就发现问题，而不是链接时才发现。
 
+比如
 
+something.h:
 
+```cpp
+int something(int); // return type of forward declaration is int
+```
 
+something.cpp:
 
+```cpp
+#include "something.h"
 
+void something(int) // error: wrong return type
+{
+}
+```
 
+就能在编译时发现问题了。
 
+**冷知识一**
 
+为什么既有尖括号（#include <iostream>），又有双引号（#include "add.h"）的形式。
 
+因为出现头文件的位置，既可能是项目路径（current directory），又可能是系统环境（include directories）。尖括号 vs双引号 可以更好地引导编译器去哪儿寻找头文件。
 
+尖括号用于非用户编写的头文件，编译器会直截了当去include directories找。双引号用于用户编写的头文件，编译器会先在include directories找。
 
+> Use double quotes to include header files that you’ve written or are expected to be found in the current directory. Use angled brackets to include headers that come with your compiler, OS, or third-party libraries you’ve installed elsewhere on your system.
+>
 
+**冷知识二**
 
+为什么标准库的头文件没有.h后缀？
 
+其实同时存在无后缀的iostream和iostream.h的头文件，但二者不是一回事。 这是由于历史原因，起初所有的标准库头文件都有.h后缀。但在进入美国国标时，更规范地要求函数在std命名空间，以免和用户定义的函数冲突。
 
+此时如果重写标准库的代码，一些旧的程序就没法运行了。为了解决这个问题，新使用了无后缀的头文件，所有在std命名空间的函数在这里声明。而那些旧的程序仍然可以使用.h后缀的头文件，而不需要重写。
 
-
-
-
+此外，许多继承自C语言的库，还会给出一个c前缀，比如stdlib.h变为cstdlib。同样地，这部分库也被移到了std命名空间。
 
 
 
