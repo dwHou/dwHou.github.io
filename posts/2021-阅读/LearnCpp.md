@@ -704,7 +704,7 @@ int main()
 
 <img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20211014125548688.png" alt="image-20211014125548688" style="zoom:50%;" />
 
-最佳实践：
+**最佳实践：**
 
 ① 头文件一般不要出现函数和变量的定义，以免日后违背“一处定义”的问题。
 
@@ -730,6 +730,14 @@ void something(int) // error: wrong return type
 
 就能在编译时发现问题了。
 
+③ 虽然include的头文件很可能会include其他头文件。这样“传递”声明。但还是建议显式地include所有需要的头文件，而不是倚赖传递。
+
+**Q: I didn’t include <someheader.h> and my program worked anyway! Why?**
+
+这种情形是可能发生的，就是当头文件“传递”声明发生时。但这可能导致某个程序在你的机器能运行，但在别人的机器无法运行。
+
+
+
 **冷知识一**
 
 为什么既有尖括号（#include <iostream>），又有双引号（#include "add.h"）的形式。
@@ -739,7 +747,6 @@ void something(int) // error: wrong return type
 尖括号用于非用户编写的头文件，编译器会直截了当去include directories找。双引号用于用户编写的头文件，编译器会先在include directories找。
 
 > Use double quotes to include header files that you’ve written or are expected to be found in the current directory. Use angled brackets to include headers that come with your compiler, OS, or third-party libraries you’ve installed elsewhere on your system.
->
 
 **冷知识二**
 
@@ -751,21 +758,35 @@ void something(int) // error: wrong return type
 
 此外，许多继承自C语言的库，还会给出一个c前缀，比如stdlib.h变为cstdlib。同样地，这部分库也被移到了std命名空间。
 
+**关于include其他路径下的头文件**
+
+```cpp
+#include "headers/myHeader.h"
+#include "../moreHeaders/myOtherHeader.h"
+```
+
+上面这种写相对路径的不是良好的办法。万一改动文件结构，就没法用了。
+
+更好的措施是：设置编译器、IDE的环境路径或者叫搜索路径。*include path* or *search directory*
+
+**关于include各种头文件的顺序**
+
+如果头文件写得规范，每个都有齐全的声明，那么主程序include的顺序就不成问题，任何顺序都没事。
+
+但如果写得不规范，出现互相倚赖，就需要调整顺序了。不过发现这类错误是好事情，我们可以fix掉，而不是留有隐患。
+
+所以<font color="red">最佳实践</font>推荐这么排序：
+
+1. 和源码成对的头文件
+2. 项目的其他头文件
+3. 第三方头文件
+4. 标准库头文件
+
+这样当用户定义的头文件需要倚赖第三方或标准库头文件时，可以很快发现编译错误并且fix。
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+#### 2.11 重复定义的问题
 
 
 
