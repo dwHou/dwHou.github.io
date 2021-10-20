@@ -788,15 +788,57 @@ void something(int) // error: wrong return type
 
 #### 2.11 重复定义的问题
 
+还是上节提到的**最佳实践：**① 头文件一般不要出现函数和变量的定义，以免日后违背“一处定义”的问题。
 
+比如：
 
+square.h:
 
+```cpp
+// We shouldn't be including function definitions in header files
+// But for the sake of this example, we will
+int getSquareSides()
+{
+    return 4;
+}
+```
 
+geometry.h:
 
+```cpp
+#include "square.h"
+```
 
+main.cpp:
 
+```cpp
+#include "square.h"
+#include "geometry.h"
 
+int main()
+{
+    return 0;
+}
+```
 
+就会出问题，这预处理后相当于：
 
+```cpp
+int getSquareSides()  // from square.h
+{
+    return 4;
+}
 
+int getSquareSides() // from geometry.h (via square.h)
+{
+    return 4;
+}
+
+int main()
+{
+    return 0;
+}
+```
+
+**头文件保护符**
 
