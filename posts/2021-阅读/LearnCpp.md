@@ -842,3 +842,48 @@ int main()
 
 **头文件保护符**
 
+好消息是我们可以利用头文件保护符（**header guard**）的机制来避免上面的问题。标准库的头文件全加上了它。
+
+头文件保护符属于条件编译的指令，写法如下：
+
+```cpp
+#ifndef SOME_UNIQUE_NAME_HERE
+#define SOME_UNIQUE_NAME_HERE
+
+// your declarations (and certain types of definitions) here
+
+#endif
+```
+
+很多编译器也都支持#pragma once，来作为头文件保护符，就一行，更为简单。但这不是标准里的，所以保险起见还是用#ifndef。
+
+```cpp
+#pragma once
+
+// your code here
+```
+
+<font color="red">**#ifndef**</font> 
+
+当SOME_UNIQUE_NAME_HERE已经定义过，编译器就会忽略它，避免重复定义。如果没定义过，就可以给它定义。
+
+**大写字母+下划线**：一般SOME_UNIQUE_NAME_HERE会直接写为该头文件的名称，对整个头文件预防重复定义。格式是全大写，且标点或空格改为下划线。
+
+例如square.h:
+
+```cpp
+#ifndef SQUARE_H
+#define SQUARE_H
+
+int getSquareSides()
+{
+    return 4;
+}
+
+#endif
+```
+
+但头文件保护符只能防止同一个文件内不要出现重复定义，你在a.cpp和main.cpp分别定义同一个函数，仍然会导致编译成功、链接失败。所以最终还是希望能遵守<font color="red">**最佳实践**</font>，不要在头文件里定义东西。
+
+
+
