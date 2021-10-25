@@ -887,3 +887,25 @@ int getSquareSides()
 
 
 
+#### 2.12 设计第一个程序
+
+在很多方面，编程就像做建筑。一开始需要蓝图。
+
+① **Define your goal** 
+
+② **Define requirements** 
+
+③ **Define your tools, targets, and backup plan** 
+
+④ **Break hard problems down into easy problems** 
+
+⑤ **Figure out the sequence of events** 
+
+实现也是先框架后细节的。
+
+① **Outlining your main function** ② **Implement each function** ③ **Final testing**
+
+
+
+#### 2.x 第二章总结
+
