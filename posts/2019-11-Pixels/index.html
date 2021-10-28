@@ -187,6 +187,12 @@ YCbCr ：也叫YCC,  YCbCr 是数字信号， 它包含两种形式， 分别为
 我们平时接触到的绝大多数都是 YCbCr （tv range） ， ffmpeg 解码出来的数据绝大多数也是这个， 虽然ffmpeg 里面将它的格式描述成YUV420P ， 实际上它是YCbCr tv range
 </pre>
 
+<h2>Checkerboard</h2>
+<pre>关于棋盘纹的问题，pixel-shuffle仍是会出现的。这个和pixel-shuffle前一个卷积的表现是息息相关的。
+    使用ICNR初始化是有帮助的，它保证具有相关性的卷积来处理相邻的像素，也等价于最近邻插值后进行卷积（也同时保持着pixel-shuffle参数多、速度快的优势）。
+    个人认为，除此之外，我们也可以特别关注下pixel-shuffle前的卷积，在训练收敛后单独对这一层进行finetune或许会有帮助。
+</pre>
+
 <h2>Training</h2>
 <pre>感受野足够大的话，增大patchsize接着训是会涨点的。训练集loss不一定降，但patchsize更接近验证集的尺寸，有助于验证集指标提升。</pre>
 
