@@ -280,6 +280,11 @@ https://zhuanlan.zhihu.com/p/23599229
     alias kexec='AttachDocker(){ sudo kubectl exec -it $1 -n video -- /bin/bash;};AttachDocker'
     进容器后做什么都可以，但不要kill这个pod任务里的进程，不然当前pod会报Error，然后K8s又自动重新帮你开一个新的pod。
   </pre>
+
+  <pre>
+      查看节点gpu数量：
+      kubectl get nodes "-o=custom-columns=NAME:.metadata.name,GPU:.status.allocatable.nvidia\.com/gpu"
+  </pre>
   
 
 
