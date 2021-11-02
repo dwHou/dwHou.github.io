@@ -250,8 +250,36 @@ https://zhuanlan.zhihu.com/p/23599229
   <font color="purple">Kubernetes</font>（常简称为K8s）旨在提供跨主机集群的平台。它支持一系列容器工具，包括Docker等。
   <h3>Kubectl基本命令</h3>
   <pre>
-      
+     假设资源组namespace叫video
+    ・ cd k8s folder
+    ・ Run: sudo kubectl apply -f <yaml file>
+    ・ Check status: sudo kubectl get pod -n video
+    ・ Check real-time logs: sudo kubectl logs <pod id> -n video 
+    ・ Stop: sudo kubectl delete –f <yaml file>
+
+    （Pod: Kubernetes的基本调度单元称为“pod”。）
   </pre>
+
+  <pre>
+    同时可以在~/.bashrc定义快捷方式
+
+    # shortcut for kubectl commands
+    alias kapply="sudo kubectl apply -f"
+    alias kstat="sudo kubectl get pod -n video"
+    alias kdel="sudo kubectl delete -f"
+    alias klog="sudo kubectl logs -n video -f"
+    
+    最后一个添加了-f，会stream log (持续更新log)，不加-f是一次性显示那一时刻的log。
+  </pre>
+
+  <pre>
+    最后，最自由的使用方式是进入容器内。
+    sudo kubectl exec -it <pod id> -n video -- /bin/bash 进 exit 出
+ 
+    也可以定义快捷方式
+    alias kexec='AttachDocker(){ sudo kubectl exec -it $1 -n video -- /bin/bash;};AttachDocker'
+  </pre>
+  
 
 
 
