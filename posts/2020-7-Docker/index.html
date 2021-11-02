@@ -278,6 +278,7 @@ https://zhuanlan.zhihu.com/p/23599229
  
     也可以定义快捷方式
     alias kexec='AttachDocker(){ sudo kubectl exec -it $1 -n video -- /bin/bash;};AttachDocker'
+    进容器后做什么都可以，但不要kill这个pod任务里的进程，不然当前pod会报Error，然后K8s又自动重新帮你开一个新的pod。
   </pre>
   
 
