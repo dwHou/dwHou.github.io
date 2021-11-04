@@ -284,6 +284,8 @@ https://zhuanlan.zhihu.com/p/23599229
   <pre>
       查看节点gpu数量：
       kubectl get nodes "-o=custom-columns=NAME:.metadata.name,GPU:.status.allocatable.nvidia\.com/gpu"
+      查看现有任务所用的节点：
+      sudo kubectl get pod -n kube-system -o wide -n video
   </pre>
   
 
