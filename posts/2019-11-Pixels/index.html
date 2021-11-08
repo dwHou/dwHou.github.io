@@ -123,6 +123,14 @@
 
 </pre>
 
+<h2>关于view与图像分块、亚像素提取</h2>
+<pre>
+    灵活地使用view，既能实现down-shuffle和pixel-shuffle，也可以实现图像分块。
+    但要注意区别：
+    view(batch_size, channels, out_height, block_size, out_width, block_size)是down-shuffle，
+    view(batch_size, channels, block_num, out_height, block_num, out_width)是图像分块。 
+</pre>
+
 <h2>Global-skip-connection and Meanshift</h2>
 <pre>
 Global-skip-connection 全局残差区分高低频，改变优化目标。
