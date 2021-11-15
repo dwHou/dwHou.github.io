@@ -1056,7 +1056,19 @@ plog::init(plog::none , "Logfile.txt"); // plog::none eliminates writing of most
 
 #### 3.6 使用集成调试器（integrated debugger）
 
+上面3.4～3.5节的方法都是假设我们没法暂停一个运行的程序。但现代IDE提供了我们<font color="red">**调试器**</font>，打破这一假设。
+
+##### 3.6.0 调试器（debugger）
+
+调试器：一种能  控制另一个程序的执行过程和检查另一个程序的状态  的程序。
+
 ##### 3.6.1 单步调试（Stepping）
+
+
+
+
+
+
 
 ##### 3.6.2 运行和断点（Running and breakpoints）
 
