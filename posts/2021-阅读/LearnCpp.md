@@ -974,17 +974,95 @@ bug的出现一般有这么个简单前提：
 
 #### 3.5 调试的进阶战术（自动篇）
 
+上一章讲到一些调试的方法，会带来些麻烦。调试语句要手动加和删。
+
+**1.** 使用预处理指令
+
+更好的办法是配合预处理指令，让程序自动判断用不用调试语句：
+
+```cpp
+#include <iostream>
+
+#define ENABLE_DEBUG // comment out to disable debugging
+
+int getUserInput()
+{
+#ifdef ENABLE_DEBUG
+std::cerr << "getUserInput() called\n";
+#endif
+	std::cout << "Enter a number: ";
+	int x{};
+	std::cin >> x;
+	return x;
+}
+
+int main()
+{
+#ifdef ENABLE_DEBUG
+std::cerr << "main() called\n";
+#endif
+    int x{ getUserInput() };
+    std::cout << "You entered: " << x;
+
+    return 0;
+}
+```
+
+就可以通过是否注释*#define ENABLE_DEBUG* 这行来决定调试与否了。
+
+**2. **使用日志
+
+这是很常用的方法，好处也多多。
+
+有很多第三方的日志工具，使用哪种取决于我们自己啦，这里以plog为例：
+
+```cpp
+#include <iostream>
+#include <plog/Log.h> // Step 1: include the logger headers
+#include <plog/Initializers/RollingFileInitializer.h>
+
+int getUserInput()
+{
+	PLOGD << "getUserInput() called"; // PLOGD is defined by the plog library
+
+	std::cout << "Enter a number: ";
+	int x{};
+	std::cin >> x;
+	return x;
+}
+
+int main()
+{
+	plog::init(plog::debug, "Logfile.txt"); // Step 2: initialize the logger
+
+	PLOGD << "main() called"; // Step 3: Output to the log as if you were writing to the console
+
+	int x{ getUserInput() };
+	std::cout << "You entered: " << x;
+
+	return 0;
+}
+```
+
+而且开启、关闭也很方便：
+
+```cpp
+plog::init(plog::none , "Logfile.txt"); // plog::none eliminates writing of most messages, essentially turning logging off
+```
+
+这样就关闭logger了。很多logger都提供了不同模式、档位，来减少甚至停止向日志输出内容。
 
 
 
+#### 3.6 使用集成调试器（integrated debugger）
 
+##### 3.6.1 单步调试（Stepping）
 
+##### 3.6.2 运行和断点（Running and breakpoints）
 
+##### 3.6.3 跟踪变量（Watching variables）
 
-
-
-
-
+##### 3.6.4 调用堆栈（The call stack）
 
 
 
