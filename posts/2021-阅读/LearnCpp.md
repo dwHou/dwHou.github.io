@@ -1062,13 +1062,19 @@ plog::init(plog::none , "Logfile.txt"); // plog::none eliminates writing of most
 
 调试器：一种能  控制另一个程序的执行过程和检查另一个程序的状态  的程序。
 
-Tips：调试器的快捷键只有在IDE/调试器是当前窗口时才有效。
+
 
 ##### 3.6.1 单步调试（Stepping）
 
+是允许我们逐语句执行的功能。它包含以下一些命令：
 
+**Step into**
 
+**Step over**
 
+**Step out**
+
+**Step back**
 
 
 
