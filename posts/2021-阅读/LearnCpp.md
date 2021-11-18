@@ -1088,7 +1088,9 @@ plog::init(plog::none , "Logfile.txt"); // plog::none eliminates writing of most
 
 **Step back**
 
+一般来说单步调试只能前进不能后退。点快、错过了，只能从头来，细心一点。
 
+但现在有些调试器比如Visual Studio企业版，能支持返回上一个状态。不过开启这个功能是有代价的，要额外存一份独立的程序状态。大多数调试器都还不支持。
 
 ##### 3.6.2 运行和断点（Running and breakpoints）
 
