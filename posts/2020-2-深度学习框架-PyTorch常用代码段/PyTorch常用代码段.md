@@ -40,6 +40,8 @@ np.random.seed(0)
 
 torch.backends.cudnn.benchmark = True      #cuDNN benchmark模式,会提升计算速度，但是由于计算中有随机性，每次网络前馈结果略有差异。
 torch.backends.cudnn.deterministic = True  #避免这种结果波动
+
+# benchmark是决定faster，deterministic是决定reproducible
 ```
 ### 显卡设置
 

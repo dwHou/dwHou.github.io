@@ -1092,7 +1092,21 @@ plog::init(plog::none , "Logfile.txt"); // plog::none eliminates writing of most
 
 但现在有些调试器比如Visual Studio企业版，能支持返回上一个状态。不过开启这个功能是有代价的，要额外存一份独立的程序状态。大多数调试器都还不支持。
 
+
+
 ##### 3.6.2 运行和断点（Running and breakpoints）
+
+对于大型项目，只靠单步调试，那想到达想调试的位置是遥遥无期的。
+
+有些IDE支持在代码行右键<font color="red">“Run to cursor”</font>，来到达想调试的位置。
+
+调试器中也有<font color="red">“continue”</font>命令继续运行，直到下一处触发调试的地方（如断点）。（注：从开头开始，可以用<font color="red">“start”</font>）
+
+<font color="red">Breakpoints</font>是一种特殊的记号，可以告诉调试器在调试模式下时，到达某个位置时停止执行程序。和Run to cursor的效果很像，就是更方便点：
+
+①一次执行内重复调用某个有断点的函数，每次都能触发  ②能一直存在，直到手动取消
+
+还有个jumping操作比较高级灵活而少见，它是通过右键<font color="red">“set next statement ”</font>。比如可以用于反复执行同一个函数，如果你想观察多次的话。
 
 ##### 3.6.3 跟踪变量（Watching variables）
 
