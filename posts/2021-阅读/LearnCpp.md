@@ -1110,6 +1110,14 @@ plog::init(plog::none , "Logfile.txt"); // plog::none eliminates writing of most
 
 ##### 3.6.3 跟踪变量（Watching variables）
 
+不用改变代码，就能去观察变量值
+
+观察窗口（watch window）：可以向窗口添加你希望持续观察的变量。
+
+有的IDE是在进入调试模式时，直接就有这个窗口。如果没有就要在菜单里找了。如Visual  Studio的*debug menu > Windows > Watch*
+
+有的IDE是手动添加想观察的变量，Xcode是自动按出现顺序把变量加入观察。而选择local variables可以马上看到所有局部变量目前的值。
+
 ##### 3.6.4 调用堆栈（The call stack）
 
 
