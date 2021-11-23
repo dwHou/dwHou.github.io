@@ -291,8 +291,10 @@ https://zhuanlan.zhihu.com/p/23599229
   <h3>搭配NFS存储服务器</h3>
   <pre>
     现在比较流行的是挂载NFS网络盘，适合深度学习批量传输小文件的需求。
-    sudo mount -t nfs -o rw xx.xx.xx.xx(IP):/export/xx(remote directory) /home/xx(local directory)
-    其他参数见 https://www.cxyzjd.com/article/xinanrusu/70047422 
+    sudo mount -t nfs(挂载的类型) -o rw(可读写) xx.xx.xx.xx(IP):/export/xx(remote directory) /home/xx(local directory)
+    
+    mount [-t vfstype] [-o  options] device dir
+    其他参数见 https://developer.aliyun.com/article/10547
   </pre>
 
 
