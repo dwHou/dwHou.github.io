@@ -287,7 +287,12 @@ https://zhuanlan.zhihu.com/p/23599229
       查看现有任务所用的节点：
       sudo kubectl get pod -n kube-system -o wide -n video
   </pre>
-  
+
+  <h3>搭配NFS存储服务器</h3>
+  <pre>
+    现在比较流行的是挂载NFS网络盘，适合深度学习批量传输小文件的需求。
+    sudo mount -t nfs -o rw xx.xx.xx.xx(IP):/export/xx(remote directory) /home/xx(local directory)
+  </pre>
 
 
 
