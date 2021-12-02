@@ -1154,20 +1154,32 @@ plog::init(plog::none , "Logfile.txt"); // plog::none eliminates writing of most
 
 4. 尽早发现错误
    - 一边编程，一边运行
+
    - 写测试函数，它多次调用待测试的函数，涵盖了多种测试用例，有一些corner case. 这就是最原始的单元测试（现在有很多第三方库做单元测试）。
-   - 约束
+
+   - 约束技术：一些额外的代码，来检查是否违反某些假设或预期。一般是用*assert*和*static_assert*，第七章我们会详细介绍。
+
+   - 有的程序被专门设计用来检查程序员常犯的错误。被称为[静态分析工具](https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis#C,_C++)（也叫*linters*）。
+
+     中大型项目非常建议使用一个静态分析工具。
+
+     > 其实你已经有一个这样的工具——你的编译器！比如现代编译器就能提示语法错误，警告没有初始化变量。可以参考0.11节，设置一个合适的warning层级。
+     >
+     > 另外，Visual Studio 2019里也集成来一个静态分析工具。Build > Run Code Analysis on Solution (Alt+F11).
 
 
 
+#### 3.x 第三章总结
 
 
 
+## 基本数据类型
 
 
 
+#### 4.1 基本数据类型的介绍
 
-
-
+**比特、字节和内存地址**
 
 
 
