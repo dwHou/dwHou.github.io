@@ -1181,23 +1181,32 @@ plog::init(plog::none , "Logfile.txt"); // plog::none eliminates writing of most
 
 **比特、字节和内存地址**
 
+比特是内存的最小单元，一个字节有8比特，并且每个字节会有一个内存地址去找到它。
+
+**数据类型**
+
+因为数据只是一串比特，我们用“数据类型”来告诉编译器怎么解读内存里的数据。
+
+**基础数据类型**
+
+C++内置支持的数据类型，称作基础类型。
+
+| Types                                                        | Category             | Meaning                                          | Example |
+| :----------------------------------------------------------- | :------------------- | :----------------------------------------------- | :------ |
+| float double long double                                     | Floating Point       | a number with a fractional part                  | 3.14159 |
+| bool                                                         | Integral (Boolean)   | true or false                                    | true    |
+| char wchar_t char8_t (C++20) char16_t (C++11) char32_t (C++11) | Integral (Character) | a single character of text                       | ‘c’     |
+| short int long long long (C++11)                             | Integral (Integer)   | positive and negative whole numbers, including 0 | 64      |
+| std::nullptr_t (C++11)                                       | Null Pointer         | a null pointer                                   | nullptr |
+| void                                                         | Void                 | no type                                          | n/a     |
+
+注：1.很多现代语言将string（字符串）作为基础类型，但C++没有，而是将它作为混合类型（compound type） 2.可以看到许多新的基础类型会有后缀<font color="green">_t</font>
 
 
 
+#### 4.2 void
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+void意味着无类型。最主要就是在 <font color="green">不返回值的函数</font> 的返回类型那儿使用。还有个比较高级的void pointer，在第十章介绍指针时会介绍。
 
 
 
