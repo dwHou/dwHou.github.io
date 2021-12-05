@@ -1210,39 +1210,79 @@ void意味着无类型。最主要就是在 <font color="green">不返回值的�
 
 
 
+#### 4.3 占字节数
+
+**对象的占字节数**
+
+编译器根据数据类型，很清楚对象是几个字节。
+
+每种类型占多少字节，我们也应该非常清楚。虽然现代计算机的内存比较大，有时内存的影响被忽略了。但有些程序需要用到大量的对象或数据（比如一个需要渲染数百万个多边形的游戏），这时数据类型的取舍就相当重要。
+
+<font color="red">Key insight</font>：不过写程序还是优先专注写维护性好的代码，至于优化，当益处非常明显时，再进行。
+
+C++只规定了每种基础类型至少占多少字节，实际占多少是根据编译器或计算机架构决定的。为了更好的兼容性，你最好假设占字节数就是指定的最小值。
 
 
 
+**sizeof操作符**
+
+可以查看数据类型或变量的占字节数
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    std::cout << "bool:\t\t" << sizeof(bool) << " bytes\n";
+    std::cout << "char:\t\t" << sizeof(char) << " bytes\n";
+    std::cout << "wchar_t:\t" << sizeof(wchar_t) << " bytes\n";
+    std::cout << "char16_t:\t" << sizeof(char16_t) << " bytes\n";
+    std::cout << "char32_t:\t" << sizeof(char32_t) << " bytes\n";
+    std::cout << "short:\t\t" << sizeof(short) << " bytes\n";
+    std::cout << "int:\t\t" << sizeof(int) << " bytes\n";
+    std::cout << "long:\t\t" << sizeof(long) << " bytes\n";
+    std::cout << "long long:\t" << sizeof(long long) << " bytes\n";
+    std::cout << "float:\t\t" << sizeof(float) << " bytes\n";
+    std::cout << "double:\t\t" << sizeof(double) << " bytes\n";
+    std::cout << "long double:\t" << sizeof(long double) << " bytes\n";
+
+    return 0;
+}
+```
+
+顺便一提... 不是说占用内存越小的类型，处理起来越快。这并不总是正确的，CPU通常被优化处理某一特定大小的数据（比如32位）。与之匹配的数据类型可能处理得更快。比如32位机器上，一个4字节的int会比2字节的short或者1字节的char处理起来更快。
 
 
 
+#### 4.4 有符号整数
+
+```cpp
+signed long int li; //这种写法是不好的
+long li； //这样就可以，因为①默认是有符号数，②画蛇添足加个int不容易辨别，眼花误删了前面的long还容易出bug。
+```
+
+所以还是用shorthand（速记）的写法，不要画蛇添足。
+
+n-bit有符号整数的范围是-(2^n-1) to (2^n-1) -1，一共2^n种值。
+
+超出范围，就会发生<font color="red">**溢出**</font>，导致未定义行为。
+
+还有整数相除，结果会丢掉小数部分。
 
 
 
+#### 4.5 无符号整数，以及为何尽量避免它们
 
+```cpp
+unsigned int ui;
+unsigned long ul;
+```
 
+n-bit无符号整数的范围是0 to (2^n) -1，还是一共2^n种值。
 
+16-bit无符号数的上溢：65536会变成0，下溢：-1会变成65535。以此类推。
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+很多游戏开发史上臭名昭著的bug，就和无符号数溢出有关。
 
 
 
