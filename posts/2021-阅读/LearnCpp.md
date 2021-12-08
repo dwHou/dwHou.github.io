@@ -1394,6 +1394,71 @@ int main()
 
 #### 4.9 布尔型
 
+存储布尔型的变量实际用的也是整数1（true）和0（false）。
+
+cout时也会是1或0。除非加上std::cout << std::boolalpha; 对于cin也是如此，使用std::cin >> std::boolalpha;
+
+布尔型也经常作为函数的返回值类型，被频繁地用到。
+
+
+
+#### 4.10 if语句
+
+```cpp
+if (condition1)
+    statement1;
+else if (condition2)
+    statement2;
+else
+    statement3;
+```
+
+condition是值为布尔型的表达式。如果不是布尔型，则会强制转换为布尔型。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
