@@ -1327,6 +1327,109 @@ n-bit无符号整数的范围是0 to (2^n) -1，还是一共2^n种值。
 
 
 
+#### 4.8 浮点数
+
+**意义：**有助于记录很大或很小的数字。
+
+| Category       | Type        | Minimum Size | Typical Size       |
+| :------------- | :---------- | :----------- | :----------------- |
+| floating point | float       | 4 bytes      | 4 bytes            |
+|                | double      | 8 bytes      | 8 bytes            |
+|                | long double | 8 bytes      | 8, 12, or 16 bytes |
+
+```cpp
+int x{5}; // 5 means integer
+double y{5.0}; // 5.0 is a floating point literal (no suffix means double type by default)
+float z{5.0f}; // 5.0 is a floating point literal, f suffix means float type
+
+//不过要记得，字面量和变量的类型要匹配，不然一个本没必要的强制转换就会发生。
+```
+
+```cpp
+#include <iomanip> // for output manipulator std::setprecision()
+std::cout << std::setprecision(16);
+std::cout << 3.33333333333333333333333333333333333333f <<'\n'; // f suffix means float
+```
+
+std::setprecision()函数可以调整cout输出的精度。
+
+outputs: 3.333333253860474  可以看到有很大误差，所以最佳实践建议使用double。
+
+这是由于十进制和二进制的差异，比如1/10，我们看似很简单的0.1，在二进制时就是0.00011001100110011... <font color="red">并且当精度大于有效数字的位数时，仍然会出现凑整误差。</font>
+
+**凑整（rounding）误差：**当数字没法精确存储时，就会出现。往往没法避免，所以不要假设浮点型数字是精密的。
+
+> 在金融或者货币数据上，要非常谨慎地使用浮点型。
+
+而且这个误差有时还难以发觉，因为cout时是被截断的，隐藏了末尾的误差。
+
+
+
+**NaN 和 Inf**
+
+还有两类特别的浮点型：Inf表示无穷大，可正可负。NaN表示不是数。（IEEE 754格式下）
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    double zero {0.0};
+    double posinf { 5.0 / zero }; // positive infinity
+    std::cout << posinf << '\n';
+
+    double neginf { -5.0 / zero }; // negative infinity
+    std::cout << neginf << '\n';
+
+    double nan { zero / zero }; // not a number (mathematically invalid)
+    std::cout << nan << '\n';
+
+    return 0;
+}
+```
+
+不同平台的记号不一样，Xcode里是**inf**，**-inf**，**nan**
+
+
+
+#### 4.9 布尔型
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
