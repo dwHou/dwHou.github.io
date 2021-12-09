@@ -195,10 +195,11 @@ if __name__ == '__main__':
         if local_rank == 0:
 
             logging.info('===> in {}th epochs'.format(epoch))
-            psnr, var = test()
+        psnr, var = test()
 
-            scheduler.step(psnr)
-
+        scheduler.step(psnr)
+				
+        if local_rank == 0:
             if lr != optimizer.param_groups[0]['lr']:
                 lr = optimizer.param_groups[0]['lr']
                 logging.info('reducing lr of group 0 to {:.3e}'.format(lr))
