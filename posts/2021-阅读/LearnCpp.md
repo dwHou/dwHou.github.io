@@ -1484,25 +1484,66 @@ cin时输入多了字符，会暂时放在缓存里，等下次调用cin时再�
 
 #### 4.12 类型转换和静态转换
 
+大多情况下，C++很乐意把一种基础类型的值转为另一种基础类型。
+
+这种编译器帮忙转换的情形，称作**隐式转换**。
+
+比如我们常说的强制转换，
+
+```cpp
+char c;
+std::cin >> c;
+int ascii{ c };
+```
+
+有些转换是安全的，比如int→double；但有些转换会造成值的改变，比如double→int，就会出现警告甚至报错。
 
 
 
+**显式转换：**
+
+如果我们有意去转换（如double→int，明知会丢掉小数部分）。对于情形，C++提供了显式转换，使用**静态转换（static_cast）操作符**。
+
+语法是：
+
+```cpp
+static_cast<new_type>(expression)
+```
+
+注：记得之前提到过的 ② 由于C++规定的疏忽，大多数编译器会把std::int8_t和std::uint8_t当做char类型来看待，这会导致在某些系统上可能出错，所以避免使用这俩。最好显式转换为别的整数类型。
+
+比如
+
+```cpp
+#include <cstdint>
+#include <iostream>
+
+int main()
+{
+    std::cout << "Enter a number between 0 and 255: ";
+    std::int8_t myint{};
+    std::cin >> myint;
+
+    std::cout << "You entered: " << static_cast<int>(myint);
+
+    return 0;
+}
+```
+
+输出：
+
+```
+Enter a number between 0 and 255: 35
+You entered: 51
+```
+
+因为51是ASCII码的"3"。
 
 
 
+#### 4.13 字符串std::string
 
-
-
-
-
-
-
-
-
-
-
-
-
+字符串用得太频繁了，很多现代编程语言都将其作为基础类型。但C++将其作为复合类型，定义在标准库中，而不是。
 
 
 
