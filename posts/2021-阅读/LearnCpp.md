@@ -1417,27 +1417,72 @@ condition是值为布尔型的表达式。如果不是布尔型，则会强制�
 
 
 
+#### 4.11 字符型（Chars）
+
+也是作为整数来存储，解释的时候则参照ASCII码，范围时0～127。比如65是‘A’，97是‘a’。
+
+**初始化字符**
+
+```cpp
+char ch2{ 'a' }; 
+```
+
+也可以用对应ascii的整数来初始化，但不建议。
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    std::cout << "Input a keyboard character: "; // assume the user enters "abcd" (without quotes)
+
+    char ch{};
+    std::cin >> ch; // ch = 'a', "bcd" is left queued.
+    std::cout << "You entered: " << ch << '\n';
+
+    // Note: The following cin doesn't ask the user for input, it grabs queued input!
+    std::cin >> ch; // ch = 'b', "cd" is left queued.
+    std::cout << "You entered: " << ch << '\n';
+
+    return 0;
+}
+```
+
+```
+Input a keyboard character: abcd
+You entered: a
+You entered: b
+```
+
+cin时输入多了字符，会暂时放在缓存里，等下次调用cin时再被取出来。
+
+**转义字符**
+
+“\” + 字母或数字
+
+| Name            | Symbol     | Meaning                                                      |
+| :-------------- | :--------- | :----------------------------------------------------------- |
+| Alert           | \a         | Makes an alert, such as a beep                               |
+| Backspace       | \b         | Moves the cursor back one space                              |
+| Formfeed        | \f         | Moves the cursor to next logical page                        |
+| Newline         | \n         | Moves cursor to next line                                    |
+| Carriage return | \r         | Moves cursor to beginning of line                            |
+| Horizontal tab  | \t         | Prints a horizontal tab                                      |
+| Vertical tab    | \v         | Prints a vertical tab                                        |
+| Single quote    | \’         | Prints a single quote                                        |
+| Double quote    | \”         | Prints a double quote                                        |
+| Backslash       | \</td>     | Prints a backslash.                                          |
+| Question mark   | \?         | Prints a question mark. No longer relevant. You can use question marks unescaped. |
+| Octal number    | \(number)  | Translates into char represented by octal                    |
+| Hex number      | \x(number) | Translates into char represented by hex number               |
+
+单引号一般用于字符，双引号用于字符串。按照这种最佳实践，编译器也优化些。
+
+<font color="red">小知识：</font>char16_t, char32_t是用来支持UTF-16、UTF-32的，而不是ASCII。可以用来支持更多语言的字符。本课程里用不着，除非当你计划对程序做兼容或者本地化（比如汉化）时，再去学习。 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#### 4.12 类型转换和静态转换
 
 
 
