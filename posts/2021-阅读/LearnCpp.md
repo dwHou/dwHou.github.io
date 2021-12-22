@@ -1553,15 +1553,25 @@ You entered: 51
 std::string myName {}; // empty string
 ```
 
+如果用std::cin来输入字符串，它会只读到第一个空格那儿。
+
+所以建议用**std::getline()**函数，来读完整的字符串。它有俩参数，一个是cin一个是字符串。
+
+```cpp
+std::getline(std::cin >> std::ws, name); // read a full line of text into name
+```
 
 
 
+Q：std::ws是什么鬼？
 
+A：4.8节我们讲了std::setprecision()，是输出格式的操作函数。这里，**std::ws**则是输入格式操纵函数，用于告诉cin忽略任何前导空格，如上一次cin后的回车'\n'。
 
+不过如果用 提取操作符 >> 自动就会忽略前导空格，只是std::getline不用std::ws就没法忽略前导空格。
 
+**字符串长度**
 
-
-
+例myName是一个字符串，使用myName.length() 而不是 length(myName)，因为length()不是一个正常的独立函数，而是myName的成员函数。
 
 
 
