@@ -1573,9 +1573,15 @@ A：4.8节我们讲了std::setprecision()，是输出格式的操作函数。这
 
 例myName是一个字符串，使用myName.length() 而不是 length(myName)，因为length()不是一个正常的独立函数，而是myName的成员函数。
 
+返回是无符号整数，如果想赋值给int，应该做静态转换：
+
+```cpp
+int length = static_cast<int>(myName.length());
+```
 
 
 
+#### 4.14 字面量
 
 
 
