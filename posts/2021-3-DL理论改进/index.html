@@ -171,6 +171,17 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
 
   </ul>
 
+  <h2>各种归一化</h2>
+  <ul>
+      <li>GroupNorm</li>
+      记住GN，就记得它的两个特例LN和IN了。
+      <pre>
+        将channel方向分group，然后每个group内做归一化，算(C//G)HW的均值；这样与batchsize无关，不受其约束。
+        事实上，GN的极端情况就是LN和IN，分别对应G等于C和G等于1，作者在论文中给出G设为32较好.
+      </pre>
+      
+  </ul>
+
 
 
 
