@@ -1583,15 +1583,37 @@ int length = static_cast<int>(myName.length());
 
 #### 4.14 字面量
 
-常量的值是不会改变的，C++中有两种常量：字面量常量，符号常量。
+常量的值是不会改变的，C++中有两种常量：<font color="purple">字面量常量，符号常量</font>。
 
 字面量常量通常简称 **字面量**，指：直接写在代码里的值。
 
+字面量的类型是通过它本身推测出来的。
 
+**后缀 —** 整数默认是int，浮点数默认是double，如果想指定其他的，可以加后缀：
 
+| Data Type | Suffix                                    | Meaning            |
+| :-------- | :---------------------------------------- | :----------------- |
+| int       | u or U                                    | unsigned int       |
+| int       | l or L                                    | long               |
+| int       | ul, uL, Ul, UL, lu, lU, Lu, or LU         | unsigned long      |
+| int       | ll or LL                                  | long long          |
+| int       | ull, uLL, Ull, ULL, llu, llU, LLu, or LLU | unsigned long long |
+| double    | f or F                                    | float              |
+| double    | l or L                                    | long double        |
 
+不然会有警告：
 
+```cpp
+float f { 4.1 }; // warning: 4.1 is a double literal, not a float literal
+```
 
+**前缀 —** 数字默认是十进制，如果想指定其他进制，可以加前缀：
+
+| Prefix | Meaning |
+| ------ | ------- |
+| 0      | 八进制  |
+| 0x     | 十进制  |
+| 0b     | 二进制  |
 
 
 
