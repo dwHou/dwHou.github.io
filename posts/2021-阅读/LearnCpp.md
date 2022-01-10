@@ -1581,7 +1581,7 @@ int length = static_cast<int>(myName.length());
 
 
 
-#### 4.14 字面量
+#### 4.14 字面量常量
 
 常量的值是不会改变的，C++中有两种常量：<font color="purple">字面量常量，符号常量</font>。
 
@@ -1609,39 +1609,95 @@ float f { 4.1 }; // warning: 4.1 is a double literal, not a float literal
 
 **前缀 —** 数字默认是十进制，如果想指定其他进制，可以加前缀：
 
-| Prefix | Meaning |
-| ------ | ------- |
-| 0      | 八进制  |
-| 0x     | 十进制  |
-| 0b     | 二进制  |
+| Prefix | Meaning                                                      |
+| ------ | ------------------------------------------------------------ |
+| 0      | 八进制（很少用）                                             |
+| 0x     | 十六进制（由于正好两位表示一个字节，常用来表示内存地址或内存里的值） |
+| 0b     | 二进制（C++14开始支持，并且可以用<font color="red">**'**</font>分隔符，来方便阅读） |
+
+**C++14分隔符**
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    int bin { 0b1011'0010 };  // assign binary 1011 0010 to the variable
+    long value { 2'132'673'462 }; // much easier to read than 2132673462
+
+    return 0;
+}
+```
+
+**打印十进制、八进制、二进制**
+
+默认打印十进制，std::dec（回到打印十进制时可以用）, std::oct, and std::hex，如:
+
+```cpp
+#include <iostream>
+std::cout << std::hex << x << '\n'; // hexadecimal
+```
+
+std::cout没有内置打印二进制，需要另一个标准库
+
+```cpp
+#include <bitset> // for std::bitset
+std::bitset<8> bin2{ 0xC5 }; //需要告诉std::bitset使用多少位二进制，编译时就得确定。打印输出11000101
+```
 
 
 
+#### 4.15 符号常量
 
+符号常量，就是有名字的常量。有时定义一些值没法更改的变量，也是很有用的。
 
+比如重力加速度 9.8 m/s^2
 
+只需要在变量类型前（这种更符合英文形容词放前面的习惯）or后加上 <font color="red">const</font> 关键词
 
+```cpp
+const double gravity { 9.8 };  // preferred use of const before type 
+int const sidesInSquare { 4 }; // okay, but not preferred
+```
 
+- 符号常量必须定义时初始化，之后无法更改值。Note that const variables can be initialized from other variables (including non-const ones)
 
+- 符号常量作为函数参数，
 
+  ```cpp
+  #include <iostream>
+  
+  void printInt(const int x)
+  {
+      std::cout << x;
+  }
+  
+  int main()
+  {
+      printInt(5); // 5 will be used as the initializer for x
+      printInt(6); // 6 will be used as the initializer for x
+  
+      return 0;
+  }
+  ```
 
+​		将函数参数设置为 const 会获得编译器的帮助，以确保该参数的值不会在函数内部发生更改。这也没违反上一条，因为函数调用时就会隐式地通过实参初始化。
 
+​		一般这个没啥用，因为函数的参数本来就是一份copy，在函数结束时会销毁。但有种特殊情况可以用到，后面章节会提到。
 
+- 有runtime和compile-time的符号常量，编译器会对后者进行优化。
 
+- 为了更有针对性，C++11引入了**constexpr**关键字，保证为compile-time的符号常量
 
+  所以新的最佳实践是：compile-time的符号常量用constexpr，runtime的符号常量用const
 
+- 正常命名符号常量就好（有些程序员喜欢全大写，有些喜欢加个前缀'k'），它除了不能改变值，其他和变量别无二致。
 
+- 为什么不用预处理器宏#define，而用符号常量？
 
+  
 
-
-
-
-
-
-
-
-
-
+​		
 
 
 
