@@ -1689,15 +1689,40 @@ int const sidesInSquare { 4 }; // okay, but not preferred
 
 - 为了更有针对性，C++11引入了**constexpr**关键字，保证为compile-time的符号常量
 
-  所以新的最佳实践是：compile-time的符号常量用constexpr，runtime的符号常量用const
+  所以新的最佳实践是：compile-time的符号常量用<font color="purple">constexpr</font>，runtime的符号常量用<font color="purple">const</font>
 
 - 正常命名符号常量就好（有些程序员喜欢全大写，有些喜欢加个前缀'k'），它除了不能改变值，其他和变量别无二致。
 
 - 为什么不用预处理器宏#define，而用符号常量？
 
+  - 因为预处理的常量，在debug时只能看到名称，没法看到替代的值。不方便debug。
+  - 有可能名称冲突（这也是为啥宏名字用全大写）。
+  - 宏不遵循作用域的规则。
+
+- magic数字就是没有意义或者被多次使用（因为每次使用的含义到底是不是一样的，改动时要做判断很麻烦）的字面量，通常是数字。 这种也属于“hard-coded”的数字，我们应该避免使用它，而是用符号常量来赋予其意义。
+
+  ```cpp
+  ❌
+  const int maxStudents{ numClassrooms * 30 };
+  setMax(30);
   
+  🙆
+  const int maxStudentsPerClass { 30 }; // now obvious what 30 is
+  const int totalStudents{ numClassrooms * maxStudentsPerClass };
+  
+  const int maxNameLength{ 30 };
+  setMax(maxNameLength); // now obvious this 30 is used in a different context
+  ```
 
 ​		
+
+#### 4.x 第四章总结
+
+
+
+[TOC]
+
+#### 
 
 
 
