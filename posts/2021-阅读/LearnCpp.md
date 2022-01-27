@@ -1738,15 +1738,34 @@ int const sidesInSquare { 4 }; // okay, but not preferred
 
 最佳实践：对于一些比较复杂的表达式，还是使用括号来梳理优先级，增加可读性。哪怕技术上没必要如此。
 
-⚠️：操作符的优先级，但表达式的各部分是会以
+⚠️：操作符有优先级，但作为操作数的各表达式孰先孰后是不定的。
+
+```cpp
+#include <iostream>
+
+int getValue()
+{
+    std::cout << "Enter an integer: ";
+
+    int x{};
+    std::cin >> x;
+    return x;
+}
+
+int main()
+{
+    std::cout << getValue() + (getValue() * getValue()); // a + (b * c)
+    return 0;
+}
+```
+
+比如这样一个例子，依次输入1，2，3。结果会是多少，得看编译器了。所以最佳实践是避免这样的歧义。
 
 
 
+#### 5.2 算术运算符
 
-
-
-
-
+一元的正负号，二元的加减乘除余。
 
 
 
