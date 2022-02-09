@@ -391,6 +391,14 @@ Terminal <--[<output]--- |       |                \ \
     thisisunsafe 这个命令，说明你已经了解并确认这是个不安全的网站，你仍要访问就给你访问了。
   </pre>
 
+  <h2>根据安全要求升级软件包</h2>
+  <pre>
+    sudo apt update
+    apt list --upgradable 
+    sudo apt-get install --only-upgrade <package1> <package2> <package3>
+  </pre>
+
+
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
 A shortname is the unique identifier assigned to a Disqus site. 
 
