@@ -1948,9 +1948,15 @@ bool approximatelyEqualAbsRel(double a, double b, double absEpsilon, double relE
 
 #### 5.7 逻辑运算符
 
+有时我们需要同时测试多个条件，比如彩票的6个数字全部正确。逻辑运算符为我们提供了该能力。
 
+| Operator    | Symbol | Form     | Operation                                       |
+| :---------- | :----- | :------- | :---------------------------------------------- |
+| Logical NOT | !      | !x       | true if x is false, or false if x is true       |
+| Logical AND | &&     | x && y   | true if both x and y are true, false otherwise  |
+| Logical OR  | \|\|   | x \|\| y | true if either x or y are true, false otherwise |
 
-
+回忆下真值表~
 
 
 
