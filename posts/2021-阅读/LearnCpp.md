@@ -1948,7 +1948,7 @@ bool approximatelyEqualAbsRel(double a, double b, double absEpsilon, double relE
 
 #### 5.7 逻辑运算符
 
-有时我们需要同时测试多个条件，比如彩票的6个数字全部正确。逻辑运算符为我们提供了该能力。
+有时我们需要同时测试多个条件，比如彩票的6个数字全部正确。逻辑运算符允许我们形成复合条件语句。
 
 | Operator    | Symbol | Form     | Operation                                       |
 | :---------- | :----- | :------- | :---------------------------------------------- |
@@ -1956,23 +1956,47 @@ bool approximatelyEqualAbsRel(double a, double b, double absEpsilon, double relE
 | Logical AND | &&     | x && y   | true if both x and y are true, false otherwise  |
 | Logical OR  | \|\|   | x \|\| y | true if either x or y are true, false otherwise |
 
-回忆下真值表~
+**回忆下真值表~**
+
+**回忆下德摩根定律（De Morgan's law）~**
+
+**注：**
+
+① !的优先级很靠前；
+
+② &&和||会有短路现象，即左操作符足以得到结果时，不计算右操作符的值；
+
+③ 不要混淆逻辑运算符（如&&）和位运算符（如&）；
+
+④ &&的优先级比||高，最佳实践还是加上括号，增强代码易读性；
+
+④ C++没有异或，但异或可以用关系运算符!=来模仿。
+
+```cpp
+if (a != b) ... // a XOR b, assuming a and b are Booleans
+```
+
+请注意，上述 XOR 模式仅在操作数是布尔值（不是整数）时才有效。 如果您需要一种与非布尔操作数一起使用的逻辑 XOR 形式，您可以将它们静态转换为布尔型：
+
+```cpp
+if (static_cast<bool>(a) != static_cast<bool>(b) != static_cast<bool>(c) != static_cast<bool>(d)) ... // a XOR b XOR c XOR d, for any type that can be converted to bool
+```
 
 
 
+#### 5.x 第五章总结
 
 
 
+## 位操作（可选章节）
 
+#### O.1 通过 std::bitset 进行位标志和位操作
 
+#### O.2 位运算符
 
+#### O.3 使用位运算符和位掩码进行位操作
 
-
-
-
-
-
-
+#### O.4 二进制和十进制之间的转换
 
 
 
