@@ -1357,7 +1357,7 @@ outputs: 3.333333253860474  可以看到有很大误差，所以最佳实践建�
 
 这是由于十进制和二进制的差异，比如1/10，我们看似很简单的0.1，在二进制时就是0.00011001100110011... <font color="red">并且当精度大于有效数字的位数时，仍然会出现凑整误差。</font>
 
-**凑整（rounding）误差：**当数字没法精确存储时，就会出现。往往没法避免，所以不要假设浮点型数字是精密的。
+**舍入（rounding）误差：**当数字没法精确存储时，就会出现。往往没法避免，所以不要假设浮点型数字是精密的。
 
 > 在金融或者货币数据上，要非常谨慎地使用浮点型。
 
@@ -1892,21 +1892,61 @@ z = (x, y) 可以写成 x; z = y;
 
 #### 5.6 关系运算符和浮点数比较
 
+| Operator               | Symbol | Form   | Operation                                                |
+| :--------------------- | :----- | :----- | :------------------------------------------------------- |
+| Greater than           | >      | x > y  | true if x is greater than y, false otherwise             |
+| Less than              | <      | x < y  | true if x is less than y, false otherwise                |
+| Greater than or equals | >=     | x >= y | true if x is greater than or equal to y, false otherwise |
+| Less than or equals    | <=     | x <= y | true if x is less than or equal to y, false otherwise    |
+| Equality               | ==     | x == y | true if x equals y, false otherwise                      |
+| Inequality             | !=     | x != y | true if x does not equal y, false otherwise              |
+
+非常直观易懂，这些运算符得到的值都是布尔型 true (1), or false (0).
+
+但是对于**浮点数比较**，是比较麻烦的：
+
+因为浮点数不是精确的，会有小的舍入误差。在4.8节我们做过介绍。如果两个操作数非常接近，就容易出现意料不到的比较结果。尤其是==和!=风险最大，因为哪怕最小的舍入误差就会导致错误的返回。
+
+所以我们应该避免对浮点数进行==或!=的运算。
 
 
 
+不过可以自己实验函数来完成**浮点数比较**：
+
+```cpp
+#include <algorithm> // std::max
+#include <cmath> // std::abs
+
+// return true if the difference between a and b is within epsilon percent of the larger of a and b
+bool approximatelyEqual(double a, double b, double epsilon)
+{
+    return (std::abs(a - b) <= (std::max(std::abs(a), std::abs(b)) * epsilon));
+}
+```
+
+该方法由[Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth)在著作中实现，（判断浮点相等）查看两个数字是否几乎相同。 如果它们“足够接近”，那么我们称它们为相等。 用于表示“足够接近”的值传统上称为 epsilon。 Epsilon 通常定义为一个小的正数（例如 0.00000001，有时写为 1e-8）。
+
+Donald Knuth的方法里epsilon 不再是绝对数，而是一个相对于 a 或 b 很小的正数。
+
+```cpp
+// return true if the difference between a and b is less than absEpsilon, or within relEpsilon percent of the larger of a and b
+bool approximatelyEqualAbsRel(double a, double b, double absEpsilon, double relEpsilon)
+{
+    // Check if the numbers are really close -- needed when comparing numbers near zero.
+    double diff{ std::abs(a - b) };
+    if (diff <= absEpsilon)
+        return true;
+
+    // Otherwise fall back to Knuth's algorithm
+    return (diff <= (std::max(std::abs(a), std::abs(b)) * relEpsilon));
+}
+```
+
+在这个算法中，我们首先检查 a 和 b 是否接近一个绝对的epsilon，它处理 a 和 b 都接近于零的情况。 absEpsilon 参数应设置为非常小的值（例如 1e-12）。 如果失败了，那么我们就回退到使用相对 epsilon 的 Knuth 算法。
 
 
 
-
-
-
-
-
-
-
-
-
+#### 5.7 逻辑运算符
 
 
 
