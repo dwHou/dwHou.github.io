@@ -1781,45 +1781,116 @@ std::cout << "double / int = " << static_cast<double>(x) / y << '\n';
 
 #### 5.3 取余和幂指运算
 
-**取余**运算的操作数必须是整数，且可以是负数。
+**取余**运算的操作数必须是整数，且可以是负数。x % y的符号总和x一致。
 
-因为幂指运算可以通过位异或来实现，C++没有专门包括一个幂指运算符。
+因为**幂指**运算可以通过位异或来实现，C++没有专门包括一个幂指运算符。
 
+```cpp
+#include <cmath>
+double x{ std::pow(3.0, 4.0) }; // 3 to the 4th power
+```
 
+不过输入输出得是double类型，可能有精度丢失。
 
+可以自己实现一版整数型的幂指函数，不过稍不注意就会溢出哦：
 
+```cpp
+#include <cstdint> // for std::int_fast64_t
 
+// note: exp must be non-negative
+std::int_fast64_t pow(int base, int exp)
+{
+    std::int_fast64_t result{ 1 };
+    while (exp)
+    {
+        if (exp & 1)
+            result *= base;
+        exp >>= 1;
+        base *= base;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return result;
+}
+```
 
 
 
+#### 5.4 自增和自减运算
+
+**自增1和自减1**使用很频繁，于是形成了内置的运算符。
+
+| Operator                           | Symbol | Form | Operation                                      |
+| :--------------------------------- | :----- | :--- | :--------------------------------------------- |
+| Prefix increment (pre-increment)   | ++     | ++x  | Increment x, then return x                     |
+| Prefix decrement (pre-decrement)   | ––     | ––x  | Decrement x, then return x                     |
+| Postfix increment (post-increment) | ++     | x++  | Copy x, then increment x, then return the copy |
+| Postfix decrement (post-decrement) | ––     | x––  | Copy x, then decrement x, then return the copy |
+
+①前缀方式先自增/自减，再计算表达式。后缀方式计算表达式用的原值，即copy，再自增/自减。
+
+②前缀方式返回的是一个引用形式；后缀方式则要开辟另外的空间。
+
+所以最佳实践，建议用前缀方式，一来性能好，二来直观，不容易出现奇怪的问题。
+
+**副作用（side effects）**
+
+一个函数或表达式如果存在超过它生命的影响，则被称为有副作用的。
+
+三个side effects的例子：
+
+```cpp
+x = 5; // the assignment operator modifies the state of x
+++x; // operator++ modifies the state of x
+std::cout << x; // operator<< modifies the state of the console
+```
+
+side effects也会造成无法预期的结果（二义性文法）：
+
+```cpp
+int value{ add(x, ++x) }; // is this 5 + 6, or 6 + 6?
+// It depends on what order your compiler evaluates the function arguments in
+```
+
+C++没有规定实参表达的顺序。这些问题通常可以通过确保在给定语句中使用不超过一次的任何具有副作用的变量来避免。
 
 
 
+#### 5.5 逗号和条件运算符
+
+**逗号运算符**
+
+| Operator | Symbol | Form | Operation                             |
+| :------- | :----- | :--- | :------------------------------------ |
+| Comma    | ,      | x, y | Evaluate x then y, returns value of y |
+
+可以方便的在一个表达式里做分步的计算。
+
+不过要留心的是，逗号表达式具有最低的优先级，甚至低于赋值运算。所以用的时候记得酌情加上括号。
+
+这使得逗号运算符的使用有些危险，大多数程序员根本不使用逗号运算符。
+
+在几乎所有情况下，使用逗号运算符编写的语句最好写成单独的语句。 例如：
+
+z = (x, y) 可以写成 x; z = y;
+
+**条件运算符**
+
+| Operator    | Symbol | Form          | Operation                                                    |
+| :---------- | :----- | :------------ | :----------------------------------------------------------- |
+| Conditional | ?:     | c ? x : y     | If c is nonzero (true) then evaluate x, otherwise evaluate y |
+|             |        | ((c) ? x : y) | 如左式，因为优先级低，一般也要用括号来保证正确性。           |
+
+一度是C++里唯一的三元运算符，所以提到三元运算符一般指的它。相比if-else表达式，?:运算符
+
+①可以帮助压缩代码，而不损失易读性。
+
+②用于一些必须是表达式的位置。
+
+但它不应该用于替代复杂的 if/else 语句，因为它很快就会变得不可读且容易出错。
+
+
+
+#### 5.6 关系运算符和浮点数比较
 
 
 
