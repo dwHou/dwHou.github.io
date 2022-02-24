@@ -1988,7 +1988,11 @@ if (static_cast<bool>(a) != static_cast<bool>(b) != static_cast<bool>(c) != stat
 
 
 
+
+
 ## 位操作（可选章节）
+
+
 
 #### O.1 通过 std::bitset 进行位标志和位操作
 
@@ -2000,11 +2004,19 @@ if (static_cast<bool>(a) != static_cast<bool>(b) != static_cast<bool>(c) != stat
 
 
 
+
+
+
+
+
+
 ## 范围，期间和链接
+
+
 
 #### 6.1 复合语句（块）
 
-
+复合语句又称作块，由{起，}止，中间可以是多条语句。而编译器将其视作一个单独的语句对待。
 
 
 
