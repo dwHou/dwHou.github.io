@@ -179,6 +179,12 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
         将channel方向分group，然后每个group内做归一化，算(C//G)HW的均值；这样与batchsize无关，不受其约束。
         事实上，GN的极端情况就是LN和IN，分别对应G等于C和G等于1，作者在论文中给出G设为32较好.
       </pre>
+      <pre>
+        当Conv bias遇上Norm:
+        对于Norm之前的卷积是否使用偏置，也是有讲究的。
+        MMDetection仓库就有友情提醒，当用户在使用Batch Norm或者Instance Norm时，MMCV的提示是非常贴心的。
+        使用Layer Norm或者Group Norm（num_groups≠C）时，MMCV则不必抛出这个<a href="https://zhuanlan.zhihu.com/p/403444336">warning</a>。
+      </pre>
       
   </ul>
 
