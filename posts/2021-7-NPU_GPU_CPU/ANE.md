@@ -71,9 +71,10 @@ iPhone、iPad 和 Apple Silicon Mac 具有共享内存，这意味着 CPU、GPU 
 
 看起来是这样。
 
-在CPU上，Core ML模型计算和存储中间张量都是用FP32（iOS14和macOS11开始支持在CPU上使用FP16），
+1. 在CPU上，Core ML模型计算和存储中间张量都是用FP32（iOS14和macOS11开始支持在CPU上使用FP16），
+2. 在GPU上，Core ML模型存储权重和中间张量用FP16，但计算用FP32。不过可以通过设置`MLModelConfiguration`里的`allowLowPrecisionAccumulationOnGPU`使它支持FP16计算，
+3. 在ANE上，似乎任何情况都用FP16。所以有的需要精度的模型可能没法正常工作。不过苹果声称 A12 Bionic 中的 ANE 具有“多精度”支持。TODO(@author)：看看这实际上意味着什么。
 
-在GPU上，Core ML模型存储权重和中间张量用FP16，但计算用FP32，
 
-在ANE上，
 
+#### 7.ANE 不支持哪些 Core ML 层？
