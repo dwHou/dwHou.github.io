@@ -78,3 +78,44 @@ iPhone、iPad 和 Apple Silicon Mac 具有共享内存，这意味着 CPU、GPU 
 
 
 #### 7.ANE 不支持哪些 Core ML 层？
+
+> :warning:此处提供的信息不完整，可能是错误的。 它甚至可能在不同版本的 ANE 之间有所不同。 在调试ML模型的性能问题时，请将此作为参考，但不要将其视为教条。 
+
+Core ML 不会在 ANE 上运行模型的主要原因是模型包含某些类型的层。
+
+Core ML 可能会在 ANE 上运行模型的第一部分，然后切换到 GPU（或 CPU）来运行模型的其余部分。 从理论上讲，可以进行多次这样的切换，但是每次切换都会产生开销。
+
+如果模型是 `S → U → S → U → S → U` 其中 S 是受支持的层，而 U 是不受支持的层，Core ML 可能会只执行一次 `ANE → GPU` 而不是 `ANE → GPU → ANE → GPU → etc`。但是 , `ANE → CPU → ANE → CPU → etc` 似乎确实发生了，因为在 ANE 和 CPU 之间切换比在 ANE 和 GPU 之间切换更便宜。
+
+Core ML 的资源调用是一个黑盒子。
+
+**ANE不支持的层（Problematic layers）：**
+
+- custom layers
+
+- RNN layers such as LSTM or GRU
+
+- gather
+
+- dilated convolutions
+
+- <font color="red">broadcastable</font> and <font color="red">"ND" </font>layers
+
+- certain broadcasting operations (e.g. multiply of `CxHxW` and `Cx1x1` tensors)
+
+- pooling layers with kernel size greater than 13, or stride greater than 2
+
+- upsampling with scaling factors greater than 2
+
+  **Note:** Some of these are guesses. It's hard to tell what Core ML is *really* up to half the time.
+
+可广播层（broadcastable）就包括常见的`AddBroadcastableLayer`、`DivideBroadcastableLayer`、`MultiplyBroadcastableLayer`、`SubtractBroadcastableLayer`  等等
+
+维度操作层（“ND”）就包括常见的`ConcatNDLayer`、`SplitNDLayer`、`LoadConstantNDLayer`  等等
+
+
+
+- `AddBroadcastableLayer` → `AddLayer`
+- `MultiplyBroadcastableLayer` → `MultiplyLayer` or `ScaleLayer` or a linear `Activation` layer
+- `ConcatND` → `Concat`
+- and so on...
