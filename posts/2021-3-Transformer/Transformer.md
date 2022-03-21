@@ -10,6 +10,10 @@
 
 
 
-
+ViT逐行解读
 
 https://blog.csdn.net/qq_42418728/article/details/120365972?spm=1001.2014.3001.5502
+
+自注意力
+
+https://blog.csdn.net/qq_42418728/article/details/121723479
