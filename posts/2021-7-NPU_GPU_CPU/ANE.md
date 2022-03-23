@@ -113,9 +113,19 @@ Core ML 的资源调用是一个黑盒子。
 
 维度操作层（“ND”）就包括常见的`ConcatNDLayer`、`SplitNDLayer`、`LoadConstantNDLayer`  等等
 
+可以[操作](https://github.com/hollance/neural-engine/blob/master/docs/model-surgery.md)一下，用旧版本的层替代这些新版本的层。
 
 
-- `AddBroadcastableLayer` → `AddLayer`
-- `MultiplyBroadcastableLayer` → `MultiplyLayer` or `ScaleLayer` or a linear `Activation` layer
-- `ConcatND` → `Concat`
-- and so on...
+
+#### 8.其他奇怪的问题
+
+轶闻（anecdotal evidence）：
+
+1. ANE上有的FP16的模型比FP32的模型慢
+
+2. A12以及更高版本的处理器有“智能计算系统”，决策哪些任务应该运行在CPU，GPU或ANE上。
+
+   哪怕模型所有的层都与ANE兼容，但如果GPU很空闲，CoreML很可能会在GPU上运行它。反之如果GPU负载很重，便很可能在ANE运行。
+
+3. 有时模型超过某个大小，CoreML可能决定运行在GPU上。
+
