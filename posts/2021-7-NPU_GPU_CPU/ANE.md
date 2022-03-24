@@ -12,6 +12,8 @@
 
 M1和 A14 Bionic 中的神经引擎很可能是相同的。
 
+[^查看各类软件对M1芯片的支持程度]: [link](https://doesitarm.com/)
+
 
 
 #### 2.为什么要关注ANE
@@ -65,6 +67,13 @@ iPhone、iPad 和 Apple Silicon Mac 具有共享内存，这意味着 CPU、GPU 
 
 调试器时按下暂停按钮。 如果有一个名为 H11ANEServicesThread 的线程，那么 Core ML 至少在模型的某些部分使用了神经引擎。
 
+也可以使用命令：
+
+```shell
+watch -n 0.1 'sudo dmesg | grep H11'
+```
+
+观察watch demesg的信息可以看到`H11ANEInUserClient::ANE_PowerOn()->H11ANEIn::ANE_Init()->ANE_ProcessCreate_gated->H11ANEIn::FreeIntermediateBuffer->ANE_ProcessDestroy_gated`的过程。
 
 
 #### 6.ANE是16-bit的吗？
@@ -128,4 +137,10 @@ Core ML 的资源调用是一个黑盒子。
    哪怕模型所有的层都与ANE兼容，但如果GPU很空闲，CoreML很可能会在GPU上运行它。反之如果GPU负载很重，便很可能在ANE运行。
 
 3. 有时模型超过某个大小，CoreML可能决定运行在GPU上。
+
+
+
+#### 9.其他资料
+
+
 
