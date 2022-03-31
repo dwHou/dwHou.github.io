@@ -105,6 +105,8 @@
 </div>
 </br>
 
+
+
 <h2>SubPixel</h2>
 <pre>
     一般来说在Pixel shuffle之后会接一个卷积，防止上采样出现一些错误。
@@ -241,6 +243,11 @@ Highlights
     sharp_bicubic|blur_bicubic|blur|blur_comp 是REDS的四个赛道。
     对二者训练的主要区别就是vid4适合7帧输入，REDS适合5帧。(可能说REDS运动更剧烈，更难对齐)
     现在我们测试自己的testset，比如来自aicomp的或者优酷的，就按照sharp_bicubic替换就好了。
+</pre>
+
+<h2>超分选择模型的吐槽</h2>
+<pre>
+    <a href="https://github.com/neonbjb/fluvial">GANs have serious problems with mode collapse, likelihood and MSE-based models just blur everything, flow-based models have artifact problems due to the restricted operator set they use. Autoregressive models are promising but are tricky to apply to SR and do not scale to high-resolution images. Diffusion models are notorious for being quite slow at processing.</a>
 </pre>
 
 <h2>Reading list</h2>

@@ -454,6 +454,9 @@ ffmpeg -ss 00:1:05 -i gemfield.mp4 -frames:v 1 out.jpg
 # output seeking
 ffmpeg -i gemfield.mp4 -ss 00:1:05 -frames:v 1 out1.jpg
 上述两种就是有区别的。
+ffmpeg -r 15 -i input output
+ffmpeg -i input -r 15 output
+假设原本是30fps，第一种会使其输出文件的时长分别为原来的两倍，第二种时长不变，但码流理论上为输入文件的一半左右。
       </pre>
       <li><a href="https://slhck.info/video/2017/03/01/rate-control.html">关于码控</a> </li>
       <li><a href="https://blog.csdn.net/leixiaohua1020/article/details/15811977">雷霄骅的-从零开始-博客</a> </li>
