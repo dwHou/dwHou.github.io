@@ -2028,13 +2028,43 @@ if (static_cast<bool>(a) != static_cast<bool>(b) != static_cast<bool>(c) != stat
 
 #### 6.2 用户定义的命名空间 和 范围操作
 
-第2.8节我们介绍了命名冲突和命名空间的概念，这个概念主要是为了避免标识符冲突，编译器没法消除歧义。
+第2.8节我们介绍了命名冲突和命名空间的概念，这个概念主要是为了避免标识符冲突，编译器没法消除歧义。比如：
 
+foo.cpp:
 
+```cpp
+// This doSomething() adds the value of its parameters
+int doSomething(int x, int y)
+{
+    return x + y;
+}
+```
 
+goo.cpp:
 
+```cpp
+// This doSomething() subtracts the value of its parameters
+int doSomething(int x, int y)
+{
+    return x - y;
+}
+```
 
+main.cpp:
 
+```cpp
+#include <iostream>
+
+int doSomething(int x, int y); // forward declaration for doSomething
+
+int main()
+{
+    std::cout << doSomething(4, 3) << '\n'; // which doSomething will we get?
+    return 0;
+}
+```
+
+这么运行就会报错：goo.cpp:3: multiple definition of `doSomething(int, int)'; foo.cpp:3: first defined here
 
 
 
