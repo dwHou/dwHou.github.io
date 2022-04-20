@@ -2066,19 +2066,61 @@ int main()
 
 这么运行就会报错：goo.cpp:3: multiple definition of `doSomething(int, int)'; foo.cpp:3: first defined here
 
+避免冲突的一个方式是修改函数名，但更好的方式是将函数放入您自己的命名空间中（默认是global namespace）。 出于这个原因，标准库被移到了 std 命名空间中。
 
 
 
+**定义自己的命名空间（user-defined namespaces）**
 
+C++ 允许我们通过<font color="red"> namespace</font> 关键字定义自己的命名空间，也叫用户定义的命名空间。  由 C++（如global namespace）或库（如std namespace）提供的不被视为用户定义的命名空间。:heavy_exclamation_mark:命名空间标识符通常不大写。
 
+上面的例子就可以重写为：
 
+foo.cpp:
 
+```cpp
+namespace foo // define a namespace named foo
+{
+    // This doSomething() belongs to namespace foo
+    int doSomething(int x, int y)
+    {
+        return x + y;
+    }
+}
+```
 
+goo.cpp:
 
+```cpp
+namespace goo // define a namespace named goo
+{
+    // This doSomething() belongs to namespace goo
+    int doSomething(int x, int y)
+    {
+        return x - y;
+    }
+}
+```
 
+**使用范围解析运算符 (::) 访问命名空间**
 
+scope resolution operator (::)
 
+main.cpp:
 
+```cpp
+int doSomething(int x, int y); // forward declaration for doSomething
+
+int main()
+{
+    std::cout << doSomething(4, 3) << '\n'; // which doSomething will we get?
+    return 0;
+}
+```
+
+有两种不同的方法可以告诉编译器使用哪个版本的 doSomething()，通过作用域解析操作符，或者通过 using 语句（我们将在本章后面的课程中讨论）。
+
+对于后续示例，我们将把我们的示例分解为一个文件解决方案，以便于阅读。
 
 
 
