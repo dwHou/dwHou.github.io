@@ -235,6 +235,38 @@ https://zhuanlan.zhihu.com/p/23599229
       <font color="red">注意：</font>在docker内查看nvidia-smi是不显示进程号(pid), 回到服务器账户看就好啦
   </pre>
 
+  <h3>关于在远程容器中使用jupyter</h3>
+  <pre>
+    对于一些教程类型的code，我们经常需要用到jupyter。那么如何在本地利用远程服务器的算力和docker容器启动jupyter呢？
+    <b>step1</b>: 首先创建容器时，就记得提前多留出一个特定端口
+    docker run -it --runtime=nvidia -p 9999:22 10000:8888 ...
+    
+    <b>step2</b>: 安装jupyter并进行配置
+    安装：pip install notebook
+    生成配置文件：jupyter notebook --generate-config
+    修改配置：vim ~/.jupyter/jupyter_notebook_config.py 
+    c.NotebookApp.ip='*'    #表示同一网络的主机都可访问
+    c.NotebookApp.password = u'sha1密文'
+    c.NotebookApp.open_browser = False
+    c.NotebookApp.port =8888    #随便指定一个
+    
+    第二行的密码是可选的，为了安全起见，我们可以生成一个。
+    In [1]: from notebook.auth import passwd
+    In [2]: passwd()
+    Enter password:
+    Verify password:
+    # 粘贴到c.NotebookApp.password = u'sha1密文'这儿
+    Out[2]:'sha1:xxxxxxxxx:xxxxxxxxxxxxxxxxxxxxx'   
+
+    <b>step3</b>: 启动jupyter并在本地浏览器打开：
+    启动：jupyter notebook
+    url：服务器IP:10000 （对应创建容器时的-p设置）
+
+    <b>step4</b>: 输入密码
+
+  </pre>
+
+
   <h3>关于vscode进入远程容器</h3>
   <pre>
     设置管理员密码
