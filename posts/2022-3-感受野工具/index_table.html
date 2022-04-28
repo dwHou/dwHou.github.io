@@ -93,7 +93,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8">
-                            <h1>Receptive field calculator</h1>
+                            <!-- <h1>Receptive field calculator</h1> -->
                             <br>
                             <div class="info">
     <p style="font-family:CMSS; font-size:120%">Posted on Apr.20, 2022</p>
@@ -114,7 +114,18 @@
     }
   </style>
 
+<h2> Receptive field calculator </h2>
 <script type="text/javascript" src="assets/dynamic_visuals/RFcalculator.js"></script>
+
+
+<h2> formulas </h2>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<url>
+    <li>Receptive field size: `F=r*(k-1)+1`</li>
+    <li>Feature map size: `O=(I-F+2*p)/s+1`</li>
+</url>
+
+
 <h2> other issues </h2>
 <pre>一方面有感受野大小的计算，但另一方面还有感受野中心的问题。</pre>
 <img src="assets/dynamic_visuals/RFcenter.png">

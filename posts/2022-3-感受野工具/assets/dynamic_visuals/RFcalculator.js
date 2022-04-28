@@ -9,7 +9,7 @@ var htmlstr = "<div id='calculator'>" +
 "<button type='button' onclick='calc()'>Calc</button>" +
 "<button type='button' onclick='clean()'>Clear</button>" +
 "</p><p>" +
-"<i>kernel_size,stride,padding</i>" + "</p><div id='layers'></div></div>"
+"<i>kernel_size,stride,padding,dilation</i>" + "</p><div id='layers'></div></div>"
 
 dom = document.createElement('div')
 dom.id = 'calculator'
@@ -70,12 +70,17 @@ function calc(){
   for (var i=0;i<lc.length;i++){
     if (lc[i].firstChild.value=="") break;
     var ksp = lc[i].firstChild.value.split(',').map(y=>parseInt(y))
-    if (ksp.length!=3) {alert("Invalid input.");break;}
+    if (ksp.length!=4) {alert("Invalid input.");break;}
     k = ksp[0]
     s = ksp[1]
     p = ksp[2]
-    xs[xs.length] = parseInt((xs[xs.length-1]-k+2*p)/s) + 1
-    cs[cs.length] = cs[cs.length-1]+(k-1)*ws[ws.length-1]
+    r = ksp[3]
+
+    // F = r * (k - 1)+ 1
+    // out = ( in - F + 2 * pading ) / stride +1
+    ke = r * (k - 1)+ 1
+    xs[xs.length] = parseInt((xs[xs.length-1]-ke+2*p)/s) + 1
+    cs[cs.length] = cs[cs.length-1]+(ke-1)*ws[ws.length-1]
     ws[ws.length] = s*ws[ws.length-1]
 
     result = document.getElementById("result_"+i.toString())
