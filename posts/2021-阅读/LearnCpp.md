@@ -64,7 +64,7 @@ https://ai.stackexchange.com/questions/6185/why-does-c-seem-less-widely-used-tha
 
 #### 0.4 关于C++开发
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20210824162102685.png" alt="image-20210824162102685" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20210824162102685.png" alt="image-20210824162102685" style="zoom:50%;" />
 
 
 
@@ -172,7 +172,7 @@ C++98, C++03, C++11, C++14, C++17, C++20, etc… 都可以选。
 
 这样一方面编译器还要一段时间针对最新标准打磨优化，另一方面前两代的标准在不同平台的兼容性和支持度也更高。
 
-![Xcode](/Users/DevonnHou/Library/Application Support/typora-user-images/image-20210830083338204.png)
+![Xcode](../../images/typora-images/image-20210830083338204.png)
 
 
 
@@ -702,7 +702,7 @@ int main()
 
 头文件帮助我们省下了很多打重复代码的精力。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20211014125548688.png" alt="image-20211014125548688" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20211014125548688.png" alt="image-20211014125548688" style="zoom:50%;" />
 
 **最佳实践：**
 
@@ -1734,7 +1734,7 @@ int const sidesInSquare { 4 }; // okay, but not preferred
 
 如果优先级相同，则由结合性决定，左到右还是右到左。
 
-![image-20220119164743873](/Users/DevonnHou/Library/Application Support/typora-user-images/image-20220119164743873.png)
+![image-20220119164743873](../../images/typora-images/image-20220119164743873.png)
 
 最佳实践：对于一些比较复杂的表达式，还是使用括号来梳理优先级，增加可读性。哪怕技术上没必要如此。
 

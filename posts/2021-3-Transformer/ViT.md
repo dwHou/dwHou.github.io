@@ -58,21 +58,21 @@ ViT的特性：
 
    总体而言，Transformer是NLP给CV的一个输出，我们可以去学习Transformer的长处，至于未来是否会替换CNN，或者Transformer与CNN共存，甚至互相弥补，这个还是靠整个学界去决定。CV的任务很多很难，无论是CNN还是Transformer都不会是CV的终点，保持学习、保持接纳、保持探究。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20211013112858069.png" alt="image-20211013112858069" style="zoom:10%;" />
+<img src="../../images/typora-images/image-20211013112858069.png" alt="image-20211013112858069" style="zoom:10%;" />
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20211013113017587.png" alt="image-20211013113017587" style="zoom:10%;" />
+<img src="../../images/typora-images/image-20211013113017587.png" alt="image-20211013113017587" style="zoom:10%;" />
 
 ​														这里的xi到zi是都是共享参数的全连接层。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20211013112754034.png" alt="image-20211013112754034" style="zoom:10%;" />
+<img src="../../images/typora-images/image-20211013112754034.png" alt="image-20211013112754034" style="zoom:10%;" />
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20211013113211338.png" alt="image-20211013113211338" style="zoom:10%;" />
+<img src="../../images/typora-images/image-20211013113211338.png" alt="image-20211013113211338" style="zoom:10%;" />
 
 ​						                          transformer encoder的输出中，有用的是向量c0。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20211013114049198.png" alt="image-20211013114049198" style="zoom:10%;" />
+<img src="../../images/typora-images/image-20211013114049198.png" alt="image-20211013114049198" style="zoom:10%;" />
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20211013114807750.png" alt="image-20211013114807750" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20211013114807750.png" alt="image-20211013114807750" style="zoom:50%;" />
 
 Transformer的缺点：
 
@@ -80,9 +80,9 @@ Transformer的缺点：
 
 实验结果表示，如果用ImageNet（small）预训练，ViT表现不如ResNet。用ImageNet-21K（medium），ViT表现与ResNet相当。只有在使用JFT数据集后，ViT才超越了ResNet。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20211013114951914.png" alt="image-20211013114951914" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20211013114951914.png" alt="image-20211013114951914" style="zoom:50%;" />
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20211013122242576.png" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20211013122242576.png" style="zoom:50%;" />
 
 而且实验的迹象表明，即便是3亿张图片的JFT也不够大，继续增大数据集，ViT的优势还会进一步增大。反观ResNet，预训练的数据量是1亿还是3亿张图片时区别不大。
 

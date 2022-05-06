@@ -59,7 +59,7 @@ git checkout -b <your-branch-name>
 >
 > 通过图示更容易理解一些，咱们到下一页看一下。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20220414162657958.png" alt="image-20220414162657958" style="zoom:30%;" />
+<img src="../../images/typora-images/image-20220414162657958.png" alt="image-20220414162657958" style="zoom:30%;" />
 
 示例：
 
