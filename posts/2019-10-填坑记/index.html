@@ -256,14 +256,25 @@
             4，如果资源较少，不需要任何GUI功能，包含contrib模块
             pip install opencv-contrib-python-headless
       </pre>
+      <pre>
+          有些仓库，比如MMCV<a href="https://github.com/ckkelvinchan/BasicVSR_PlusPlus/blob/master/requirements/runtime.txt">需要opencv-python</a>，可以采取如下方式：
+          '''
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get -y install tzdata
+            apt-get update
+            apt-get install ffmpeg libsm6 libxext6  -y
+            pip3 install opencv-python
+          '''
+      </pre>
   </ul>
 
   <h2>nvidia-smi显存被占用,却没显示进程</h2>
   <ul>
       <li>使用fuser命令</li>
       fuser用于显示哪些进程正在使用给定的文件、文件系统或unix套接字
-      <li>fuser -v /dev/nvidia*</li>
-      查看占用指定显卡的进程id之后，kill掉就好了
+      <li>sudo fuser -v /dev/nvidia*</li>
+      记住最好加sudo，因为有些进程是只有系统管理员可见的。
+      查看占用指定显卡的进程id之后，kill掉就好了。
       <li>kill -9 PID</li>
   </ul>
 
