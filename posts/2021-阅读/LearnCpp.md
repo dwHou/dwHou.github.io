@@ -2102,35 +2102,86 @@ namespace goo // define a namespace named goo
 }
 ```
 
-**使用范围解析运算符 (::) 访问命名空间**
+这时默认的global namespace就没有doSomething了。只有用户定义的命名空间有。
 
-scope resolution operator (::)
 
-main.cpp:
+
+**使用域解析运算符 (::) 访问命名空间**
+
+**scope resolution operator (::)**
+
+有两种不同的方法可以告诉编译器使用哪个版本的 doSomething()，通过作用域解析操作符，或者通过 using 语句（我们将在本章后面的课程中讨论）。
+
+示例 main.cpp:
 
 ```cpp
-int doSomething(int x, int y); // forward declaration for doSomething
+#include <iostream>
 
 int main()
 {
-    std::cout << doSomething(4, 3) << '\n'; // which doSomething will we get?
+    std::cout << foo::doSomething(4, 3) << '\n'; // use the doSomething() that exists in namespace foo
+    std::cout << goo::doSomething(4, 3) << '\n'; // use the doSomething() that exists in namespace goo
     return 0;
 }
 ```
 
-有两种不同的方法可以告诉编译器使用哪个版本的 doSomething()，通过作用域解析操作符，或者通过 using 语句（我们将在本章后面的课程中讨论）。
+输出：
 
-对于后续示例，我们将把我们的示例分解为一个文件解决方案，以便于阅读。
+7
 
+1
 
-
-
-
-
+范围解析运算符很棒，因为它允许我们显式选择我们想要查看的命名空间，因此没有潜在的歧义。
 
 
 
+**使用域解析运算符 (::) 时不带前缀**
 
+`::doSomething();` 不带前缀时是在默认的global namespace。这个例子与我们直接调用 `doSomething();` 相同，因此在这种情况下使用范围解析运算符是多余的。 
+
+但有一种情况下，(::)不带前缀是有必要的：在命名空间内如果不加(::)，编译器将首先尝试在同一命名空间中找到匹配的声明。如果没有找到匹配的将依次检查每个嵌套的命名空间，直到global namespace。
+
+```cpp
+#include <iostream>
+
+void print() // this print lives in the global namespace
+{
+	std::cout << " there\n";
+}
+
+namespace foo
+{
+	void print() // this print lives in the foo namespace
+	{
+		std::cout << "Hello";
+	}
+
+	void printHelloThere()
+	{
+		print(); // calls print() in foo namespace
+		::print(); // calls print() in global namespace
+	}
+}
+
+int main()
+{
+	foo::printHelloThere();
+
+	return 0;
+}
+```
+
+```shell
+Hello there
+```
+
+所以这种情况下，如果指定用全局命名空间，需要用到无前缀的(::)运算符。
+
+
+
+**允许多个命名空间块**
+
+在多个位置（跨多个文件或同一文件中的多个位置）声明（同一个或不同命名空间）命名空间块是合法的。 命名空间内的所有声明都被视为命名空间的一部分。
 
 
 
