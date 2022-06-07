@@ -347,7 +347,10 @@ model.load_state_dict({k.replace('module.',''):v for k,v in torch.load('myfile.p
 
 
 
-[1]: https://zhuanlan.zhihu.com/p/104019160	"待补充"
+[1]: https://zhuanlan.zhihu.com/p/104019160	"PyTorch Cookbook"
+[2]: https://zhuanlan.zhihu.com/p/435669796	"flexible learning rate"
+
+
 
 
 
