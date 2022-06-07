@@ -185,6 +185,10 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
         MMDetection仓库就有友情提醒，当用户在使用Batch Norm或者Instance Norm时，MMCV的提示是非常贴心的。
         使用Layer Norm或者Group Norm（num_groups≠C）时，MMCV则不必抛出这个<a href="https://zhuanlan.zhihu.com/p/403444336">warning</a>。
       </pre>
+      <pre>
+        巧记
+        HxW 看作一个实例 instance , 加一维 C 就看成 layter norm , 要是加一维 B 就是batch norm , 加部分C 就看做group
+      </pre>
       
   </ul>
 
