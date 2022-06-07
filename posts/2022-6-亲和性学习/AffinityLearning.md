@@ -82,6 +82,13 @@ CSPN 即基于 SPN 做出的改进，用卷积核的方式直接得到8个方向
 
 **关键代码**
 
+0.接口代码
+
+```python
+
+def forward(self, guidance, blur_depth, sparse_depth=None)
+```
+
 1.正则化代码
 
 ```python
