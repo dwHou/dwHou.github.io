@@ -85,9 +85,30 @@ CSPN 即基于 SPN 做出的改进，用卷积核的方式直接得到8个方向
 0.接口代码
 
 ```python
-
-def forward(self, guidance, blur_depth, sparse_depth=None)
+class Affinity_Propagate(nn.Module):
+  def __init__(self,
+                   prop_time,
+                   prop_kernel,
+                   norm_type='8sum'):
+          """
+          Inputs:
+              prop_time: how many steps for CSPN to perform
+              prop_kernel: the size of kernel (current only support 3x3)
+              way to normalize affinity
+                  '8sum': normalize using 8 surrounding neighborhood
+                  '8sum_abs': normalization enforcing affinity to be positive
+                              This will lead the center affinity to be 0
+          """
+      self.in_feature = 1
+      self.out_feature = 1
+  def forward(self, guidance, blur_depth, sparse_depth=None)
 ```
+
+可以看到Affinity_Propagate的特征为1通道。
+
+由关联矩阵形成的sum_conv的参数会设置requires_grad = False。
+
+
 
 1.正则化代码
 
