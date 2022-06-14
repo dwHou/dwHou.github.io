@@ -93,7 +93,7 @@ class Affinity_Propagate(nn.Module):
           """
           Inputs:
               prop_time: how many steps for CSPN to perform
-              prop_kernel: the size of kernel (current only support 3x3)
+              prop_kernel: the size of kernel (currently only support 3x3)
               way to normalize affinity
                   '8sum': normalize using 8 surrounding neighborhood
                   '8sum_abs': normalization enforcing affinity to be positive
