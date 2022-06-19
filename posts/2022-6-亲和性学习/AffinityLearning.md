@@ -30,15 +30,21 @@
 
 ### 4.基于空间传播（SPN）的模型
 
+#### 4.1 Anisotropic Diffusion
+
+
+
+#### 4.2 SPN
+
 **Learning Affinity via. Spatial Propagation Network** 
 
-#### 4.1 概念
+##### 概念
 
 **亲和性**描述了像素或区域之间的强成对关系。与距离、颜色、纹理或结构相关。
 
 <img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20220531104029824.png" alt="image-20220531104029824" style="zoom:50%;" />
 
-#### 4.2 核心思想
+##### 核心思想
 
 在图像密集预测类型的任务例如深度估计、语义分割中，如果利用每个点与相邻点的预测之间的关系进行优化，往往可以得到更为准确而精细的结果。
 
@@ -189,7 +195,9 @@ class Wighted_L1_Loss(torch.nn.Module):
 
 **原理**
 
+现状分析：当前的大多数 SPNs都基于线性传播模型。 也就是affinity matrix的值在传播过程中不会改变，这样会限制表达能力。
 
+核心思想：为了解决上述问题，受动态滤波器 (Jia et al. 2016) 的启发，我们提出了一种新的非线性传播设计，称为动态空间传播网络 (DySPN)，它可以学习自适应亲和矩阵。 为了实现这种设计，当递归地细化深度图中的每个像素时，将不同的注意力级别分配给不同距离的邻居。 更具体地说，在传播开始时，远邻居提供远程信息来填充初始深度图的漏洞并快速对其进行平滑处理。
 
 #### 4.6 Guided Filter
 
