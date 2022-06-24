@@ -143,13 +143,18 @@
 
   <h2>权重平均</h2>
   <ul>
-  <li><b>思想溯源: </b> 从网络插值，到EMA和SWA<a href="https://arxiv.org/pdf/1803.05407.pdf"><i class="fa fa-file-pdf-o"></i></a></li>
+  <li><b>思想溯源: </b> 网络插值，从EMA到模型汤</li>
   <pre>
+  low-level:
   • 2018年、2019年，ESRGAN的团队同时提出网络插值，用于结合不同优化目标下的模型权重。
   • 2019年、2020年，网络插值被运用在重要赛事中，用于结合不同ckp的权重，旨在提升模型泛化性能。
+  Overall:
   • 2017年，吴恩达就在<a href="https://mooc.study.163.com/course/2001281003?tid=2001391036&_trace_c_p_k2_=defef755139242b883937f7e9c67fcaf#/info">课上</a>讲EMA（指数移动平均）对模型的参数做平均，以求提高测试指标并增加模型鲁棒。
-  • 2018年，有理论支撑，权值平滑能让测试误差落在更优平面。该思想更是能在训练中使用，成为SWA技术。
-  • 2019年，PyTorch开始在torchcontrib库支持swa。该技术也在Kaggle赛事中一展头角。</pre>
+  • 2018年，有理论支撑，权值平滑能让测试误差落在更优平面。该思想更是能在训练中使用，成为SWA技术<a href="https://arxiv.org/pdf/1803.05407.pdf"><i class="fa fa-file-pdf-o"></i></a>。
+  • 2019年，PyTorch开始在torchcontrib库支持swa。该技术也在Kaggle赛事中一展头角。
+  • 2021年，NIPS一篇论文提出SWA Densly。
+  • 2022年，谷歌提出“模型汤”，核心方法是Greedy soup:只对单独插值有效果提升的参数进行插值。
+ </pre>
 
   <pre><b>区别</b>：SWA是取不同<font color="red">epoch</font>的模型，跨度更大。EMA是滑动取连续的<font color="red">iteration</font>的模型参数。</pre>
   <pre>EMA t时刻变量v的滑动平均值大致等于过去1 / ( 1 − β )个时刻v值的平均。即，

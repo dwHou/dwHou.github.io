@@ -193,11 +193,19 @@ class Wighted_L1_Loss(torch.nn.Module):
 
 #### 4.5 DynSPN
 
-**原理**
+##### **原理**
 
-现状分析：当前的大多数 SPNs都基于线性传播模型。 也就是affinity matrix的值在传播过程中不会改变，这样会限制表达能力。
+**现状分析：**当前的大多数 SPNs都基于线性传播模型。 也就是affinity matrix的值在传播过程中不会改变，这样会限制表达能力。
 
-核心思想：为了解决上述问题，受动态滤波器 (Jia et al. 2016) 的启发，我们提出了一种新的非线性传播设计，称为动态空间传播网络 (DySPN)，它可以学习自适应亲和矩阵。 为了实现这种设计，当递归地细化深度图中的每个像素时，将不同的注意力级别分配给不同距离的邻居。 更具体地说，在传播开始时，远邻居提供远程信息来填充初始深度图的漏洞并快速对其进行平滑处理。
+**核心思想：**为了解决上述问题，受动态滤波器 (Jia et al. 2016) 的启发，本文提出了一种新的非线性传播，称为DySPN。它可以学习自适应affinity matrix。 为了实现这种设计，采用了注意力机制。 更具体地说，在传播开始时，远邻居提供的信息来快速填充初始深度图的洞，在深度图逐渐稠密时，更关注近邻居提供的信息来保边。
+
+> Inspired by the dynamic filters described above, we propose a DySPN with a non-linear propagation model, which applies <font color="red">spatial and sequential attention</font> to generate a series of <font color="red">adaptive affinity matrices</font>.
+
+
+
+
+
+
 
 #### 4.6 Guided Filter
 
