@@ -200,6 +200,7 @@ YCbCr ：也叫YCC,  YCbCr 是数字信号， 它包含两种形式， 分别为
 <h2>Checkerboard</h2>
 <pre>关于棋盘纹的问题，pixel-shuffle仍是会出现的。这个和pixel-shuffle前一个卷积的表现是息息相关的。
     使用ICNR初始化是有帮助的，它保证具有相关性的卷积来处理相邻的像素，也等价于最近邻插值后进行卷积（也同时保持着pixel-shuffle参数多、速度快的优势）。
+    同时对bias也零值初始化self.conv.bias.data.zero_()，不然默认是均匀分布。
     个人认为，除此之外，我们也可以特别关注下pixel-shuffle前的卷积，在训练收敛后单独对这一层进行finetune或许会有帮助。
 </pre>
 
