@@ -172,15 +172,23 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
   <ul>
   <li><b>思想溯源: </b> 从Topk到Focal loss</li>
   <pre>
-  • 问题存在：①样本类别不平衡 ②样本难度不对等，简单样本支配训练，淹没困难样本的学习价值。
+  • 问题存在：①样本类别不平衡 ②样本难度不对等，简单样本支配训练，淹没（overwhelm training）评估损失的有效性。
   • ~2017年，
     1. 按照class比例加权重：最常用处理类别不平衡问题的方式
-    2. OHEM：只保留loss最高的那些样本，完全忽略掉简单样本
-    3. OHEM+按class比例sample：在前者基础上，再保证正负样本的比例（1：3）
+    2. <a href="https://www.zhihu.com/question/63581984">OHEM</a>：只保留loss最高的那些样本，完全忽略掉简单样本
+    3. OHEM+按class比例sample：在前者基础上，再保证正负样本的比例
     3的结果比2要更差，其实这也表明，其实正负样本不平衡不是最核心的因素，而是由这个因素导出的<font color="red">easy example dominant</font>的问题。
-    至今，Topk loss仍然被广泛用于kaggle比赛中。
-  • 2017年，Loss max-pooling被提出，
-  • 2017年，何恺明团队提出Focal loss
+  • 至今，Topk loss仍然被广泛用于kaggle比赛中。
+  • 2017年，Loss max-pooling被提出，主要思想是：
+    1. 通过pixel weighting functions自适应地对每个像素的contribution（实际展现的loss）进行re-weighting
+    2. 通过普通的max-pooling在pixel-loss level上对pixel weighting function取最大
+    3. 而这个最大值是传统loss（即每个像素损失的权重是相等的）的上界  
+  • 同年，何恺明团队提出Focal loss。
+    硬方案：OHEM 
+    Focal loss可以看作soft OHEM。至于OHEM本身不能单独很好解决“简单样本支配”问题，私以为是focal loss可以"看全局"，而OHEM直接把easy ecample忽略使得许多pixel没有得到充分训练。
+    软方案（sample reweighting）：Focal loss
+    软性的难例加权，focal loss的思路是聚焦难例，并且自适应的削弱易例对最终的loss的贡献。
+    
  </pre>
 
 
