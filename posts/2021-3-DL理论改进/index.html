@@ -188,6 +188,7 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
     Focal loss可以看作soft OHEM。至于OHEM本身不能单独很好解决“简单样本支配”问题，私以为是focal loss可以"看全局"，而OHEM直接把easy ecample忽略使得许多pixel没有得到充分训练。
     软方案（sample reweighting）：Focal loss
     软性的难例加权，focal loss的思路是聚焦难例，并且自适应的削弱易例对最终的loss的贡献。
+  
     
  </pre>
 
