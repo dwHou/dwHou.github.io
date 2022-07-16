@@ -411,6 +411,15 @@ Terminal <--[<output]--- |       |                \ \
     sudo apt upgrade package1 package2 ...
   </pre>
 
+  <h2>关于显卡的温度监控</h2>
+  <pre>
+    指定显卡重启：
+    nvidia-smi --gpu-reset -i 0
+    如果没能正常重启，有可能是<a href="https://forums.developer.nvidia.com/t/nvidia-smi-showing-err-in-all-fields-for-one-of-the-gpus-a40/210862">烧坏</a>了。
+    nvidia-smi窗口直接就有显示温度，下面的命令进行温度持续监控。
+    nvidia-smi --query-gpu=temperature.gpu -i 7 --format=csv >> xxx.log
+  </pre>
+
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
 A shortname is the unique identifier assigned to a Disqus site. 
