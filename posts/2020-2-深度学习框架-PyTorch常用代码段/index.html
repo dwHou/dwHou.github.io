@@ -447,6 +447,13 @@ https://github.com/pytorch/pytorch/issues/48915
           https://www.zhihu.com/question/303070254
       </pre>
 
+      <li>GAN训练注意事项</li>
+      <pre>
+        判别器部分尽量不要复制粘贴生成器的代码。因为生成器写错容易在运行时报出，但判别器复制粘贴导致的错误就很隐蔽。
+        比如：
+        optimizerD = torch.optim.Adam(model.parameters(), lr=5e-5), D.parameters()就误写为model.parameters()。
+      </pre>
+
       <li>Python, NumPy, Pytorch中的多进程中 每个进程的随机化种子 误区</li>
       <pre>
         random.random(), numpy.random(), torch.random()
