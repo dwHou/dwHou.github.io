@@ -255,7 +255,7 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
   <h2>优化器与<a href="https://atcold.github.io/pytorch-Deep-Learning/zh/week14/14-3/">正则化</a></h2>
   <ul>
     <pre>
-      过拟合一般的解决方案：
+      正则化技术有很多，比如提前终止、数据增强、参数绑定、参数共享、对抗训练、切面距离、正切传播等，我们简单介绍几种常用的：
       1.Early stop
 
       在模型训练过程中，提前终止。这里可以根据具体指标设置early stop的条件，比如可以是loss的大小，或者acc/f1等值的epoch之间的大小对比。
@@ -266,15 +266,32 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
 
       3.正则化
 
-      常用的有L1、L2正则化
+      常用的有L1&L2-norm、Max-norm(即clip_grad_norm)
 
-      4.Droup Out
+      4.Dropout
 
       以一定的概率使某些神经元停止工作
+      (使用该方法，网络结果、学习率都要相应调整：https://blog.csdn.net/qq_43409114/article/details/105931830)
+
+      4'.R-Drop
+      所谓“Dropout两次”，只需要将样本重复地输入到模型，然后计算相应的loss就行了。从结果上来看，就是希望Dropout对模型结果不会有太大影响，也就是模型输出对Dropout是鲁棒的。
+
+      #训练过程上下文
+      ce = CrossEntropyLoss(reduction='none')
+      kld = nn.KLDivLoss(reduction='none')
+      logits1 = model(input)
+      logits2 = model(input)
+      #下面是训练过程中对比学习的核心实现！！！！
+      kl_weight = 0.5 #对比loss权重
+      ce_loss = (ce(logits1, target) + ce(logits2, target)) / 2
+      kl_1 = kld(F.log_softmax(logits1, dim=-1), F.softmax(logits2, dim=-1)).sum(-1)
+      kl_2 = kld(F.log_softmax(logits2, dim=-1), F.softmax(logits1, dim=-1)).sum(-1)
+      loss = ce_loss + kl_weight * (kl_1 + kl_2) / 2
 
       5.<a href="https://www.zhihu.com/question/275788133">BatchNorm</a>
 
       对神经元作归一化
+
     </pre>
     <pre>
       torch.optim集成了很多优化器，如SGD，Adadelta，Adam，Adagrad，RMSprop等，这些优化器中有一个参数weight_decay，用于指定权值衰减率，相当于L2正则化中的λ参数，
