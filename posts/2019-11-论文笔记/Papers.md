@@ -33,4 +33,18 @@ ECCV 2022 *Tsinghua University*
 1. LUT通过快速内存访问代替耗时的计算，具有实用性。
 2. 但是大多数现有的基于 LUT 的方法只有一层 LUT。 如果使用 n 维 LUT并且用于查询v个可能值，则 LUT 的尺寸有 v^n。 因此，通常将 v 和 n 设置为较小的值以避免无法承受的大 LUT，这严重限制了效果。
 
+
+
+#### RAISR: Rapid and Accurate Image Super Resolution
+
+[RAISR]()
+
+TCI 2016 *Google*
+
+###### 分析现有方法：
+
+1. 传统插值方法，是内容无关的线性方法，表达能力不足。
+
 ###### 该文观点：
+
+1. example-based方法，即使用外部数据集学习
