@@ -260,4 +260,3 @@ Name  |   Description    |  Epochs  |  Train loss  |  Valid loss
 
 ---
 
-

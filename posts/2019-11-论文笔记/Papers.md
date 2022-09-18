@@ -47,7 +47,7 @@ TCI 2016 *Google*
 
 ###### 该文观点：
 
-1. example-based方法，即使用外部数据集学习
+1. example-based方法，即使用外部数据集学习LR patch到HR patch的映射。
 
 
 

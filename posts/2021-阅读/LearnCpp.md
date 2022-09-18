@@ -2108,6 +2108,13 @@ namespace goo // define a namespace named goo
 
 **使用域解析运算符 (::) 访问命名空间**
 
+> :: 是作用域符，是运算符中等级最高的，它分为三种:
+>
+> 1)global scope(全局作用域符），用法（::name)
+> 2)class scope(类作用域符），用法(class::name)
+> 3)namespace scope(命名空间作用域符），用法(namespace::name)
+> 他们都是左关联（left-associativity)，他们的作用都是为了更明确的调用你想要的变量。
+
 **scope resolution operator (::)**
 
 有两种不同的方法可以告诉编译器使用哪个版本的 doSomething()，通过作用域解析操作符，或者通过 using 语句（我们将在本章后面的课程中讨论）。
@@ -2188,7 +2195,7 @@ Hello there
 
 **允许多个命名空间块**
 
-在多个位置（跨多个文件或同一文件中的多个位置）声明（同一个或不同命名空间）命名空间块是合法的。 命名空间内的所有声明都被视为命名空间的一部分。
+在多个位置（跨多个文件或同一文件中的多个位置）声明命名空间块是合法的。 命名空间内的所有声明都被视为命名空间的一部分。
 
 标准库广泛使用了这个特性，因为每个标准库头文件都在该头文件中包含的命名空间 std 块中包含其声明。 否则整个标准库必须在一个头文件中定义！
 
@@ -2266,9 +2273,191 @@ A: 在应用程序中，命名空间可用于将特定于应用程序的代码�
 
 #### 6.3 局部变量
 
+在第 2.5 节，我们介绍了局部变量，它们是定义在函数内部的变量（包括函数参数）。我们将在本节和接下来的课程中探索局部变量的属性。
+
+**局部变量具有块作用域**
+
+局部变量具有块作用域，这意味着它们从定义的地方到定义它们的块的末尾都在范围(*in scope*)内。
+
+> 相关内容：6.1节
+
+```Cpp
+int max(int x, int y) // x and y enter scope here
+{
+    // assign the greater of x or y to max
+    int max{ (x > y) ? x : y }; // max enters scope here
+
+    return max;
+} // max, y, and x leave scope here
+```
+
+**范围内的所有变量名必须是唯一的**
+
+**局部变量具有自动的持续时间**
+
+**嵌套块中的局部变量**
+
+```cpp
+#include <iostream>
+
+int main()
+{ // outer block
+
+    int x { 5 }; // x enters scope and is created here
+
+    { // nested block
+        int y { 7 }; // y enters scope and is created here
+
+        // x and y are both in scope here
+        std::cout << x << " + " << y << " = " << x + y << '\n';
+    } // y goes out of scope and is destroyed here
+
+    // y can not be used here because it is out of scope in this block
+
+    return 0;
+} // x goes out of scope and is destroyed here
+```
+
+**局部变量没有链接**
+
+> Scope and linkage may seem somewhat similar. However, scope defines where a single declaration can be seen and used. Linkage defines whether multiple declarations refer to the same object or not.
+
+后续课程会介绍链接(Linkage)
+
+**变量应在被用到的最小的范围内定义**
+
+有助于释放内存，增加程序可读性
+
+> **Best practice**
+>
+> Define variables in the most limited existing scope. Avoid creating new blocks whose only purpose is to limit the scope of variables.
 
 
 
+**<font color="red">Q</font>:**  变量的作用域*scope*、持续时间*duration*和生命周期*lifetime*有什么区别？ 默认情况下，局部变量有什么样的范围和持续时间（以及这些是什么意思）？
+
+A variable’s scope determines where the variable is accessible. Duration defines the rules that govern when a variable is created and destroyed. A variable’s lifetime is the actual time between its creation and destruction.
 
 
 
+#### 6.4 全局变量
+
+在函数之外声明的变量称为全局变量。
+
+**声明和命名全局变量**
+
+1. 按照惯例，全局变量声明在文件的顶部，仅仅在includes之下。 
+
+2. 按照惯例，许多开发人员给全局变量标识符加上“g”或“g_”前缀来表示它们是全局的。（Best practice）
+
+**全局变量具有文件范围和静态持续时间**
+
+文件范围*file scope*：也称global scope或global namespace scope，意味着全局变量从声明点到声明它们的文件末尾都是可见的。
+
+静态持续时间*static duration*：全局变量在程序启动时创建，在程序结束时销毁。 这称为静态持续时间。 具有静态持续时间的变量有时称为静态变量。
+
+**全局变量初始化**
+
+与默认未初始化的局部变量不同，具有静态持续时间的变量默认为零初始化(zero-initialized)。
+
+```cpp
+int g_x;       // no explicit initializer (zero-initialized by default)
+int g_y {};    // zero-initialized
+int g_z { 1 }; // initialized with value
+```
+
+**常量全局变量**
+
+就像局部变量一样，全局变量也可以是常量。 与所有常量一样，必须初始化常量全局变量。
+
+后面课程会讨论跨文件的常量全局变量。
+
+
+
+#### 6.5 名称隐藏
+
+**(Variable shadowing or name hiding)**
+
+##### 局部变量的名称隐藏
+
+```cpp
+#include <iostream>
+
+int main()
+{ // outer block
+    int apples { 5 }; // here's the outer block apples
+
+    { // nested block
+        // apples refers to outer block apples here
+        std::cout << apples << '\n'; // print value of outer block apples
+
+        int apples{ 0 }; // define apples in the scope of the nested block
+
+        // apples now refers to the nested block apples
+        // the outer block apples is temporarily hidden
+
+        apples = 10; // this assigns value 10 to nested block apples, not outer block apples
+
+        std::cout << apples << '\n'; // print value of nested block apples
+    } // nested block apples destroyed
+
+
+    std::cout << apples << '\n'; // prints value of outer block apples
+
+    return 0;
+} // outer block apples destroyed
+```
+
+输出
+
+```shell
+5
+10
+5
+```
+
+在嵌套块内部时，无法直接访问外部块的隐藏变量。
+
+##### 全局变量的名称隐藏
+
+类似于嵌套块中的变量可以隐藏外部块中的变量，与全局变量同名的局部变量将在局部变量在范围内的任何位置隐藏全局变量。
+
+```cpp
+#include <iostream>
+int value { 5 }; // global variable
+
+void foo()
+{
+    std::cout << "global variable value: " << value << '\n'; // value is not shadowed here, so this refers to the global value
+}
+
+int main()
+{
+    int value { 7 }; // hides the global variable value until the end of this block
+
+    ++value; // increments local value, not global value
+
+    std::cout << "local variable value: " << value << '\n';
+
+    foo();
+
+    return 0;
+} // local value is destroyed
+```
+
+输出
+
+```shell
+local variable value: 8
+global variable value: 5
+```
+
+但前面的课程介绍过，我们可以通过不带前缀的::来指定使用全局变量，而非同名的局部变量。
+
+##### 避免名称隐藏
+
+一般建议避免名称隐藏，有些编译器会报warning。如果所有全局名称都使用“g_”前缀，很容易避免全局变量的名称隐藏。
+
+
+
+#### 6.6 内部链接
