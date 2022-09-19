@@ -1,16 +1,67 @@
-## Transformer
+# Transformer
 
 [TOC]
 
-**by** <font color="brown">**[Jay Alammar](http://jalammar.github.io/)**</font>
+## 自注意力机制与Transformer
 
-#### 前言
+#### 自注意力机制(Self-Attention Mechanism)
 
-Transformer的重要意义。
+- 输入：长度为$l$, 特征维度为$d$的输入序列$X \in R^{l \times d}$
+
+- 目标：对序列中的每一个元素$X_{i} \in R^{d}$以一定权重从其他元素处聚合信息
+
+- 计算方式：
+
+  - 将输入序列通过线性变换转换为三个不同的序列$Q, K, V \in R^{l \times d}$
+
+  - 计算索引序列(query)和键序列(key)之间的注意力系数$ S \in R^{l \times l} $
+
+    ​                 $ S = QK^{T} / \sqrt{d} $
+
+  - 使用softmax对注意力系数进行归一化
+
+    ​				$ P = softmax(S) $
+
+  - 使用归一化的注意力系数对值序列(value)进行加权求和，得到输出$ Y = PV $
+
+- 公式：
+
+​					$ Attention(Q, K, V) = softmax(\frac{QK^{T}}{\sqrt{d}})V$
+
+#### 多头自注意力(Multi-Head Self-Attention)
+
+- softmax计算使归一化注意力系数只在个别部分有高响应
+
+- 为增加多处信息的聚合能力，提出多头自注意力机制
+
+- 计算过程
+
+  - 序列$Q, K, V \in R^{l \times d}$被分为$h$组$\{Q_{i}\}_{i=1}^{h}$, $\{K_{i}\}_{i=1}^{h}$, $\{V_{i}\}_{i=1}^{h}$，每组特征维度为$d_{i} = d / h$
+  - 每组$Q_{i}$, $K_{i}$, $V_{i}$分别计算自注意力
+  - 结果沿特征维度拼接后经过线性变换$W^{0}$，得到输出
+
+- 公式：
+
+   		$ MHAttention(Q, K, V) = Concat(head_{1}, ..., head_{h}) W^{0}$
+
+  ​						$ head_{i} = Attention(Q_{i}, K_{i}, V_{i})$
+
+#### Transformer
+
+- 编码器：交替堆叠多头自注意力层和MLP层（或称为前馈网络，FFN）
+- 解码器：类似编码器，但在每个多头自注意力层后插入一个多头交叉注意力层，其索引序列(query)来自自注意力层的输出，而键序列(key)和值序列(value)来自编码器的输出。
+
+
+
+
+
+大模型应用：
 
 Transformer由Encoder、Decoder构成，其中的基础模块称作encoder block和decoder block。
 
 语言模型里GPT-2、GPT-3用到了decoder block（GPT-2用36），Bert则是用了encoder block(24个)。
+
+[Jay Alammar](http://jalammar.github.io/)
 
 
 

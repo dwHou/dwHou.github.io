@@ -2321,8 +2321,12 @@ int main()
 **局部变量没有链接**
 
 > Scope and linkage may seem somewhat similar. However, scope defines where a single declaration can be seen and used. Linkage defines whether multiple declarations refer to the same object or not.
+>
+> 范围和联系可能看起来有些相似。 但是，范围定义了可以看到和使用单个声明的位置。 链接定义多个声明是否引用同一个对象。
 
 后续课程会介绍链接(Linkage)
+
+
 
 **变量应在被用到的最小的范围内定义**
 
@@ -2348,7 +2352,25 @@ A variable’s scope determines where the variable is accessible. Duration defin
 
 1. 按照惯例，全局变量声明在文件的顶部，仅仅在includes之下。 
 
-2. 按照惯例，许多开发人员给全局变量标识符加上“g”或“g_”前缀来表示它们是全局的。（Best practice）
+2. 按照惯例，许多开发人员给全局变量标识符加上<font color="red">“g”</font>或<font color="red">“g_”</font>前缀来表示它们是全局的。（Best practice）
+3. 或者更好的是，将它们放在命名空间中，以减少命名冲突。
+4. 更更好的方式，不如“封装”变量，提供外部全局“访问函数”来处理变量。 这些功能可以确保正确使用（例如，进行输入验证、范围检查等）并方便底层更新。 
+
+例4:
+
+```cpp
+namespace constants
+{
+    constexpr double gravity { 9.8 }; // has internal linkage, is accessible only by this file
+}
+
+double getGravity() // this function can be exported to other files to access the global outside of this file
+{
+    // We could add logic here if needed later
+    // or change the implementation transparently to the callers
+    return constants::gravity;
+}
+```
 
 **全局变量具有文件范围和静态持续时间**
 
@@ -2460,4 +2482,294 @@ global variable value: 5
 
 
 
+[TOC]
+
+
+
 #### 6.6 内部链接
+
+链接是标识符的属性。
+
+我们前面第6.3节提到了，**“标识符的链接决定了该名称的其他声明是否引用同一个对象”**，并且我们讨论了局部变量如何没有链接<font color="red">no linkage</font>。而全局变量和函数标识符可以具有内部链接<font color="red">internal linkage</font>或外部链接<font color="red">external linkage</font>。我们将在2节中分别介绍。
+
+
+
+可以在单个文件中看到和使用具有内部链接的标识符，但不能从其他文件访问它（即，它不暴露给链接器）。 这意味着如果两个文件具有具有内部链接的同名标识符，则这些标识符将被视为独立的。
+
+##### 内部链接的全局变量
+
+内部链接的全局变量有时也称为内部变量。
+
+为了使非常量全局变量成为内部变量，我们使用 static 关键字。
+
+```cpp
+static int g_x; // non-constant globals have external linkage by default, but can be given internal linkage via the static keyword
+
+const int g_y { 1 }; // const globals have internal linkage by default
+constexpr int g_z { 2 }; // constexpr globals have internal linkage by default
+
+int main()
+{
+    return 0;
+}
+```
+
+一个文件不会知道另一个文件的内部变量的存在。
+
+**For advanced readers**
+
+The use of the `static` keyword above is an example of a **storage class specifier**, which sets both the name’s linkage and its storage duration (but not its scope). The most commonly used `storage class specifiers` are `static`, `extern`, and `mutable`. The term `storage class specifier` is mostly used in technical documentations.
+
+`static`, `extern`, 和 `mutable` 都是和存储有关的关键字。
+
+**单一定义规则和内部对象**
+
+在不同文件中定义的内部对象（和函数）被认为是独立的实体（即使它们的名称和类型相同），因此不违反单一定义规则。 每个内部对象只有一个定义。
+
+##### 内部链接的函数
+
+由于<font color="red">内部链接是标识符的属性</font>，所以对于全局变量还是函数没有差别。
+
+```cpp
+// This function is declared as static, and can now be used only within this file
+// Attempts to access it from another file via a function forward declaration will fail
+static int add(int x, int y)
+{
+    return x + y;
+}
+```
+
+
+
+#### 6.7 外部链接和变量的前向声明
+
+具有外部链接的标识符可以从定义它的文件和其他代码文件（通过前向声明）看到和使用。 从这个意义上说，具有外部链接的标识符是**真正的“全局”**！
+
+##### 外部链接的全局变量
+
+为了使常量全局变量成为外部变量，我们使用 extern 关键字。
+
+a.cpp:
+
+```cpp
+int g_x { 2 }; // non-constant globals are external by default
+
+extern const int g_y { 3 }; // const globals can be defined as extern, making them external
+extern constexpr int g_z { 3 }; // constexpr globals can be defined as extern, making them external (but this is useless, see the note in the next section) 因为编译器需要知道 constexpr 变量的值（在编译时）。 而此时没有进行链接，如果该值是在其他文件中定义的，则编译器无法查看在该其他文件中定义的值。所以外部文件中constexpr的前向声明是not allowed的。
+int main()
+{
+    return 0;
+}
+```
+
+前向声明时，则都要使用extern关键字。
+
+> Note that the `extern` keyword has different meanings in different contexts. In some contexts, `extern` means “give this variable external linkage”. In other contexts, `extern` means “this is a forward declaration for an external variable that is defined somewhere else”. 
+
+main.cpp:
+
+```cpp
+#include <iostream>
+
+extern int g_x; // this extern is a forward declaration of a variable named g_x that is defined somewhere else
+extern const int g_y; // this extern is a forward declaration of a const variable named g_y that is defined somewhere else
+
+int main()
+{
+    std::cout << g_x << '\n'; // prints 2
+
+    return 0;
+}
+```
+
+:warning: 如果你想定义一个未初始化的非常量全局变量，不要使用 extern 关键字，否则 C++ 会认为你正在尝试对变量进行前向声明。
+
+##### 外部链接的函数
+
+`by default`
+
+前向声明时，不需要使用extern关键字。因为编译器能够根据您是否提供函数体来判断您是定义新函数还是进行前向声明。 而变量的前向声明确实需要 extern 关键字来帮助区分变量定义和变量前向声明（它们在其他方面看起来相同）。
+
+```cpp
+// non-constant
+int g_x; // variable definition (can have initializer if desired)
+extern int g_x; // forward declaration (no initializer)
+
+// constant
+extern const int g_y { 1 }; // variable definition (const requires initializers)
+extern const int g_y; // forward declaration (no initializer)
+```
+
+##### 文件范围与全局范围
+
+术语“文件范围”和“全局范围”容易引起混淆，这部分是由于它们被非正式地使用的方式。 从技术上讲，在 C++ 中，所有全局变量都有“文件范围”，而链接属性控制它们是否可以在其他文件中使用。
+
+非正式地，术语“文件范围”更常用于具有内部链接的全局变量，而“全局范围”则用于具有外部链接的全局变量（因为它们可以在整个程序中使用，并带有适当的前向声明）。
+
+
+
+#### 6.7+ 复习
+
+**范围，期间和链接**
+
+Scope determines where a variable is accessible. Duration determines when a variable is created and destroyed. Linkage determines whether the variable can be exported to another file or not.
+
+回顾几个概念
+
+**1.声明**
+
+　　 一个声明将一个名称引入一个作用域;
+
+　　 在c++中，在一个作用域中重复一个声明是合法的 
+
+　　 以下都是声明： 
+
+```cpp
+int foo(int,int); *//函数前置声明* 
+typedef int Int; *//typedef 声明* 
+class bar; *//类前置声明* 
+extern int g_var; *//外部引用声明* 
+class bar; *//类前置声明* 
+typedef int Int; *//typedef 声明* 
+extern int g_var; *//外部引用声明* 
+friend test; *//友员声明* 
+using std::cout; *//名字空间引用声明*
+friend test; *//友员声明* 
+using std::cout; //名字空间引用声明*
+int foo(int,int); *//函数前置声明*
+```
+
+在同一个作用域中你可以多次重复这些声明。 
+
+有两种声明不能重复，那就是类成员函数及静态数据成员的声明
+
+```cpp
+class foo 
+　　 { 
+　　 	static int i; 
+　　 	static int i;//不可以 
+　　 public: 
+　　 	int foo(); 
+　　 	int foo();//不可以 
+　　 };
+```
+
+**2.定义**
+
+　　 一个定义提供一个实体(类型、实例、函数)在一个作用域的唯一描述。
+
+　　 在同一作用域中不可重复定义一个实体。
+
+　　 以下都是定义。
+
+```cpp
+		int y;
+　　 class foo {...};
+　　 struct bar {...};
+　　 foo* p;
+　　 static int i;
+　　 enum Color{RED,GREEN,BLUE};
+　　 const double PI = 3.1415;
+　　 union Rep{...};
+　　 void test(int p) {};
+　　 foo a;
+　　 bar b;
+```
+
+**3.编译单元**
+
+当一个c或cpp文件在编译时，预处理器首先递归包含头文件，形成一个含有所有 必要信息的单个源文件,这个源文件就是一个编译单元。这个编译单元会被编译成为一个与cpp文件名同名的目标文件(.o或是.obj)。连接程序把不同编译单元中产生的符号联系起来，构成一个可执行程序。
+
+**4.自由函数**
+
+如果一个函数是自由函数，那么这个函数不是类的成员函数，也不是友元函数。
+
+**5.内部连接和外部连接**
+
+**内部连接**：如果一个名称对于它的编译单元来说是局部的，并且在连接时不会与其它编译单元中的同样的名称相冲突，那么这个名称有内部连接(注：有时也将声明看作是无连接的，这里我们统一看成是内部连接的)。
+
+**以下情况有内部连接:**
+　　 a)所有的声明
+　　 b)名字空间(包括全局名字空间)中的静态自由函数、静态友元函数、静态变量的定义,const常量定义
+　　 c)enum定义
+　　 d)inline函数定义(包括自由函数和非自由函数)
+　　 e)类的定义
+　　 f)union的定义
+
+**外部连接**: 在一个多文件程序中，如果一个名称在连接时可以和其它编译单元交互，那么这个名称就有外部连接。
+**以下情况有外部连接:**
+　　 a)类非inline函数总有外部连接。包括类成员函数和类静态成员函数
+　　 b)类静态成员变量总有外部连接。
+　　 c)名字空间(包括全局名字空间)中非静态自由函数、非静态友元函数及非静态变量
+
+
+
+#### 6.8 为什么（非常量）全局变量是邪恶的
+
+如果您要向一位资深程序员请教关于良好编程实践的一条建议，经过一番思考，最有可能的答案是“避免使用全局变量！”。 并且有充分的理由：全局变量是该语言中历史上被滥用最多的概念之一。 尽管它们在小型学术项目中可能看起来无害，但在大型学术项目中往往会出现问题。
+
+新程序员经常想使用大量的全局变量，因为它们很容易使用，尤其是当涉及到对不同函数的多次调用时（通过函数参数传递数据是一种痛苦）。 但是，这通常是一个坏主意。 许多开发人员认为应该完全避免使用非常量全局变量！
+
+但在我们讨论原因之前，我们应该澄清一下。 当开发人员告诉你全局变量是邪恶的时，他们通常并不是在谈论所有的全局变量。 他们大多在谈论非常量全局变量。
+
+**为什么（非常量）全局变量是邪恶的**
+
+到目前为止，非常量全局变量危险的最大原因是它们的值可以被任何调用的函数更改，并且程序员没有简单的方法知道这会发生。 简而言之，全局变量使程序的状态不可预测，单看一个函数，不step into另一个函数，无法预测结果。局部变量更安全，因为其他函数不能直接影响它们。
+
+```cpp
+#include <iostream>
+int g_mode; // declare global variable (will be zero-initialized by default)
+void doSomething()
+{
+    g_mode = 2; // set the global g_mode variable to 2
+}
+int main()
+{
+    g_mode = 1; // note: this sets the global g_mode variable to 1.  It does not declare a local g_mode variable!
+    doSomething();
+    // Programmer still expects g_mode to be 1
+    // But doSomething changed it to 2!
+    if (g_mode == 1)
+    {
+        std::cout << "No threat detected.\n";
+    }
+    else
+    {
+        std::cout << "Launching nuclear missiles...\n";
+    }
+    return 0;
+}
+```
+
+其他麻烦：不方便debug，大项目另人崩溃（比如您可能会发现 g_mode 在您的程序中被引用了 442 次），使程序模块化程度/灵活性降低。
+
+恰恰违背了最佳实践“变量应在被用到的最小的范围内定义”
+
+最佳实践：尽可能使用局部变量而不是全局变量。
+
+**A joke**
+
+What’s the best naming prefix for a global variable?
+
+Answer: //
+
+:laughing: C++ jokes are the best.
+
+**全局变量的初始化顺序问题**
+
+**何处用（非常量）全局变量是好的**
+
+没有很多。 但有些个例，它们的使用可能比替代方案更好。
+
+一个很好的例子是日志文件，您可以在其中转储错误或调试信息。 将其定义为全局可能是有意义的，因为您可能在程序中只有一个日志，并且它可能会在您的程序中的任何地方使用。
+
+值得一提的是，std::cout 和 std::cin 对象被实现为全局变量（在 std 命名空间内）。
+
+> 根据经验，对全局变量的任何使用都应至少满足以下两个标准： 变量在您的程序中代表的东西应该只有一个，并且它的使用应该在整个程序中无处不在。
+>
+> 许多新程序员错误地认为某些东西可以作为全局实现，因为现在只需要一个。 例如，您可能认为因为您正在实施单人游戏，所以您只需要一个玩家。 但是当您想要添加多人模式（对战或热座）时会发生什么？
+
+
+
+#### 6.9 跨多个文件共享全局常量（使用内联变量）
+
