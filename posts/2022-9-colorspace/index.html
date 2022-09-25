@@ -3,51 +3,9 @@
 <head>
 <meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
 
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.5.0/tocbot.min.js"></script> -->
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.5.0/tocbot.css"> -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.5.0/tocbot.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.5.0/tocbot.css">
-
-<script>
-    var headerEl = 'h1,h2,h3,h4',  //headers
-    content = '.article-content',//文章容器
-    idArr = {};  //标题数组以确定是否增加索引id
-//add #id
-
-$(content).children(headerEl).each(function () {
-    //去除空格以及多余标点
-    var headerId = $(this).text().replace(/[\s|\~|`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\_|\+|\=|\||\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?|\：|\，|\。]/g, '');
-
-    headerId = headerId.toLowerCase();
-    if (idArr[headerId]) {
-        //id已经存在
-        $(this).attr('id', headerId + '-' + idArr[headerId]);
-        idArr[headerId]++;
-    }
-    else {
-        //id未存在
-        idArr[headerId] = 1;
-        $(this).attr('id', headerId);
-    }
-});
-</script>
-<script>
-tocbot.init({
-    {#添加到哪里#}
-    tocSelector: '.tocContainer',
-    {#针对那个id标签#}
-    contentSelector: '.article-content',
-    {#滚动跟随#}
-    positionFixedClass: 'is-position-fixed',
-    positionFixedSelector: '.aside-article-catalog',
-    {#// 需要解析的标题#}
-    headingSelector: headerEl,
-});
-</script>
-
-
-
+<script type="text/javascript" src="2html/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="2html/2html.js"></script>
+<link rel="stylesheet" type="text/css" href="2html/style.css">
 
 <link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
 .mac-os-11 { --title-bar-height: 28px; }
@@ -716,7 +674,8 @@ header, .context-menu, .megamenu-content, footer{
  @media print { @page {margin: 0 0 0 0;} body.typora-export {padding-left: 0; padding-right: 0;} #write {padding:0;}}
 </style><title>色彩空间与像素格式</title>
 </head>
-<body class='typora-export'><div class='typora-export-content'>
+<body class='typora-export'><div class='typora-export-content'>  
+
 <div id='write'  class=''><h2 id='色彩空间与像素格式'><span>色彩空间与像素格式</span></h2><div class='md-toc' mdtype='toc'><p class="md-toc-content" role="list"><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n0"><a class="md-toc-inner" href="#色彩空间与像素格式">色彩空间与像素格式</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n3"><a class="md-toc-inner" href="#1色彩空间基础">1.色彩空间基础</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n19"><a class="md-toc-inner" href="#11-光的常用度量">1.1 光的常用度量</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n45"><a class="md-toc-inner" href="#12-色度学基础">1.2 色度学基础</a></span><span role="listitem" class="md-toc-item md-toc-h4" data-ref="n46"><a class="md-toc-inner" href="#121-彩色三要素">1.2.1 彩色三要素</a></span><span role="listitem" class="md-toc-item md-toc-h4" data-ref="n48"><a class="md-toc-inner" href="#122-三基色原理">1.2.2 三基色原理</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n61"><a class="md-toc-inner" href="#2-rgb-色彩空间">2. RGB 色彩空间</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n110"><a class="md-toc-inner" href="#21-存储模式-rgb565">2.1 存储模式 RGB565</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n114"><a class="md-toc-inner" href="#22-存储模式-rgb888">2.2 存储模式 RGB888</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n116"><a class="md-toc-inner" href="#23-存储模式-argb8888">2.3 存储模式 ARGB8888</a></span><span role="listitem" class="md-toc-item md-toc-h2" data-ref="n121"><a class="md-toc-inner" href="#3-yuv-色彩空间">3. YUV 色彩空间</a></span><span role="listitem" class="md-toc-item md-toc-h3" data-ref="n127"><a class="md-toc-inner" href="#31-yuv-采样方式与存储模式">3.1 YUV 采样方式与存储模式</a></span></p></div><p><span>转载自 </span><a href='https://www.cnblogs.com/leisure_chn/p/10290575.html'><span>叶余的博文</span></a></p><h3 id='1色彩空间基础'><span>1.色彩空间基础</span></h3><p><span>颜色是不同波长的光对人眼刺激产生的色彩感觉。色彩空间(Color Space)是颜色的数学表示，根据不同的表示方法分为不同的色彩模型。最常用的色彩模型有三类：RGB(用于计算机图形学), YUV(用于视频系统), CMYK(用于彩色印刷)。后文对色彩空间与色彩模型的叫法不作区分。本文仅讨论视频图像处理领域常用的 RGB 色彩空间和 YUV 色彩空间。</span></p><p><span>颜色与光源特性和人眼视觉特性有密切的关系，与之相关的学科有光度学和色度学。光度学是研究光学计量的学科，定义了光通量、发光强度、照度、亮度等主要光度学参量以及几个光度学重要定律。光度学考虑的是可见光范围，并且考虑人眼主观影响。色度学是研究色彩计量的科学，它定性和定量地研究人眼的颜色视觉规律、颜色测量理论与技术。色度学是研究视频技术的重要理论基础，将色度学中最基础的两个概念摘录如下。本节内容，是理解图像色彩相关知识的基础，已经简洁的不能再简洁。</span></p><h3 id='11-光的常用度量'><span>1.1 光的常用度量</span></h3><p><span>描述光的常用物理量有四个：光通量、光强、照度、亮度。如下两张示意图引用自“</span><a href='https://zhuanlan.zhihu.com/p/53136784'><span>如何正确理解照度和亮度的关系?</span></a><span>”，图中涉及三个角色：光源、物体(被观察者)与人眼(观察者)。</span></p><p><img src="https://pic2.zhimg.com/80/v2-26d3788c58a770c4e28dd4bcffdc3dfd_hd.jpg" alt="图 从光源到眼睛" style="zoom:70%;" /></p><p><img src="https://pic4.zhimg.com/v2-445239721c6038906a3c30df40282f11_1200x500.jpg" alt="图 光度量示意图" style="zoom:77%;" /></p><h3 id='12-色度学基础'><span>1.2 色度学基础</span></h3><h4 id='121-彩色三要素'><span>1.2.1 彩色三要素</span></h4><p><span>光的颜色取决于客观和主观两方面的因素。客观因素是光的功率波谱分布，它影响光源的颜色。主观因素是人眼视频特性，它影响人眼对色彩的感觉。 彩色三要素指亮度(Lightness)、色调(Hue)和饱和度(Saturation)，任一色彩都可以用这三个基本参量来表示：</span>
 <strong><span>亮度</span></strong><span>表示颜色明暗的程度，是光作用于人眼时引起的明亮程度的感觉。</span>
 <strong><span>色调</span></strong><span>是指颜色的类别，例如红色、蓝色、绿色指的就是色调。</span>
