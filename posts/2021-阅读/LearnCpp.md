@@ -1916,8 +1916,6 @@ namespace goo // define a namespace named goo
 
 这时默认的global namespace就没有doSomething了。只有用户定义的命名空间有。
 
-
-
 **使用域解析运算符 (::) 访问命名空间**
 
 > :: 是作用域符，是运算符中等级最高的，它分为三种:
