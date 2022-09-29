@@ -3,7 +3,7 @@
 <head>
 <meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
 
-<link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+<link href='https://fonts.loli.net/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
 .mac-os-11 { --title-bar-height: 28px; }
 html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
 body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.42857143; overflow-x: hidden; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; tab-size: 4; background-position: inherit; background-repeat: inherit; }
@@ -22,6 +22,8 @@ body.typora-export { padding-left: 30px; padding-right: 30px; }
 @media screen and (max-width: 500px) {
   body.typora-export { padding-left: 0px; padding-right: 0px; }
   #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
 }
 #write li > figure:last-child { margin-bottom: 0.5rem; }
 #write ol, #write ul { position: relative; }
@@ -49,7 +51,7 @@ sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inh
 #write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
 figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
 figure > table { margin: 0px; }
-thead, tr { break-inside: avoid; break-after: auto; }
+tr { break-inside: avoid; break-after: auto; }
 thead { display: table-header-group; }
 table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
 table.md-table td { min-width: 32px; }
@@ -71,7 +73,6 @@ div.hr:focus { cursor: none; }
 #write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
 .md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
 .CodeMirror-line, twitterwidget { break-inside: avoid; }
-svg { break-inside: avoid; }
 .footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
 .footnotes + .footnotes { margin-top: 0px; }
 .md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; background-position: 0px 0px; }
@@ -86,7 +87,7 @@ blockquote > :first-child, li > :first-child { margin-top: 0px; }
 #write .footnote-line { white-space: pre-wrap; }
 @media print {
   body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
-  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; padding-bottom: 0px !important; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
   .typora-export * { print-color-adjust: exact; }
   .typora-export #write { break-after: avoid; }
   .typora-export #write::after { height: 0px; }
@@ -129,7 +130,6 @@ p > .md-image:only-child { display: inline-block; width: 100%; }
 }
 a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
 .footnote-line a:not(.reversefootnote) { color: inherit; }
-.reversefootnote { font-family: ui-monospace, sans-serif; }
 .md-attr { display: none; }
 .md-fn-count::after { content: "."; }
 code, pre, samp, tt { font-family: var(--monospace); }
@@ -201,54 +201,166 @@ mark .md-meta { color: rgb(0, 0, 0); }
 .md-inline-math-container mjx-container { zoom: 0.95; }
 
 
+/* meyer reset -- http://meyerweb.com/eric/tools/css/reset/ , v2.0 | 20110126 | License: none (public domain) */
+
+@include-when-export url(https://fonts.loli.net/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext);
+
+/* =========== */
+
+/* pt-serif-regular - latin */
+/* pt-serif-italic - latin */
+/* pt-serif-700 - latin */
+/* pt-serif-700italic - latin */
 :root {
-    --side-bar-bg-color: #fafafa;
-    --control-text-color: #777;
+	--active-file-bg-color: #dadada;
+	--active-file-bg-color: rgba(32, 43, 51, 0.63);
+	--active-file-text-color: white;
+	--bg-color: #f3f2ee;
+	--text-color: #1f0909;
+	--control-text-color: #444;
+	--rawblock-edit-panel-bd: #e5e5e5;
+
+	--select-text-bg-color: rgba(32, 43, 51, 0.63);
+  --select-text-font-color: white;
 }
 
-@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
-
-/* open-sans-regular - latin-ext_latin */
-  /* open-sans-italic - latin-ext_latin */
-    /* open-sans-700 - latin-ext_latin */
-    /* open-sans-700italic - latin-ext_latin */
-  html {
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
+pre {
+	--select-text-bg-color: #36284e;
+	--select-text-font-color: #fff;
 }
 
-body {
-    font-family: "Open Sans","Clear Sans", "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
-    color: rgb(51, 51, 51);
-    line-height: 1.6;
+html {
+	font-size: 16px;
+	-webkit-font-smoothing: antialiased;
 }
+
+html, body {
+	background-color: #f3f2ee;
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+	color: #1f0909;
+	line-height: 1.5em;
+}
+
+/*#write {
+	overflow-x: auto;
+    max-width: initial;
+	padding-left: calc(50% - 17em);
+    padding-right: calc(50% - 17em);
+}
+
+@media (max-width: 36em) {
+ 	#write {
+ 		padding-left: 1em;
+    	padding-right: 1em;
+ 	}
+}*/
 
 #write {
-    max-width: 860px;
-  	margin: 0 auto;
-  	padding: 30px;
-    padding-bottom: 100px;
+	max-width: 40em;
 }
 
 @media only screen and (min-width: 1400px) {
 	#write {
-		max-width: 1024px;
+			max-width: 914px;
 	}
 }
 
-@media only screen and (min-width: 1800px) {
-	#write {
-		max-width: 1200px;
-	}
+ol li {
+	list-style-type: decimal;
+	list-style-position: outside;
+}
+ul li {
+	list-style-type: disc;
+	list-style-position: outside;
 }
 
-#write > ul:first-child,
-#write > ol:first-child{
-    margin-top: 30px;
+ol,
+ul {
+	list-style: none;
 }
+
+blockquote,
+q {
+	quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* styles */
+
+/* ====== */
+
+/* headings */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: bold;
+}
+h1 {
+	font-size: 1.875em;
+	/*30 / 16*/
+	line-height: 1.6em;
+	/* 48 / 30*/
+	margin-top: 2em;
+}
+h2,
+h3 {
+	font-size: 1.3125em;
+	/*21 / 16*/
+	line-height: 1.15;
+	/*24 / 21*/
+	margin-top: 2.285714em;
+	/*48 / 21*/
+	margin-bottom: 1.15em;
+	/*24 / 21*/
+}
+h3 {
+	font-weight: normal;
+}
+h4 {
+	font-size: 1.125em;
+	/*18 / 16*/
+	margin-top: 2.67em;
+	/*48 / 18*/
+}
+h5,
+h6 {
+	font-size: 1em;
+	/*16*/
+}
+h1 {
+	border-bottom: 1px solid;
+	margin-bottom: 1.875em;
+	padding-bottom: 0.8125em;
+}
+/* links */
 
 a {
-    color: #4183C4;
+	text-decoration: none;
+	color: #065588;
+}
+a:hover,
+a:active {
+	text-decoration: underline;
+}
+/* block spacing */
+
+p,
+blockquote,
+.md-fences {
+	margin-bottom: 1.5em;
 }
 h1,
 h2,
@@ -256,340 +368,438 @@ h3,
 h4,
 h5,
 h6 {
-    position: relative;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    font-weight: bold;
-    line-height: 1.4;
-    cursor: text;
+	margin-bottom: 1.5em;
 }
-h1:hover a.anchor,
-h2:hover a.anchor,
-h3:hover a.anchor,
-h4:hover a.anchor,
-h5:hover a.anchor,
-h6:hover a.anchor {
-    text-decoration: none;
-}
-h1 tt,
-h1 code {
-    font-size: inherit;
-}
-h2 tt,
-h2 code {
-    font-size: inherit;
-}
-h3 tt,
-h3 code {
-    font-size: inherit;
-}
-h4 tt,
-h4 code {
-    font-size: inherit;
-}
-h5 tt,
-h5 code {
-    font-size: inherit;
-}
-h6 tt,
-h6 code {
-    font-size: inherit;
-}
-h1 {
-    font-size: 2.25em;
-    line-height: 1.2;
-    border-bottom: 1px solid #eee;
-}
-h2 {
-    font-size: 1.75em;
-    line-height: 1.225;
-    border-bottom: 1px solid #eee;
-}
+/* blockquote */
 
-/*@media print {
-    .typora-export h1,
-    .typora-export h2 {
-        border-bottom: none;
-        padding-bottom: initial;
-    }
+blockquote {
+	font-style: italic;
+	border-left: 5px solid;
+	margin-left: 2em;
+	padding-left: 1em;
+}
+/* lists */
 
-    .typora-export h1::after,
-    .typora-export h2::after {
-        content: "";
-        display: block;
-        height: 100px;
-        margin-top: -96px;
-        border-top: 1px solid #eee;
-    }
-}*/
-
-h3 {
-    font-size: 1.5em;
-    line-height: 1.43;
-}
-h4 {
-    font-size: 1.25em;
-}
-h5 {
-    font-size: 1em;
-}
-h6 {
-   font-size: 1em;
-    color: #777;
-}
-p,
-blockquote,
-ul,
-ol,
-dl,
-table{
-    margin: 0.8em 0;
-}
-li>ol,
-li>ul {
-    margin: 0 0;
-}
-hr {
-    height: 2px;
-    padding: 0;
-    margin: 16px 0;
-    background-color: #e7e7e7;
-    border: 0 none;
-    overflow: hidden;
-    box-sizing: content-box;
-}
-
-li p.first {
-    display: inline-block;
-}
 ul,
 ol {
-    padding-left: 30px;
+	margin: 0 0 1.5em 1.5em;
 }
-ul:first-child,
-ol:first-child {
-    margin-top: 0;
+/* tables */
+.md-meta,.md-before, .md-after {
+	color:#999;
 }
-ul:last-child,
-ol:last-child {
-    margin-bottom: 0;
-}
-blockquote {
-    border-left: 4px solid #dfe2e5;
-    padding: 0 15px;
-    color: #777777;
-}
-blockquote blockquote {
-    padding-right: 0;
-}
+
 table {
-    padding: 0;
-    word-break: initial;
+	margin-bottom: 1.5em;
+	/*24 / 16*/
+	font-size: 1em;
+	/* width: 100%; */
 }
-table tr {
-    border: 1px solid #dfe2e5;
-    margin: 0;
-    padding: 0;
+thead th,
+tfoot th {
+	padding: .25em .25em .25em .4em;
+	text-transform: uppercase;
 }
-table tr:nth-child(2n),
-thead {
-    background-color: #f8f8f8;
+th {
+	text-align: left;
 }
-table th {
-    font-weight: bold;
-    border: 1px solid #dfe2e5;
-    border-bottom: 0;
-    margin: 0;
-    padding: 6px 13px;
-}
-table td {
-    border: 1px solid #dfe2e5;
-    margin: 0;
-    padding: 6px 13px;
-}
-table th:first-child,
-table td:first-child {
-    margin-top: 0;
-}
-table th:last-child,
-table td:last-child {
-    margin-bottom: 0;
+td {
+	vertical-align: top;
+	padding: .25em .25em .25em .4em;
 }
 
-.CodeMirror-lines {
-    padding-left: 4px;
-}
-
-.code-tooltip {
-    box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
-    border-top: 1px solid #eef2f2;
-}
-
-.md-fences,
 code,
-tt {
-    border: 1px solid #e7eaed;
-    background-color: #f8f8f8;
-    border-radius: 3px;
-    padding: 0;
-    padding: 2px 4px 0px 4px;
-    font-size: 0.9em;
+.md-fences {
+	background-color: #dadada;
 }
 
 code {
-    background-color: #f3f4f4;
-    padding: 0 2px 0 2px;
+	padding-left: 2px;
+	padding-right: 2px;
 }
 
 .md-fences {
-    margin-bottom: 15px;
-    margin-top: 15px;
-    padding-top: 8px;
-    padding-bottom: 6px;
+	margin-left: 2em;
+	margin-bottom: 3em;
+	padding-left: 1ch;
+	padding-right: 1ch;
 }
 
+pre,
+code,
+tt {
+	font-size: .875em;
+	line-height: 1.714285em;
+}
+/* some fixes */
 
-.md-task-list-item > input {
-  margin-left: -1.3em;
+h1 {
+	line-height: 1.3em;
+	font-weight: normal;
+	margin-bottom: 0.5em;
 }
 
-@media print {
-    html {
-        font-size: 13px;
-    }
-    pre {
-        page-break-inside: avoid;
-        word-wrap: break-word;
-    }
+p + ul,
+p + ol{
+	margin-top: .5em;
 }
 
-.md-fences {
-	background-color: #f8f8f8;
+h3 + ul,
+h4 + ul,
+h5 + ul,
+h6 + ul,
+h3 + ol,
+h4 + ol,
+h5 + ol,
+h6 + ol {
+	margin-top: .5em;
 }
+
+li > ul,
+li > ol {
+	margin-top: inherit;
+	margin-bottom: 0;
+}
+
+li ol>li {
+	list-style-type: lower-alpha;
+}
+
+li li ol>li{
+	list-style-type: lower-roman;
+}
+
+h2,
+h3 {
+	margin-bottom: .75em;
+}
+hr {
+	border-top: none;
+	border-right: none;
+	border-bottom: 1px solid;
+	border-left: none;
+}
+h1 {
+	border-color: #c5c5c5;
+}
+blockquote {
+	border-color: #bababa;
+	color: #656565;
+}
+
+blockquote ul,
+blockquote ol {
+	margin-left:0;
+}
+
+.ty-table-edit {
+	background-color: transparent;
+}
+thead {
+	background-color: #dadada;
+}
+tr:nth-child(even) {
+	background: #e8e7e7;
+}
+hr {
+	border-color: #c5c5c5;
+}
+.task-list{
+	padding-left: 1rem;
+}
+
+.md-task-list-item {
+	padding-left: 1.5rem;
+	list-style-type: none;
+}
+
+.md-task-list-item > input:before {
+	content: '\221A';
+	display: inline-block;
+	width: 1.25rem;
+  	height: 1.6rem;
+	vertical-align: middle;
+	text-align: center;
+	color: #ddd;
+	background-color: #F3F2EE;
+}
+
+.md-task-list-item > input:checked:before,
+.md-task-list-item > input[checked]:before{
+	color: inherit;
+}
+
 #write pre.md-meta-block {
-	padding: 1rem;
-    font-size: 85%;
-    line-height: 1.45;
-    background-color: #f7f7f7;
-    border: 0;
-    border-radius: 3px;
-    color: #777777;
-    margin-top: 0 !important;
+	min-height: 1.875rem;
+	color: #555;
+	border: 0px;
+	background: transparent;
+	margin-top: -4px;
+	margin-left: 1em;
+	margin-top: 1em;
 }
 
-.mathjax-block>.code-tooltip {
-	bottom: .375rem;
+.md-image>.md-meta {
+	color: #9B5146;
 }
 
-.md-mathjax-midline {
-    background: #fafafa;
+.md-image>.md-meta{
+	font-family: Menlo, 'Ubuntu Mono', Consolas, 'Courier New', 'Microsoft Yahei', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', serif;
 }
+
 
 #write>h3.md-focus:before{
-	left: -1.5625rem;
-	top: .375rem;
+	left: -1.5rem;
+	color:#999;
+	border-color:#999;
 }
 #write>h4.md-focus:before{
-	left: -1.5625rem;
-	top: .285714286rem;
+	left: -1.5rem;
+	top: .25rem;
+	color:#999;
+	border-color:#999;
 }
 #write>h5.md-focus:before{
-	left: -1.5625rem;
-	top: .285714286rem;
+	left: -1.5rem;
+	top: .0.3125rem;
+	color:#999;
+	border-color:#999;
 }
 #write>h6.md-focus:before{
-	left: -1.5625rem;
-	top: .285714286rem;
+	left: -1.5rem;
+	top: 0.3125rem;
+	color:#999;
+	border-color:#999;
 }
-.md-image>.md-meta {
-    /*border: 1px solid #ddd;*/
-    border-radius: 3px;
-    padding: 2px 0px 0px 4px;
-    font-size: 0.9em;
+
+.md-toc:focus .md-toc-content{
+	margin-top: 19px;
+}
+
+.md-toc-content:empty:before{
+	color: #065588;
+}
+.md-toc-item {
+	color: #065588;
+}
+#write div.md-toc-tooltip {
+	background-color: #f3f2ee;
+}
+
+#typora-sidebar {
+	background-color: #f3f2ee;
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+  	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+}
+
+.pin-outline #typora-sidebar {
+	background: inherit;
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+.pin-outline #typora-sidebar:hover .outline-title-wrapper {
+	border-left:1px dashed;
+}
+
+.outline-item:hover {
+  background-color: #dadada;
+  border-left: 28px solid #dadada;
+  border-right: 18px solid #dadada;
+}
+
+.typora-node .outline-item:hover {
+  	border-right: 28px solid #dadada;
+}
+
+.outline-expander:before {
+  content: "\f0da";
+  font-family: FontAwesome;
+  font-size:14px;
+  top: 1px;
+}
+
+.outline-expander:hover:before,
+.outline-item-open>.outline-item>.outline-expander:before {
+  content: "\f0d7";
+}
+
+.modal-content {
+	background-color: #f3f2ee;
+}
+
+.auto-suggest-container ul li {
+	list-style-type: none;
+}
+
+/** UI for electron */
+
+.megamenu-menu,
+#top-titlebar, #top-titlebar *,
+.megamenu-content {
+	background: #f3f2ee;
+	color: #1f0909;
+}
+
+.megamenu-menu-header {
+	border-bottom: 1px dashed #202B33;
+}
+
+.megamenu-menu {
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+header, .context-menu, .megamenu-content, footer {
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+    color: #1f0909;
+}
+
+#megamenu-back-btn {
+	color: #1f0909;
+	border-color: #1f0909;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title:before {
+	color: #1f0909;
+}
+
+.megamenu-menu-list li a:hover, .megamenu-menu-list li a.active {
+	color: inherit;
+	background-color: #e8e7df;
+}
+
+.long-btn:hover {
+	background-color: #e8e7df;
+}
+
+#recent-file-panel tbody tr:nth-child(2n-1) {
+    background-color: transparent !important;
+}
+
+.megamenu-menu-panel tbody tr:hover td:nth-child(2) {
     color: inherit;
 }
 
-.md-tag {
-    color: #a7a7a7;
-    opacity: 1;
+.megamenu-menu-panel .btn {
+	background-color: #D2D1D1;
 }
 
-.md-toc { 
-    margin-top:20px;
-    padding-bottom:20px;
+.btn-default {
+	background-color: transparent;
 }
 
-.sidebar-tabs {
-    border-bottom: none;
+.typora-sourceview-on #toggle-sourceview-btn,
+.ty-show-word-count #footer-word-count {
+	background: #c7c5c5;
 }
 
 #typora-quick-open {
-    border: 1px solid #ddd;
-    background-color: #f8f8f8;
+    background-color: inherit;
 }
 
-#typora-quick-open-item {
-    background-color: #FAFAFA;
-    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
-    border-style: solid;
-    border-width: 1px;
+.md-diagram-panel {
+	margin-top: 8px;
 }
 
-/** focus mode */
-.on-focus-mode blockquote {
-    border-left-color: rgba(85, 85, 85, 0.12);
+.file-list-item-file-name {
+	font-weight: initial;
 }
 
-header, .context-menu, .megamenu-content, footer{
-    font-family: "Segoe UI", "Arial", sans-serif;
+.file-list-item-summary {
+	opacity: 1;
 }
 
-.file-node-content:hover .file-node-icon,
-.file-node-content:hover .file-node-open-state{
-    visibility: visible;
+.file-list-item {
+	color: #777;
 }
 
-.mac-seamless-mode #typora-sidebar {
-    background-color: #fafafa;
-    background-color: var(--side-bar-bg-color);
+.file-list-item.active {
+	background-color: inherit;
+	color: black;
 }
 
-.md-lang {
-    color: #b4654d;
+.ty-side-sort-btn.active {
+	background-color: inherit;
 }
 
-/*.html-for-mac {
-    --item-hover-bg-color: #E6F0FE;
-}*/
+.file-list-item.active .file-list-item-file-name  {
+	font-weight: bold;
+}
 
-#md-notification .btn {
-    border: 0;
+.file-list-item{
+    opacity:1 !important;
+}
+
+.file-library-node.active>.file-node-background{
+	background-color: rgba(32, 43, 51, 0.63);
+	background-color: var(--active-file-bg-color);
+}
+
+.file-tree-node.active>.file-node-content{
+	color: white;
+	color: var(--active-file-text-color);
+}
+
+.md-task-list-item>input {
+	margin-left: -1.7em;
+	margin-top: calc(1rem - 12px);
+	-webkit-appearance: button;
+}
+
+input {
+	border: 1px solid #aaa;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title,
+.megamenu-menu-header:hover, 
+.megamenu-menu-header:focus {
+	color: inherit;
 }
 
 .dropdown-menu .divider {
-    border-color: #e5e5e5;
-    opacity: 0.4;
+	border-color: #e5e5e5;
+	opacity: 1;
 }
 
-.ty-preferences .window-content {
-    background-color: #fafafa;
+/* https://github.com/typora/typora-issues/issues/2046 */
+.os-windows-7 strong,
+.os-windows-7 strong  {
+	font-weight: 760;
 }
 
-.ty-preferences .nav-group-item.active {
-    color: white;
-    background: #999;
+.ty-preferences .btn-default {
+	background: transparent;
 }
 
-.menu-item-container a.menu-style-btn {
-    background-color: #f5f8fa;
-    background-image: linear-gradient( 180deg , hsla(0, 0%, 100%, 0.8), hsla(0, 0%, 100%, 0)); 
+.ty-preferences .window-header {
+	border-bottom: 1px dashed #202B33;
+	box-shadow: none;
 }
 
+#sidebar-loading-template, #sidebar-loading-template.file-list-item {
+	color: #777;
+}
+
+.searchpanel-search-option-btn.active {
+	background: #777;
+	color: white;
+}
+
+.export-detail, .light .export-detail, 
+.light .export-item.active, 
+.light .export-items-list-control {
+	background: #e0e0e0;
+	border-radius: 2px;
+	font-weight: 700;
+	color: inherit
+}
 
  @media print { @page {margin: 0 0 0 0;} body.typora-export {padding-left: 0; padding-right: 0;} #write {padding:0;}}
 </style><title>Papers</title>
 </head>
-<body class='typora-export'><div class='typora-export-content'>
-<div id='write'  class=''><p>&nbsp;</p><h4 id='multi-stage-progressive-image-restoration'><span>Multi-Stage Progressive Image Restoration</span></h4><p><a href='https://arxiv.org/pdf/1803.05407.pdf'><span>MPRNet</span></a></p><p><span>CVPR 2021 </span><em><span>Inception Institute of AI, UAE</span></em></p><h6 id='分析现有方法-1'><span>分析现有方法：</span></h6><ol start='' ><li><span>encoder-decoder结构 ：</span><b><span>优：</span></b><span>更宽的上下文信息，</span><b><span>劣：</span></b><span>保持细节不足。</span></li><li><span>single-scale pipeline ：</span><b><span>优：</span></b><span>保持空间上的精确细节，</span><b><span>劣：</span></b><span>语义上不太可靠。</span></li></ol><h6 id='该文观点-1'><span>该文观点：</span></h6><ol start='' ><li><span>在multi-stage结构中，结合encoder-decoder与single-scale pipeline，是必要的。</span></li><li><span>multi-stage不仅仅是上一阶段的输出，也作为下一阶段的输入。</span></li><li><span>每一阶段都用上监督信息是很重要的，渐进式学习。由此，设计supervised attention module (SAM)模块。</span></li><li><span>该文提出了将上一阶段特征(contextualized)传递给下一阶段。由此，设计cross-stage feature fusion (CSFF)方法。</span></li></ol><h6 id='网络结构'><span>网络结构：</span></h6><p><img src="MPRNet.png" style="width:80%; height: 80%;"></p><p>&nbsp;</p><h4 id='series-parallel-lookup-tables'><span>Series-Parallel Lookup Tables</span></h4><p><a href=''><span>SPLUT</span></a></p><p><span>ECCV 2022 </span><em><span>Tsinghua University</span></em></p><h6 id='分析现有方法-2'><span>分析现有方法：</span></h6><ol><li><span>LUT可以</span></li></ol><h6 id='该文观点-2'><span>该文观点：</span></h6></div></div>
-</body>
+<body class='typora-export typora-export-show-outline typora-export-no-collapse-outline'><div class='typora-export-content'>
+<div class="typora-export-sidebar"><div class="outline-content"><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#multi-stage-progressive-image-restoration">Multi-Stage Progressive Image Restoration</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h6"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#分析现有方法-1">分析现有方法：</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h6"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#该文观点-1">该文观点：</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h6"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#网络结构">网络结构：</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#series-parallel-lookup-tables">Series-Parallel Lookup Tables</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h6"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#分析现有方法-2">分析现有方法：</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#raisr-rapid-and-accurate-image-super-resolution">RAISR: Rapid and Accurate Image Super Resolution</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h6"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#分析现有方法-3">分析现有方法：</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h6"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#该文观点-2">该文观点：</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#multiscale-pca-for-image-local-orientation-estimation">Multiscale PCA for Image Local Orientation Estimation</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#edge--sr-super--resolution-for-the-masses">edge–SR: Super–Resolution For The Masses</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h6"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#分析现有方法-4">分析现有方法：</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h6"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#该文贡献">该文贡献：</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h6"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#该文观点-3">该文观点：</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h6"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#提出模型">提出模型：</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h6"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#阅读评价">阅读评价：</a></div><ul class="outline-children"></ul></li></ul></li></div></div><div id='write'  class=''><h4 id='multi-stage-progressive-image-restoration'><span>Multi-Stage Progressive Image Restoration</span></h4><p><a href='https://arxiv.org/pdf/1803.05407.pdf'><span>MPRNet</span></a></p><p><span>CVPR 2021 </span><em><span>Inception Institute of AI, UAE</span></em></p><h6 id='分析现有方法-1'><span>分析现有方法：</span></h6><ol start='' ><li><span>encoder-decoder结构 ：</span><b><span>优：</span></b><span>更宽的上下文信息，</span><b><span>劣：</span></b><span>保持细节不足。</span></li><li><span>single-scale pipeline ：</span><b><span>优：</span></b><span>保持空间上的精确细节，</span><b><span>劣：</span></b><span>语义上不太可靠。</span></li></ol><h6 id='该文观点-1'><span>该文观点：</span></h6><ol start='' ><li><span>在multi-stage结构中，结合encoder-decoder与single-scale pipeline，是必要的。</span></li><li><span>multi-stage不仅仅是上一阶段的输出，也作为下一阶段的输入。</span></li><li><span>每一阶段都用上监督信息是很重要的，渐进式学习。由此，设计supervised attention module (SAM)模块。</span></li><li><span>该文提出了将上一阶段特征(contextualized)传递给下一阶段。由此，设计cross-stage feature fusion (CSFF)方法。</span></li></ol><h6 id='网络结构'><span>网络结构：</span></h6><p><img src="MPRNet.png" style="width:80%; height: 80%;"></p><p>&nbsp;</p><h4 id='series-parallel-lookup-tables'><span>Series-Parallel Lookup Tables</span></h4><p><a href=''><span>SPLUT</span></a></p><p><span>ECCV 2022 </span><em><span>Tsinghua University</span></em></p><h6 id='分析现有方法-2'><span>分析现有方法：</span></h6><ol start='' ><li><span>LUT通过快速内存访问代替耗时的计算，具有实用性。</span></li><li><span>但是大多数现有的基于 LUT 的方法只有一层 LUT。 如果使用 n 维 LUT并且用于查询v个可能值，则 LUT 的尺寸有 v^n。 因此，通常将 v 和 n 设置为较小的值以避免无法承受的大 LUT，这严重限制了效果。</span></li></ol><p>&nbsp;</p><h4 id='raisr-rapid-and-accurate-image-super-resolution'><span>RAISR: Rapid and Accurate Image Super Resolution</span></h4><p><a href=''><span>RAISR</span></a></p><p><span>TCI 2016 </span><em><span>Google</span></em></p><h6 id='分析现有方法-3'><span>分析现有方法：</span></h6><ol start='' ><li><span>传统插值方法，是内容无关的线性方法，表达能力不足。</span></li><li><span>全局滤波效果不如大量参数且非线性的神经网络；所以改全局为图像块内容自适应。</span></li></ol><h6 id='该文观点-2'><span>该文观点：</span></h6><p><img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20220926211611036.png" alt="image-20220926211611036" style="zoom:50%;" /></p><ol start='' ><li><p><span>倾向example-based方法，即使用外部数据集学习LR patch到HR patch的映射。</span></p></li><li><p><span>RAISR 背后的核心思想是通过在图像块上应用一组预先学习的过滤器来提高画质，这些过滤器由高效的散列机制选择。</span></p><ol><li><span>过滤器是基于 LR 和 HR 训练图像块对学习的</span></li><li><span>哈希是通过估计局部梯度的统计信息来完成的。</span></li></ol></li><li><p><span>过程：</span></p><ol><li><p><span>插值上采样或pixelshuffle机制，参考：edge–SR: Super–Resolution For The Masses</span></p></li><li><p><span>局部梯度的函数得到{角度, 强度, 连贯性}3个哈希表的键。最终经过散列计算得到索引值（散列意味着冲突尽可能少）</span></p><p><span>哈希表键是局部梯度的</span><a href='https://www.academia.edu/download/42362012/feng_asilomar.pdf'><span>函数</span></a><span>，哈希表条目是相应的预学习过滤器。比“昂贵”的聚类（例如 K-means、GMM、字典学习）更加高效。</span></p><blockquote><p><span>假如每桶有n个filter，那么可设置index = f(angle, strength, coherence)的散列函数，在f(0,0,0)=0，f(1,1,1)=n。</span></p></blockquote></li><li><p><span>如若上采样+滤波，滤波器组只需一个(但尺寸要求较大)。如若滤波+pixelshuffle，滤波器组需要上采样倍数^2个。</span></p><ol><li><span>上采样+滤波，会更复杂的有Pixel-Type，这是由于插值方法的特性（像素的来源不同）导致的。</span></li><li><span>滤波+pixelshuffle，不需要Pixel-Type，或者说Pixel-Type隐含在了我们有4组滤波器，即4种Type。</span></li></ol></li><li><p><span>所有滤波器权重均由学习得到。</span></p></li></ol></li></ol><p>&nbsp;</p><h4 id='multiscale-pca-for-image-local-orientation-estimation'><span>Multiscale PCA for Image Local Orientation Estimation</span></h4><p>&nbsp;</p><h4 id='edge--sr-super--resolution-for-the-masses'><span>edge–SR: Super–Resolution For The Masses</span></h4><p><a href=''><span>edge-SR</span></a></p><p><span>WACV 2022 </span><em><span>BOE</span></em></p><h6 id='分析现有方法-4'><span>分析现有方法：</span></h6><ol start='' ><li><span>超分辨率的历史</span></li></ol><ul><li><ul><li><span>传统插值算法：linear或者bicubic上采样，在低分辨率图像上插0然后低通滤波得到，对应pytorch、tf中的反卷积(</span><em><span>strided transposed convolutional layer</span></em><span>)</span></li><li><span>先进的上采样算法：利用几何原理提升质量，自适应上采样和滤波为主</span></li><li><span>深度学习：用CNN的SRCNN、用ResNets的EDSR、用DenseNets的RDN、用attention的RCAN、用非局部attention的RNAN、用transformer的SwinIR等</span></li></ul></li></ul><ol start='2' ><li><span>FSRCNN 和 ESPCN 都在未来的 SR 研究中留下了深刻的印记，这些研究经常以低分辨率执行计算并使用pixel-shuffle layers上采样。</span></li></ol><h6 id='该文贡献'><span>该文贡献：</span></h6><p><span>提出单层架构超分，详尽比较速度-效果权衡，对单层架构中的自注意力策略的分析和解释。</span></p><h6 id='该文观点-3'><span>该文观点：</span></h6><p><span>传统插值的上下采样是等效于：filter–then–downsampling和upsampling–then–filter。张量处理框架则使用跨步转置卷积层实现这种上采样。</span></p><p><span>传统插值上采样图示：</span></p><p><img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20220916141622033.png" alt="image-20220916141622033" style="zoom:35%;" /></p><p><span>但图中的定义的升频(upscaling)显然效率低下，因为上采样(upsampling)引入了许多零，当乘以滤波器系数时会浪费资源。 一个众所周知的优化，广泛用于经典升频器的实际实现中，是将插值滤波器从图中的大小 sk×sk 拆分或解复用为 s^2 所谓的大小为 k × k 的高效滤波器。 然后，s^2 个滤波器的输出通过Pixel-Shuffle操作进行多路复用，以获得放大后的图像。</span></p><p><span>上采倍数越高，s越大，意味着实现</span><strong><span>1</span></strong><span>的核大小越大，或实现</span><strong><span>2</span></strong><span>的卷积通道数越大。</span></p><h6 id='提出模型'><span>提出模型：</span></h6><ul><li><p><span>eSR：</span></p><p><span>卷积输出s^2个通道，最后pixel-shuffle得到超分结果。</span></p></li><li><p><span>eSR-MAX：卷积输出C * s^2个通道，pixel-shuffle后，每C个通道取一个最大值。</span></p><p><span>思想源自Maxout networks。</span></p></li><li><p><span>eSR-TM：卷积输出2 * C * s^2个通道，pixel-shuffle后，前C个通道softmax，得到概率对后C个通道加权平均。</span></p><p><span>属于自注意力，思想是Template Matching。</span></p></li><li><p><span>eSR-TR</span></p></li><li><p><span>eSR-CNN</span></p></li></ul><h6 id='阅读评价'><span>阅读评价：</span></h6><p><span>有启发意义，但实际由于硬件支持（比如耗时的softmax），并不如我们ZoomSR速度快。效果也是锯齿比较严重。</span></p><p>&nbsp;</p></div></div>
+
+<script>(function (){var t=document.body.parentElement,e=[],n=null,i=document.body.classList.contains("typora-export-collapse-outline"),r=function(t,e,n){document.addEventListener(t,function(t){if(!t.defaultPrevented)for(var i=t.target;i&&i!=this;i=i.parentNode)if(i.matches(e)){!1===n.call(i,t)&&(t.preventDefault(),t.stopPropagation());break}},!1)};function o(){return t.scrollTop}r("click",".outline-expander",function(t){var e=this.closest(".outline-item-wrapper").classList;return e.contains("outline-item-open")?e.remove("outline-item-open"):e.add("outline-item-open"),c(),!1}),r("click",".outline-item",function(t){var e=this.querySelector(".outline-label");if(location.hash="#"+e.getAttribute("href"),i){var n=this.closest(".outline-item-wrapper").classList;n.contains("outline-item-open")||n.add("outline-item-open"),l(),n.add("outline-item-active")}});var a,s,u=function(){var t=o();n=null;for(var i=0;i<e.length&&e[i][1]-t<60;i++)n=e[i]},l=function(){document.querySelectorAll(".outline-item-active").forEach(t=>t.classList.remove("outline-item-active")),document.querySelectorAll(".outline-item-single.outline-item-open").forEach(t=>t.classList.remove("outline-item-open"))},c=function(){if(n){l();var t=document.querySelector('.outline-label[href="#'+(CSS.escape?CSS.escape(n[0]):n[0])+'"]');if(t)if(i){var e=t.closest(".outline-item-open>ul>.outline-item-wrapper");if(e)e.classList.add("outline-item-active");else{for(var r=(t=t.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper");r;)r=(t=r).parentElement.closest(".outline-item-wrapper");t.classList.add("outline-item-active")}}else t.closest(".outline-item-wrapper").classList.add("outline-item-active")}};window.addEventListener("scroll",function(t){a&&clearTimeout(a),a=setTimeout(function(){u(),c()},300)});var f=function(){s=setTimeout(function(){!function(){e=[];var t=o();document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(n=>{var i=n.getAttribute("id");e.push([i,t+n.getBoundingClientRect().y])})}(),u(),c()},300)};window.addEventListener("resize",function(t){s&&clearTimeout(s),f()}),f()})();</script></body>
 </html>

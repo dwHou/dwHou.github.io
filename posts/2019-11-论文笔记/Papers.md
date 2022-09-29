@@ -44,12 +44,40 @@ TCI 2016 *Google*
 ###### 分析现有方法：
 
 1. 传统插值方法，是内容无关的线性方法，表达能力不足。
+1. 全局滤波效果不如大量参数且非线性的神经网络；所以改全局为图像块内容自适应。
 
 ###### 该文观点：
 
-1. example-based方法，即使用外部数据集学习LR patch到HR patch的映射。
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20220926211611036.png" alt="image-20220926211611036" style="zoom:50%;" />
+
+1. 倾向example-based方法，即使用外部数据集学习LR patch到HR patch的映射。
+
+2. RAISR 背后的核心思想是通过在图像块上应用一组预先学习的过滤器来提高画质，这些过滤器由高效的散列机制选择。
+
+   1. 过滤器是基于 LR 和 HR 训练图像块对学习的
+   2. 哈希是通过估计局部梯度的统计信息来完成的。
+
+3. 过程：
+
+   1. 插值上采样或pixelshuffle机制，参考：edge–SR: Super–Resolution For The Masses
+
+   2. 局部梯度的函数得到{角度, 强度, 连贯性}3个哈希表的键。最终经过散列计算得到索引值（散列意味着冲突尽可能少）
+
+      哈希表键是局部梯度的[函数](https://www.academia.edu/download/42362012/feng_asilomar.pdf)，哈希表条目是相应的预学习过滤器。比“昂贵”的聚类（例如 K-means、GMM、字典学习）更加高效。
+
+      > 假如每桶有n个filter，那么可设置index = f(angle, strength, coherence)的散列函数，在f(0,0,0)=0，f(1,1,1)=n。
+
+   3. 如若上采样+滤波，滤波器组只需一个(但尺寸要求较大)。如若滤波+pixelshuffle，滤波器组需要上采样倍数^2个。
+
+      1. 上采样+滤波，会更复杂的有Pixel-Type，这是由于插值方法的特性（像素的来源不同）导致的。
+      2. 滤波+pixelshuffle，不需要Pixel-Type，或者说Pixel-Type隐含在了我们有4组滤波器，即4种Type。
+
+   4. 所有滤波器权重均由学习得到。
 
 
+
+
+#### Multiscale PCA for Image Local Orientation Estimation
 
 
 
@@ -86,4 +114,24 @@ WACV 2022 *BOE*
 上采倍数越高，s越大，意味着实现**1**的核大小越大，或实现**2**的卷积通道数越大。
 
 ###### 提出模型：
+
+- eSR：
+
+  卷积输出s^2个通道，最后pixel-shuffle得到超分结果。
+
+- eSR-MAX：卷积输出C * s^2个通道，pixel-shuffle后，每C个通道取一个最大值。
+
+  思想源自Maxout networks。
+
+- eSR-TM：卷积输出2 * C * s^2个通道，pixel-shuffle后，前C个通道softmax，得到概率对后C个通道加权平均。
+
+  属于自注意力，思想是Template Matching。
+
+- eSR-TR
+
+- eSR-CNN
+
+###### 阅读评价：
+
+有启发意义，但实际由于硬件支持（比如耗时的softmax），并不如我们ZoomSR速度快。效果也是锯齿比较严重。
 
