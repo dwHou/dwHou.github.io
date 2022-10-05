@@ -2550,3 +2550,431 @@ Answer: //
 
 #### 6.9 跨多个文件共享全局常量（使用内联变量）
 
+##### 方式一：头文件定义constexpr
+
+有一些全局常量是各个文件中保持一致的，比如不变的π，可调整的重力系数。实现这一目的最常用的方法：
+
+① 创建一个头文件包含这些常量
+
+② 在该头文件里定义一个命名空间
+
+③ 在命名空间中添加所有常量（得是constexpr）
+
+④ 在用到常量的文件里#include上述头文件
+
+例如constant.h
+
+```cpp
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+// define your own namespace to hold constants
+namespace constants
+{
+    // constants have internal linkage by default
+    constexpr double pi { 3.14159 };
+    constexpr double avogadro { 6.0221413e23 };
+    constexpr double myGravity { 9.2 }; // m/s^2 -- gravity is light on this planet
+    // ... other related constants
+}
+#endif
+```
+
+由于#include都是写在文件开头，因为常量的定义也会在此处，而不是某个函数里。所以它们会被视为全局变量。
+
+但上述方式有缺点：
+
+每个文件都include这些常量，编译时产生了大量重复代码：
+
+- 更改单个常量值需要重新编译每个包含它的文件，这可能会导致大型项目的重建(rebuild)时间过长。
+- 如果常量本身很大并且无法优化掉，会占用大量内存。
+
+> 头文件保护符（**header guard**）只用于防止单个文件发生重复included。而不能针对此处的情况
+
+##### 方式二：头文件声明extern const
+
+可以避免方式一的一些问题。因为只需要初始化一次。 在此方法中，我们将在 .cpp 文件中定义常量（以确保定义仅存在于一个位置），并在头文件中提出声明（将被其他文件include）。
+
+constants.cpp:
+
+```cpp
+#include "constants.h"
+
+namespace constants
+{
+    // actual global variables
+    extern const double pi { 3.14159 };
+    extern const double avogadro { 6.0221413e23 };
+    extern const double myGravity { 9.2 }; // m/s^2 -- gravity is light on this planet
+}
+```
+
+constants.h:
+
+```CPP
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+namespace constants
+{
+    // since the actual variables are inside a namespace, the forward declarations need to be inside a namespace as well
+    extern const double pi;
+    extern const double avogadro;
+    extern const double myGravity;
+}
+
+#endif
+```
+
+由于这里用了命名空间，所以"g_"前缀是不必要的。
+
+在方式二里，符号常量只在constants.cpp 中实例化一次。所有用到这些常量的地方都会链接到该实例。所以任何更改，只需重新编译constants.cpp 这一个文件。
+
+但这个方式的缺点是常量除了在constants.cpp 里是compile-time的，在其他文件中使用都是runtime的。因此① 不能用于需要compile-time常量的上下文中，比如用于设置array sizes。 ② 因为编译时(compile-time)常量通常可以比运行时(runtime)常量更优化，这些常量可能缺乏优化。
+
+##### 方式一&方式二
+
+由于方式一、二各有缺点，我们可以结合二者，在constant.h中部分常量用方式一定义，部分用方式二声明。
+
+##### 方式三：内联变量（C++17引入）
+
+在 C++ 中，术语内联已经演变为“允许多个定义”。 因此，内联变量是允许在多个文件中定义而不违反一个定义规则的变量。 内联全局变量默认具有外部链接。
+
+链接器会将变量的所有内联定义合并为单个变量定义（从而满足一个定义规则）。
+
+内联变量有两个必须遵守的主要限制：
+
+- 内联变量的所有定义必须相同（否则，将导致未定义的行为）。
+- 内联变量定义（不是前向声明）必须存在于使用该变量的任何文件中。
+
+constants.h:
+
+```cpp
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+// define your own namespace to hold constants
+namespace constants
+{
+    inline constexpr double pi { 3.14159 }; // note: now inline constexpr
+    inline constexpr double avogadro { 6.0221413e23 };
+    inline constexpr double myGravity { 9.2 }; // m/s^2 -- gravity is light on this planet
+    // ... other related constants
+}
+#endif
+```
+
+main.cpp:
+
+```cpp
+#include "constants.h"
+
+#include <iostream>
+
+int main()
+{
+    std::cout << "Enter a radius: ";
+    int radius{};
+    std::cin >> radius;
+
+    std::cout << "The circumference is: " << 2.0 * radius * constants::pi << '\n';
+
+    return 0;
+}
+```
+
+和方式一比，方式三能减少占内存，但仍然是需要每个文件重新编译。所以对于经常变动的常量，建议还是取个子集放头文件，使得include的文件少一些。
+
+综上，方式三 > 方式一 > 方式二。
+
+最佳实践：C++17，倾向于用方式三。
+
+#### 6.10 静态局部变量
+
+“static”是 C++ 语言中最令人困惑的术语之一，很大程度上是因为静态在不同的上下文中具有不同的含义。
+
+在之前的课程中，我们介绍了全局变量具有静态持续时间（static duration），这意味着它们在程序启动时创建并在程序结束时销毁。
+
+我们还讨论了 static 关键字如何提供全局标识符内部链接（internal linkage），这意味着标识符只能在定义它的文件中使用。
+
+##### 静态局部变量
+
+在本课中，我们将探讨静态关键字在应用于局部变量时的用法：
+
+在局部变量上使用 static 关键字会将其持续时间从自动持续时间（automatic duration，定义时创建，退出块时销毁）更改为静态持续时间。 这意味着该变量现在在程序开始时创建，并在程序结束时销毁（就像全局变量一样）。 结果，静态变量即使在超出范围后仍将保留其值！
+
+普通局部变量：
+
+```cpp
+#include <iostream>
+
+void incrementAndPrint()
+{
+    int value{ 1 }; // automatic duration by default
+    ++value;
+    std::cout << value << '\n';
+} // value is destroyed here
+
+int main()
+{
+    incrementAndPrint();
+    incrementAndPrint();
+    incrementAndPrint();
+
+    return 0;
+}
+```
+
+输出2,2,2
+
+静态局部变量：
+
+第一次定义初始化后，之后的调用里定义会被跳过。所以不会发生重复初始化。（注：没有显式初始化的静态局部变量会默认进行zero初始化）
+
+```cpp
+#include <iostream>
+
+void incrementAndPrint()
+{
+    static int s_value{ 1 }; // static duration via static keyword.  This initializer is only executed once.
+    ++s_value;
+    std::cout << s_value << '\n';
+} // s_value is not destroyed here, but becomes inaccessible because it goes out of scope
+
+int main()
+{
+    incrementAndPrint();
+    incrementAndPrint();
+    incrementAndPrint();
+
+    return 0;
+}
+```
+
+输出2,3,4
+
+和对全局变量用"g\_"前缀类似，静态局部变量一般用"<font color="red">s\_</font>"前缀。
+
+静态局部变量最常用的场景是用于产生唯一ID号。比如僵尸游戏里的僵尸或者渲染里的某个三角。
+
+```cpp
+int generateID()
+{
+    static int s_itemID{ 0 };
+    return s_itemID++; // makes copy of s_itemID, increments the real s_itemID, then returns the value in the copy
+}
+```
+
+第一次调用此函数时，它返回 0。第二次，它返回 1。每次调用它时，它返回一个比上次调用时大一的数字。 您可以将这些编号指定为对象的唯一 ID。 因为 s_itemID 是一个局部变量，它不能被其他函数“篡改”。
+
+静态变量提供了全局变量的一些好处（它们在程序结束之前不会被销毁），同时将它们的可见性限制在块范围内。 即使您定期更改它们的值，这也使它们使用起来更安全。
+
+##### 静态局部常量
+
+静态局部变量可以设为 const。 好处是当您有一个需要使用 const 值的函数，但创建或初始化对象是昂贵的（例如，您需要从数据库中读取值），您在使用静态局部常量时只需创建和初始化一次，就可在调用函数时多次重用它。
+
+但**最佳实践**是：避免使用静态局部变量，除非该变量永远不需要重置。
+
+> Quiz time
+>
+> Q:  What effect does using keyword `static` have on a global variable? What effect does it have on a local variable?
+>
+> A:  When applied to a global variable, the static keyword defines the global variable as having internal linkage, meaning the variable cannot be exported to other files.
+>
+> When applied to a local variable, the static keyword defines the local variable as having static duration, meaning the variable will only be created once, and will not be destroyed until the end of the program.
+
+#### 6.11 范围，期间和链接的总结
+
+Scope, duration, and linkage summary
+
+范围：标识符的范围决定了可以在源代码中访问标识符的位置。
+
+- 块范围 block (local) scope
+- 文件范围 file (global) scope
+
+期间：变量的持续时间决定了它何时被创建和销毁。
+
+- 自动持续时间 automatic duration
+- 静态持续时间 static duration
+- 动态持续时间 dynamic duration：由程序员请求创建和销毁。
+
+链接：标识符的链接确定标识符的多个声明是否引用同一实体（对象、函数、引用等）。
+
+- 无链接 no linkage
+- 内部链接 internal linkage
+- 外部链接 external linkage
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221004211258364.png" alt="image-20221004211258364" style="zoom:50%;" />
+
+存储类说明符：
+
+| Specifier    | Meaning                                                      | Note                |
+| :----------- | :----------------------------------------------------------- | :------------------ |
+| extern       | static (or thread_local) storage duration and external linkage |                     |
+| static       | static (or thread_local) storage duration and internal linkage |                     |
+| thread_local | thread storage duration                                      |                     |
+| mutable      | object allowed to be modified even if containing class is const |                     |
+| auto         | automatic storage duration                                   | Deprecated in C++11 |
+| register     | automatic storage duration and hint to the compiler to place in a register | Deprecated in C++17 |
+
+
+
+#### 6.12 Using声明(✔︎安全)和using指令(✗不推荐)
+
+你可能已经在很多教科书和教程中看到过这个程序：
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << "Hello world!\n";
+    return 0;
+}
+```
+
+一些较旧的 IDE 还将使用类似的程序自动填充新的 C++ 项目（因此您可以立即编译某些内容，而不是从空白文件开始）。
+
+如果你看到这个，运行。 您的教科书、教程或编译器可能已过时。 在本课中，我们将探讨原因。
+
+首先，对现成的大型项目添加std::会比较繁琐，并且牺牲易读性。所以这里使用了 `using statements`. 但让我们了解两个术语：
+
+1. 限定名称 Qualified and unqualified names
+
+   限定名称是包含关联范围的名称。大多数情况，名称通过使用范围解析运算符 (::) 的<font color="purple">**命名空间进行限定**</font>。 例如：
+
+   ```cpp
+   std::cout // identifier cout is qualified by namespace std
+   ::foo // identifier foo is qualified by the global namespace
+   ```
+
+   For advanced readers:
+
+   名称也可以使用范围解析运算符 (::) 由<font color="purple">**类名限定**</font>，或使用成员选择运算符 (. 或 ->) 由<font color="purple">**类对象限定**</font>。 例如：
+
+   ```cpp
+   class C; // some class
+   
+   C::s_member; // s_member is qualified by class C
+   obj.x; // x is qualified by class object obj
+   ptr->y; // y is qualified by pointer to class object ptr
+   ```
+
+   非限定名称是不包含范围限定符的名称。 例如， cout 和 x 是非限定名称，因为它们不包括关联的范围。
+
+2. Using声明 Using declarations
+
+   一种减少重复输入 std:: 的方法是使用 using 声明语句。 using 声明允许我们使用非限定名称（没有范围）作为限定名称的别名。
+
+   可以理解为告诉编译器<font color="red">**“在用...”**</font>
+
+   ```cpp
+   #include <iostream>
+   
+   int main()
+   {
+      using std::cout; // this using declaration tells the compiler that cout should resolve to std::cout
+      cout << "Hello world!\n"; // so no std:: prefix is needed here!
+      return 0;
+   } // the using declaration expires here
+   ```
+
+   请注意，每个名称都需要一个单独的 using 声明（例如，一个用于 std::cout，一个用于 std::cin，等等……）。using声明通常被认为是安全且可接受的（在函数内部使用时）。
+
+3. Using指令 Using directives
+
+   另一种简化事情的方法是使用 using 指令。 将所有标识符从命名空间导入到 using 指令的范围内。
+
+   就是我们开头的那段程序，using 指令 `using namespace std;` 告诉编译器将 std 命名空间中的所有名称导入当前作用域（在本例中为函数 main()）。 然后当我们使用非限定标识符 cout 时，它将解析为导入的 std::cout。
+
+   Using指令是为旧的pre-namespace 代码库提供的解决方案，这些代码库使用非限定名称来实现标准库功能。 不必手动将每个非限定名称更新为限定名称（这是有风险的），可以将单个 using 指令（`using namespace std;` ）放在每个文件的顶部，从而所有已移动的名称 到 std 命名空间仍然可以非限定地使用。         
+
+Using指令的问题
+
+（a.k.a为什么应该避免用 `using namespace std;` ）
+
+在现代 C++ 中，与风险相比，using指令通常没有什么好处（仅仅节省一些打字）。 比如，造成歧义的风险：
+
+```cpp
+#include <iostream> // imports the declaration of std::cout
+
+int cout() // declares our own "cout" function
+{
+    return 5;
+}
+
+int main()
+{
+    using namespace std; // makes std::cout accessible as "cout"
+    cout << "Hello, world!\n"; // uh oh!  Which cout do we want here?  The one in the std namespace or the one we defined above?
+
+    return 0;
+}
+```
+
+编译不会通过。我们应该要么：
+
+```cpp
+std::cout << "Hello, world!\n"; // tell the compiler we mean std::cout
+```
+
+要么使用using声明：
+
+```cpp
+using std::cout; // tell the compiler that cout means std::cout
+cout << "Hello, world!\n"; // so this means std::cout
+```
+
+这样就没问题了。 虽然您不太可能编写名为“cout”的函数，但 std 命名空间中有数百个（如果不是数千个）其他名称正等待与您的名称发生冲突。“count”, “min”, “max”, “search”, “sort”, 仅举几例。
+
+即使 using 指令今天不会导致命名冲突，它也会使您的代码更容易受到未来冲突的影响。 例如，如果您的代码包含用于随后更新的某个库的 using 指令，则更新后的库中引入的所有新名称现在都是与现有代码命名冲突的候选者。
+
+甚至会带来些更隐蔽的问题，比如可编译，但逻辑错误。
+
+最后，由于没有明确的作用域前缀，读者更难分辨哪些函数是库的一部分，哪些是程序的一部分。使得代码不方便梳理。
+
+综上，带来问题有四：① 当下冲突  ② 未来冲突  ③ 隐蔽bug  ④ 不便梳理
+
+Using声明和using指令也根据所处位置有block范围和file范围。
+
+> **Best practice**
+>
+> Prefer explicit namespaces over `using statements`. Avoid `using directives` whenever possible. `Using declarations` are okay to use inside blocks.
+
+相关内容：using 关键字也用于定义类型别名，这些别名与 using 语句无关。 我们将在第 8.6 课中介绍类型别名。
+
+#### 6.13 内联函数
+
+inline 的同义词是 in-place
+
+假如我们想实现某个离散的任务，写代码时有两种选择：
+
+- 将代码编写为现有函数的一部分（称为“就地”或“内联”编写代码）。
+- 创建一个新函数（可能还有子函数）来处理任务。
+
+写为函数有很多潜在好处：易读、易用、易维护更新、易复用。
+
+但是，使用函数的一个缺点是每次调用函数时都会产生一定的性能开销（performance overhead）。 这个汇编里面都学过，一般来说大型和复杂任务的函数，调用开销通常微不足道。但一些小型函数，开销成本可能大于实际执行函数代码所需的时间！
+
+##### 内联扩展
+
+幸运的是，C++ 编译器有一个技巧可以用来避免这种开销成本：内联扩展是一个函数调用被调用函数定义中的代码替换的过程。
+
+```cpp
+#include <iostream>
+
+inline int min(int x, int y) // hint to the compiler that it should do inline expansion of this function
+{
+    return (x < y) ? x : y;
+}
+
+int main()
+{
+    std::cout << min(5, 6) << '\n';
+    std::cout << min(3, 2) << '\n';
+    return 0;
+}
+```
+
+除了消除函数调用开销之外，内联扩展还可以让编译器更有效地优化生成的代码——例如，因为表达式` ((5 < 6) ? 5 : 6) `现在是编译时常量， 编译器可以进一步优化 main() 中的第一条语句为 `std::cout << 5 << '\n';`。

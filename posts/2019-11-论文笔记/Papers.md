@@ -1,4 +1,16 @@
-#### Multi-Stage Progressive Image Restoration
+### 李沐团队：
+
+#### Paper-reading-principle
+
+Pass1: 读标题，摘要，结论，方法、实验的图表 —— 得出文章是否适合自己，要不要读。Pass2: 从头到尾读。Pass3: 精读，仿佛自己从头到尾在做这个研究。
+
+
+
+
+
+### Low-level Vision
+
+#### :page_with_curl: Multi-Stage Progressive Image Restoration
 
 [MPRNet](https://arxiv.org/pdf/1803.05407.pdf)
 
@@ -22,7 +34,7 @@ CVPR 2021 *Inception Institute of AI, UAE*
 
 
 
-#### Series-Parallel Lookup Tables
+#### :page_with_curl: Series-Parallel Lookup Tables
 
 [SPLUT]()
 
@@ -35,7 +47,7 @@ ECCV 2022 *Tsinghua University*
 
 
 
-#### RAISR: Rapid and Accurate Image Super Resolution
+#### :page_with_curl: RAISR: Rapid and Accurate Image Super Resolution
 
 [RAISR]()
 
@@ -77,11 +89,23 @@ TCI 2016 *Google*
 
 
 
-#### Multiscale PCA for Image Local Orientation Estimation
+#### :page_with_curl: Multiscale PCA for Image Local Orientation Estimation
+
+[MS-PCA]()
+
+###### 思想：
+
+PCA（主成分分析）+ multiscale（多尺度金字塔）进行图像局部方向估计
+
+###### 主成分分析：
+
+PCA ① 寻找能尽可能体现差异的属性，② 寻找能够尽可能好地重建原本特性的属性。两个目标是等效的，所以PCA可以一箭双雕。这个属性我们一般称为主成分、特征。Q：为什么两个目标等效 A：假设是一个假设新的特征是线性组合的直线。
+
+###### 多尺度：
 
 
 
-#### edge–SR: Super–Resolution For The Masses
+#### :page_with_curl: edge–SR: Super–Resolution For The Masses
 
 [edge-SR]()
 
@@ -133,5 +157,13 @@ WACV 2022 *BOE*
 
 ###### 阅读评价：
 
-有启发意义，但实际由于硬件支持（比如耗时的softmax），并不如我们ZoomSR速度快。效果也是锯齿比较严重。
+有启发意义，但实际由于硬件支持（比如耗时的softmax），并不如我们ZoomSR速度快。效果也是锯齿比较严重。另外，eSR-TM不一定得用softmax，用tanh，或者啥也不用应该也是有理由的。比如NAFNet的非线性激活就是个例子：
 
+```python
+class SimpleGate(nn.Module):
+    def forward(self, x):
+        x1, x2 = x.chunk(2, dim=1)
+        return x1 * x2
+```
+
+Multi-mo
