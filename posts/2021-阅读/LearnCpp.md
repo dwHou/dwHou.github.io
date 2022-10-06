@@ -2582,6 +2582,8 @@ namespace constants
 
 由于#include都是写在文件开头，因为常量的定义也会在此处，而不是某个函数里。所以它们会被视为全局变量。
 
+（对了，这里<font color="red">不会导致重复定义</font>，因为常量是没有外部链接的）
+
 但上述方式有缺点：
 
 每个文件都include这些常量，编译时产生了大量重复代码：
@@ -2978,3 +2980,147 @@ int main()
 ```
 
 除了消除函数调用开销之外，内联扩展还可以让编译器更有效地优化生成的代码——例如，因为表达式` ((5 < 6) ? 5 : 6) `现在是编译时常量， 编译器可以进一步优化 main() 中的第一条语句为 `std::cout << 5 << '\n';`。
+
+但如果 **内联扩展** 比 **函数调用** 需要更多的指令，那么每次内联扩展都会导致可执行文件变大。较大的可执行文件往往速度较慢（由于不适合缓存）。
+
+所以关于函数是否会从内联中受益的决定，要综合考虑调用的相对开销、函数大小以及其他优化。一般来说，内联扩展最适合简单、简短的函数（例如，不超过几条语句），尤其是多次执行单个函数调用的情况（例如循环内的函数调用）。
+
+##### 内联函数
+
+每个函数都属于以下三个类别之一，当调用函数时：
+
+(1) 必会扩展。
+(2) 可能扩展（大多数函数在此类别中）。
+(3) 无法扩展。
+
+符合条件扩展其函数调用的函数称为内联函数。
+
+大多数函数都属于“可能”类别：如果这样做是有益的，可以扩展它们的函数调用。 对于此类中的函数，**现代编译器将评估每个函数和每个函数调用**，以确定该特定函数调用是否会从内联扩展中受益。 编译器可能决定不扩展给定函数的函数调用、扩展部分函数调用或扩展所有函数调用。
+
+##### 内联关键字(✗)
+
+从历史上看，编译器要么没有能力确定内联扩展是否有益，要么不太擅长。 出于这个原因，C++ 提供了关键字 inline，它旨在用作对编译器的提示，程序员判断函数将从内联扩展中受益。
+
+但是，在现代 C++ 中，不再使用 inline 关键字来请求内联扩展函数。这有很多原因：
+
+- 使用 inline 请求内联扩展是过早优化的一种形式，滥用实际上可能会损害性能。
+- inline 关键字只是一个提示——编译器完全可以忽略内联函数的请求。如果您尝试内联冗长的函数，这很可能是结果！编译器还可以自由地执行不使用 inline 关键字作为其正常优化集的一部分的函数的内联扩展。
+- inline 关键字是在错误的粒度级别定义的。我们在函数声明中使用 inline 关键字，但内联扩展实际上是根据函数调用确定的。扩展某些函数调用可能是有益的，而扩展其他函数调用可能是有害的，并且没有语法可以影响这一点。
+
+现代优化编译器通常非常擅长确定哪些函数应该内联——在大多数情况下比人类更好。结果，编译器可能会忽略或贬低您对内联函数所做的任何请求。
+
+最佳实践：不使用inline关键字进行内联函数请求。
+
+inline关键字的现代用法：
+
+> 在前面的章节中，我们提到不应该在头文件中实现函数（带有外部链接），因为当这些头文件包含在多个 .cpp 文件中时，函数定义将被复制到多个 .cpp 文件中。然后这些文件将被编译，链接器会抛出一个错误，因为它会注意到你已经多次定义了同一个函数，这违反了单一定义规则。
+>
+> 在第 6.9 课——跨多个文件共享全局常量（使用内联变量）中，我们注意到在现代 C++ 中，<font color="red">内联概念已经演变为具有新的含义：程序中允许多个定义</font>。对于函数和变量都是如此。因此，如果我们将一个函数标记为内联，那么该函数允许有多个定义（在不同的文件中），只要这些定义相同。
+>
+> 为了进行内联扩展，编译器需要能够在调用函数的任何位置看到内联函数的完整定义。因此，内联函数通常定义在头文件中，可以将它们#include 到任何需要查看函数完整定义的代码文件中。
+
+最佳实践：避免对函数使用 inline 关键字，除非您有特定的、令人信服的理由这样做。
+
+#### 6.14 常量函数
+
+##### 常量函数
+
+```cpp
+#include <iostream>
+
+// int greater(int x, int y) 原本的形式
+constexpr int greater(int x, int y) // now a constexpr function
+{
+    return (x > y ? x : y);
+}
+
+int main()
+{
+    constexpr int x{ 5 };
+    constexpr int y{ 6 };
+    // We'll explain why we use variable g here later in the lesson
+    constexpr int g { greater(x, y) }; // will be evaluated at compile-time 
+  // 函数调用 greater(x, y) 将在编译时(compile-time)而不是运行时(runtime)进行评估！
+    std::cout << g << " is greater!\n";
+    return 0;
+}
+```
+
+constexpr 函数是一个函数，它的返回值可以在编译时(compile-time)计算。 要使函数成为 constexpr 函数，我们只需在返回类型前使用 constexpr 关键字。 
+
+当函数调用在编译时求值时，编译器会计算函数调用的返回值，然后用返回值替换函数调用。所以在我们的例子中，对greater(x, y)的调用将被函数调用的结果替换，即整数值6。换句话说，编译器将编译这个：
+
+```cpp
+...
+constexpr int g { 6 }; // greater(x, y) evaluated and replaced with return value 6
+...
+```
+
+**为了符合条件进行编译时评估，函数必须具有 constexpr 返回类型并且不调用任何非 constexpr 函数。 此外，对函数的调用必须具有 constexpr 实参。**
+
+注：因为 constexpr 函数可以在编译时求值，所以编译器必须能够在调用函数的所有位置看到 constexpr 函数的完整定义。所以<font color="brown">constexpr函数是隐式内联（inline）的</font>。
+
+如果传的不是constexpr实参，constexpr函数也能正常运行，只不过退化为runtime的函数，得到一个non-constexpr类型的返回值。
+
+##### 啥时候constexpr函数在编译时评估
+
+您可能会认为 constexpr 函数会尽可能在编译时进行评估，但不幸的是，情况并非如此。
+
+根据 C++ 标准，如果在需要常量表达式的地方使用返回值，则必须在编译时评估符合编译时评估条件的 constexpr 函数。 否则，编译器可以在编译时或运行时自由地评估函数。让我们看几个案例：
+
+```cpp
+#include <iostream>
+
+constexpr int greater(int x, int y)
+{
+    return (x > y ? x : y);
+}
+
+int main()
+{
+    constexpr int g { greater(5, 6) };            // case 1: evaluated at compile-time
+    std::cout << g << " is greater!\n";
+
+    int x{ 5 }; // not constexpr
+    std::cout << greater(x, 6) << " is greater!\n"; // case 2: evaluated at runtime
+
+    std::cout << greater(5, 6) << " is greater!\n"; // case 3: may be evaluated at either runtime or compile-time
+
+    return 0;
+}
+```
+
+这也是为什么我们倾向写成case 1。因此，最好将 constexpr 函数视为“可以在常量表达式中使用”的函数，而不是“将在编译时评估”的函数。
+
+##### 立即函数
+
+C++20 引入了关键字 consteval，用于表示函数必须在编译时求值，否则会导致编译错误。 这样的函数称为立即函数。
+
+```cpp
+#include <iostream>
+
+consteval int greater(int x, int y) // function is now consteval
+{
+    return (x > y ? x : y);
+}
+
+int main()
+{
+    constexpr int g { greater(5, 6) };            // ok: will evaluate at compile-time
+    std::cout << greater(5, 6) << " is greater!\n"; // ok: will evaluate at compile-time
+
+    int x{ 5 }; // not constexpr
+    std::cout << greater(x, 6) << " is greater!\n"; // error: consteval functions must evaluate at compile-time
+
+    return 0;
+}
+```
+
+最佳实践：如果你有一个函数由于某种原因（例如性能）必须在编译时运行，请使用 consteval。
+
+综上，constexpr和consteval函数差不多，但constexpr更灵活，返回值不是常量时也能退化为运行时评估。consteval更强制，一定在编译时评估。
+
+#### 6.15 匿名和内联命名空间
+
+
+
