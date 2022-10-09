@@ -3166,5 +3166,32 @@ C++20 引入了关键字 consteval，用于表示函数必须在编译时求值�
 
 #### 7.1 控制流介绍
 
+当程序运行时，CPU 在 main() 的顶部开始执行，执行一些语句（默认按顺序），然后程序在 main() 的末尾终止。 CPU 执行的特定语句序列称为程序的执行路径（或简称路径）。
 
+**straight-line**程序，每次运行时都采用相同的路径。
+
+但很多时候，我们并不想要straight-line的程序。C++提供了许多控制流语句：允许改变语句执行路径。
+
+当控制流语句导致执行点变为非顺序语句时，这称为分支（**branching**）。
+
+流控制语句的类别
+
+| Category               | Meaning                                                      | Implementated in C++ by          |
+| :--------------------- | :----------------------------------------------------------- | :------------------------------- |
+| Conditional statements | Conditional statements cause a sequence of code to execute only if some condition is met. | If, switch                       |
+| Jumps                  | Jumps tell the CPU to start executing the statements at some other location. | Goto, break, continue            |
+| Function calls         | Function calls are jumps to some other location and back.    | Function calls, return           |
+| Loops                  | Loops tell the program to repeatedly execute some sequence of code zero or more times, until some condition is met. | While, do-while, for, ranged-for |
+| Halts                  | Halts tell the program to quit running.                      | std::exit(), std::abort()        |
+| Exceptions             | Exceptions are a special kind of flow control structure designed for error handling. |                                  |
+
+在本章之前，你可以让一个程序做的事情的数量是相当有限的。 能够控制程序的流程（尤其是使用循环）使许多有趣的事情成为可能！
+
+This is where the real fun begins. So let’s get to it!
+
+#### 7.2 if语句和块
+
+条件语句是指定是否应执行某些关联语句的语句。
+
+快速回顾4.10节
 

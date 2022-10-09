@@ -1,6 +1,6 @@
-### 李沐团队：
+### Mu Li's team
 
-#### Paper-reading-principle
+#### :page_with_curl: Paper-reading-principle
 
 Pass1: 读标题，摘要，结论，方法、实验的图表 —— 得出文章是否适合自己，要不要读。Pass2: 从头到尾读。Pass3: 精读，仿佛自己从头到尾在做这个研究。
 
