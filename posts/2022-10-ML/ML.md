@@ -1,14 +1,14 @@
-StatQuest with Josh Starmer
+# 统计学方法
 
-李航《统计学习方法》
+## 主成分分析（PCA）
 
-### PCA
+### 直观原理
+
+参考：StatQuest with Josh Starmer
 
 理解主成分分析法（PCA）和构成分析法的奇异值分解（SVD）
 
-http://blog.codinglabs.org/articles/pca-tutorial.html
-
-#### 二维：
+#### 👉二维
 
 **PC1是一条通过原点（由均值x_mean, y_mean得到，即数据中心化），并且综合所有样本点，有着最大的投影点到原点距离平方和的线。（除以样本数目后，也可以说方差最大）**
 
@@ -50,7 +50,7 @@ Variation for PC1 / (Variation for PC1 + Variation for PC2)  是PC1的差异率�
 
 碎石图（Scree Plot）是一种图像呈现方式，用来描绘每个PC所占的差异率。
 
-#### 三维：
+#### 👉三维
 
 和二维类似，找到贯穿原点的最佳拟合线是PC1。只不过现在PC1的配方包含三种成分了。
 
@@ -58,7 +58,7 @@ Variation for PC1 / (Variation for PC1 + Variation for PC2)  是PC1的差异率�
 
 最后，和PC1、PC2所在平面垂直的为PC3。
 
-#### 以此类推：
+#### 👉以此类推
 
 只不过超过3维，我们没法用几何理解了。
 
@@ -77,4 +77,12 @@ Variation for PC1 / (Variation for PC1 + Variation for PC2)  是PC1的差异率�
 如果碎石图看起来像上图，其中PC3和PC4占差异相当大的比例。
 
 那么仅使用前两个PC不能很精确地代表我们的数据。但是，即使像这样不清晰的PCA图（noisy PCA plot）也可以用来数据聚类。
+
+### 数学原理
+
+参考 http://blog.codinglabs.org/articles/pca-tutorial.html
+
+PCA（Principal Component Analysis）是一种常用的数据分析方法。PCA通过线性变换将原始数据变换为一组各维度线性无关的表示，可用于提取数据的主要特征分量，常用于高维数据的降维。
+
+#### 👉数据的向量表示及降维问题
 
