@@ -3195,3 +3195,81 @@ This is where the real fun begins. So let’s get to it!
 
 快速回顾4.10节
 
+true_statement 和 false_statement 只能是单个语句，或者复合语句（块，被视为单个语句）。而单个语句是否应该显式地包含在块中，程序员社区内部存在争论。
+
+单个语句放在块中的好处：① 方便后续增加代码（语句），② 方便该语句注释掉（comment out）时不影响下一句
+
+单个语句放在块中的坏处：影响了代码可读性，垂直间距变大，一次看到的行数少了。
+
+一个中间的替代方案是将单行放在与 if 或 else 相同的行上。
+
+最佳实践：
+
+考虑将与 if 或 else 相关联的单个语句放在块中（尤其是在您学习时）。 更有经验的 C++ 开发人员有时会忽略这种做法，而倾向于更紧密的垂直间距。
+
+##### 隐式块
+
+编译器会隐式地给if statement或else statement加块，
+
+比如：
+
+```cpp
+if (condition)
+    true_statement;
+else
+    false_statement;
+```
+
+在编译器看来实际是：
+
+```cpp
+if (condition)
+{
+    true_statement;
+}
+else
+{
+    false_statement;
+}
+```
+
+为什么提到这点？
+
+大多数时候，这无关紧要。 然而，新程序员有时会尝试做这样的事情：
+
+```cpp
+#include <iostream>
+int main()
+{
+    if (true)
+        int x{ 5 };
+    else
+        int x{ 6 };
+    std::cout << x << '\n';
+    return 0;
+}
+```
+
+这种情况编译器会报错，标识符x没有定义。因为x是块范围的，在std::cout这行根本访问不到x。
+
+##### 常见的条件语句错误
+
+1. **悬挂的else语句 (Dangling else)：**
+
+   else 语句与同一块中最后一个未匹配的if 语句配对。在嵌套if语句时，不清楚这一点，很容易写出bug。所以建议内层if语句写在块里。
+
+2. **重构if语句 (Flattening nested)**:
+
+   ① 增加else if ② 通过逻辑运算符更改、组合新的条件。
+
+3. **空语句 (Null statements):**
+
+   和python的pass类似，Cpp里就是一个分号。它们可能会无意中给新的（或粗心的）程序员带来问题：
+
+   *不小心在 if 语句的末尾加上了一个分号（这是一个常见的错误，因为分号结束了许多语句）。 这个不起眼的错误是可以编译的，但会导致错误的逻辑。*
+
+4. **条件里的==操作符和=操作符：**
+
+   关系运算符和赋值，可别粗心混淆了。不然也是可以编译成功，但结果谬以千里（会将赋的值强转为bool型，即0为false，非0为true）。
+
+#### 7.4 Switch语句基础
