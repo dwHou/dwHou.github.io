@@ -3273,3 +3273,39 @@ int main()
    关系运算符和赋值，可别粗心混淆了。不然也是可以编译成功，但结果谬以千里（会将赋的值强转为bool型，即0为false，非0为true）。
 
 #### 7.4 Switch语句基础
+
+尽管可以将许多 if-else 语句链接在一起，但这既难以阅读又效率低下。
+
+因为根据一组不同的值测试变量或表达式的相等性是常见的，所以 C++ 提供了另一种条件语句，称为 switch 语句，专门用于此目的。
+
+```cpp
+#include <iostream>
+
+void printDigitName(int x)
+{
+    switch (x)
+    {
+        case 1:
+            std::cout << "One";
+            return;
+        case 2:
+            std::cout << "Two";
+            return;
+        case 3:
+            std::cout << "Three";
+            return;
+        default:
+            std::cout << "Unknown";
+            return;
+    }
+}
+
+int main()
+{
+    printDigitName(2);
+    std::cout << '\n';
+
+    return 0;
+}
+```
+

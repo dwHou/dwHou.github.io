@@ -168,6 +168,29 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
 有好的预训练模型，可以将use_num_updates关掉，或者至少将其初始数值设大。不然会出现性能一开始骤降的情形。</pre>
   </ul>
 
+
+  <h2>像素级动态卷积核</h2>
+  <ul>
+    <li><b>思想溯源：</b>从localconv到KPN</li>
+    <pre>
+      • 1990年，各向异性扩散算法就被提出。
+      • 2014年，论文DeepFace提出在网络深层使用3层localconv，能够提升人脸识别精度。
+      • 2018年，论文CSPN循环使用localconv（避免学习新的filter bank），可以解释为空间传播网络。
+      • 上述两个工作分别是high-level,mid-level vision的。
+      • low-level vision:
+      • 2016年，Google提出RAISR，它的过滤器通过高效的散列机制选择，即像素级的索引从filter bucket(or LUT)中选取过滤器，起到了空域自适应的效果。
+      • Kernel Prediction Networks：
+      • 2017年，两篇KPN用于视频插帧的论文被发表于顶会（相同作者）。前一篇论文由于插帧/运动估计问题的特性，kernel特别大（41x41），只能逐像素处理。后一篇因此只预测1D的kernel，41x1和1x41，再外积得到完整的2D kernel。
+      • 2018年，KPN被用于超分，只不过末层学输出通道r^2的kernel，可以pixel-shuffle上采样，做为skip-connection分支（KPN）。同时也共享参数，末层另一个分支学残差（非KPN）。
+      • 2018年，加州伯克利和谷歌将<a href="https://joechann0831.github.io/2019/06/24/Burst-Denoising-with-Kernel-Prediction-Networks/">KPN</a>用在Burst Denoising上。本质和localconv没有区别。提出的loss可以引导KPN既做align又做去噪，最后average。
+      • 2019年，张磊老师组将KPN用于RealSR，解决blur kernel会跟随物距而改变的问题。因为kernel尺寸太大，复杂度增加很大，kernel尺寸太小，效果不好。所以该方法使用了金字塔结构，最后几层pixel-shuffle因子不一样，产生不同的kernel，作用于不同下采样倍数的图像上。
+      
+
+
+    </pre>
+  </ul>
+  
+
   <h2>不平衡损失</h2>
   <ul>
   <li><b>思想溯源: </b> 从Topk到Focal loss</li>
@@ -233,6 +256,22 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
         HxW 看作一个实例 instance , 加一维 C 就看成 layter norm , 要是加一维 B 就是batch norm , 加部分C 就看做group
       </pre>
       
+  </ul>
+
+  <h2>归一化和标准化</h2>
+  <ul>
+      <li>用途</li>
+      <pre>
+        normalization和standardization是差不多的，都是把数据进行前处理，从而使数值都落入到统一的数值范围，从而在建模过程中，各个特征量没差别对待。
+        normalization一般是把数据限定在需要的范围，比如一般都是[0, 1]，从而消除了数据量纲对建模的影响。standardization 一般是指将数据正态化，使平均值0方差为1.
+      </pre>
+      <li>方法</li>
+      <pre>
+        1). 最大最小值normalization： x'=(x-min)/(max-min). 这种方法的本质还是线性变换，简单直接。缺点就是新数据的加入，可能会因数值范围的扩大需要重新regularization。2). 对数归一化：x'=log10(x)/log10(xmax)或者log10(x)。推荐第一种，除以最大值，这样使数据落到[0, 1]区间
+        3). 反正切归一化。x'=2atan(x)/pi。能把数据投影到[-1, 1]区间。
+        4). zero mean normalization归一化，也是standardization. x'=(x-mean)/std.
+        有无normalization，模型的学习曲线是不一样的，甚至会收敛结果不一样。
+      </pre>
   </ul>
 
 
