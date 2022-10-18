@@ -3325,9 +3325,153 @@ case标签后接常量表达式。
 
 switch的条件只允许整数（或枚举）类型。（原因是switch 语句被设计为高度优化的。 从历史上看，编译器实现 switch 语句的最常见方式是通过跳转表——而跳转表仅适用于整数值。）
 
-#### 7.5 switch失败和作用域
+#### 7.5 switch落空和作用域
 
 在上节中，我们提到标签下的每组语句都应该以 break 语句或 return 语句结束。
 
 在本节中，我们将探讨原因，并讨论一些有时会绊倒新程序员的switch作用域问题。
+
+**落空（Fallthrough）**
+
+程序从匹配的标签后的第一句语句开始执行，直到：
+
+- switch块的块尾
+
+- 其他控制流语句（典型如break或return）
+
+  break退出块，return退出函数
+
+- 其他中断，比如操作系统关闭了程序，比如宇宙爆炸..
+
+值得注意的是，遇到另一个case标签并不是终止条件之一
+
+——因此，如果没有中断或返回，执行将溢出到后续cases。
+
+这可能不是我们想要的！
+
+**<u>当执行从标签下的语句流向后续标签下的语句时，这称为落空。</u>**许多编译器和代码分析工具会将<font color="brown">落空</font>记为警告(warning)。
+
+**[[fallthrough]]属性**（C++17），用于故意落空
+
+> 属性是一种现代 C++ 特性，它允许程序员向编译器提供一些关于代码的附加数据。 要指定一个属性，属性名称放在双硬括号之间。 属性不是语句——相反，它们几乎可以在与上下文相关的任何地方使用。
+
+[[fallthrough]] 属性修改一个 null 语句以表明 fallthrough 是有意的（并且不应触发任何警告）
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    switch (2)
+    {
+    case 1:
+        std::cout << 1 << '\n';
+        break;
+    case 2:
+        std::cout << 2 << '\n'; // Execution begins here
+        [[fallthrough]]; // intentional fallthrough -- note the semicolon to indicate the null statement
+    case 3:
+        std::cout << 3 << '\n'; // This is also executed
+        break;
+    }
+    return 0;
+}
+```
+
+该程序会依次打印 2, 3
+
+**顺序case标签**
+
+如果流向下一个case标签，而其下没有语句。就不算落空。
+
+因此，我们可以“堆叠”case标签以使所有这些case标签在之后共享同一组语句。 这不被视为落空，不需要[[fallthrough]]。
+
+例子：
+
+```cpp
+bool isVowel(char c)
+{
+    return (c=='a' || c=='e' || c=='i' || c=='o' || c=='u' ||c=='A' || c=='E' || c=='I' || c=='O' || c=='U');
+}
+```
+
+可以提高其效率，写为：
+
+```cpp
+bool isVowel(char c)
+{
+    switch (c)
+    {
+        case 'a': // if c is 'a'
+        case 'e': // or if c is 'e'
+        case 'i': // or if c is 'i'
+        case 'o': // or if c is 'o'
+        case 'u': // or if c is 'u'
+        case 'A': // or if c is 'A'
+        case 'E': // or if c is 'E'
+        case 'I': // or if c is 'I'
+        case 'O': // or if c is 'O'
+        case 'U': // or if c is 'U'
+            return true;
+        default:
+            return false;
+    }
+}
+```
+
+**switch case的作用域**
+
+前面提到if条件之后只能有一个语句，并且该语句被认为是隐式在块内。
+
+但对于 switch 语句，标签后面的语句的作用域都是 switch 块，并不创建隐式块。
+
+> 这意味着 switch 内的所有语句都是同一作用域的一部分。
+
+```cpp
+switch (1)
+{
+    int a; // okay: definition is allowed before the case labels
+    int b{ 5 }; // illegal: initialization is not allowed before the case labels
+
+    case 1:
+        int y; // okay but bad practice: definition is allowed within a case
+        y = 4; // okay: assignment is allowed
+        break;
+
+    case 2:
+        int z{ 4 }; // illegal: initialization is not allowed if subsequent cases exist
+        y = 5; // okay: y was declared above, so we can use it here too
+        break;
+
+    case 3:
+        break;
+}
+```
+
+仅仅定义是compile time的，初始化是runtime的。
+
+:warning:除了最后一个case，都不允许初始化变量。（因为可能会跳过初始化程序，这会使变量未初始化）。在第一个case之前也不允许初始化，因为这些语句永远不会被执行，因为switch无法到达它们。
+
+如果一个case需要定义和/或初始化一个新变量，最佳实践是在case语句下方的显式块中这样做：
+
+```cpp
+switch (1)
+{
+    case 1:
+    { // note addition of explicit block here
+        int x{ 4 }; // okay, variables can be initialized inside a block inside a case
+        std::cout << x;
+        break;
+    }
+    default:
+        std::cout << "default case\n";
+        break;
+}
+```
+
+> Best practice：If defining variables used in a case statement, do so in a block inside the case.
+
+Quiz time: 使用switch语句实现一个可以做四则运算的计算器。
+
+#### 7.6 Goto语句
 
