@@ -178,7 +178,7 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
       • 2018年，论文CSPN循环使用localconv（避免学习新的filter bank），可以解释为空间传播网络。
       • 上述两个工作分别是high-level,mid-level vision的。
       • low-level vision:
-      • 2016年，Google提出RAISR，它的过滤器通过高效的散列机制选择，即像素级的索引从filter bucket(or LUT)中选取过滤器，起到了空域自适应的效果。详细可见<a href="../posts/2019-11-论文笔记/">论文解读</a>。
+      • 2016年，Google提出RAISR，它的过滤器通过高效的散列机制选择，即像素级的索引从filter bucket(or LUT)中选取过滤器，起到了空域自适应的效果。详细可见<a href="../2019-11-论文笔记/">论文解读</a>。
       • Kernel Prediction Networks：
       • 2017年，两篇KPN用于视频插帧的论文被发表于顶会（相同作者）。前一篇论文由于插帧/运动估计问题的特性，kernel特别大（41x41），只能逐像素处理。后一篇因此只预测1D的kernel，41x1和1x41，再外积得到完整的2D kernel。
       • 2018年，KPN被用于超分，只不过末层学输出通道r^2的kernel，可以pixel-shuffle上采样，做为skip-connection分支（KPN）。同时也共享参数，末层另一个分支学残差（非KPN）。
