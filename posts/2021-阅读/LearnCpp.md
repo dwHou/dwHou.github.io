@@ -3475,3 +3475,32 @@ Quiz time: 使用switch语句实现一个可以做四则运算的计算器。
 
 #### 7.6 Goto语句
 
+在 C++ 中，无条件跳转是通过 goto 语句实现的，跳转到的点通过使用语句标签来标识，例子：
+
+```cpp
+#include <iostream>
+#include <cmath> // for sqrt() function
+
+int main()
+{
+    double x{};
+tryAgain: // this is a statement label
+    std::cout << "Enter a non-negative number: ";
+    std::cin >> x;
+
+    if (x < 0.0)
+        goto tryAgain; // this is the goto statement
+
+    std::cout << "The square root of " << x << " is " << std::sqrt(x) << '\n';
+    return 0;
+}
+```
+
+运行结果：
+
+```shell
+Enter a non-negative number: -4
+Enter a non-negative number: 4
+The square root of 4 is 2
+```
+
