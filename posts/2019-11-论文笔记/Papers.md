@@ -1,12 +1,61 @@
-### Mu Li's team
+### 李沐团队带读系列
 
-#### :page_with_curl: Paper-reading-principle
+#### Paper-reading-principle
 
 Pass1: 读标题，摘要，结论，方法、实验的图表 —— 得出文章是否适合自己，要不要读。Pass2: 从头到尾读。Pass3: 精读，仿佛自己从头到尾在做这个研究。
 
+### 沈向洋带读系列
 
+#### Ten Questions
 
+论文十问由沈向洋博士提出，鼓励大家带着这十个问题去阅读论文，用有用的信息构建认知模型。写出自己的十问回答，还有机会在当前页面展示哦。
 
+**Q1**论文试图解决什么问题？
+
+**Q2**这是否是一个新的问题？
+
+**Q3**这篇文章要验证一个什么科学假设？
+
+**Q4**有哪些相关研究？如何归类？谁是这一课题在领域内值得关注的研究员？
+
+**Q5**论文中提到的解决方案之关键是什么？
+
+**Q6**论文中的实验是如何设计的？
+
+**Q7**用于定量评估的数据集是什么？代码有没有开源？
+
+**Q8**论文中的实验及结果有没有很好地支持需要验证的科学假设？
+
+**Q9**这篇论文到底有什么贡献？
+
+**Q10**下一步呢？有什么工作可以继续深入？
+
+#### :page_with_curl: Video imprint
+
+构造并学习一个更通用的视频时空表征。
+
+#### :page_with_curl: Swin Transformer
+
+**分析现有方法：**
+
+Transformer本来是处理文本的，不需要处理不同尺度的信息的问题。
+
+ViT对Transformer的改造很简单直接，但没考虑视觉信号的一些特点。
+
+主要有以下挑战：
+
+- 视觉实体变化大，在不同场景下视觉Transformer性能未必很好（所以ViT只能做做分类问题，不太适合检测、分割）
+- 图像分辨率高，像素点多，Transformer基于全局自注意力的计算导致计算量较大
+
+本工作就是希望Transformer能更好的适应视觉信号（层次性hierarchy/局部性locality/平移不变性translation invarianc）
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221020174023945.png" alt="image-20221020174023945" style="zoom:50%;" />
+
+针对现有问题，提出了一种**包含滑窗操作，具有层级设计**的Swin Transformer。
+
+**本文方法：**
+
+用shifting window而不是sliding window。
 
 ### Low-level Vision
 
@@ -16,19 +65,19 @@ Pass1: 读标题，摘要，结论，方法、实验的图表 —— 得出文�
 
 CVPR 2021 *Inception Institute of AI, UAE*
 
-###### 分析现有方法：
+**分析现有方法：**
 
 1. encoder-decoder结构 ：<b>优：</b>更宽的上下文信息，<b>劣：</b>保持细节不足。
 2. single-scale pipeline ：<b>优：</b>保持空间上的精确细节，<b>劣：</b>语义上不太可靠。
 
-###### 该文观点：
+**该文观点：**
 
 1. 在multi-stage结构中，结合encoder-decoder与single-scale pipeline，是必要的。
 2. multi-stage不仅仅是上一阶段的输出，也作为下一阶段的输入。
 3. 每一阶段都用上监督信息是很重要的，渐进式学习。由此，设计supervised attention module (SAM)模块。
 4. 该文提出了将上一阶段特征(contextualized)传递给下一阶段。由此，设计cross-stage feature fusion (CSFF)方法。
 
-###### 网络结构：
+**网络结构：**
 
 <img src="MPRNet.png" style="width:80%; height: 80%;">
 
@@ -40,7 +89,7 @@ CVPR 2021 *Inception Institute of AI, UAE*
 
 ECCV 2022 *Tsinghua University*
 
-###### 分析现有方法：
+**分析现有方法：**
 
 1. LUT通过快速内存访问代替耗时的计算，具有实用性。
 2. 但是大多数现有的基于 LUT 的方法只有一层 LUT。 如果使用 n 维 LUT并且用于查询v个可能值，则 LUT 的尺寸有 v^n。 因此，通常将 v 和 n 设置为较小的值以避免无法承受的大 LUT，这严重限制了效果。
@@ -53,12 +102,12 @@ ECCV 2022 *Tsinghua University*
 
 TCI 2016 *Google*
 
-###### 分析现有方法：
+**分析现有方法：**
 
 1. 传统插值方法，是内容无关的线性方法，表达能力不足。
 1. 全局滤波效果不如大量参数且非线性的神经网络；所以改全局为图像块内容自适应。
 
-###### 该文观点：
+**该文观点：**
 
 <img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20220926211611036.png" alt="image-20220926211611036" style="zoom:50%;" />
 
@@ -99,15 +148,15 @@ TCI 2016 *Google*
 
 [MS-PCA]()
 
-###### 思想：
+**思想：**
 
 PCA（主成分分析）+ multiscale（多尺度金字塔）进行图像局部方向估计
 
-###### 主成分分析：
+**主成分分析：**
 
 PCA ① 寻找能尽可能体现差异的属性，② 寻找能够尽可能好地重建原本特性的属性。两个目标是等效的，所以PCA可以一箭双雕。这个属性我们一般称为主成分、特征。Q：为什么两个目标等效 A：假设是一个假设新的特征是线性组合的直线。
 
-###### 多尺度：
+**多尺度：**
 
 
 
@@ -117,7 +166,7 @@ PCA ① 寻找能尽可能体现差异的属性，② 寻找能够尽可能好�
 
 WACV 2022 *BOE*
 
-###### 分析现有方法：
+**分析现有方法：**
 
 1. 超分辨率的历史
 
@@ -127,11 +176,11 @@ WACV 2022 *BOE*
 
 2. FSRCNN 和 ESPCN 都在未来的 SR 研究中留下了深刻的印记，这些研究经常以低分辨率执行计算并使用pixel-shuffle layers上采样。
 
-###### 该文贡献：
+**该文贡献：**
 
 提出单层架构超分，详尽比较速度-效果权衡，对单层架构中的自注意力策略的分析和解释。
 
-###### 该文观点：
+**该文观点：**
 
 传统插值的上下采样是等效于：filter–then–downsampling和upsampling–then–filter。张量处理框架则使用跨步转置卷积层实现这种上采样。
 
@@ -143,7 +192,7 @@ WACV 2022 *BOE*
 
 上采倍数越高，s越大，意味着实现**1**的核大小越大，或实现**2**的卷积通道数越大。
 
-###### 提出模型：
+**提出模型：**
 
 - eSR：
 
@@ -161,7 +210,7 @@ WACV 2022 *BOE*
 
 - eSR-CNN
 
-###### 阅读评价：
+**阅读评价：**
 
 有启发意义，但实际由于硬件支持（比如耗时的softmax），并不如我们ZoomSR速度快。效果也是锯齿比较严重。另外，eSR-TM不一定得用softmax，用tanh，或者啥也不用应该也是有理由的。比如NAFNet的非线性激活就是个例子：
 
@@ -172,4 +221,3 @@ class SimpleGate(nn.Module):
         return x1 * x2
 ```
 
-Multi-mo

@@ -1,0 +1,805 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+
+<link href='https://fonts.loli.net/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+.mac-os-11 { --title-bar-height: 28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.42857143; overflow-x: hidden; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; tab-size: 4; background-position: inherit; background-repeat: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; word-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font-family: inherit; font-size: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+thead, tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right-width: 0px; background-color: inherit; }
+.CodeMirror-linenumber { }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; position: relative !important; background-position: inherit; background-repeat: inherit; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+svg { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; background-position: 0px 0px; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; padding-bottom: 0px !important; }
+  .typora-export * { print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background-color: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.reversefootnote { font-family: ui-monospace, sans-serif; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background-color: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; }
+a.md-print-anchor { white-space: pre !important; border: none !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; text-shadow: initial !important; background-position: 0px 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom-width: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background-color: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; background-position: inherit; background-repeat: inherit; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex: 2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.428571429rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left-width: 28px; border-left-style: solid; border-left-color: transparent; border-right-width: 28px; border-right-style: solid; border-right-color: transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right-width: 8px; border-right-style: solid; border-right-color: transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+
+
+/* meyer reset -- http://meyerweb.com/eric/tools/css/reset/ , v2.0 | 20110126 | License: none (public domain) */
+
+@include-when-export url(https://fonts.loli.net/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext);
+
+/* =========== */
+
+/* pt-serif-regular - latin */
+/* pt-serif-italic - latin */
+/* pt-serif-700 - latin */
+/* pt-serif-700italic - latin */
+:root {
+	--active-file-bg-color: #dadada;
+	--active-file-bg-color: rgba(32, 43, 51, 0.63);
+	--active-file-text-color: white;
+	--bg-color: #f3f2ee;
+	--text-color: #1f0909;
+	--control-text-color: #444;
+	--rawblock-edit-panel-bd: #e5e5e5;
+
+	--select-text-bg-color: rgba(32, 43, 51, 0.63);
+  --select-text-font-color: white;
+}
+
+pre {
+	--select-text-bg-color: #36284e;
+	--select-text-font-color: #fff;
+}
+
+html {
+	font-size: 16px;
+	-webkit-font-smoothing: antialiased;
+}
+
+html, body {
+	background-color: #f3f2ee;
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+	color: #1f0909;
+	line-height: 1.5em;
+}
+
+/*#write {
+	overflow-x: auto;
+    max-width: initial;
+	padding-left: calc(50% - 17em);
+    padding-right: calc(50% - 17em);
+}
+
+@media (max-width: 36em) {
+ 	#write {
+ 		padding-left: 1em;
+    	padding-right: 1em;
+ 	}
+}*/
+
+#write {
+	max-width: 40em;
+}
+
+@media only screen and (min-width: 1400px) {
+	#write {
+			max-width: 914px;
+	}
+}
+
+ol li {
+	list-style-type: decimal;
+	list-style-position: outside;
+}
+ul li {
+	list-style-type: disc;
+	list-style-position: outside;
+}
+
+ol,
+ul {
+	list-style: none;
+}
+
+blockquote,
+q {
+	quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* styles */
+
+/* ====== */
+
+/* headings */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: bold;
+}
+h1 {
+	font-size: 1.875em;
+	/*30 / 16*/
+	line-height: 1.6em;
+	/* 48 / 30*/
+	margin-top: 2em;
+}
+h2,
+h3 {
+	font-size: 1.3125em;
+	/*21 / 16*/
+	line-height: 1.15;
+	/*24 / 21*/
+	margin-top: 2.285714em;
+	/*48 / 21*/
+	margin-bottom: 1.15em;
+	/*24 / 21*/
+}
+h3 {
+	font-weight: normal;
+}
+h4 {
+	font-size: 1.125em;
+	/*18 / 16*/
+	margin-top: 2.67em;
+	/*48 / 18*/
+}
+h5,
+h6 {
+	font-size: 1em;
+	/*16*/
+}
+h1 {
+	border-bottom: 1px solid;
+	margin-bottom: 1.875em;
+	padding-bottom: 0.8125em;
+}
+/* links */
+
+a {
+	text-decoration: none;
+	color: #065588;
+}
+a:hover,
+a:active {
+	text-decoration: underline;
+}
+/* block spacing */
+
+p,
+blockquote,
+.md-fences {
+	margin-bottom: 1.5em;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-bottom: 1.5em;
+}
+/* blockquote */
+
+blockquote {
+	font-style: italic;
+	border-left: 5px solid;
+	margin-left: 2em;
+	padding-left: 1em;
+}
+/* lists */
+
+ul,
+ol {
+	margin: 0 0 1.5em 1.5em;
+}
+/* tables */
+.md-meta,.md-before, .md-after {
+	color:#999;
+}
+
+table {
+	margin-bottom: 1.5em;
+	/*24 / 16*/
+	font-size: 1em;
+	/* width: 100%; */
+}
+thead th,
+tfoot th {
+	padding: .25em .25em .25em .4em;
+	text-transform: uppercase;
+}
+th {
+	text-align: left;
+}
+td {
+	vertical-align: top;
+	padding: .25em .25em .25em .4em;
+}
+
+code,
+.md-fences {
+	background-color: #dadada;
+}
+
+code {
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.md-fences {
+	margin-left: 2em;
+	margin-bottom: 3em;
+	padding-left: 1ch;
+	padding-right: 1ch;
+}
+
+pre,
+code,
+tt {
+	font-size: .875em;
+	line-height: 1.714285em;
+}
+/* some fixes */
+
+h1 {
+	line-height: 1.3em;
+	font-weight: normal;
+	margin-bottom: 0.5em;
+}
+
+p + ul,
+p + ol{
+	margin-top: .5em;
+}
+
+h3 + ul,
+h4 + ul,
+h5 + ul,
+h6 + ul,
+h3 + ol,
+h4 + ol,
+h5 + ol,
+h6 + ol {
+	margin-top: .5em;
+}
+
+li > ul,
+li > ol {
+	margin-top: inherit;
+	margin-bottom: 0;
+}
+
+li ol>li {
+	list-style-type: lower-alpha;
+}
+
+li li ol>li{
+	list-style-type: lower-roman;
+}
+
+h2,
+h3 {
+	margin-bottom: .75em;
+}
+hr {
+	border-top: none;
+	border-right: none;
+	border-bottom: 1px solid;
+	border-left: none;
+}
+h1 {
+	border-color: #c5c5c5;
+}
+blockquote {
+	border-color: #bababa;
+	color: #656565;
+}
+
+blockquote ul,
+blockquote ol {
+	margin-left:0;
+}
+
+.ty-table-edit {
+	background-color: transparent;
+}
+thead {
+	background-color: #dadada;
+}
+tr:nth-child(even) {
+	background: #e8e7e7;
+}
+hr {
+	border-color: #c5c5c5;
+}
+.task-list{
+	padding-left: 1rem;
+}
+
+.md-task-list-item {
+	padding-left: 1.5rem;
+	list-style-type: none;
+}
+
+.md-task-list-item > input:before {
+	content: '\221A';
+	display: inline-block;
+	width: 1.25rem;
+  	height: 1.6rem;
+	vertical-align: middle;
+	text-align: center;
+	color: #ddd;
+	background-color: #F3F2EE;
+}
+
+.md-task-list-item > input:checked:before,
+.md-task-list-item > input[checked]:before{
+	color: inherit;
+}
+
+#write pre.md-meta-block {
+	min-height: 1.875rem;
+	color: #555;
+	border: 0px;
+	background: transparent;
+	margin-top: -4px;
+	margin-left: 1em;
+	margin-top: 1em;
+}
+
+.md-image>.md-meta {
+	color: #9B5146;
+}
+
+.md-image>.md-meta{
+	font-family: Menlo, 'Ubuntu Mono', Consolas, 'Courier New', 'Microsoft Yahei', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', serif;
+}
+
+
+#write>h3.md-focus:before{
+	left: -1.5rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h4.md-focus:before{
+	left: -1.5rem;
+	top: .25rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h5.md-focus:before{
+	left: -1.5rem;
+	top: .0.3125rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h6.md-focus:before{
+	left: -1.5rem;
+	top: 0.3125rem;
+	color:#999;
+	border-color:#999;
+}
+
+.md-toc:focus .md-toc-content{
+	margin-top: 19px;
+}
+
+.md-toc-content:empty:before{
+	color: #065588;
+}
+.md-toc-item {
+	color: #065588;
+}
+#write div.md-toc-tooltip {
+	background-color: #f3f2ee;
+}
+
+#typora-sidebar {
+	background-color: #f3f2ee;
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+  	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+}
+
+.pin-outline #typora-sidebar {
+	background: inherit;
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+.pin-outline #typora-sidebar:hover .outline-title-wrapper {
+	border-left:1px dashed;
+}
+
+.outline-item:hover {
+  background-color: #dadada;
+  border-left: 28px solid #dadada;
+  border-right: 18px solid #dadada;
+}
+
+.typora-node .outline-item:hover {
+  	border-right: 28px solid #dadada;
+}
+
+.outline-expander:before {
+  content: "\f0da";
+  font-family: FontAwesome;
+  font-size:14px;
+  top: 1px;
+}
+
+.outline-expander:hover:before,
+.outline-item-open>.outline-item>.outline-expander:before {
+  content: "\f0d7";
+}
+
+.modal-content {
+	background-color: #f3f2ee;
+}
+
+.auto-suggest-container ul li {
+	list-style-type: none;
+}
+
+/** UI for electron */
+
+.megamenu-menu,
+#top-titlebar, #top-titlebar *,
+.megamenu-content {
+	background: #f3f2ee;
+	color: #1f0909;
+}
+
+.megamenu-menu-header {
+	border-bottom: 1px dashed #202B33;
+}
+
+.megamenu-menu {
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+header, .context-menu, .megamenu-content, footer {
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+    color: #1f0909;
+}
+
+#megamenu-back-btn {
+	color: #1f0909;
+	border-color: #1f0909;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title:before {
+	color: #1f0909;
+}
+
+.megamenu-menu-list li a:hover, .megamenu-menu-list li a.active {
+	color: inherit;
+	background-color: #e8e7df;
+}
+
+.long-btn:hover {
+	background-color: #e8e7df;
+}
+
+#recent-file-panel tbody tr:nth-child(2n-1) {
+    background-color: transparent !important;
+}
+
+.megamenu-menu-panel tbody tr:hover td:nth-child(2) {
+    color: inherit;
+}
+
+.megamenu-menu-panel .btn {
+	background-color: #D2D1D1;
+}
+
+.btn-default {
+	background-color: transparent;
+}
+
+.typora-sourceview-on #toggle-sourceview-btn,
+.ty-show-word-count #footer-word-count {
+	background: #c7c5c5;
+}
+
+#typora-quick-open {
+    background-color: inherit;
+}
+
+.md-diagram-panel {
+	margin-top: 8px;
+}
+
+.file-list-item-file-name {
+	font-weight: initial;
+}
+
+.file-list-item-summary {
+	opacity: 1;
+}
+
+.file-list-item {
+	color: #777;
+}
+
+.file-list-item.active {
+	background-color: inherit;
+	color: black;
+}
+
+.ty-side-sort-btn.active {
+	background-color: inherit;
+}
+
+.file-list-item.active .file-list-item-file-name  {
+	font-weight: bold;
+}
+
+.file-list-item{
+    opacity:1 !important;
+}
+
+.file-library-node.active>.file-node-background{
+	background-color: rgba(32, 43, 51, 0.63);
+	background-color: var(--active-file-bg-color);
+}
+
+.file-tree-node.active>.file-node-content{
+	color: white;
+	color: var(--active-file-text-color);
+}
+
+.md-task-list-item>input {
+	margin-left: -1.7em;
+	margin-top: calc(1rem - 12px);
+	-webkit-appearance: button;
+}
+
+input {
+	border: 1px solid #aaa;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title,
+.megamenu-menu-header:hover, 
+.megamenu-menu-header:focus {
+	color: inherit;
+}
+
+.dropdown-menu .divider {
+	border-color: #e5e5e5;
+	opacity: 1;
+}
+
+/* https://github.com/typora/typora-issues/issues/2046 */
+.os-windows-7 strong,
+.os-windows-7 strong  {
+	font-weight: 760;
+}
+
+.ty-preferences .btn-default {
+	background: transparent;
+}
+
+.ty-preferences .window-header {
+	border-bottom: 1px dashed #202B33;
+	box-shadow: none;
+}
+
+#sidebar-loading-template, #sidebar-loading-template.file-list-item {
+	color: #777;
+}
+
+.searchpanel-search-option-btn.active {
+	background: #777;
+	color: white;
+}
+
+.export-detail, .light .export-detail, 
+.light .export-item.active, 
+.light .export-items-list-control {
+	background: #e0e0e0;
+	border-radius: 2px;
+	font-weight: 700;
+	color: inherit
+}
+
+ @media print { @page {margin: 0 0 0 0;} body.typora-export {padding-left: 0; padding-right: 0;} #write {padding:0;}}
+</style><title>AItools</title>
+</head>
+<body class='typora-export typora-export-show-outline typora-export-no-collapse-outline'><div class='typora-export-content'>
+<div class="typora-export-sidebar"><div class="outline-content"><li class="outline-item-wrapper outline-h1"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#ai-research-tools">AI-research-tools</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#趋势关注">趋势关注</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#rss-阅读器">RSS 阅读器</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#论文查找">论文查找</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#搜索引擎">搜索引擎</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#arxiv-相关">arXiv 相关</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#代码实现查找">代码实现查找</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#论文阅读">论文阅读</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#查阅下载">查阅下载</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#文献管理">文献管理</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#文献翻译">文献翻译</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#笔记工具">笔记工具</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#编码实验">编码实验</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#pytorch-相关">Pytorch 相关</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#功能配置封装">功能配置封装</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#项目参考">项目参考</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#项目管理">项目管理</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#风格指南">风格指南</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#项目模板">项目模板</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#神经网络分析器">神经网络分析器</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#可视化">可视化</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#实验记录">实验记录</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#数据集查找">数据集查找</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#数据集下载">数据集下载</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#特征工程">特征工程</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#超参搜索">超参搜索</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#debug-工具">Debug 工具</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#论文写作">论文写作</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#latex-模板">LaTeX 模板</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#latex-编辑器">LaTeX 编辑器</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#语言表达">语言表达</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#搭配查找">搭配查找</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#句式推荐">句式推荐</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#写作检查">写作检查</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#公式编辑">公式编辑</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#截屏悬浮">截屏悬浮</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#表格转-latex">表格转 LaTeX</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#绘制示意图">绘制示意图</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#绘图工具">绘图工具</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#绘图参考">绘图参考</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#ppt-插件">PPT 插件</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#图片转换">图片转换</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#图片休整">图片休整</a></div><ul class="outline-children"></ul></li></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#论文投递">论文投递</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#会议期刊查找筛选">会议期刊查找筛选</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#匿名链接">匿名链接</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#arxiv-提交">arXiv 提交</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#代码开源">代码开源</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#其他">其他</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#专利检索">专利检索</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#专注工作">专注工作</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#白噪声--音乐">白噪声 / 音乐</a></div><ul class="outline-children"></ul></li></ul></li></ul></li></div></div><div id='write'  class=''><h1 id='ai-research-tools'><span>AI-research-tools</span></h1><p><a href='https://github.com/bighuang624/AI-research-tools/blob/master/LICENSE'><img src="https://img.shields.io/badge/license-MIT-blue.svg" referrerpolicy="no-referrer" alt="MIT license"></a></p><h2 id='趋势关注'><span>趋势关注</span></h2><h3 id='rss-阅读器'><span>RSS 阅读器</span></h3><ul><li><a href='http://irreader.fatecore.com/'><span>irreader 阅读器</span></a><span>：这是我现在在使用的 RSS 阅读器。一个非常大的优点是，对于一些没有提供 RSS 订阅源的网站，irreader 可以自定义 RSS 订阅源。另外，订阅的 RSS 更新时，有弹窗提醒。还有一个我暂时用不到的功能是，irreader 同时支持订阅播客和播放有声媒体。</span></li></ul><h2 id='论文查找'><span>论文查找</span></h2><h3 id='搜索引擎'><span>搜索引擎</span></h3><ul><li><a href='https://scholar.google.com/schhp?hl=zh-CN'><span>Google scholar</span></a><span>：搜索论文的首选，可以在这里查看论文统计和引用参考文献，还能通过关注作者或者论文获得新论文更新提醒，以及利用自动化推荐来提供一个基本库。</span></li><li><a href='https://www.semanticscholar.org/'><span>Semantic scholar</span></a><span>：可以结合外部材料整合进行论文的语义分析。功能包括：展示引用和参考文献、度量论文影响力、展示论文图表、自动生成关键词（根据标题）、分析作者、在互联网寻找额外资源（例如，相关 youtube 视频），以及推荐论文。</span></li><li><a href='https://dblp.org/'><span>dblp: computer science bibliography</span></a><span>：专为 CS 设计的论文查询网站，收录比较顶级并可以被检索到的论文。可以根据会议、期刊等分类查询作者的论文，想搜一个计算机会议的所有文章时好用。</span></li><li><a href='https://chn.oversea.cnki.net/index/'><span>中国知网海外服务</span></a><span>：支持全 PDF 格式下载。具体可见 </span><a href='https://iseex.github.io//2020-07/CNKI-oversea/'><span>海外版知网升级了！（全PDF下载），从此告别CAJ阅读器！</span></a><span>。</span></li></ul><h3 id='arxiv-相关'><span>arXiv 相关</span></h3><ul><li><a href='https://arxiv.org/'><span>arXiv</span></a><span>: 论文预印本收录网站。</span></li><li><a href='http://arxiv-sanity.com/'><span>arXiv-sanity</span></a><span>：在功能上相比于 arXiv 有很大的改进，包括在浏览中显示摘要、评论和非常基本的社交、推荐、库功能。搜索也更好用。</span></li><li><a href='https://s2-sanity.apps.allenai.org'><span>Semantic Sanity: A Personalized Adaptive Feed</span></a><span>：创建自己的个性化 arXiv 选读 Feed。创建每个 Feed 时，会让您先选择几篇论文，然后根据这几篇论文开始推荐，对于推荐结果可以点赞或者不喜欢来帮助调整推荐结果。</span></li><li><a href='http://arxiv.xixiaoyao.cn/'><span>卖萌屋Arxiv服务</span></a><span>: 只包含 arxiv 当日更新的论文。优点在于把作者机构也展示出来。仍在改进。</span></li><li><a href='https://www.paperdigest.org/'><span>Paper Digest – AI for tracking and summarizing papers</span></a><span>: 提供邮件订阅前一天出的论文的列表，附有每篇论文的一句话总结。对我更重要的是这个网站也会在每个顶会论文全部公布时进行整理。</span></li></ul><h3 id='代码实现查找'><span>代码实现查找</span></h3><ul><li><a href='https://paperswithcode.com/'><span>Papers With Code</span></a><span>：自动把论文连接到实现代码的 GitHub 资源库和数据集，并根据 GitHub 的收藏量排序。展示各任务上的 SOTA 以供比较。</span></li></ul><!-- * [rasbt/deeplearning-models](https://github.com/rasbt/deeplearning-models)：使用 TensorFlow 和 PyTorch 实现各种深度学习模型的合集。 --><ul><li><a href='https://github.com/labmlai/annotated_deep_learning_paper_implementations'><span>labmlai/annotated_deep_learning_paper_implementations</span></a><span>：很多算法的 PyTorch 实现，带有在线版的注释。缺点是展示的部分不是从头实现，一部分代码放在他们自己的包里了。</span></li></ul><h2 id='论文阅读'><span>论文阅读</span></h2><h3 id='查阅下载'><span>查阅下载</span></h3><ul><li><a href='http://tool.yovisun.com/scihub/'><span>SCI-Hub 科研论文全文下载可用网址</span></a></li></ul><h3 id='文献管理'><span>文献管理</span></h3><ul><li><a href='https://www.mendeley.com'><span>Mendeley</span></a><span>：支持 web、PC、Mac 和移动手机等多个平台，可以直接注释和高亮显示 PDF，有限额的免费云存储。另外有每周邮件推荐论文。</span></li></ul><h3 id='文献翻译'><span>文献翻译</span></h3><ul><li><a href='https://copytranslator.github.io/'><span>CopyTranslator</span></a><span>：最大的优点在于有置顶、点按复制、监听剪贴板等功能，阅读文献配合使用时可以无缝切换，非常方便。</span></li><li><a href='https://saladict.crimx.com/'><span>Saladict 沙拉查词</span></a><span>：浏览器翻译插件，有非常丰富的设置来配合用户的使用习惯。除了官方文档，也可以看 </span><a href='https://zhuanlan.zhihu.com/p/113809716'><span>沙拉查词 + Alfred，打造最佳文献翻译体验！</span></a><span> 来了解。我还在探索如何在 Windows 系统上实现浏览器外翻译。</span></li></ul><h3 id='笔记工具'><span>笔记工具</span></h3><ul><li><span>我个人习惯使用</span><a href='https://www.yinxiang.com/'><span>印象笔记</span></a><span>。</span></li></ul><h2 id='编码实验'><span>编码实验</span></h2><h3 id='pytorch-相关'><span>Pytorch 相关</span></h3><h4 id='功能配置封装'><span>功能配置封装</span></h4><ul><li><a href='https://github.com/williamFalcon/pytorch-lightning'><span>pytorch-lightning</span></a><span>：将 PyTorch 开发中的各种通用配置（训练验证逻辑、超参搜索、分布式训练等）全部包装起来，以更高级的形式快速搭建模型。功能强大，有些复杂，正在摸索。</span><a href='https://mp.weixin.qq.com/s/5ueJvt1tcWW0wknpkM3WIg'><span>机器之心写的简介</span></a></li></ul><h4 id='项目参考'><span>项目参考</span></h4><ul><li><a href='https://github.com/ritchieng/the-incredible-pytorch'><span>the-incredible-pytorch</span></a><span>：有关 PyTorch 的各种教程、项目、视频等资源。</span></li><li><a href='https://github.com/microsoft/computervision-recipes'><span>computervision-recipes</span></a><span>：微软出品，基于 PyTorch 的各种 CV 任务的教程。</span></li></ul><!-- * [donnyyou/torchcv](https://github.com/donnyyou/torchcv)：基于 PyTorch 的 CV 模型框架，包含图像分类、语义分割、目标检测、姿态检测、实例分割、生成对抗网络等任务中的多个常见模型。 --><h4 id='项目管理'><span>项目管理</span></h4><ul><li><a href='https://oidiotlin.com/torchtracer/'><span>torchtracer</span></a><span>：一个管理 PyTorch AI 实验项目的工具，主要用于保存各类训练数据（模型 checkpoints、超参数组合、日志、loss 变化曲线图像等）。</span></li></ul><h4 id='风格指南'><span>风格指南</span></h4><ul><li><a href='https://github.com/IgorSusmelj/pytorch-styleguide'><span>pytorch-styleguide</span></a><span>：一份 PyTorch 的非官方风格指南和最佳实践总结。</span></li></ul><h4 id='项目模板'><span>项目模板</span></h4><ul><li><a href='https://github.com/moemen95/Pytorch-Project-Template'><span>Pytorch-Project-Template</span></a><span>：一个可扩展的 PyTorch 项目模板，包括图像分割、目标分类、GANs 和强化学习等实例。</span></li><li><a href='https://github.com/lyakaap/pytorch-template'><span>pytorch-template</span></a><span>：另一份 PyTorch 项目模板。</span></li></ul><h4 id='神经网络分析器'><span>神经网络分析器</span></h4><ul><li><a href='https://github.com/TylerYep/torchinfo'><span>torchinfo</span></a><span>：打印 PyTorch 模型信息，包含模型每层的参数量、输出张量大小等。</span></li><li><a href='https://github.com/sovrasov/flops-counter.pytorch'><span>flops-counter.pytorch</span></a><span>：计算模型总共的 FLOPs（浮点运算数，理解为计算量，可以用来衡量算法/模型的复杂度）以及每层的占比。缺点是似乎不支持 RNN 相关层，另外打印下来的信息不是很方便看。</span></li></ul><h4 id='可视化'><span>可视化</span></h4><ul><li><span>PyTorch 最新版本已经带有 tensorboard。</span><a href='https://pytorch.org/tutorials/intermediate/tensorboard_tutorial.html'><span>官方 tutorial</span></a><span>。</span></li><li><a href='https://github.com/facebookresearch/visdom'><span>visdom</span></a><span>：【待尝试】用于创建、组织和共享实时丰富数据可视化的灵活工具。</span></li><li><a href='https://ezyang.github.io/convolution-visualizer/index.html'><span>Convolution Visualizer</span></a><span>：如果卷积层配置比较复杂，不方便计算输出大小时，可以利用这个可视化工具辅助。</span></li></ul><h3 id='实验记录'><span>实验记录</span></h3><ul><li><a href='https://github.com/fastnlp/fitlog'><span>fitlog</span></a><span>：【待尝试】架构无关的实验记录工具，可以看</span><a href='https://www.zhihu.com/question/384519338/answer/1181186086'><span>邱锡鹏老师在知乎写的介绍</span></a><span>。</span></li></ul><h3 id='数据集查找'><span>数据集查找</span></h3><ul><li><a href='https://toolbox.google.com/datasetsearch'><span>Google Dataset Search</span></a></li><li><a href='https://datasets.bifrost.ai/'><span>Data Search | Bifrost</span></a><span>：视觉数据集搜索。</span></li></ul><h3 id='数据集下载'><span>数据集下载</span></h3><ul><li><a href='https://github.com/wkentaro/gdown'><span>gdown</span></a><span>：用于解决在 Google Drive 上下载大型数据集常发生的失败现象。</span></li></ul><h3 id='特征工程'><span>特征工程</span></h3><ul><li><a href='https://github.com/featuretools/featuretools'><span>Featuretools</span></a><span>：【待尝试】自动化特征工程库。</span></li></ul><h3 id='超参搜索'><span>超参搜索</span></h3><ul><li><a href='https://github.com/optuna/optuna'><span>optuna</span></a><span>：自动超参数优化框架。</span></li><li><a href='https://github.com/microsoft/nni/blob/master/README_zh_CN.md'><span>microsoft/nni</span></a><span>：【待尝试】用于神经模型搜索和超参数调优的开源自动机器学习（AutoML）的工具包，支持绝大多数主流框架和运行环境。</span></li><li><a href='http://hyperopt.github.io/hyperopt/'><span>Hyperopt</span></a><span>：【待尝试】分布式异步超参数优化。看到知乎上有人推荐，不过根据文档来看，目前支持的优化算法只有两种，且不包括贝叶斯优化。</span></li><li><a href='https://github.com/pytorch/botorch'><span>BoTorch</span></a><span>：【待尝试】基于 PyTorch 的贝叶斯优化库。</span></li><li><a href='https://github.com/automl/Auto-PyTorch'><span>automl/Auto-PyTorch</span></a><span>：【待尝试】基于 PyTorch 的自动结构搜素和超参数搜索。</span></li></ul><h3 id='debug-工具'><span>Debug 工具</span></h3><ul><li><a href='https://github.com/cool-RR/pysnooper'><span>PySnooper</span></a><span>：【待尝试】致力让用户抛弃</span><code>print</code><span>函数来 debug（然而，至少目前我还是习惯用 logging 模块，和</span><code>print</code><span>差不了多少）。</span><a href='https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2650760939&amp;idx=1&amp;sn=5b69c106549f329f83ca241e1bc71ff3&amp;chksm=871aa295b06d2b83deade4fc16f99ed5354572c8838d202d0a229d804bb535815f2315d980d0&amp;scene=0&amp;xtrack=1&amp;key=6854b25c2a023c1b259671991171b31fab8ca8f0b3be42cfe9746f0ac6a97af337c3f692988c69af5813e1658308b6087dc66c1d1f218619aab29c7d02dfc8b005eff42eea7fcb837022e321727f14b5&amp;ascene=1&amp;uin=MjA1ODkwNzIyNw%3D%3D&amp;devicetype=Windows+10&amp;version=62060739&amp;lang=zh_CN&amp;pass_ticket=5JdoVuTltfAvWg%2FaBYq40SvnVT0xZhhRK9fPaxA3iu2MgoceoLJpRqamQ9gnBuY2'><span>机器之心写的简介</span></a></li></ul><h2 id='论文写作'><span>论文写作</span></h2><h3 id='latex-模板'><span>LaTeX 模板</span></h3><p><span>包括论文、报告、海报等在内的各种 LaTeX 模板。</span></p><ul><li><a href='https://www.overleaf.com/latex/templates'><span>Templates from Overleaf</span></a></li><li><a href='http://www.latextemplates.com/'><span>LaTeX Templates</span></a></li></ul><h3 id='latex-编辑器'><span>LaTeX 编辑器</span></h3><ul><li><span>我个人习惯使用 VSCode 进行离线的 LaTeX 写作，配合 Github 私有库进行版本管理。</span></li><li><a href='https://www.overleaf.com/'><span>Overleaf</span></a><span>：支持多人协作的</span><strong><span>在线</span></strong><span> LaTeX 编辑器。但是对网络连接有一定要求。</span></li></ul><h3 id='语言表达'><span>语言表达</span></h3><h4 id='搭配查找'><span>搭配查找</span></h4><p><span>可以看一下这篇文章的推荐：</span><a href='https://zhuanlan.zhihu.com/p/35396232'><span>有了这些网站，英文论文再也不难写了（15个英文论文写作辅助网站介绍和使用技巧） - 知乎</span></a></p><ul><li><a href='https://linggle.com/'><span>Linggle</span></a><span>：搜索最常出现的英文词语搭配。不确定自己的表达方式是否正确时使用。</span></li><li><a href='https://www.english-corpora.org/coca/'><span>Corpus of Contemporary American English (COCA)</span></a><span>：可以查词汇搭配的</span><strong><span>美式</span></strong><span>英语语料库，可以查看具体的用了这个词的句子。 </span><a href='https://www.english-corpora.org/bnc/'><span>British National Corpus (BYU-BNC)</span></a><span>：英式英语的语料库，语料比美式的少一些</span></li><li><a href='https://www.thesaurus.com/'><span>Thesaurus</span></a><span>：将低端词汇转换为同义的高端词汇。</span></li><li><a href='http://www.esoda.org/'><span>易搜搭ESODA</span></a><span>：清华HCI Lab工作室出品的一款适合国人英语写作的词组搭配查询工具。可切换具体研究方向的论文语料库，展示相关的可替换用法，支持中英混搜。</span></li><li><a href='https://www.wordandphrase.info/analyzeText.asp'><span>Words and phrases: frequency, genres, collocates, concordances, synonyms, and WordNet</span></a><span>：用不同颜色区分高中低频词，展现代表文章类型的词汇，并归类出相关可替换的词。虽然说是英文写作措辞辅助工具，感觉最大的用途是学习相关领域论文常用的词汇和搭配。</span></li></ul><h4 id='句式推荐'><span>句式推荐</span></h4><ul><li><a href='http://www.phrasebank.manchester.ac.uk/'><span>Academic Phrasebank</span></a><span>：学术用语库，告诉你各个章节适合用哪些句式搭配。</span></li></ul><h4 id='写作检查'><span>写作检查</span></h4><p><span>请注意在线检测工具的泄露风险，谨慎处理关键文字。</span></p><ul><li><a href='https://www.grammarly.com/'><span>Grammarly</span></a><span>：语法、句型、标点、选词检测修改，有浏览器插件。</span></li><li><a href='https://www.nounplus.net/'><span>Nounplus.net</span></a><span>：免费的在线英文语法检测。</span></li><li><a href='https://gitlab.com/snowhitiger/proofread'><span>proofread</span></a><span>：【待尝试】对科学文章草稿自动检查，寻找不符合英文科学写作标准的部分，并提出修改意见。作者写的介绍：</span><a href='https://zhuanlan.zhihu.com/p/62351973'><span>分享一个自己做的英文科学写作检查器 - 知乎</span></a><span>。</span></li></ul><h3 id='公式编辑'><span>公式编辑</span></h3><ul><li><a href='https://mathpix.com/'><span>Mathpix</span></a><span>：通过截取复杂数学方程式的截图将其转换为 LaTeX 代码。可以处理 PDF 的印刷体和照片中的手写公式等。</span></li><li><a href='https://webdemo.myscript.com/'><span>MyScript Webdemo</span></a><span>：Math 模块可以将手写公式转为 LaTeX 代码；同时，Diagram 模块可以将手绘的框图转化为工整的框图。</span></li><li><a href='http://detexify.kirelabs.org/classify.html'><span>Detexify LaTeX handwritten symbol recognition</span></a><span>: 忘记某些字符用 LaTeX 怎么表示时，可以在这个网站上通过手写来查询。</span></li></ul><h3 id='截屏悬浮'><span>截屏悬浮</span></h3><p><span>写论文时经常会遇到需要参考多个文献或代码的情况，同时查看多个文件并频繁切换会非常麻烦。这里是别人推荐的两个能够将截图悬浮置顶的工具，并随时调整位置和大小，方便写作时参考。</span></p><ul><li><a href='https://www.snipaste.com/'><span>Snipaste</span></a><span>：【待尝试】有 Windows 和 Mac 版，暂时没有 Linux 版。</span></li><li><a href='http://snappy-app.com/'><span>Snappy</span></a><span>：【待尝试】有 Mac 和 iPhone &amp; iPad 版，暂时没有 Windows 版。</span></li></ul><h3 id='表格转-latex'><span>表格转 LaTeX</span></h3><ul><li><a href='https://ctan.org/tex-archive/support/excel2latex'><span>Excel2LaTeX</span></a><span>：用在 Excel 上的宏工具，能够将 Excel 表格转换为 LaTeX 代码，节省很多时间。能够满足大多数效果的转换，有些效果可能需要微调。</span></li></ul><h3 id='绘制示意图'><span>绘制示意图</span></h3><h4 id='绘图工具'><span>绘图工具</span></h4><ul><li><span>PPT 通常是我的第一选择：入手快，种类多，自由度高，支持导出矢量图。</span></li><li><a href='https://inkscape.org/'><span>Inkscape</span></a><span> with </span><a href='https://writetex.tk/'><span>latex equation extensions</span></a><span>：【待尝试】</span></li><li><a href='https://www.lucidchart.com/'><span>http://Lucidchart.com</span></a><span>：在线画矢量图，可以导出 png、pdf，也支持各种颜色，组合和图层等。</span></li></ul><h4 id='绘图参考'><span>绘图参考</span></h4><ul><li><a href='https://github.com/MLNLP-World/Paper-Picture-Writing-Code'><span>Paper-Picture-Writing-Code</span></a><span>：基于 LaTex 的画图代码，包含折线图、柱状图、散点图、注意力可视化以及结构图。</span></li><li><a href='https://github.com/xinychen/academic-drawing'><span>academic-drawing</span></a><span>：Matlab/Python 绘图，主要用于画时序数据。</span></li><li><a href='https://github.com/xinychen/awesome-latex-drawing'><span>awesome-latex-drawing</span></a><span>：LaTeX 绘图，主要用于画贝叶斯网络、张量分解等。</span></li><li><a href='https://github.com/HarisIqbal88/PlotNeuralNet'><span>PlotNeuralNet</span></a><span>：Python 得到可用于 LaTeX 的图，主要画 CNN。</span></li></ul><h4 id='ppt-插件'><span>PPT 插件</span></h4><ul><li><a href='http://www.jonathanleroux.org/software/iguanatex/'><span>IguanaTex</span></a><span>：帮助插入 LaTeX 公式的 PPT 插件。将输入的 LaTeX 代码转换为高质量的 png 图片来插入。</span></li></ul><h4 id='图片转换'><span>图片转换</span></h4><p><span>提供各种格式的图片的转换服务的网站很多。这里只是简单列举，你也可以通过搜索引擎来找到其他类似的网站。</span></p><ul><li><a href='http://www.tlhiv.org/rast2vec/'><span>Convert PNG/JPEG (Raster) to EPS/PDF (Vector) Format</span></a><span>：将 jpg、png 格式的图片文件转换为 eps 文件。</span></li><li><a href='https://convertio.co/zh/eps-pdf/'><span>EPS到PDF转换器</span></a><span>：也可以将 eps 文件转换为别的格式的图片。</span></li></ul><h4 id='图片休整'><span>图片休整</span></h4><ul><li><a href='https://pdfresizer.com/crop'><span>Crop PDF files online - PDF Tools</span></a><span>：裁剪 pdf 文件的白边。</span></li><li><span>在命令行中直接将 eps 转换为 pdf：</span><code>epstopdf &lt;file.eps&gt;</code><span>；自动裁剪 pdf 的白边：</span><code>pdfcrop &lt;file.pdf&gt;</code><span>。</span></li></ul><h2 id='论文投递'><span>论文投递</span></h2><h3 id='会议期刊查找筛选'><span>会议期刊查找筛选</span></h3><ul><li><a href='https://ccfddl.github.io/'><span>ccf-deadlines</span></a><span>：可以根据研究方向和 CCF 等级来筛选本年度已经确定截稿日期的会议。对国内的同学比较友好。</span></li><li><a href='https://aideadlin.es/'><span>AI Conference Deadlines</span></a><span>：可以根据研究方向筛选会议。但是好像需要科学上网才能看到全部信息。</span></li><li><a href='http://www.conferencelist.info/upcoming.html'><span>Conference List</span></a><span>：根据截稿时间排序，过期的会议不在首页出现。有一页可以看每个研究方向有哪些会议，但是没有办法根据研究方向筛选还没过期的会议。</span></li><li><a href='http://www.myhuiban.com/'><span>Conference Partner (会伴)</span></a><span>：计算机最新国际会议和期刊列表。可以注册以关注会议或期刊。比较全，但目前信息更新不及时。</span></li><li><a href='https://github.com/lixin4ever/Conference-Acceptance-Rate'><span>Conference-Acceptance-Rate</span></a><span>：主要会议近年录取率统计。</span></li></ul><h3 id='匿名链接'><span>匿名链接</span></h3><p><span>出于论文盲审考虑，有时候文件（如源码）链接需要是匿名的。有些人会选择在 Github 上创建一个匿名用户，但为每一个会议的每一篇论文都创建一个之后再用不到的用户过于繁琐。我查到有一些工具支持匿名分享文件如下。</span></p><ul><li><a href='https://www.dropbox.com/'><span>Dropbox</span></a><span>：应该是最常用的。</span></li><li><a href='http://help.osf.io/m/links_forks/l/783581-create-a-view-only-link-for-a-registration'><span>Open Science Framework</span></a></li><li><a href='https://knowledge.figshare.com/articles/item/how-to-share-cite-or-embed-my-data'><span>Figshare</span></a></li></ul><h3 id='arxiv-提交'><span>arXiv 提交</span></h3><ul><li><a href='https://zhuanlan.zhihu.com/p/109405192'><span>Arxiv 论文提交流程——看这篇就够了</span></a><span>：文章，用于了解将论文提交至 arXiv 上的流程。</span></li><li><a href='https://github.com/google-research/arxiv-latex-cleaner'><span>arxiv-latex-cleaner</span></a><span>：将论文的 LaTeX 代码清理为提交至 arXiv 上的要求。一个亮点是能够自动清理掉论文中所有被注释掉的内容。</span></li><li><a href='https://zhuanlan.zhihu.com/p/558225069'><span>overleaf -&gt; arxiv 丝滑提交过程</span></a><span>：如果是使用 Overleaf（而不是在本地将 LaTeX 代码编译为论文），可以先参考本文下载合适的源码包，然后再考虑使用 arxiv-latex-cleaner。</span></li></ul><h3 id='代码开源'><span>代码开源</span></h3><p><span>为已发表的论文提供清晰、可复现的代码能够有效推动领域发展。这里推荐一些对开源代码有帮助的工具。</span></p><ul><li><a href='https://www.cs.mcgill.ca/~jpineau/ReproducibilityChecklist.pdf'><span>ReproducibilityChecklist-v2.0</span></a><span>：一份机器学习复现清单，列举了你应该提供哪些文件来增强你的论文的可复现性。</span></li><li><a href='https://github.com/Damnever/pigar'><span>pigar</span></a><span>：Python 项目 requirements 文件自动生成工具。</span></li></ul><h2 id='其他'><span>其他</span></h2><h3 id='专利检索'><span>专利检索</span></h3><ul><li><a href='https://iseex.github.io//2020-05/Google-Patents/'><span>Google Patents</span></a><span>：免费检索和下载中英文专利。具体可见 </span><a href='https://iseex.github.io//2020-05/Google-Patents/'><span>Google Patents，免费检索和下载中英文专利的最佳工具！</span></a><span>。</span></li></ul><h3 id='专注工作'><span>专注工作</span></h3><ul><li><a href='http://www.tomatolife.cn/index.html'><span>番茄·人生</span></a><span>：Windows PC 端待办事项软件，番茄工作法时钟。</span></li></ul><h3 id='白噪声--音乐'><span>白噪声 / 音乐</span></h3><ul><li><a href='https://rainyscope.com'><span>Rainyscope rain simulator</span></a><span>：下雨声。</span></li><li><a href='https://www.lofi.cafe/'><span>lofi.cafe - lofi music 🎧</span></a><span>：随机播放 Lo-Fi 音乐，习惯在工作时听音乐的同学可以尝试一下。需要科学上网。</span></li></ul></div></div>
+
+<script>(function (){var t=document.body.parentElement,e=[],n=null,i=document.body.classList.contains("typora-export-collapse-outline"),r=function(t,e,n){document.addEventListener(t,function(t){if(!t.defaultPrevented)for(var i=t.target;i&&i!=this;i=i.parentNode)if(i.matches(e)){!1===n.call(i,t)&&(t.preventDefault(),t.stopPropagation());break}},!1)};function o(){return t.scrollTop}r("click",".outline-expander",function(t){var e=this.closest(".outline-item-wrapper").classList;return e.contains("outline-item-open")?e.remove("outline-item-open"):e.add("outline-item-open"),c(),!1}),r("click",".outline-item",function(t){var e=this.querySelector(".outline-label");if(location.hash="#"+e.getAttribute("href"),i){var n=this.closest(".outline-item-wrapper").classList;n.contains("outline-item-open")||n.add("outline-item-open"),l(),n.add("outline-item-active")}});var a,s,u=function(){var t=o();n=null;for(var i=0;i<e.length&&e[i][1]-t<60;i++)n=e[i]},l=function(){document.querySelectorAll(".outline-item-active").forEach(t=>t.classList.remove("outline-item-active")),document.querySelectorAll(".outline-item-single.outline-item-open").forEach(t=>t.classList.remove("outline-item-open"))},c=function(){if(n){l();var t=document.querySelector('.outline-label[href="#'+(CSS.escape?CSS.escape(n[0]):n[0])+'"]');if(t)if(i){var e=t.closest(".outline-item-open>ul>.outline-item-wrapper");if(e)e.classList.add("outline-item-active");else{for(var r=(t=t.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper");r;)r=(t=r).parentElement.closest(".outline-item-wrapper");t.classList.add("outline-item-active")}}else t.closest(".outline-item-wrapper").classList.add("outline-item-active")}};window.addEventListener("scroll",function(t){a&&clearTimeout(a),a=setTimeout(function(){u(),c()},300)});var f=function(){s=setTimeout(function(){!function(){e=[];var t=o();document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(n=>{var i=n.getAttribute("id");e.push([i,t+n.getBoundingClientRect().y])})}(),u(),c()},300)};window.addEventListener("resize",function(t){s&&clearTimeout(s),f()}),f()})();</script></body>
+</html>
