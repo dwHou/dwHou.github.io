@@ -2806,7 +2806,7 @@ Scope, duration, and linkage summary
 - 内部链接 internal linkage
 - 外部链接 external linkage
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221004211258364.png" alt="image-20221004211258364" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20221004211258364.png" alt="image-20221004211258364" style="zoom:50%;" />
 
 存储类说明符：
 

@@ -49,7 +49,7 @@ ViT对Transformer的改造很简单直接，但没考虑视觉信号的一些特
 
 本工作就是希望Transformer能更好的适应视觉信号（层次性hierarchy/局部性locality/平移不变性translation invarianc）
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221020174023945.png" alt="image-20221020174023945" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20221020174023945.png" alt="image-20221020174023945" style="zoom:50%;" />
 
 针对现有问题，提出了一种**包含滑窗操作，具有层级设计**的Swin Transformer。
 
@@ -109,7 +109,7 @@ TCI 2016 *Google*
 
 **该文观点：**
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20220926211611036.png" alt="image-20220926211611036" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20220926211611036.png" alt="image-20220926211611036" style="zoom:50%;" />
 
 1. 倾向example-based方法，即使用外部数据集学习LR patch到HR patch的映射。
 
@@ -186,7 +186,7 @@ WACV 2022 *BOE*
 
 传统插值上采样图示：
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20220916141622033.png" alt="image-20220916141622033" style="zoom:35%;" />
+<img src="../../images/typora-images/image-20220916141622033.png" alt="image-20220916141622033" style="zoom:35%;" />
 
 但图中的定义的升频(upscaling)显然效率低下，因为上采样(upsampling)引入了许多零，当乘以滤波器系数时会浪费资源。 一个众所周知的优化，广泛用于经典升频器的实际实现中，是将插值滤波器从图中的大小 sk×sk 拆分或解复用为 s^2 所谓的大小为 k × k 的高效滤波器。 然后，s^2 个滤波器的输出通过Pixel-Shuffle操作进行多路复用，以获得放大后的图像。
 
