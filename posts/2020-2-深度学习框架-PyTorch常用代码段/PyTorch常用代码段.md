@@ -281,7 +281,7 @@ tensor = torchvision.transforms.functional.to_tensor(PIL.Image.open(path)) #Equi
 
 ```python
 # np.ndarray → PIL.Image.
-image = PIL.Image.fromarray(ndarray.astype(np.unit8))
+image = PIL.Image.fromarray(ndarray.astype(np.uint8))
 
 # PIL.Image → np.ndarray.
 ndarray = np.asarray(PIL.Image.open(path))

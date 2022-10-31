@@ -180,13 +180,16 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
       • low-level vision:
       • 2016年，Google提出RAISR，它的过滤器通过高效的散列机制选择，即像素级的索引从filter bucket(or LUT)中选取过滤器，起到了空域自适应的效果。详细可见<a href="../2019-11-论文笔记/">论文解读</a>。
       • Kernel Prediction Networks：
+      • 2017年，<a href="http://disneyresearch.s3.amazonaws.com/wp-content/uploads/20170630135237/Kernel-Predicting-Convolutional-Networks-for-Denoising-Monte-Carlo-Renderings-Paper33.pdf">KPN</a>被用于蒙特卡洛渲染去噪。
       • 2017年，两篇KPN用于视频插帧的论文被发表于顶会（相同作者）。前一篇论文由于插帧/运动估计问题的特性，kernel特别大（41x41），只能逐像素处理。后一篇因此只预测1D的kernel，41x1和1x41，再外积得到完整的2D kernel。
       • 2018年，KPN被用于超分，只不过末层学输出通道r^2的kernel，可以pixel-shuffle上采样，做为skip-connection分支（KPN）。同时也共享参数，末层另一个分支学残差（非KPN）。
       • 2018年，加州伯克利和谷歌将<a href="https://joechann0831.github.io/2019/06/24/Burst-Denoising-with-Kernel-Prediction-Networks/">KPN</a>用在Burst Denoising上。本质和localconv没有区别。提出的loss可以引导KPN既做align又做去噪，最后average。
       • 2019年，张磊老师组将KPN用于RealSR，解决blur kernel会跟随物距而改变的问题。因为kernel尺寸太大，复杂度增加很大，kernel尺寸太小，效果不好。所以该方法使用了金字塔结构，最后几层pixel-shuffle因子不一样，产生不同的kernel，作用于不同下采样倍数的图像上。
-      
-
-
+      • 2019年，相似概念的<a href="https://suhangpro.github.io/pac/">PAC</a>(pixel-adaptive convolution)被提出。认为权重共享的负面影响是使得content-agnostic. 这些缺点可以通过学习大量滤波器来尝试捕获图像和像素变化来解决。 然而，这增加了参数的数量，需要更大的内存占用和大量的标注数据。 另一种方法是在网络内使用content-adaptive卷积。
+    </pre>
+    <pre>
+        1. 一类技术使传统的图像自适应滤波器可微分，例如双边滤波、引导滤波和各向异性扩散，并将它们用作 CNN 的层。 这些内容自适应层通常设计用于增强 CNN 结果，但不能替代标准卷积。 
+        2. 另一类内容自适应网络涉及使用单独的子网络学习特定位置的kernel，该子网络预测每个像素的卷积滤波器权重。 这些被称为“动态滤波网络”（DFN），也称为交叉卷积（cross-convolution）或核预测网络（KPN），并且已被证明在几个计算机视觉任务中的有效性。尽管 DFN 是通用的并且可以用作标准卷积层的替代品，但这种核预测策略很难扩展到具有大量滤波器组的整个网络。
     </pre>
   </ul>
   

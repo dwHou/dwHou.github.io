@@ -1,5 +1,7 @@
 # 统计学方法
 
+[张志华课程](https://www.math.pku.edu.cn/teachers/zhzhang/course.pdf)
+
 ## 主成分分析（PCA）
 
 ### 直观原理
