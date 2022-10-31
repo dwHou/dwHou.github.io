@@ -186,11 +186,10 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
       • 2018年，加州伯克利和谷歌将<a href="https://joechann0831.github.io/2019/06/24/Burst-Denoising-with-Kernel-Prediction-Networks/">KPN</a>用在Burst Denoising上。本质和localconv没有区别。提出的loss可以引导KPN既做align又做去噪，最后average。
       • 2019年，张磊老师组将KPN用于RealSR，解决blur kernel会跟随物距而改变的问题。因为kernel尺寸太大，复杂度增加很大，kernel尺寸太小，效果不好。所以该方法使用了金字塔结构，最后几层pixel-shuffle因子不一样，产生不同的kernel，作用于不同下采样倍数的图像上。
       • 2019年，更轻量的<a href="https://suhangpro.github.io/pac/">PAC</a>(pixel-adaptive convolution)被提出。认为权重共享的负面影响是使得content-agnostic. 这些缺点可以通过学习大量滤波器来尝试捕获图像和像素变化来解决。 然而，这增加了参数的数量，需要更大的内存占用和大量的标注数据。 另一种方法是在网络内使用content-adaptive卷积。
+          1. 一类技术使传统的图像自适应滤波器可微分，例如双边滤波、引导滤波和各向异性扩散，并将它们用作 CNN 的层。 这些内容自适应层通常设计用于增强 CNN 结果，但不能替代标准卷积。 
+          2. 另一类内容自适应网络涉及使用单独的子网络学习特定位置的kernel，该子网络预测每个像素的卷积滤波器权重。 这些被称为“动态滤波网络”（DFN），也称为交叉卷积（cross-convolution）或核预测网络（KPN），并且已被证明在几个计算机视觉任务中的有效性。尽管 DFN 是通用的并且可以用作标准卷积层的替代品，但这种核预测策略很难扩展到具有大量滤波器组的整个网络。
     </pre>
-    <pre>
-        1. 一类技术使传统的图像自适应滤波器可微分，例如双边滤波、引导滤波和各向异性扩散，并将它们用作 CNN 的层。 这些内容自适应层通常设计用于增强 CNN 结果，但不能替代标准卷积。 
-        2. 另一类内容自适应网络涉及使用单独的子网络学习特定位置的kernel，该子网络预测每个像素的卷积滤波器权重。 这些被称为“动态滤波网络”（DFN），也称为交叉卷积（cross-convolution）或核预测网络（KPN），并且已被证明在几个计算机视觉任务中的有效性。尽管 DFN 是通用的并且可以用作标准卷积层的替代品，但这种核预测策略很难扩展到具有大量滤波器组的整个网络。
-    </pre>
+    <img src="../../images/typora-images/DynFilter.png">
   </ul>
   
 
@@ -343,6 +342,10 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
       
       自定义正则化类：
       https://blog.csdn.net/zhang2010hao/article/details/89339327
+      自定义正交规范化：
+      https://zhuanlan.zhihu.com/p/98873800
+
+      注：正交规范化加loss的方式可以，但直接构造或许不行。神经网络是极其复杂的。即使看起来似乎很好的方法也可能会失败，因为当大多数人有一个想法时，他们只是想到了网络最终训练好的状态（就像我一样，我想要矩阵的列是正交的）。但如果你想到网络必须通过一个路径才能优化，那么大多数好想法就立马显得蠢笨了。
     </pre>
     <a href="https://www.fast.ai/2018/07/02/adam-weight-decay/">Adam与weight decay</a>
   </ul>
