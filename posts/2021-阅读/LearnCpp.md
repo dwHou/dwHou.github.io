@@ -3485,7 +3485,7 @@ int main()
 {
     double x{};
 tryAgain: // this is a statement label
-    std::cout << "Enter a non-negative number: ";
+    std::cout << "Enter a non-negative number: ";//语句标签后面必须接语句。（正如其名称：statement label）
     std::cin >> x;
 
     if (x < 0.0)
@@ -3502,5 +3502,36 @@ tryAgain: // this is a statement label
 Enter a non-negative number: -4
 Enter a non-negative number: 4
 The square root of 4 is 2
+```
+
+语句标签有着函数作用域（不同于以往提到的块作用域和文件作用域）。
+
+跳转有两个主要限制：
+
+- 你只能在单个函数的范围内跳转（你不能从一个函数中跳到另一个函数中）
+- 如果你forward跳转，你不能跳过初始化的变量，却仍使用它。
+- 如果你backward跳转，可以跳过初始化的变量，只不过它会重新初始化。
+
+最佳实践：避免使用 goto
+
+> 在 C++（以及其他现代高级语言）中避免使用 goto。著名的计算机科学家Dijkstra 在一篇论文中阐述了避免 goto 的理由，该论文名为 Go To Statement Considered Harmful。 goto 的主要问题是它允许程序员任意跳转代码。这创造了“意大利面条代码”。意大利面条代码的执行路径类似于一碗意大利面条（所有这些都是纠结和扭曲的），因此很难遵循此类代码的逻辑。
+>
+> 正如 Dijkstra 有点幽默地说，“程序员的素质是他们生成的程序中 go to 语句密度的递减函数”。
+
+几乎任何使用 goto 语句编写的代码都可以使用 C++ 中的其他构造（例如 if 语句和循环）更清晰地编写。一个值得注意的例外是当您需要退出嵌套循环而不是整个函数时——在这种情况下，跳转到循环之外可能是最干净的解决方案。
+
+#### 7.7 循环和while语句
+
+循环
+
+循环是控制流结构，它允许一段代码重复执行，直到满足某些条件。 循环为编程增加了很大的灵活性。
+
+##### while语句
+
+while 语句（也称为 while 循环）是 C++ 提供的三种循环类型中最简单的一种：
+
+```cpp
+while (condition)
+    statement;
 ```
 
