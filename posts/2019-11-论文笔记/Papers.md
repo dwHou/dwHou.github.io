@@ -278,7 +278,7 @@ class SimpleGate(nn.Module):
 
 而SamlingAug从训练样本的角度出发，则更为有意思一点。感觉和<font color="brown">困难样本挖掘</font>的思路有点类似，但绕了一道，不是直接SR和HR之间loss来决定是否反传。而是linearSR和HR之间的loss来决定是否反传。就成了与当前网络无关的独立因素了，避免了训练不稳定。
 
-> 我这种思路还是挺好实现的。
+> 我这种思路，再结合topk的代码，还是挺好实现的。
 
 #### :page_with_curl: Pixel-Adaptive Convolutional Neural Networks
 
