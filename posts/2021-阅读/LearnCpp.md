@@ -3535,3 +3535,43 @@ while (condition)
     statement;
 ```
 
+只要条件评估为真，while 语句就会一直循环。
+
+```cpp
+#include <iostream>
+// Write a program that prints out the letters a through z along with their ASCII codes.
+int main()
+{
+    char myChar{ 'a' };
+    while (myChar <= 'z')
+    {
+        std::cout << myChar << ' ' << static_cast<int>(myChar) << '\n';
+        ++myChar;
+    }
+    return 0;
+}
+```
+
+最佳实践
+
+支持 while(true) 用于有意的无限循环。比如：在连续运行并为 Web 请求提供服务的 Web 服务器应用程序中，这种循环很常见。
+
+##### 循环变量
+
+通常，我们希望循环执行一定次数。 为此，通常会使用循环变量，也称为计数器。
+
+> 循环变量通常被赋予简单的名称，例如 i、j 或 k。但这样不利于搜索，代码中有大量的这些字母。出于这个原因，一些开发人员更喜欢如 iii、jjj 或 kkk，作为循环变量名称。一个更好的主意是使用“真实的”变量名称，例如 count，或者一个可以提供更多关于您正在计数的内容的名称（例如 userCount）。
+
+循环变量应该几乎总是有符号的，因为无符号整数会导致意想不到的问题。 因为无符号数永远不会是负数，有时--count并且在条件里和零做比较判断，循环不会终止（无限循环）。
+
+> Best practice: Loop variables should be of type (signed) int.
+
+Tips：
+
+- 每 N 次迭代做一些事情，可以通过对循环变量取余（模运算符）轻松完成
+- 嵌套循环记得在尽可能小的范围内声明您的变量的原则
+
+#### 7.8 Do while语句
+
+
+

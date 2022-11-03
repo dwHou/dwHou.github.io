@@ -268,6 +268,10 @@ class SimpleGate(nn.Module):
 
   SamlingAug不同于<font color="brown">困难样本挖掘</font>（OHEM），OHEM只反传每个batch中最高的损失。用于SR时难以收敛。
 
+  > Adobe的超分方法也有类似idea：
+  >
+  > A second key piece is that we focused our training efforts on “challenging” examples — image areas with lots of texture and tiny details, which are often susceptible to artifacts after being resized.
+  
   
 
 
