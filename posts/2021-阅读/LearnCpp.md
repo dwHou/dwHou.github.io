@@ -3573,5 +3573,44 @@ Tips：
 
 #### 7.8 Do while语句
 
+while 循环会预先评估条件，但有时我们希望语句至少执行一次
 
+```cpp
+do
+    statement; // can be a single statement or a compound statement
+while (condition);
+```
 
+do while 语句是一种循环结构，其工作方式与 while 循环类似，但该语句始终至少执行一次。 语句执行后，do-while 循环检查条件。 如果条件评估为真，则执行路径跳回到 do-while 循环的顶部并再次执行它。
+
+在实践中，do-while 循环并不常用。提倡优先选用 while 循环。
+
+> Best practice: Favor while loops over do-while when given an equal choice.
+
+#### 7.9 For语句
+
+**C++ 中使用最多的循环语句是 for 语句。** 当我们有一个明显的循环变量时，最好使用 for 语句（也称为 for 循环），因为它可以让我们<font color="green">轻松简洁地定义、初始化、测试和更改循环变量的值。</font>
+
+```cpp
+for (init-statement; condition; end-expression)
+   statement;
+```
+
+等价于下面的while语句：
+
+```cpp
+{ // note the block here
+    init-statement; // define variables used in the loop
+    while (condition)
+    {
+        statement; 
+        end-expression; // used to modify the loop variable prior to reassessment of the condition
+    }
+} // variables defined inside the loop go out of scope here
+```
+
+1. init-statement通常用于变量定义和初始化。这些变量具有“loop scope”，实际上只是块范围的一种形式，表示这些变量从定义点到循环语句结束都存在。
+2. 对于每次循环迭代，都会评估condition。
+3. end-expression通常用于递增或递减 init 语句中定义的循环变量。在计算完 end-expression 之后，执行返回到第二步（并且再次计算condition）。
+
+> 有经验的程序员喜欢 for loops，因为它们是使用计数器执行循环的一种非常紧凑的方式，其中包含有关循环变量、循环条件和计数更新的所有必要信息预先呈现。 这有助于减少错误。
