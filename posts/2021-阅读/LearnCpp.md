@@ -3614,3 +3614,192 @@ for (init-statement; condition; end-expression)
 3. end-expression通常用于递增或递减 init 语句中定义的循环变量。在计算完 end-expression 之后，执行返回到第二步（并且再次计算condition）。
 
 > 有经验的程序员喜欢 for loops，因为它们是使用计数器执行循环的一种非常紧凑的方式，其中包含有关循环变量、循环条件和计数更新的所有必要信息预先呈现。 这有助于减少错误。
+
+- Off-by-one问题：新手经常遇到循环多了一次或少一次的问题，最常见原因是使用了错误的关系运算符。
+
+- Omitted表达式：可以编写省略任何或所有表达式的 for 循环。
+
+  省略部分：
+
+  ```cpp
+  #include <iostream>
+  //没有让for循环进行初始化和递增，而是手动完成。
+  int main()
+  {
+      int count{ 0 };
+      for ( ; count < 10; ) // no init-statement or end-expression
+      {
+          std::cout << count << ' ';
+          ++count;
+      }
+  
+      std::cout << '\n';
+  
+      return 0;
+  }
+  ```
+
+  省略所有：
+
+  ```cpp
+  //和while(true)一样是无穷循环，但while(true)可读性更好。
+  for (;;)
+      statement;
+  ```
+
+- 多个计数器：
+
+  虽然 for 循环通常只迭代一个变量，但处理多个变量也是支持的。 
+
+  程序员可以在 init-statement 中定义多个变量，并可以使用逗号运算符来更改 end-expression 中多个变量的值：
+
+  ```cpp
+  for (int x{ 0 }, y{ 9 }; x < 10; ++x, --y)
+  ```
+
+  这是 C++ 中唯一一处 *同一语句定义多个变量，且使用逗号运算符* 被认为是可接受的做法。
+
+- 嵌套for循环
+
+- 计数器避免无符号变量（再次提醒）
+
+> 最佳实践：当有明显的循环变量时，更喜欢 for 循环而不是 while 循环。当没有明显的循环变量时，优先使用 while 循环而不是 for 循环。
+
+#### 7.10 Break和continue
+
+##### Break
+
+```cpp
+break; // exit the loop
+```
+
+switch语句那节介绍到了break语句：**break退出块**，return退出函数。
+
+break可以与多种类型的控制流语句一起使用：
+
+1. breaking a switch：可以防止落空到后续的cases。
+2. breaking a loop：可以提前结束循环。 
+
+break 语句终止 switch 或循环，并在 switch 或循环之后的第一个语句处继续执行。 return 语句终止循环所在的整个函数，并在调用函数的位置继续执行。
+
+##### Continue
+
+```cpp
+continue; // go to next iteration
+```
+
+continue 语句提供了一种方便的方法来结束当前迭代（iteration）而不终止整个循环（loop）。
+
+continue 语句通过使当前执行点跳转到当前循环的底部来工作。
+
+在 for 循环的情况下，for 循环的end-expression仍然在 continue 之后执行（因为这发生在循环体结束之后）。
+
+但将 continue 语句与 while 或 do-while 循环一起使用时要<font color="deep yellow">小心</font>，它们的计数器的值是在循环体内手动更改的。如果end-expression被跳过，那么可能会变得无限循环！
+
+>许多教科书告诫读者不要在循环中使用 break 和 continue，这既是因为它会导致执行流程跳来跳去，也因为它会使逻辑流程更难遵循。
+>
+>但是，明智地使用 break 和 continue 可以通过减少嵌套块的数量来帮助使循环更具可读性，并减少对复杂循环逻辑的需求。
+>
+>Best practice: Use break and continue when they simplify your loop logic.
+
+#### 7.11 中止语句（Halts，提前退出程序）
+
+我们将在本章中介绍的最后一类流控制语句是中止。 中止是终止程序的流控制语句。 在 C++ 中，中止是作为函数（而不是关键字）实现的。
+
+回顾一下程序正常退出时会发生什么：
+
+1. 当 main() 函数返回时（通过到达函数末尾或通过 return 语句）
+2. 首先，因为我们要离开函数，所以所有局部变量和函数参数都被销毁（像往常一样）。
+3. 接下来，调用一个名为 std::exit() 的特殊函数，并将 main() 的返回值（`状态码，status code`）作为参数传入。 
+
+那么什么是std::exit()？
+
+##### std::exit()函数
+
+`std::exit()` 是一个导致程序正常终止的函数。 正常终止意味着程序以预期的方式退出。 请注意，术语`正常终止`并不意味着程序是否成功（这就是`状态码`的用途）。 例如，假设您正在编写一个程序，您希望用户在其中键入要处理的文件名。 如果用户输入了无效的文件名，您的程序可能会返回一个非零`状态码`来指示失败状态，但它仍然会正常终止。
+
+`std::exit() `执行许多清理功能。 首先，具有静态存储持续时间的对象被销毁。 然后，如果使用了任何文件，则会进行一些其他杂项文件清理。 最后，随着传递给 std::exit() 的参数用作状态码，控制权返回给操作系统。
+
+##### 显式调用 std::exit()
+
+虽然在函数 main() 结束时隐式调用 std::exit()，但也可以显式调用 std::exit() 以在程序正常终止之前停止程序。 当 std::exit() 以这种方式调用时，您将需要包含 cstdlib 头文件。
+
+示例：
+
+```cpp
+#include <cstdlib> // for std::exit()
+#include <iostream>
+
+void cleanup()
+{
+    // code here to do any kind of cleanup required
+    std::cout << "cleanup!\n";
+}
+
+int main()
+{
+    std::cout << 1 << '\n';
+    cleanup();
+    std::exit(0); // terminate and return status code 0 to operating system
+    // The following statements never execute
+    std::cout << 2 << '\n';
+    return 0;
+}
+```
+
+关于显式调用 std::exit() 的一个重要注意事项：std::exit() 不会清理任何局部变量（在当前函数中，或在调用堆栈上的函数中）。 因此，通常最好避免调用 std::exit()。
+
+>:warning: 警告：std::exit() 函数不会清理当前函数中的局部变量或调用堆栈。
+
+##### std::atexit()函数
+
+因为 std::exit() 会立即终止程序，所以您可能希望在终止之前手动进行一些清理。 在这种情况下，清理意味着关闭数据库或网络连接、释放您分配的任何内存、将信息写入日志文件等......
+
+在上面的示例中，我们调用函数 cleanup() 来处理我们的清理任务。 但是，记住在每次调用 exit() 之前手动调用清理函数会增加程序员的负担。
+
+为了解决这个问题，C++ 提供了` std::atexit() `函数，它允许您指定一个函数，该函数将在程序终止时通过 std:exit() 自动调用。
+
+> Related content: We discuss passing functions as arguments in lesson [12.1 -- Function Pointers](https://www.learncpp.com/cpp-tutorial/function-pointers/).
+
+示例：
+
+```cpp
+#include <cstdlib> // for std::exit()
+#include <iostream>
+
+void cleanup()
+{
+    // code here to do any kind of cleanup required
+    std::cout << "cleanup!\n";
+}
+
+int main()
+{
+    // register cleanup() to be called automatically when std::exit() is called
+    std::atexit(cleanup); // note: we use cleanup rather than cleanup() since we're not making a function call to cleanup() right now
+    std::cout << 1 << '\n';
+    std::exit(0); // terminate and return status code 0 to operating system
+    // The following statements never execute
+    std::cout << 2 << '\n';
+    return 0;
+}
+```
+
+对于高级读者：在多线程程序中，调用 std::exit() 可能会导致程序崩溃（因为调用 std::exit() 的线程将清除其他线程仍可访问的静态对象）。 出于这个原因，C++ 引入了另一对功能类似于 std::exit() 和 std::atexit() 的函数，称为` std::quick_exit() `和 `std::at_quick_exit()`。
+
+##### std::abort和std::terminate
+
+C++ 包含另外两个与中止相关的函数。
+
+`std::abort() `函数会导致您的程序异常终止。 异常终止意味着程序有某种异常的运行时错误，程序无法继续运行。 例如，尝试除以 0 将导致异常终止。std::abort() 不进行任何清理。
+
+`std::terminate() `函数通常与异常一起使用（我们将在后面的章节中介绍异常）。 尽管可以显式调用 std::terminate，但在未处理异常时（以及在其他一些与异常相关的情况下），它更经常被隐式调用。 默认情况下，std::terminate() 调用 std::abort()。
+
+<font color="brown">**什么时候应该使用中止？**</font>
+
+简短的回答是<font color="brown">“几乎从不”</font>。 销毁局部对象是 C++ 的一个重要部分（尤其是当我们进入类时），上述函数都没有清理局部变量。 异常是处理错误情况的更好、更安全的机制。
+
+> 最佳实践：只有在没有安全方法从主函数正常返回时才使用暂停。 如果您尚未禁用异常，则更喜欢使用异常来安全地处理错误。
+
+#### 7.12 测试代码简介
+
