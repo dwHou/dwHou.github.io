@@ -223,6 +223,13 @@ https://zhuanlan.zhihu.com/p/23599229
   </pre>
 
   <pre>
+      本地浏览器连容器内的tensorboard：
+      1.创建容器时 -p 6166:6166/tcp -p 6167:6167/tcp 多映射几对端口。（平时9999:22，是因为ssh一般默认22端口）
+      2.tensorboard --logdir dirname --bind_all --port 6167，可以tensorboard -h查看--bind_all的作用，可以知道它能将TensorBoard实例暴露给公网。
+      3.本地浏览器输入 http://服务器IP:6166 
+  </pre>
+
+  <pre>
     修改虚拟网卡ip: 配置文件添加 --bip，设置合适的地址。不然会报错。
     step1: 删除原有配置
     https://www.jianshu.com/p/c06d532ec8f8

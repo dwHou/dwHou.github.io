@@ -127,6 +127,8 @@ TCI 2016 *Google*
       哈希表键是局部梯度的[函数](https://www.academia.edu/download/42362012/feng_asilomar.pdf)，哈希表条目是相应的预学习过滤器。比“昂贵”的聚类（例如 K-means、GMM、字典学习）更加高效。
 
       > 假如每桶有n个filter，那么可设置index = f(angle, strength, coherence)的散列函数，在f(0,0,0)=0，f(1,1,1)=n。
+      >
+      > 我们有trick避免冲突。
 
    3. 如若上采样+滤波，滤波器组只需一个(但尺寸要求较大)。如若滤波+pixelshuffle，滤波器组需要上采样倍数^2个。
 
@@ -141,6 +143,44 @@ TCI 2016 *Google*
    2. 考虑使用量化。RAISR只有单层，不存在误差累积。
 
 
+
+#### :page_with_curl: BLADE: Best Linear Adaptive Enhancement
+
+**分析现有方法：**
+
+> 深度学习：DL methods can <font color="red">trade</font> quality <font color="red">vs.</font> computation time and memory costs through considered choice of network architecture.
+>
+> Deep networks are hard to analyze, however, which makes failures challenging to diagnose and fix.
+>
+> These problems motivate us to take a lightweight, yet effective approach that is <font color="red">trainable</font> but still <font color="red">computationally simple</font> and <font color="red">interpretable</font>.
+
+相关工作：
+
+A Deep Convolutional Neural Network with Selection Units for Super-Resolution
+
+**本文方法：**
+
+我们的方法可以看作是一个浅层的双层网络，其中第一层是预先确定的，第二层是经过训练的。 我们表明，这种简单的网络结构允许推理计算效率高、易于训练、解释，并且足够灵活以在广泛的任务中表现良好。
+
+**滤波器选择：**
+
+我们发现结构张量分析（structure tensor analysis）是一个特别好的选择：它是稳健的、相当有效的，并且适用于我们测试过的一系列任务。 结构张量分析是局部梯度的主成分分析（PCA）
+
+**图像结构张量：**
+
+From the eigensystem, we define the features:
+
+- <font color="purple">$\text{orientation} = \arctan w_2/w_1$</font>, is the predominant local orientation of the gradient;
+
+- <font color="purple">$\text{strength} = \sqrt{\lambda_1}$</font>, is the local gradient magnitude; and
+
+- <font color="purple">$\text{coherence} = \frac{\sqrt{\lambda_1} - \sqrt{\lambda_2}}{\sqrt{\lambda_1} + \sqrt{\lambda_2}}$</font>, which characterizes the amount of anisotropy in the local structure.
+
+
+
+**阅读评价：**
+
+和eSR-MAX某种意义上是等价，“This spatially-adaptive filtering is equivalent to passing image through a linear filterbank and then for each spatial position selecting one filter output”，但提前逐像素进行了模板选择，减少了计算资源的浪费。这篇文章提到，“three-dimensional index”，和我的思路是不谋而合的。
 
 
 
