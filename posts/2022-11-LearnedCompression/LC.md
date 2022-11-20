@@ -245,5 +245,130 @@ for i in range(10):
 
 ## LIBRARY API
 
+#### compressai
+
+compressai.**available_entropy_coders**() ：返回可用的熵编码器列表。
+
+compressai.**get_entropy_coder**() ：返回用于编码比特流的默认熵编码器的名称。
+
+compressai.**set_entropy_coder**(*entropy_coder*) ：指定用于对比特流进行编码的默认熵编码器。
+
+#### compressai.ans
+
+范围不对称数字系统 (rANS) 绑定。 rANS 可用于替代传统范围编码器。
+
+编码器：*class* compressai.ans.**RansEncoder**
+
+解码器：*class* compressai.ans.**RansDecoder**
+
+#### compressai.datasets
+
+*class* compressai.datasets.**ImageFolder**(*root*, *transform=None*, *split='train'*)
+
+加载图像文件夹数据库，训练和测试图像样本分别存放在不同的目录中。
+
+*class* compressai.datasets.**VideoFolder**(*root*, *rnd_interval=False*, *rnd_temp_order=False*, *transform=None*, *split='train'*)
+
+加载视频文件夹数据库。 训练和测试视频剪辑存储在包含许多子目录的目录中。
+
+#### compressai.entropy_models
+
+**熵瓶颈：**
+
+*class* compressai.entropy_models.**EntropyBottleneck**(*channels: int*)
+
+**高斯条件：**
+
+*class* compressai.entropy_models.**GaussianConditional**()
+
+均来自[论文](https://arxiv.org/abs/1802.01436)
+
+#### compressai.layers
+
+MaskedConv2d: 屏蔽未来“看不见的”像素, 用于构建自回归网络组件，参见[论文](https://arxiv.org/abs/1606.05328)。
+
+GDN: Generalized Divisive Normalization layer，参见[论文](https://arxiv.org/abs/1511.06281)。
+
+GDN1: 简化的GDN层，参见[论文](https://arxiv.org/abs/1912.08771)。
+
+AttentionBlock：自注意力模块，参见[论文](https://arxiv.org/abs/2001.01568)。
+
+QReLU: 根据给定位深clamp输入，参见[论文](https://openreview.net/pdf?id=S1zz2i0cY7)。
+
+> GDN, GDN1, QReLU的作者是有重合的。
+
+#### compressai.models
+
+CompressionModel：用于构造具有至少一个熵瓶颈模块的auto-encoder的基类。
+
+```python
+class compressai.models.CompressionModel(entropy_bottleneck_channels, init_weights=None)
+```
+
+2018：FactorizedPrior，ScaleHyperprior[论文](https://arxiv.org/abs/1802.01436)，MeanScaleHyperprior，JointAutoregressiveHierarchicalPriors
+
+2020：Cheng2020Anchor，Cheng2020Attention[论文](https://arxiv.org/abs/2001.01568)，ScaleSpaceFlow[论文](https://openaccess.thecvf.com/content_CVPR_2020/html/Agustsson_Scale-Space_Flow_for_End-to-End_Optimized_Video_Compression_CVPR_2020_paper.html)
+
+#### compressai.ops
+
+compressai.ops.**ste_round**(*x: torch.Tensor*)：使用非零梯度进行舍入。 通过用恒等函数代替导数来近似梯度，参见[论文](https://arxiv.org/abs/1703.00395)。
+
+*class* compressai.ops.**LowerBound**(*bound: float*)：下限运算符，使用自定义梯度计算 torch.max(x, bound)。当 x 向边界移动时，导数被恒等函数代替，否则梯度保持为零。
+
+*class* compressai.ops.**NonNegativeParametrizer**()：非负重参数化，用于训练期间的稳定性。
+
+#### compressai.transforms
+
+RGB2YCbCr，YCbCr2RGB，YUV420To444，YUV444To420
+
+这里`Kr, Kg, Kb = YCBCR_WEIGHTS["ITU-R_BT.709"]`
+
 ## MODEL ZOO
+
+#### 图像压缩
+
+模型：{bmshj2018-factorized,bmshj2018-hyperprior,mbt2018-mean,mbt2018,cheng2020-anchor,cheng2020-attn}
+
+| Metric  | Loss function   |
+| ------- | --------------- |
+| MSE     | $L=λ∗255^2∗D+R$ |
+| MS-SSIM | $L=λ∗(1-D)+R$   |
+
+| Quality | 1      | 2      | 3      | 4      | 5      | 6      | 7      | 8      |
+| ------- | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
+| MSE     | 0.0018 | 0.0035 | 0.0067 | 0.0130 | 0.0250 | 0.0483 | 0.0932 | 0.1800 |
+| MS-SSIM | 2.40   | 4.58   | 8.73   | 16.64  | 31.73  | 60.50  | 115.37 | 220.00 |
+
+> 我的理解，表里的数字是$λ$。
+
+对于不同质量等级，网络结构的通道数也会设计得不一样。
+
+{'bmshj2018-factorized': {1: (128, 192), 2: (128, 192), 3: (128, 192), 4: (128, 192), 5: (128, 192), 6: (192, 320), 7: (192, 320), 8: (192, 320)}, 'bmshj2018-hyperprior': {1: (128, 192), 2: (128, 192), 3: (128, 192), 4: (128, 192), 5: (128, 192), 6: (192, 320), 7: (192, 320), 8: (192, 320)}, 'mbt2018-mean': {1: (128, 192), 2: (128, 192), 3: (128, 192), 4: (128, 192), 5: (192, 320), 6: (192, 320), 7: (192, 320), 8: (192, 320)}, 'mbt2018': {1: (192, 192), 2: (192, 192), 3: (192, 192), 4: (192, 192), 5: (192, 320), 6: (192, 320), 7: (192, 320), 8: (192, 320)}, <font color="purple">'cheng2020-anchor': {1: (128,), 2: (128,), 3: (128,), 4: (192,), 5: (192,), 6: (192,)}</font>, 'cheng2020-attn': {1: (128,), 2: (128,), 3: (128,), 4: (192,), 5: (192,), 6: (192,)}}
+
+> The number of channels for the convolutionnal layers and the entropy bottleneck depends on the architecture and the quality parameter (~targeted bit-rate). For low bit-rates (<0.5 bpp), the literature usually recommends 192 channels for the entropy bottleneck, and 320 channels for higher bitrates. The detailed list of configurations can be found in `compressai.zoo.image.cfgs`.
+
+例如cheng2020-anchor：
+
+ compressai.zoo.**cheng2020_anchor**(*quality*, *metric='mse'*, *pretrained=False*, *progress=True*, ***kwargs*)，参数如下：
+
+- **quality** (*int*) – 质量等级 (最低为1, 最高为6)
+- **metric** (*str*) – 优化指标，从 (‘mse’, ‘ms-ssim’) 选择
+- **pretrained** (*bool*) – 如果为真，则返回预训练模型
+- **progress** (*bool*) – 如果为真，则显示下载到 stderr 的进度条
+
+性能：Cheng2020Anchor > JointAutoregressiveHierarchicalPriors > MeanScaleHyperprior > ScaleHyperprior > FactorizedPrior，
+
+具体参见[率失真曲线图](https://interdigitalinc.github.io/CompressAI/zoo.html)。
+
+#### 视频压缩
+
+例如ScaleSpaceFlow([论文](https://openaccess.thecvf.com/content_CVPR_2020/html/Agustsson_Scale-Space_Flow_for_End-to-End_Optimized_Video_Compression_CVPR_2020_paper.html))：
+
+compressai.zoo.**ssf2020**(*quality*, *metric='mse'*, *pretrained=False*, *progress=True*, ***kwargs*)，参数含义与图像压缩一致。
+
+## UTILS
+
+
+
+
 
