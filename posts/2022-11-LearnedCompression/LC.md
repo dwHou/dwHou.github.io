@@ -339,7 +339,7 @@ RGB2YCbCr，YCbCr2RGB，YUV420To444，YUV444To420
 | MSE     | 0.0018 | 0.0035 | 0.0067 | 0.0130 | 0.0250 | 0.0483 | 0.0932 | 0.1800 |
 | MS-SSIM | 2.40   | 4.58   | 8.73   | 16.64  | 31.73  | 60.50  | 115.37 | 220.00 |
 
-> 我的理解，表里的数字是$λ$。
+> 我的理解，表里的数字是$λ$。这个应该就是一个核心的概念——熵模型。
 
 对于不同质量等级，网络结构的通道数也会设计得不一样。
 
@@ -358,7 +358,11 @@ RGB2YCbCr，YCbCr2RGB，YUV420To444，YUV444To420
 
 性能：Cheng2020Anchor > JointAutoregressiveHierarchicalPriors > MeanScaleHyperprior > ScaleHyperprior > FactorizedPrior，
 
-具体参见[率失真曲线图](https://interdigitalinc.github.io/CompressAI/zoo.html)。
+具体参见[率失真曲线图](https://interdigitalinc.github.io/CompressAI/zoo.html):
+
+<img src="./kodak-psnr.png" alt="kodak-psnr" style="zoom:60%;" />
+
+注：VTM是VVC的参考软件。
 
 #### 视频压缩
 
