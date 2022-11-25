@@ -126,7 +126,7 @@ class Network(nn.Module):
         self.entropy_bottleneck = EntropyBottleneck(N)
         self.encode = nn.Sequential(
             nn.Conv2d(3, N, stride=2, kernel_size=5, padding=2),
-            GDN(N),
+            GDN(N), # 广义分歧归一化
             nn.Conv2d(N, N, stride=2, kernel_size=5, padding=2),
             GDN(N),
             nn.Conv2d(N, N, stride=2, kernel_size=5, padding=2),
@@ -185,7 +185,8 @@ x_hat, y_likelihoods = net(x)
 # bitrate of the quantized latent
 N, _, H, W = x.size()
 num_pixels = N * H * W
-bpp_loss = torch.log(y_likelihoods).sum() / (-math.log(2) * num_pixels) # 我初步理解likelihoods越小，可能意味着熵越小，更有序。相同维度输入经过熵编码后的latent的比特数目越少。
+bpp_loss = torch.log(y_likelihoods).sum() / (-math.log(2) * num_pixels) 
+# 算术编码器是一种接近最优的熵编码器，这使得在训练期间使用y的熵作为码率估计成为可能。观测的y_likelihoods越大（不确定性越小，相同维度输入经过熵编码后码字越少），算术编码用的码字越少。
 
 # mean square error
 mse_loss = F.mse_loss(x, x_hat)
@@ -374,5 +375,9 @@ compressai.zoo.**ssf2020**(*quality*, *metric='mse'*, *pretrained=False*, *progr
 
 
 
+## CLIC
 
+### FAQ
 
+如果我作为公司团队的一员参加，我是否有资格获得奖金？
+不会。您有资格获得奖项和获奖证书，但我们会将奖金分配给下一个符合条件的学生团队。我们这样做是为了让更多的学生能够亲自参加（如果会议是亲自举行的）。

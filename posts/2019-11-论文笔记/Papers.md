@@ -276,7 +276,7 @@ class SimpleGate(nn.Module):
 
 启发式度量来评估每个补丁对的信息重要性，再据此进行采样。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221027144430792.png" alt="image-20221027144430792" style="zoom:30%;" />
+<img src="../../images/typora-images/image-20221027144430792.png" alt="image-20221027144430792" style="zoom:30%;" />
 
 具体启发是：
 
@@ -375,3 +375,9 @@ $\mathbf{v}'_i = \sum_{j \in \Omega(i)} K\left(\mathbf{f}_i, \mathbf{f}_j\right)
 文章提到了自注意力，说概念类似，但是PAC只关注local，不需要很高的复杂度。但比较好奇这样和空间注意力有啥区别？可能唯一区别是多了img2col。在卷积操作时起作用。
 
 https://www.yuque.com/lart/architecture
+
+
+
+### 智能编码系列
+
+[2016~2022](./CLIC.html)
