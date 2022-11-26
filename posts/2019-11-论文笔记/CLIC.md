@@ -292,7 +292,9 @@ s仍位于A区间，所以第二字符还是A。
 
 完全分解的方式，熵模型经过后处理训练后，就固定下来了。明显是次优的。
 
-按理说统计一下频率，作为熵模型，是最好的。但你没法传频率呀，很大。而我们传概率的紧凑表示$z$，可以在解码端再解码得到$y$的熵模型。这是可行的trick。至于$z_{latent}$解码后能不能用频率作为target计算loss。这个在研究。
+按理说统计一下频率，作为熵模型，是最好的。但你没法传频率呀，很大。而我们传概率的紧凑表示$z$，可以在解码端再解码得到$y$的熵模型。这是可行的trick。
+
+至于$z_{latent}$解码后能不能用频率作为target计算loss。这个在研究。
 
 
 
@@ -378,6 +380,105 @@ $\mathcal{L} = \mathcal{R(\hat{\boldsymbol{y}})} + \mathcal{R(\hat{\boldsymbol{z
 
 <img src="../../images/typora-images/image-20221124152948160.png" alt="image-20221124152948160" style="zoom:50%;" />
 
+
+
+### ICLR 2022
+
+#### :page_with_curl:Entroformer: A Transformer-based Entropy Model 
+
+有着良好的开源，主体的编解码器仍是用Balle提出的，仅熵模型的非线性转换部分使用Transformer。
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221126152104505.png" alt="image-20221126152104505" style="zoom:50%;" />
+
+熵模型是 Hyperprior+Context的联合模型。
+
+```python3
+				# Tables to CDF of channels
+    		tables = torch.range(-opt.table_range, opt.table_range-1)
+        # 或者新的 tables = torch.arange(-opt.table_range, opt.table_range)，arange是左包右不包了。
+     
+  			# Compress z_hat
+        tables_z = tables.repeat(1, opt.hyper_channels, 1, 1).to(device)
+        z_symbol = z_hat.type(torch.int16).cpu() + opt.table_range
+        pmf_z = prob_model(tables_z).unsqueeze(-2).cpu()
+        cdf_z = torch.cumsum(torch.clip(pmf_z, 1e-9, None), dim=-1)
+        cdf_z = torch.roll(cdf_z, shifts=1, dims=-1)
+        cdf_z[...,0] = 0
+        cdf_z = cdf_z.repeat(1,1,zh,zw,1).clip(min=0, max=1)
+        
+        # Compress y_hat
+        # [L, C, H, W] 
+        tables_y = tables.repeat(opt.last_channels, yh, yw, 1).to(device).permute(3,0,1,2)
+        # [1, H, W, C]
+        y_symbol = y_hat.type(torch.int16).cpu().permute(0,2,3,1) + opt.table_range
+        # predicted_param，如果是GMM模型，就包括mean(均值),sigma(标准差),coeffs(混合系数)和K(个数)。
+        # we have, for each channel: K pi / K mu / K sigma / [K coeffs]
+        # tables_y [L, C, H, W], predicted_param_repeat [L, C*K*p, H, W]
+        pmf_y_logit = criterion_entropy(tables_y.half(), predicted_param.repeat(opt.table_range*2, 1, 1, 1).half())
+        
+        '''
+        这里作者是自行实现的分布，我们也可以调用torch.distributions里的。
+        criterion_entropy = DiscretizedMixGaussLoss(rgb_scale=False, x_min=-opt.table_range, x_max=opt.table_range-1,                                         num_p=opt.num_parameter, L=opt.table_range*2)
+        
+        def forward(self, x, l, scale=0):
+        """
+        :param x: labels, i.e., NCHW, float
+        :param l: predicted distribution, i.e., NKpHW, see above
+        :return: log-likelihood, as NHW if shared, NCHW if non_shared pis
+        累积密度函数可以用：
+        def _standardized_cumulative(self, inputs):
+        half = float(0.5)
+        const = float(-(2**-0.5))
+        # Using the complementary error function maximizes numerical precision.
+        return half * torch.erfc(const * inputs)
+        源码里还实现了Laplace分布的_standardized_cumulative。
+        """
+        '''
+       
+        
+        pmf_y_logit = pmf_y_logit.float()
+        pmf_y = (-pmf_y_logit).exp_().cpu()
+        # [1, H, W, C, L]
+        pmf_y = pmf_y.permute(2,3,1,0).unsqueeze(0)
+        cdf_y = torch.cumsum(pmf_y , dim=-1)
+        cdf_y = torch.roll(cdf_y, shifts=1, dims=-1)
+        cdf_y[...,0] = 0
+        cdf_y = cdf_y.clip(min=0, max=1)
+
+        # Write to binary file
+        ac_encoder = ArithmeticEncoder("compressed/%s.bin" % img_name)
+        ac_encoder.write_int([h,w,yh,yw,zh,zw])  # write shape of image and feature
+
+        if opt.na == 'unidirectional':
+            cdf = torch.cat([cdf_z.view(-1, cdf_z.size(-1)), cdf_y.view(-1, cdf_y.size(-1))], dim=0)
+            symbol = torch.cat([z_symbol.flatten(), y_symbol.flatten()], dim=0)
+            ac_encoder.encode(cdf, symbol)
+        else:
+            L = opt.table_range*2
+            _, _, _, mask = cit_ar.get_mask(1, yh, yw)
+
+            y1_slice_idx = torch.where(mask[0,0].flatten() == False)[0]
+            y1_slice_idx = y1_slice_idx.view(1, y1_slice_idx.size(0), 1).repeat(1, 1, opt.last_channels)
+            y1_symbol_slice = torch.gather(y_symbol.view(1, -1, opt.last_channels), dim=1, index=y1_slice_idx)
+            y1_slice_idx = y1_slice_idx.unsqueeze(-1).repeat(1,1,1,L)
+            cdf_y1_slice = torch.gather(cdf_y.view(1, -1, cdf_y.size(-2), cdf_y.size(-1)), dim=1, index=y1_slice_idx)
+
+            y2_slice_idx = torch.where(mask[0,0].flatten() == True)[0]
+            y2_slice_idx = y2_slice_idx.unsqueeze(-1).repeat(1, opt.last_channels).unsqueeze(0)
+            y2_symbol_slice = torch.gather(y_symbol.view(1, -1, opt.last_channels), dim=1, index=y2_slice_idx)
+            y2_slice_idx = y2_slice_idx.unsqueeze(-1).repeat(1,1,1,L)
+            cdf_y2_slice = torch.gather(cdf_y.view(1, -1, cdf_y.size(-2), cdf_y.size(-1)), dim=1, index=y2_slice_idx)
+
+            cdf = [cdf_z.view(-1, L), cdf_y1_slice.view(-1, L), cdf_y2_slice.view(-1, L)]
+            cdf = torch.cat(cdf, dim=0)
+            symbol = [z_symbol.flatten(), y1_symbol_slice.flatten(), y2_symbol_slice.flatten()]
+            symbol = torch.cat(symbol, dim=0)
+            ac_encoder.encode(cdf, symbol)
+        ac_encoder.close()
+```
+
+
+
 ### CVPR 2022
 
 #### :page_with_curl:ELIC: Efficient Learned Image Compression
@@ -394,7 +495,7 @@ $\mathcal{L} = \mathcal{R(\hat{\boldsymbol{y}})} + \mathcal{R(\hat{\boldsymbol{z
 
 <img src="../../images/typora-images/image-20221125134622825.png" alt="image-20221125134622825" style="zoom:50%;" />
 
-提出来2-pass棋盘方式的解码得到anchor，第二遍的时候就可以并行进行`maskedconv`了。
+提出来2-pass棋盘方式的解码，pass 1 (anchor decoding)，pass 2 (non-anchor decoding)的时候就可以并行进行`maskedconv`了。
 
 这里有个trade-off，就是第一遍要不要用context model。如果用了1st-pass就会比较慢，不用的话效果可能受一点影响。
 
@@ -430,6 +531,18 @@ ELIC提出可以前面的分组包含的通道更少，使其信息更集中，�
 
 另外，先解码的通道16+16+32+64已经包含主要的语义信息了，可以通过一个轻量解码器，重建低分辨率预览图。而完整解码器，重建完整分辨率的图像。
 
+
+
+#### :page_with_curl:DPICT: Deep Progressive Image Compression Using Trit-Planes
+
+#### :page_with_curl:Unified Multivariate GMM & Multi-codebook Quantizers
+
+PyTorch有MultivariateNormal，可能就是看这个想到的。
+
+#### :page_with_curl:Window-based Attention 
+
+#### :page_with_curl:Neural Data-Dependent Transform for LIC
+
 ### 5th CLIC
 
 #### :page_with_curl: PO-ELIC: Perception-Oriented Efficient Learned Image Coding
@@ -445,6 +558,16 @@ ELIC提出可以前面的分组包含的通道更少，使其信息更集中，�
 ① Back-projection：解码器将结果再压缩，要求和原来的latent比较相似。甚至可以要求熵模型相同，也就是latent得到的z相同。
 
 ② K-chunk context model结合网络结构设计，创造多尺度loss
+
+③ $z_{latent}$解码后用频率作为target计算loss。这个可能可行，但工作量是挺大的。
+
+```
+mask = torch.unique(y_quant)
+print(data.shape)
+tmp = []
+for v in mask:
+    tmp.append(np.sum(data==v))
+```
 
 
 

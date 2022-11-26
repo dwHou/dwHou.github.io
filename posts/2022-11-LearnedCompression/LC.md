@@ -365,11 +365,77 @@ RGB2YCbCr，YCbCr2RGB，YUV420To444，YUV444To420
 
 注：VTM是VVC的参考软件。
 
+##### Lossy model 
+
+上面提到CompressAI提供了许多智能编码的模型，全都属于有损压缩+熵编码。
+
+##### Lossless model
+
+有损压缩和熵估计模型部分使用神经网络进行非线性变换，这个我们熟悉。所以感觉重点需要研究的恰恰是无损压缩（熵编码）。
+
+比如，有[仓库](https://github.com/candywr/Lossless-image-compress)将CompressAI的该部分摘出来研究。
+
+<font color="brown">数学基础：</font>
+
+设$X\sim N(\mu, \sigma^{2})$，则
+
+$P(x_{1}<X<x_{2}) = \Phi(\frac{x_{2}-\mu}{\sigma})-\Phi(\frac{x_{1}-\mu}{\sigma})$
+
+而$\Phi(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x}e^{\frac{-t^{2}}{2}}\mathrm{d}t = \frac{1}{2}\mathrm{erfc}(-\frac{x}{\sqrt{2}})$
+
+<font color="brown">代码实现：</font>
+
+我验证了两种实现方式 ① feature_probs_api，② feature_probs_manual
+
+```python3
+#!/usr/bin/env python
+import torch
+
+def feature_probs_api(feature, sigma, mu):
+    # 零均值
+    # mu = torch.zeros_like(sigma) 
+    sigma = sigma.clamp(1e-10, 1e10)
+    # gaussian = torch.distributions.laplace.Laplace(mu, sigma)
+    gaussian = torch.distributions.normal.Normal(mu, sigma)
+    probs = gaussian.cdf(feature + 0.5) - gaussian.cdf(feature - 0.5)
+    # 算术编码就是一个位置，给一个熵估计，只有教学时才以各位置统一均匀的概率为例。然后bin_width/2 = 0.5
+    # total_bits = torch.sum(torch.clamp(-1.0 * torch.log(probs + 1e-10) / math.log(2.0), 0, 50))
+    return probs
+
+def feature_probs_manual(feature, sigma, mu):
+    sigma = sigma.clamp(1e-10, 1e10)
+    
+    values = feature - mu
+    upper = (values + .5) / sigma 
+    lower = (values - .5) / sigma 
+    probs = _standardized_cumulative(upper) - _standardized_cumulative(lower)
+    return probs
+
+def _standardized_cumulative(inputs):
+        half = torch.tensor(.5)
+        const = torch.tensor(-(2 ** -0.5))
+        return half * torch.erfc(const * inputs)
+
+feature = torch.randn(1,1,2,2)
+sigma = torch.randn(1,1,2,2).abs()
+mu = feature + 0.01
+
+probs = feature_probs_api(feature, sigma, mu)
+print('torch.distributions probs:', probs)
+
+probs = feature_probs_manual(feature, sigma, mu)
+print('torch manual probs:', probs)
+```
+
+
+
 #### 视频压缩
 
 例如ScaleSpaceFlow([论文](https://openaccess.thecvf.com/content_CVPR_2020/html/Agustsson_Scale-Space_Flow_for_End-to-End_Optimized_Video_Compression_CVPR_2020_paper.html))：
 
 compressai.zoo.**ssf2020**(*quality*, *metric='mse'*, *pretrained=False*, *progress=True*, ***kwargs*)，参数含义与图像压缩一致。
+
+[LIC & DVC](https://github.com/ZhihaoHu/PyTorchDataCompression)
 
 ## UTILS
 
