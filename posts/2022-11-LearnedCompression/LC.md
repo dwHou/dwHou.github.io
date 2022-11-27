@@ -383,12 +383,41 @@ $P(x_{1}<X<x_{2}) = \Phi(\frac{x_{2}-\mu}{\sigma})-\Phi(\frac{x_{1}-\mu}{\sigma}
 
 而$\Phi(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{x}e^{\frac{-t^{2}}{2}}\mathrm{d}t = \frac{1}{2}\mathrm{erfc}(-\frac{x}{\sqrt{2}})$
 
+<font color="brown">统计学术语：</font>
+
+1. 随机变量(random variable)：随机变量实际上是一个函数，是随机过程映射到数值的函数
+
+2. 离散随机变量和PMF：如果随机变量X只可能取有限个或至多可列个值，则称X为离散随机变量。一般我们使用PMF来描述离散随机变量的概率函数。
+
+   > PMF：概率质量函数(probability mass function)，在概率论中，概率质量函数是离散随机变量在各特定取值上的概率。
+   >
+   > 高中学习时也称其分布律。高中没有学习微积分，所以没法研究连续随机变量。
+
+3. 连续随机变量
+
+   > 在一定区间内可以任意取值的变量叫连续变量。
+
+   一般我们使用PDF来描述连续随机变量的概率分布。
+
+   > PDF：概率密度函数(probability density function)，连续型随机变量的概率密度函数是一个描述某个确定的取值点附近的可能性的函数。
+   >
+   > 而可能性是一种趋势（密度），只有对连续随机变量的取值进行积分后才是概率。
+
+   为了便于概率的计算，我们引入CDF的概念。
+
+   > CDF：累积分布函数(cumulative distribution function)，也简称分布函数，是概率密度函数的积分，能完整描述一个实随机变量X的概率分布。
+   >
+   > **CDF是PDF的（从负无穷-∞到当前值的）积分，PDF是CDF的导数。**
+   >
+   > CDF相当于其左侧的面积，也相当于小于该值的概率，负无穷的CDF值为0，正无穷的CDF值总为1。
+
 <font color="brown">代码实现：</font>
 
 我验证了两种实现方式 ① feature_probs_api，② feature_probs_manual
 
 ```python3
 #!/usr/bin/env python
+
 import torch
 
 def feature_probs_api(feature, sigma, mu):
@@ -397,37 +426,81 @@ def feature_probs_api(feature, sigma, mu):
     sigma = sigma.clamp(1e-10, 1e10)
     # gaussian = torch.distributions.laplace.Laplace(mu, sigma)
     gaussian = torch.distributions.normal.Normal(mu, sigma)
-    probs = gaussian.cdf(feature + 0.5) - gaussian.cdf(feature - 0.5)
+    likelihood = gaussian.cdf(feature + 0.5) - gaussian.cdf(feature - 0.5)
     # 算术编码就是一个位置，给一个熵估计，只有教学时才以各位置统一均匀的概率为例。然后bin_width/2 = 0.5
     # total_bits = torch.sum(torch.clamp(-1.0 * torch.log(probs + 1e-10) / math.log(2.0), 0, 50))
-    return probs
+    return likelihood
 
 def feature_probs_manual(feature, sigma, mu):
     sigma = sigma.clamp(1e-10, 1e10)
-    
-    values = feature - mu
+
+    # values = feature - mu
+    # CompressAI用的 (-abs(feature - mu) ± 0.5) / sigma，效果是一样的。因为归一化到零均值后，这俩区间是对称的。
+    values = -torch.abs(feature - mu)
     upper = (values + .5) / sigma 
     lower = (values - .5) / sigma 
-    probs = _standardized_cumulative(upper) - _standardized_cumulative(lower)
-    return probs
+    
+    likelihood = _standardized_cumulative(upper) - _standardized_cumulative(lower)
+
+    return likelihood
+
 
 def _standardized_cumulative(inputs):
         half = torch.tensor(.5)
         const = torch.tensor(-(2 ** -0.5))
         return half * torch.erfc(const * inputs)
 
-feature = torch.randn(1,1,2,2)
-sigma = torch.randn(1,1,2,2).abs()
-mu = feature + 0.01
+# Tables to CDF of channels
+y_hat = torch.randn(1,3,2,2)*3
+table_range = 8
+tables = torch.arange(-table_range, table_range)
+tables_y = tables.repeat(3, 2, 2, 1).permute(3,0,1,2)
+# feature = torch.randn(1,1,2,2)
+sigma = torch.randn(1,3,2,2).abs().repeat(table_range*2, 1, 1, 1)
+mu = torch.randn(1,3,2,2).repeat(table_range*2, 1, 1, 1)
 
-probs = feature_probs_api(feature, sigma, mu)
-print('torch.distributions probs:', probs)
+# print(tables_y.shape, sigma.shape, mu.shape)
+pmf_y = feature_probs_api(tables_y, sigma, mu)
+print('torch.distributions likelihood:', pmf_y.shape)
+pmf_y = pmf_y.permute(1,2,3,0).unsqueeze(0)
+cdf_y = torch.cumsum(pmf_y , dim=-1)
+cdf_y_0 = torch.zeros(cdf_y.shape[:-1]).unsqueeze(-1)
+cdf_y = torch.cat([cdf_y_0, cdf_y], dim=-1)
+cdf_y = cdf_y.clip(min=0, max=1)
 
-probs = feature_probs_manual(feature, sigma, mu)
-print('torch manual probs:', probs)
+import torchac
+
+# Encode to bytestream.
+output_cdf = cdf_y  # Get CDF from your model, shape B, C, H, W, Lp
+sym = y_hat.type(torch.int16).cpu() + table_range  # Get the symbols to encode, shape B, C, H, W.
+byte_stream = torchac.encode_float_cdf(output_cdf, sym, check_input_bounds=True)
+
+# Number of bits taken by the stream
+real_bits = len(byte_stream) * 8
+
+# Write to a file.
+with open('outfile.b', 'wb') as fout:
+    fout.write(byte_stream)
+
+print(byte_stream)
+
+# Read from a file.
+with open('outfile.b', 'rb') as fin:
+    byte_stream = fin.read()
+
+
+# Decode from bytestream.
+sym_out = torchac.decode_float_cdf(output_cdf, byte_stream)
+print(sym)
+print(sym_out)
+
+# Output will be equal to the input.
+assert sym_out.equal(sym)
 ```
 
+<font color="brown">算术编码：</font>
 
+[L3C-PyTorch](https://github.com/fab-jul/L3C-PyTorch) and `pip3 install torchac`，作者Fabian专门研究基于学习的无损编码。
 
 #### 视频压缩
 

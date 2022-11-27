@@ -559,7 +559,7 @@ PyTorch有MultivariateNormal，可能就是看这个想到的。
 
 ② K-chunk context model结合网络结构设计，创造多尺度loss
 
-③ $z_{latent}$解码后用频率作为target计算loss。这个可能可行，但工作量是挺大的。
+③ $z_{latent}$解码后用频率作为target计算loss。但这个需要积累非常多的输入作为辅助，可能需要后期主体网络固定后finetune auto-encoder-z的时候再使用。
 
 ```
 mask = torch.unique(y_quant)
@@ -569,7 +569,7 @@ for v in mask:
     tmp.append(np.sum(data==v))
 ```
 
-
+④ 使用预训练模型。
 
 
 
