@@ -53,6 +53,14 @@
 
 批量归一化（batch normalization）一旦训练完成，缩放参数通常是固定的，这就将归一化转化为数据的仿射变换。而GDN是空间自适应的，并且可能是高度非线性的
 
+https://cloud.tencent.com/developer/article/1983313
+
+GDN的主要贡献是引入逐点的非线性，该模块沿通道聚合信息并在每个位置缩放特征向量，表现类似于逐点注意机制。 ELIC就提出研究其他非线性变换层（如卷积残差块）作为 GDN 的替代方案。
+
+> 卷积运算可以被BLAS库充分加速，而GDN层引入了昂贵的平方根倒数（rsqrt）
+
+所以我觉得用SimpleGate代替也是可以的。
+
 ### ICLR 2018
 
 #### :page_with_curl:Variational image compression with a scale hyperprior
@@ -519,7 +527,7 @@ for v in mask:
   3. 如果脉冲可以的话，就像z_latent一样用estimate_bits了，不需要精心设计熵模型。
   4. 我们可以attention，不同区域用不同高斯数目(K)的GMM。（就是这样不太好实现，没有torch.distribution直接支持这种mixture。）
 
-甚至拿测试集overfitting熵估计，主体网络不动。
+甚至拿测试集overfitting熵估计，主体网络不动。不过这样没有意义，因为比赛是先提交解码器，再才公布最终测试集。防止那网络参数过拟合的现象。
 
 
 
@@ -528,6 +536,8 @@ for v in mask:
 ⑤ 去掉GDN，直接relu系列，加上quant内置sigmoid。
 
 ⑥ 去掉GDN，换成SimpleGate
+
+⑦ 训练encoder+decoder时联合训练。之后单独finetune decoder，只用失真损失。stage0: loss, stage1: bpp, stage2: distortion
 
 
 

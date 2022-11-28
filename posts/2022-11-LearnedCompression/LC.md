@@ -521,3 +521,54 @@ compressai.zoo.**ssf2020**(*quality*, *metric='mse'*, *pretrained=False*, *progr
 
 如果我作为公司团队的一员参加，我是否有资格获得奖金？
 不会。您有资格获得奖项和获奖证书，但我们会将奖金分配给下一个符合条件的学生团队。我们这样做是为了让更多的学生能够亲自参加（如果会议是亲自举行的）。
+
+
+
+## Community
+
+感谢[[hotarugali](https://cloud.tencent.com/developer/article/2099590)的整理
+
+### 1. 传统图像压缩
+
+| 方法    | 主页                                     | 说明                                                         |
+| :------ | :--------------------------------------- | :----------------------------------------------------------- |
+| JPEG XL | https://jpeg.org/jpegxl/                 | JPEG 小组提出，目前最好的图像压缩方法                        |
+| CMIX    | http://www.byronknoll.com/cmix.html      | 无损数据压缩方法，以高 CPU/内存使用率换高压缩比              |
+| Lepton  | https://github.com/dropbox/lepton        | 对 JPEG 图片进行无损压缩，节省近 22%22\%22% 的大小           |
+| FLIF    | https://flif.info/                       | 无损图像压缩方法，目前已停止开发（被 JPEG XL 取代）          |
+| AVIF    | https://aomediacodec.github.io/av1-avif/ | 开放媒体联盟 AOMedia 提出                                    |
+| HEIC    | https://hevc.hhi.fraunhofer.de/          | MPEG 小组提出，基于 HEVC，不开源                             |
+| Webp    | https://developers.google.com/speed/webp | Google 提出，无损模式比 PNG 小 26%26\%26%，有损模式比 JPEG 小 25∼34%25 \sim 34\%25∼34% |
+
+
+
+### 2. 深度图像压缩
+
+#### 2.1可关注的研究员
+
+| 作者            | 主页                                                   | 说明                                                         |
+| :-------------- | :----------------------------------------------------- | :----------------------------------------------------------- |
+| Johannes Ballé  | https://balle.io/                                      | Balle 可谓是深度图像压缩的开创者，同时也是深度图像压缩界的大佬，目前在 Google 任职 |
+| Lucas Theis     | http://theis.io/                                       | Google 做 AI 数据压缩的大佬                                  |
+| David Minnen    | https://research.minnen.org/                           | Google 做 AI 数据压缩的大佬                                  |
+| George Toderici | https://research.google/people/author38233/            | Google 做 AI 数据压缩的大佬                                  |
+| 刘东            | http://staff.ustc.edu.cn/~dongeliu/                    | 中国科学技术大学电子工程与信息科学系副教授，主要研究方向为互联网数据挖掘、多媒体信息处理、图像与视频压缩等 |
+| 陈志波          | http://staff.ustc.edu.cn/~chenzhibo/                   | 中国科学技术大学电子工程与信息科学系教授，主要研究方向为视频信号的编码和处理，视频质量的分析，未来浸入式多媒体计算，移动多媒体计算等 |
+| 鲁国            | https://guolusjtu.github.io/guoluhomepage/             | 北京理工大学计算机学院助理教授，主要研究方向为视频压缩, 视频增强和深度学习 |
+| 马展            | https://vision.nju.edu.cn/fc/d3/c29470a457939/page.htm | 南京大学电子科学与工程学院教授，主要研究方向为神经视频通信（压缩与网络）、智能相机和视学计算模型 |
+| 朱军            | https://ml.cs.tsinghua.edu.cn/~jun/publications.shtml  | 清华大学计算机科学与技术系教授，主要研究方向为机器学习、贝叶斯方法、深度学习、数据挖掘 |
+
+#### 2.2 可关注的竞赛
+
+| 竞赛 | 主页                      | 说明                                                         |
+| :--- | :------------------------ | :----------------------------------------------------------- |
+| CLIC | http://compression.cc/    | CLIC 是在 CVPR 的一个 Workshop 里举办的挑战赛，每年都会举办，是图像压缩领域认可度比较高的竞赛 |
+| MMSP | https://jpegai.github.io/ | MMSP 网站指出了六个客观评价指标用于评定图像的质量            |
+
+#### 2.3 可关注的公司
+
+| 公司     | 主页                                                         | 说明                                                         |
+| :------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
+| WaveOne  | https://www.wave.one/                                        | WaveOne 专注于使用 AI 技术加强视频压缩                       |
+| TinyPNG  | https://tinify.cn/                                           | TinyPNG 使用智能有损压缩技术，可以在不影响视觉质量的条件下，将原有的 WebP、PNG 和 JPEG 图片的文件大小降低 |
+| Qualcomm | https://www.qualcomm.com/research/artificial-intelligence/ai-research/papers | 众所周知，Qualcomm 就是以科研专利为生的公司，其在基于 AI 的数据压缩研究方面也有所为 |
