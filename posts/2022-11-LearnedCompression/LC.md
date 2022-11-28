@@ -473,6 +473,7 @@ import torchac
 # Encode to bytestream.
 output_cdf = cdf_y  # Get CDF from your model, shape B, C, H, W, Lp
 sym = y_hat.type(torch.int16).cpu() + table_range  # Get the symbols to encode, shape B, C, H, W.
+# symbols的格式要求是0,1,2,3,...。我们学出来的y_hat在[-table_range, table_range-1]，加上table_range正好。
 byte_stream = torchac.encode_float_cdf(output_cdf, sym, check_input_bounds=True)
 
 # Number of bits taken by the stream

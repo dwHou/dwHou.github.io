@@ -292,11 +292,9 @@ s仍位于A区间，所以第二字符还是A。
 
 完全分解的方式，熵模型经过后处理训练后，就固定下来了。明显是次优的。
 
-按理说统计一下频率，作为熵模型，是最好的。但你没法传频率呀，很大。而我们传概率的紧凑表示$z$，可以在解码端再解码得到$y$的熵模型。这是可行的trick。
+可视化发现y是可能存在多个most probable value，只用一个高斯分布也是次优的。
 
-至于$z_{latent}$解码后能不能用频率作为target计算loss。这个在研究。
-
-
+![image-20221128095621959](/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221128095621959.png)
 
 <font color="purple">问题发现：</font>我们发现用于率估计的准确熵模型在很大程度上影响网络参数的优化，从而影响速率失真性能。
 
@@ -392,96 +390,27 @@ $\mathcal{L} = \mathcal{R(\hat{\boldsymbol{y}})} + \mathcal{R(\hat{\boldsymbol{z
 
 熵模型是 Hyperprior+Context的联合模型。
 
-```python3
-				# Tables to CDF of channels
-    		tables = torch.range(-opt.table_range, opt.table_range-1)
-        # 或者新的 tables = torch.arange(-opt.table_range, opt.table_range)，arange是左包右不包了。
-     
-  			# Compress z_hat
-        tables_z = tables.repeat(1, opt.hyper_channels, 1, 1).to(device)
-        z_symbol = z_hat.type(torch.int16).cpu() + opt.table_range
-        pmf_z = prob_model(tables_z).unsqueeze(-2).cpu()
-        cdf_z = torch.cumsum(torch.clip(pmf_z, 1e-9, None), dim=-1)
-        cdf_z = torch.roll(cdf_z, shifts=1, dims=-1)
-        cdf_z[...,0] = 0
-        cdf_z = cdf_z.repeat(1,1,zh,zw,1).clip(min=0, max=1)
-        
-        # Compress y_hat
-        # [L, C, H, W] 
-        tables_y = tables.repeat(opt.last_channels, yh, yw, 1).to(device).permute(3,0,1,2)
-        # [1, H, W, C]
-        y_symbol = y_hat.type(torch.int16).cpu().permute(0,2,3,1) + opt.table_range
-        # predicted_param，如果是GMM模型，就包括mean(均值),sigma(标准差),coeffs(混合系数)和K(个数)。
-        # we have, for each channel: K pi / K mu / K sigma / [K coeffs]
-        # tables_y [L, C, H, W], predicted_param_repeat [L, C*K*p, H, W]
-        pmf_y_logit = criterion_entropy(tables_y.half(), predicted_param.repeat(opt.table_range*2, 1, 1, 1).half())
-        
-        '''
-        这里作者是自行实现的分布，我们也可以调用torch.distributions里的。
-        criterion_entropy = DiscretizedMixGaussLoss(rgb_scale=False, x_min=-opt.table_range, x_max=opt.table_range-1,                                         num_p=opt.num_parameter, L=opt.table_range*2)
-        
-        def forward(self, x, l, scale=0):
-        """
-        :param x: labels, i.e., NCHW, float
-        :param l: predicted distribution, i.e., NKpHW, see above
-        :return: log-likelihood, as NHW if shared, NCHW if non_shared pis
-        累积密度函数可以用：
-        def _standardized_cumulative(self, inputs):
-        half = float(0.5)
-        const = float(-(2**-0.5))
-        # Using the complementary error function maximizes numerical precision.
-        return half * torch.erfc(const * inputs)
-        源码里还实现了Laplace分布的_standardized_cumulative。
-        """
-        '''
-       
-        
-        pmf_y_logit = pmf_y_logit.float()
-        pmf_y = (-pmf_y_logit).exp_().cpu()
-        # [1, H, W, C, L]
-        pmf_y = pmf_y.permute(2,3,1,0).unsqueeze(0)
-        cdf_y = torch.cumsum(pmf_y , dim=-1)
-        cdf_y = torch.roll(cdf_y, shifts=1, dims=-1)
-        cdf_y[...,0] = 0
-        cdf_y = cdf_y.clip(min=0, max=1)
+该文还提出一个4参数的GMM，K pi / K mu / K sigma / [K coeffs]：
 
-        # Write to binary file
-        ac_encoder = ArithmeticEncoder("compressed/%s.bin" % img_name)
-        ac_encoder.write_int([h,w,yh,yw,zh,zw])  # write shape of image and feature
+标准差的概率，均值，标准差，混合系数。但这种形式的互补误差函数更复杂，这也是我为什么没有看明白它的分布函数(CDF)的原因。
 
-        if opt.na == 'unidirectional':
-            cdf = torch.cat([cdf_z.view(-1, cdf_z.size(-1)), cdf_y.view(-1, cdf_y.size(-1))], dim=0)
-            symbol = torch.cat([z_symbol.flatten(), y_symbol.flatten()], dim=0)
-            ac_encoder.encode(cdf, symbol)
-        else:
-            L = opt.table_range*2
-            _, _, _, mask = cit_ar.get_mask(1, yh, yw)
-
-            y1_slice_idx = torch.where(mask[0,0].flatten() == False)[0]
-            y1_slice_idx = y1_slice_idx.view(1, y1_slice_idx.size(0), 1).repeat(1, 1, opt.last_channels)
-            y1_symbol_slice = torch.gather(y_symbol.view(1, -1, opt.last_channels), dim=1, index=y1_slice_idx)
-            y1_slice_idx = y1_slice_idx.unsqueeze(-1).repeat(1,1,1,L)
-            cdf_y1_slice = torch.gather(cdf_y.view(1, -1, cdf_y.size(-2), cdf_y.size(-1)), dim=1, index=y1_slice_idx)
-
-            y2_slice_idx = torch.where(mask[0,0].flatten() == True)[0]
-            y2_slice_idx = y2_slice_idx.unsqueeze(-1).repeat(1, opt.last_channels).unsqueeze(0)
-            y2_symbol_slice = torch.gather(y_symbol.view(1, -1, opt.last_channels), dim=1, index=y2_slice_idx)
-            y2_slice_idx = y2_slice_idx.unsqueeze(-1).repeat(1,1,1,L)
-            cdf_y2_slice = torch.gather(cdf_y.view(1, -1, cdf_y.size(-2), cdf_y.size(-1)), dim=1, index=y2_slice_idx)
-
-            cdf = [cdf_z.view(-1, L), cdf_y1_slice.view(-1, L), cdf_y2_slice.view(-1, L)]
-            cdf = torch.cat(cdf, dim=0)
-            symbol = [z_symbol.flatten(), y1_symbol_slice.flatten(), y2_symbol_slice.flatten()]
-            symbol = torch.cat(symbol, dim=0)
-            ac_encoder.encode(cdf, symbol)
-        ac_encoder.close()
-```
+不过调用api的话，也好实现，这种叫做weighted bivariate normal distributions
 
 
 
 ### CVPR 2022
 
 #### :page_with_curl:ELIC: Efficient Learned Image Compression
+
+代码：
+
+空间：[paper-with-code](https://paperswithcode.com/paper/checkerboard-context-model-for-efficient#code)
+
+通道：[paper-with-code](https://github.com/tensorflow/compression/blob/master/models/ms2020.py) 这个应该比较简单，做一个通道切分就可以。
+
+解码提速方面的文章还有：
+
+NIPS 2020: [Improving inference for neural image compression](https://github.com/mandt-lab/improving-inference-for-neural-image-compression)
 
 <font color="purple">1. serial</font>
 
@@ -543,6 +472,14 @@ PyTorch有MultivariateNormal，可能就是看这个想到的。
 
 #### :page_with_curl:Neural Data-Dependent Transform for LIC
 
+
+
+### ECCV 2022
+
+#### :page_with_curl:Implicit Neural Representations for Image Compression
+
+
+
 ### 5th CLIC
 
 #### :page_with_curl: PO-ELIC: Perception-Oriented Efficient Learned Image Coding
@@ -559,7 +496,9 @@ PyTorch有MultivariateNormal，可能就是看这个想到的。
 
 ② K-chunk context model结合网络结构设计，创造多尺度loss
 
-③ $z_{latent}$解码后用频率作为target计算loss。但这个需要积累非常多的输入作为辅助，可能需要后期主体网络固定后finetune auto-encoder-z的时候再使用。
+③ $z_{latent}$解码后用频率作为target计算loss。但这个需要积累非常多的输入作为辅助，可能需要后期主体网络固定后finetune auto-encoder-z的时候再使用。因为主体网络和熵估计网络是互相<font color="brown">耦合</font>、影响的。 所以不将主体网络训固定，还不能去独立优化熵估计网络。
+
+finetune后统计最大的几项，topk，作为mean。scale则越小越好。
 
 ```
 mask = torch.unique(y_quant)
@@ -569,7 +508,26 @@ for v in mask:
     tmp.append(np.sum(data==v))
 ```
 
+我认为可以用laplace分布来进行这个实验，因为最终只要z能准确复原y的分布，那概率最高的区间越集中越好。这样就是为什么GMM文章认为mean越接近越好，scale越小越好。
+
+不成熟的思考：
+
+- 也可以用脉冲分布（高斯分布scale→0，狄拉克分布），多脉冲分布，因为像GMM一样可能PDF存在多个极大值的。
+- 但脉冲分布存在缺点：
+  1. 脉冲分布不一样的好编码。不过z_latent肯定是比y小很多很多的，不然一个无损的脉冲分布，相当于传2个y了。所以到底是GMM好，还是LMM、DMM，得看hyper-autoencoder的压缩情况。
+  2. 鲁棒性不一样的好，如果出现估计错误，导致严重的码字浪费。
+  3. 如果脉冲可以的话，就像z_latent一样用estimate_bits了，不需要精心设计熵模型。
+  4. 我们可以attention，不同区域用不同高斯数目(K)的GMM。（就是这样不太好实现，没有torch.distribution直接支持这种mixture。）
+
+甚至拿测试集overfitting熵估计，主体网络不动。
+
+
+
 ④ 使用预训练模型。
+
+⑤ 去掉GDN，直接relu系列，加上quant内置sigmoid。
+
+⑥ 去掉GDN，换成SimpleGate
 
 
 
