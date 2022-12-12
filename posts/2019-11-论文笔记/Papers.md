@@ -376,6 +376,10 @@ $\mathbf{v}'_i = \sum_{j \in \Omega(i)} K\left(\mathbf{f}_i, \mathbf{f}_j\right)
 
 https://www.yuque.com/lart/architecture
 
+#### :page_with_curl:Null-Space Learning for Consistent SR
+
+零空间学习
+
 
 
 ### 智能编码系列

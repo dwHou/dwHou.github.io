@@ -270,7 +270,7 @@ s仍位于A区间，所以第二字符还是A。
 
 1.1 独立编码
 
-由于熵编码部分可以不写到网络中，熵编码可以独立于自编码器单独设计。但是这样可以利用的信息较少，概率模型可能不够准确。
+由于熵编码部分可以不写到网络中，熵编码可以独立于自编码器单独设计。但是这样可以利用的信息较少，概率模型可能不够准确。假设是y的每个元素是相互独立的。
 
 > 也译完全分解的熵模型
 
@@ -359,6 +359,8 @@ $\mathcal{L} = \mathcal{R(\hat{\boldsymbol{y}})} + \mathcal{R(\hat{\boldsymbol{z
 <img src="../../images/typora-images/image-20221123200346031.png" alt="image-20221123200346031" style="zoom:90%;" />
 
 图3. 使用 Kodak 数据集中的 kodim21 作为示例，可视化具有最高熵的通道的不同熵模型。第1列：量化的潜在表达$\hat{y}$；第2,3列：预测正太分布的均值和标准差；第4列：归一化的值$\frac{\hat{y}-\mu}{\sigma}$，它反映了熵模型未捕获的剩余冗余程度；第5列：可视化编码各个元素所需的比特，由$-log_2(p_{\hat{y}}(\hat{y}|\hat{z}))$计算得到。
+
+> 好模型的目标：$\mu$接近$\hat{y}$，$\sigma$小，这样symbol所在区间的概率是最大的。$\frac{\hat{y}-\mu}{\sigma}$后，各位置分布统一转换为标准正太分布。希望这里的值越随机越好，不希望有结构性冗余。
 
 注：第一行并不是ICLR2018的零均值模型，而是mbt2018-mean消融掉上下文模型$C_{m}$的情形。
 
@@ -500,7 +502,21 @@ PyTorch有MultivariateNormal，可能就是看这个想到的。
 
 ### Idea:
 
+#### 角度：
+
+更强大的变换模块，
+
+更精确的熵模型，
+
+感知损失的优化。
+
 ① Back-projection：解码器将结果再压缩，要求和原来的latent比较相似。甚至可以要求熵模型相同，也就是latent得到的z相同。
+
+这个和感知损失函数DAE有点相似，只是这里还是用的原来的编码器。
+
+感觉直接用DAE也不是不可以。
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221202141747613.png" alt="image-20221202141747613" style="zoom:50%;" />
 
 ② K-chunk context model结合网络结构设计，创造多尺度loss
 
@@ -539,7 +555,41 @@ for v in mask:
 
 ⑦ 训练encoder+decoder时联合训练。之后单独finetune decoder，只用失真损失。stage0: loss, stage1: bpp, stage2: distortion
 
+⑧ 我发现还挺难训练的，两个loss起相反的作用。所以我的想法是主体的编码器和熵编码部分训练bpp loss，主体的解码器训distortion loss，轮流进行。不过这样感觉也有问题，解码器输入很差，巧妇难为无米之炊。
 
+⑨ ROI和非ROI区域，使用不同lambda。也就是在不增加复杂度的条件下有更好的率失真优化。
+
+⑩ z_hat是建模y_hat的熵模型的。现有方法只对z的通道间学习得到不同概率，空间上是相互独立的。但如果使用checkboard模型，z_hat空间上应该要能表征pass1和pass2的像素。
+
+可以用pixelshuffle实现，0 1 2 3，downshuffle下来1、3的通道是一种概率，0、2的通道是另一种概率。然后再upshuffle回去。
+
+11.超先验模型和自回归上下文模型提取的特征concat时可以使用通道注意力。
+
+12.网络插值实现可变码率？
+
+13.bag of tricks, full of bells and whistles
+
+14.解码端构造一个类似MPRNet的结构，就是不同分支都得到解码输出，然后粗的给精的作为注意力（预览的话只用粗的分支）。这个也可以满足不同算力的解码终端（低算力只用粗的）。
+
+15.熵编码可以用Swin Transformer，不影响主体网络的设计
+
+16.使用我们现在的轻量增强网络进行后处理。
+
+17.发现用3通道的灰度图训练，最后对彩色图像进行压缩重建，也成了灰度的。说明真的学到了数据特征，也真的要注意数据的丰富性和泛化能力的问题。
+
+18.y_hat的channel是影响不大的。通常设置128和192。如果distortion的lambda大，全零的通道就少一点。这些全零的通道算了概率后本来也不占码率。
+
+19.通道间的熵模型的核心，比如前面通道的当前位置像素一样可以作为上下文。也就是对于这些通道来说是type B。
+
+20.虽然现在解码每个i，j的整图都经过卷积，比较蠢。但这部分不是很核心。最后有空再优化速度。
+
+21.soft-then-hard，先用均匀噪声学习（soft），之后固定量化的输入，只学习、微调解码器。（hard）。单纯soft的坏处是train-test mismatch，单纯hard的坏处是梯度是不对的。其实加噪的梯度也不对，因为四舍五入是和数本身相关的。但噪声是独立的。不过这个第二步finetune合理。
+
+22.checkboard可以用pixel-shuffle代替，速度更快，并且形式更漂亮。可以作为核心创新点。checkboard 卷积有5x5的运算，但实际只使用/看到一半的元素。pixelshuffle是提升性能的重要baseline。再一个，checkboard方式的z_hat也不能简简单单的空域一样的，见⑩，导致空域一样的假设是不正确的。但用pixel-shuffle就没有这个问题，z_hat的分辨率和y_hat_anchor、y_hat_noanchor一致就ok了，单边都是y_hat的一半。
+
+23.帧内预测相当于都放在熵模型来做。所以熵模型部分非常重要。
+
+24.Entroformer的z也用的高斯，只不过是完全分解的。
 
 
 

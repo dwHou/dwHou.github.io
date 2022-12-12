@@ -197,6 +197,14 @@ loss = mse_loss + lmbda * bpp_loss
 
 > 可以训练可以处理多个比特率失真点的架构，但这超出了本教程的范围。 请参阅这篇[论文](https://openaccess.thecvf.com/content_ICCV_2019/papers/Choi_Variable_Rate_Deep_Image_Compression_With_a_Conditional_Autoencoder_ICCV_2019_paper.pdf)。
 
+`total_bits = torch.sum(torch.clamp(-1.0 * torch.log(prob + 1e-10) / math.log(2.0), 0, 50))` (1)
+
+`bpp_y = total_bits_y / (im_shape[0] * im_shape[2] * im_shape[3])` (2)
+
+这里式(1)，根据换底公式是$log_{2}(\frac{1}{P(x)})$，可以看出来和自信息的定义一致，熵越小loss越小。
+
+
+
 <font color="brown">**2.辅助损失**</font>
 
 需要训练熵瓶颈的参数以最小化latent元素的密度模型评估。 辅助损失可通过 `entropy_bottleneck` 层访问：
@@ -503,6 +511,8 @@ assert sym_out.equal(sym)
 
 [L3C-PyTorch](https://github.com/fab-jul/L3C-PyTorch) and `pip3 install torchac`，作者Fabian专门研究基于学习的无损编码。
 
+[RangeCoder](https://github.com/lucastheis/rangecoder) and `pip3 install range-coder`，作者L Theis专门研究机器学习压缩算法。[示例](https://github.com/ZhengxueCheng/Learned-Image-Compression-with-GMM-and-Attention/blob/c13652f7b77fade0641fb31eca90da696c6f5ff9/network.py)
+
 #### 视频压缩
 
 例如ScaleSpaceFlow([论文](https://openaccess.thecvf.com/content_CVPR_2020/html/Agustsson_Scale-Space_Flow_for_End-to-End_Optimized_Video_Compression_CVPR_2020_paper.html))：
@@ -522,7 +532,43 @@ compressai.zoo.**ssf2020**(*quality*, *metric='mse'*, *pretrained=False*, *progr
 如果我作为公司团队的一员参加，我是否有资格获得奖金？
 不会。您有资格获得奖项和获奖证书，但我们会将奖金分配给下一个符合条件的学生团队。我们这样做是为了让更多的学生能够亲自参加（如果会议是亲自举行的）。
 
+### Training
 
+训练心得，首先按照 $L=λ∗255^2∗D+R$ 的经验值进行。L1 loss会比MSE loss略大一点。不同的$D$会引起$λ$的变化，很难确定最终会训练得到哪个码率点的模型。我们可以看看$D$的数量级，估摸着$λ$的数值。
+
+多看看Issue和代码：
+
+https://github.com/damo-cv/entroformer/issues/4
+
+```python3
+def lambda_update(self, lam, distortion):
+		"""
+		Updates Lagrangian multiplier lambda at each step
+		"""
+		return self.epsilon * distortion + lam
+```
+
+比如别人不断更新lambda。
+
+实验出结果了，果然对lambda特别敏感。同样的lambda，一个单独的L1 loss和一个L1+Gradient Loss。就千差万别。所以比较合理的是lambda能传入loss的实际值然后进行一个躺平式的自适应调整。
+
+我发现正常按$L=λ∗D+R$，可能会发生R不断变大，D不断变小。总的L也不断变小的过程。最终收敛到一个合适的结果。 但这个过程是比较神奇的，R不断变大，只是通过loss对增大过程做了抑制。
+
+### Evaluation
+
+训练集：
+
+任意高质量的合适分辨率的图像数据集。
+
+测试集：
+
+CLIC professional validation dataset [URL](http://compression.cc/tasks/)
+
+Kodak lossless image database [URL](http://r0k.us/graphics/kodak/)
+
+测试平台：
+
+GPU需加上`torch.backends.cudnn.deterministic = True`
 
 ## Community
 
@@ -552,7 +598,8 @@ compressai.zoo.**ssf2020**(*quality*, *metric='mse'*, *pretrained=False*, *progr
 | Lucas Theis     | http://theis.io/                                       | Google 做 AI 数据压缩的大佬                                  |
 | David Minnen    | https://research.minnen.org/                           | Google 做 AI 数据压缩的大佬                                  |
 | George Toderici | https://research.google/people/author38233/            | Google 做 AI 数据压缩的大佬                                  |
-| 刘东            | http://staff.ustc.edu.cn/~dongeliu/                    | 中国科学技术大学电子工程与信息科学系副教授，主要研究方向为互联网数据挖掘、多媒体信息处理、图像与视频压缩等 |
+| 王荣刚          | https://www.ece.pku.edu.cn/info/1046/2147.htm          | 北京大学信息工程学院教授，主要研究方向为视频编解码，视频交互渲染，视频增强和深度学习 |
+| 刘东            | http://staff.ustc.edu.cn/~dongeliu/                    | 中国科学技术大学电子工程与信息科学系副教授，主要研究方向为互联网数据挖掘、多媒体信息处理、图像与视频压缩 |
 | 陈志波          | http://staff.ustc.edu.cn/~chenzhibo/                   | 中国科学技术大学电子工程与信息科学系教授，主要研究方向为视频信号的编码和处理，视频质量的分析，未来浸入式多媒体计算，移动多媒体计算等 |
 | 鲁国            | https://guolusjtu.github.io/guoluhomepage/             | 北京理工大学计算机学院助理教授，主要研究方向为视频压缩, 视频增强和深度学习 |
 | 马展            | https://vision.nju.edu.cn/fc/d3/c29470a457939/page.htm | 南京大学电子科学与工程学院教授，主要研究方向为神经视频通信（压缩与网络）、智能相机和视学计算模型 |
@@ -568,7 +615,17 @@ compressai.zoo.**ssf2020**(*quality*, *metric='mse'*, *pretrained=False*, *progr
 #### 2.3 可关注的公司
 
 | 公司     | 主页                                                         | 说明                                                         |
-| :------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
+| :------- | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | WaveOne  | https://www.wave.one/                                        | WaveOne 专注于使用 AI 技术加强视频压缩                       |
 | TinyPNG  | https://tinify.cn/                                           | TinyPNG 使用智能有损压缩技术，可以在不影响视觉质量的条件下，将原有的 WebP、PNG 和 JPEG 图片的文件大小降低 |
 | Qualcomm | https://www.qualcomm.com/research/artificial-intelligence/ai-research/papers | 众所周知，Qualcomm 就是以科研专利为生的公司，其在基于 AI 的数据压缩研究方面也有所为 |
+
+#### 2.4 可关注的项目
+
+| 项目    | 主页                           | 说明                                                         |
+| ------- | ------------------------------ | :----------------------------------------------------------- |
+| DLVC    | http://dlvc.bitahub.com/       | An open-sourced deep-learning driven video codec.            |
+| NIC     | https://fvc-sg.github.io/NIC   | Open-Source learned image compression framework.             |
+| iWave++ | https://gitlab.com/iWave/iwave | *pytorch implementation of iWave++* for IEEE 1857.11 Standard |
+|         |                                |                                                              |
+
