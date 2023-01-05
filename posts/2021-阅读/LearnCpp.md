@@ -48,7 +48,7 @@ Audio and video processing
 Artificial intelligence and neural networks
 ```
 
-有一位德国人说：AI is a ressource eater before the lord, as we germans say.
+有一位德国人说：AI is a resource eater before the lord, as we germans say.
 
 https://ai.stackexchange.com/questions/6185/why-does-c-seem-less-widely-used-than-python-in-ai
 
@@ -3914,3 +3914,79 @@ C++ 包含另外两个与中止相关的函数。
 - 将错误传回给调用者处理
 - 停止程序
 - 抛出异常
+
+1.处理函数内的错误
+
+如果可能，最好的策略是在发生错误的同一函数中从错误中恢复，这样就可以在不影响函数外部的任何代码的情况下涵盖和更正错误。 这里有两个选项：重试<font color="brown">（retry）</font>直到成功，或者取消<font color="brown">（cancel）</font>正在执行的操作。
+
+如果错误是由于程序无法控制的原因而发生的，程序可以重试直到成功。 例如，如果程序需要互联网连接，而用户失去了连接，程序可能会显示警告，然后使用循环定期重新检查互联网连接。 或者，如果用户输入了无效输入，程序可以要求用户重试，并循环直到用户成功输入有效输入。第7.16节会给出实例。
+
+另一种策略是忽略错误和/或取消操作。 例如：
+
+```cpp
+void printDivision(int x, int y)
+{
+    if (y != 0)
+        std::cout << static_cast<double>(x) / y;
+    else
+        std::cerr << "Error: Could not divide by zero\n";
+}
+```
+
+2.将错误传回给调用者
+
+比如，将具有 void 返回类型的函数，改为返回指示成功或失败的布尔值。
+
+再比如，如果函数不会用到完整范围的返回值，则可以使用正常情况下不可能发生的返回值来指示错误。
+
+但比如，如果函数需要完整范围的返回值，则无法使用返回值来指示错误（因为调用者无法判断返回值是有效值还是错误值）。 在这种情况下，第9.5节讲解的`out parameter`可能是一个可行的选择。
+
+这样，调用者可以检查返回值以查看函数是否由于某种原因而失败。
+
+3.致命错误
+
+如果错误严重到程序无法继续正常运行，则称为不可恢复错误（也称为致命错误）。 在这种情况下，最好的办法是终止程序。 
+
+- 如果您的代码位于 `main() `或直接从 `main()` 调用的函数中，最好的做法是让 `main() `返回一个非零状态代码。 
+- 然而，如果你深入到一些嵌套的子函数中，可能不方便或不可能将错误一直传播回 `main()`。 在这种情况下，可以使用中止语句`halt statement`（例如 `std::exit()`）。
+
+```cpp
+double doDivision(int x, int y)
+{
+    if (y == 0)
+    {
+        std::cerr << "Error: Could not divide by zero\n";
+        std::exit(1);
+    }
+    return static_cast<double>(x) / y;
+}
+```
+
+4.抛异常
+
+因为将错误从函数返回给调用者是很复杂的，C++ 提供了一种完全<font color="brown">独立</font>的方法将错误返回给调用者：<font color="brown">`异常(exceptions)`</font>。
+
+基本思想是，当发生错误时，**“抛出”异常**。 如果当前函数没有**“捕获”错误**，函数的调用者就有机会捕获错误。 如果调用者没有捕获错误，则调用者的调用者有机会捕获错误。 <font color="brown">错误逐渐向上移动调用堆栈，直到它被捕获并处理</font>（此时执行正常继续），或者直到 main() 无法处理错误（此时程序因异常错误而终止）。
+
+> 相当于整个调用栈的任何环节都有“捕获”错误和处理的机会。
+>
+> 第20章会专门介绍异常处理。
+
+#### 7.16 std::cin 和处理无效输入
+
+一个编写良好的程序将预测用户将如何滥用它，并优雅地处理这些情况。这样的程序被认为是健壮（robust）的。
+
+在本课中，我们以用户通过 std::cin 输入无效文本为例，向您展示一些处理这些情况的不同方式。
+
+cin的工作原理：用户输入会先进入输入<font color="brown">缓冲区</font>，`>>` 从输入缓冲区中提取尽可能多的数据到变量中，无法提取的任何数据则留在缓冲区中供下一次提取。
+
+```cpp
+int x{};
+std::cin >> x;
+// 如果用户输入“5a”，5将被提取，转换为整数，并赋值给变量x。 “a\n”将留在输入缓冲区中以供下一次提取。
+```
+
+验证输入：检查用户输入是否符合程序预期的过程称为输入验证。
+
+
+

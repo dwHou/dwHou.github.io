@@ -51,7 +51,11 @@
 
 现有方法：
 
-批量归一化（batch normalization）一旦训练完成，缩放参数通常是固定的，这就将归一化转化为数据的仿射变换。而GDN是空间自适应的，并且可能是高度非线性的
+批量归一化（batch normalization）一旦训练完成，缩放参数通常是固定的，这就将归一化转化为数据的仿射变换。而GDN是空间自适应的，并且可能是高度非线性的。
+
+本文方法：
+
+本文引入了一种参数化非线性变换，它非常适合对来自自然图像的数据进行<font color="brown">高斯化处理</font>。
 
 https://cloud.tencent.com/developer/article/1983313
 
@@ -290,6 +294,46 @@ s仍位于A区间，所以第二字符还是A。
 
 
 
+### ICIP 2020
+
+#### :page_with_curl:Channel-wise autoregressive entropy models
+
+一个加速解码的重要工作。
+
+现有方法：
+
+边信息 + 因果上下文的联合熵模型。但上下文模型在解码时拖慢速度，尤其是PixelCNN的方式串行处理每个像素，严重影响解码速度。
+
+本文方法：
+
+本文探索了两种架构的增强：channel-conditioning (CC) 和latent residual prediction  (LRP)。
+
+1.通道条件(CC)
+
+以因果上下文为条件可以更好地建模空间相关性，并且通常用于标准图像编解码器和视频编解码器中的帧内预测。
+
+在基于学习的编解码器中，模型必须估计空间自回归 (autoregressive, AR) 模型的参数。 这种方法是有效的，但需要按顺序运行 AR 模型来解码每个符号，与更好地利用此类硬件的大规模并行处理能力的架构相比，这可能会减慢 GPU 和 TPU 上的解码时间。
+
+提出通道条件 (CC) 模型：<font color="brown">它将潜在张量沿通道维度分成 N 个大小大致相等的切片，并将先前解码的切片作为当前切片的熵参数的条件。</font>可以把CC看作通道维度的自回归模型。
+
+> 自回归模型：用同一变数例如x的之前各期，亦即$x_1$至$x_{t-1}$来预测本期$x_t$的表现
+
+> 和checkboard的比较，我认为是checkboard空间上一半像素的所有通道全是没有利用上下文信息的。但如果结合CC，前面解码的通道上下文是能利用上的。
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221214180212481.png" alt="image-20221214180212481" style="zoom:50%;" />
+
+
+
+2.latent残差预测(LRP)
+
+
+
+### NIPS 2020
+
+#### High-Fidelity Generative Image Compression
+
+使用<font color="brown">条件GAN</font>的一篇文章，研究和对比了一些感知损失。
+
 ### CVPR 2020
 
 #### :page_with_curl:Learned Image Compression with GMM and attention
@@ -351,6 +395,12 @@ mbt2018-mean提出了一种更准确的熵模型，该模型联合使用自回�
 $\mathcal{L} = \mathcal{R(\hat{\boldsymbol{y}})} + \mathcal{R(\hat{\boldsymbol{z}})} + \lambda\cdot\mathcal{D(\boldsymbol{x}, \boldsymbol{\hat{x}})} = \mathop{\mathbb{E}}[-\log_{2}(p_{\hat{\boldsymbol{y}}|\hat{\boldsymbol{z}}}(\hat{\boldsymbol{y}}|\hat{\boldsymbol{z}}  ))] + \mathop{\mathbb{E}}[-\log_{2}(p_{\hat{\boldsymbol{z}}|\boldsymbol{\psi}}(\hat{\boldsymbol{z}}|\boldsymbol{\psi} ))]  +\lambda\cdot\mathcal{D(\boldsymbol{x}, \boldsymbol{\hat{x}})}$
 
 其中 $λ$ 控制率失真trade-off。 不同的λ值对应不同的码率。 $D(\boldsymbol{x}, \boldsymbol{\hat{x}})$ 表示失真项。 $\hat{z}$ 没有先验，因此使用分解密度模型 $ψ$ (fac- torized density model)将$\hat{z}$编码。
+
+> 一句话总结：
+>
+> 联合模型，就是联合了side information和causal context，前者是forward adaptation，后者是backward adaptation。
+>
+> 结构则用的autoencoders with an entropy-constrained bottleneck，<font color="brown">潜在特征受熵约束的自编码器</font>。
 
 <font color="red">(c).GMM模型：</font>
 
@@ -470,7 +520,23 @@ ELIC提出可以前面的分组包含的通道更少，使其信息更集中，�
 
 另外，先解码的通道16+16+32+64已经包含主要的语义信息了，可以通过一个轻量解码器，重建低分辨率预览图。而完整解码器，重建完整分辨率的图像。
 
+还有一个比较<font color="brown">关键的细节</font>是：ELIC用的是单一的高斯模型，而不是GMM。
 
+> 我们使用<font color="brown">混合量化估计器</font>来训练通道上下文模型，遵循 Minnen 等人[40]。 它有助于优化单个高斯mean-scale熵模型 [39]，使其可与 GMM [15、22、29、35] 等混合模型相媲美。 根据之前的工作 [24、39] 和社区讨论[1](https://groups.google.com/g/tensorflow-compression/c/LQtTAo6l26U)，我们将每个 ⌈y − μ⌋ 编码到比特流而不是 ⌈y⌋ 并将编码符号恢复为 ⌈y − μ⌋ + μ，这可以进一步使单个 Gaussiann熵模型受益。
+>
+> 关于混合量化估计器，[40]Channel-wise这篇分析了现有的量化方式，①均匀噪声是模拟“noisy quantization”，或者②使用直通梯度，自定义导数为1。由于篇幅限制，[40]没有放不同训练方法效果的完整报告，但他们凭经验发现①+②的混合方法可以提高 RD 性能。
+>
+> 所谓混合方法就是：训练熵模型时用均匀噪声，但传给synthesis transform时还是用的rounded。相当于对于ST模块，能够保证训推一致。这个方法可以和《soft-then-hard》论文对比来看。
+>
+> mixed和soft-then-hard的区别是均解决了train-test mismatch问题的同时，是D一直仅仅影响解码器(mixed)，还是分两步，soft阶段D、R均影响编码器，hard阶段D只影响解码器(soft-then-hard)。 
+>
+> （不过不管哪种实现，我们的设计都遵循D只影响解码器、编码器；R只影响熵模型、编码器）
+>
+> 我认为soft-then-hard可能更好，可以专门写soft-then-hard的训练方式(hard时仅仅self.decoder有梯度)。因此，这方面我们能够比ELIC做得更好。
+>
+> 
+
+我认为是GMM对速度和显存的影响特别大，我这边发现GMM少一个高斯模型，对速度的提升和显存的下降影响都是巨大的。
 
 #### :page_with_curl:DPICT: Deep Progressive Image Compression Using Trit-Planes
 
@@ -591,7 +657,25 @@ for v in mask:
 
 24.Entroformer的z也用的高斯，只不过是完全分解的。
 
+25.checkboard的方式很难做LRP，latent残差。但我们的方法可以很方便使用这个技术。
 
+26.可以用group convolution，既能降低计算量，又能建模shuffle后每个点位置的特点。
+
+27.描述scalable video coding的好处，算力弱或者带宽受限的接收端可以只接收第一段码流。
+
+
+
+#### 备注：
+
+文章要写。回头再探究，现在已经有好的开始，没有什么阻碍。
+
+我们可以叫ELIC++或者MagIC
+
+<font color="brown">Multi-stage and symbol Gathering I C</font>
+
+MUSIC
+
+MUlti-stage and symbol Shuffling Image Compression
 
 
 

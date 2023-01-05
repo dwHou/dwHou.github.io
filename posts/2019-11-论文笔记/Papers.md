@@ -380,6 +380,8 @@ https://www.yuque.com/lart/architecture
 
 零空间学习
 
+#### :page_with_curl:IQA: Unifying Structure and Texture Similarity
+
 
 
 ### 智能编码系列
