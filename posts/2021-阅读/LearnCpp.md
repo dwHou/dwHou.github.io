@@ -4191,6 +4191,10 @@ Assertion failed: found && "Car could not be found in database", file C:\\VCProj
 
 断言vs错误处理：可以比较7.15和7.17的内容。
 
+> 用断言作为一种注释性地代码，记录逻辑上不应该发生的case，用错误处理去处理release模式的有可能发生的错误。
+>
+> Assertions should be used to document cases that should be logically impossible. Error handling should be used to handle cases that are possible.
+
 最佳实践：使用断言来记录逻辑上不可能的案例。
 
 ##### NDEBUG
@@ -4222,3 +4226,409 @@ static_assert(condition, diagnostic_message)
 ```
 
 #### 7.18 随机数生成
+
+生成随机数的能力在某些类型的程序中很有用，特别是在游戏、统计建模程序和需要加密和解密的密码应用程序中。
+
+现代计算机生活在一个受控的电气世界中，在这个世界中，一切都是二进制的（0 或 1），没有中间值。 就其本质而言，计算机旨在产生尽可能可预测的结果。因此，计算机通常无法生成真正的随机数（至少通过软件）。 取而代之的是，现代程序通常使用算法来<font color="brown">模拟随机性</font>。
+
+##### 伪随机数生成器
+
+伪随机数生成器 (**pseudo-random number generator**, PRNG) 是一种生成数字序列的算法，其属性是模拟随机数序列。
+
+首先看一个普通的<font color="brown">有状态的(stateful)</font>函数的例子：
+
+```cpp
+#include <iostream>
+
+int plusOne()
+{
+    static int s_state { 3 }; // only initialized the first time this function is called
+
+    // Generate the next number
+
+    ++s_state;      // first we modify the state
+    return s_state; // then we use the new state to generate the next number in the sequence
+}
+
+int main()
+{
+    std::cout << plusOne() << '\n'; //打印4
+    std::cout << plusOne() << '\n'; //打印5
+    std::cout << plusOne() << '\n'; //打印6
+
+    return 0;
+}
+```
+
+> An algorithm is considered to be **stateful** if it retains some information across calls. Conversely, a **stateless** algorithm does not store any information. Our `plusOne()` function is stateful, in that it uses the static variable `s_state` to store the last number that was generated. When applied to algorithms, the term **state** refers to the current values held in stateful variables.
+
+大多数 PRNG 的工作方式与 `plusOne()` 类似——它们通常只是使用更多的状态变量和更复杂的数学运算来生成质量更好的结果（即看似更随机的结果）。
+
+##### 随机数种子
+
+PRNG 生成的“随机数”序列根本不是随机的。 就像我们的 plusOne() 函数一样，状态初始化后，PRNG将生成相同的输出序列。
+
+当实例化 PRNG 时，可以提供称为随机种子（或简称种子）的初始值（或一组值）来初始化 PRNG 的状态。 
+
+> Key insight: All of the values that a PRNG will produce are deterministically calculated from the seed value(s).
+
+What makes a good PRNG? (optional reading)
+
+多年来，已经开发出许多不同种类的 PRNG 算法（维基百科在这里有一个很好的[列表](https://en.wikipedia.org/wiki/List_of_random_number_generators)）。 每个 PRNG 算法都有可能使其或多或少适合特定应用程序的优点和缺点，因此为您的应用程序选择正确的算法很重要。
+
+##### C++中的随机化
+
+C++ 中的随机化功能可通过标准库的 <random> 标头访问。 在 random 库中，有 6 个 PRNG 系列可供使用（截至 C++20）：
+
+| Type name                | Family                                 | Period  | State size* | Performance | Quality | Should I use this?          |
+| :----------------------- | :------------------------------------- | :------ | :---------- | :---------- | :------ | :-------------------------- |
+| minstd_rand minstd_rand0 | Linear congruential generator          | 2^31    | 4 bytes     | Bad         | Awful   | No                          |
+| mt19937 mt19937_64       | Mersenne twister                       | 2^19937 | 2500 bytes  | Decent      | Decent  | Probably (see next section) |
+| ranlux24 ranlux48        | Subtract and carry                     | 10^171  | 96 bytes    | Awful       | Good    | No                          |
+| knuth_b                  | Shuffled linear congruential generator | 2^31    | 1028 bytes  | Awful       | Bad     | No                          |
+| default_random_engine    | Any of above (implementation defined)  | Varies  | Varies      | ?           | ?       | $No^{2}$                    |
+| rand()                   | Linear congruential generator          | 2^31    | 4 bytes     | Bad         | Awful   | $No^{no}$                   |
+
+从 C++20 开始，`Mersenne Twister` （梅森旋转）算法是 C++ 附带的唯一具有良好性能和质量的 PRNG。
+
+> 所以我们应该使用 Mersenne Twister，对吗？
+>
+> 大概。 对于大多数应用程序，Mersenne Twister 在性能和质量方面都很好。
+>
+> 然而，值得注意的是，按照现代 PRNG 标准，Mersenne Twister 有点过时了。 Mersenne Twister 最大的问题是它的结果可以在看到 624 个生成的数字后进行预测，这使得它不适合任何需要不可预测性的应用。
+>
+> 如果您开发的应用程序需要最高质量的随机结果（例如统计模拟）、最快的结果，或者非可预测性很重要的应用程序（例如密码学），您将需要使用第 三方库：
+>
+> 用于非加密 PRNG 的 Xoshiro 家族和 Wyrand。
+> 用于加密（不可预测）PRNG 的 Chacha 系列。
+
+好吧，既然你的眼睛可能在流血，那么理论就足够了。 让我们讨论如何在 C++ 中使用 Mersenne Twister 实际生成随机数。
+
+#### 7.19 梅森旋转算法生成随机数
+
+`梅森旋转`PRNG除了有一个好名字之外，它可能是所有编程语言中最流行的 PRNG。 虽然以今天的标准来看它有点陈旧，但它通常会产生高质量的结果并且具有不错的性能。 随机库支持两种梅森旋转类型：
+
+- mt19937 是生成 32 位无符号整数的 Mersenne Twister
+- mt19937_64 是生成 64 位无符号整数的 Mersenne Twister
+
+使用梅森旋转很简单：
+
+```cpp
+#include <iostream>
+#include <random> // for std::mt19937 
+
+int main()
+{
+	std::mt19937 mt{}; // Instantiate a 32-bit Mersenne Twister
+
+	// Print a bunch of random numbers
+	for (int count{ 1 }; count <= 40; ++count)
+	{
+		std::cout << mt() << '\t'; // generate a random number
+
+		// If we've printed 5 numbers, start a new row
+		if (count % 5 == 0)
+			std::cout << '\n';
+	}
+
+	return 0;
+}
+```
+
+提示
+
+由于 mt 是一个变量，您可能想知道 mt() 是什么意思。
+
+mt() 是调用函数 mt.operator() 的简洁语法，对于这些 PRNG 类型，它已被定义为返回序列中的下一个随机结果。 使用 `operator()` 而不是命名函数的好处是我们不需要记住函数的名称，而且语法简洁，输入少。
+
+##### 使用梅森旋转掷骰子
+
+32 位 PRNG 将生成 0 到 4,294,967,295 之间的随机数，如果我们需要某种方法将 PRNG 输出的数字转换为我们想要的较小范围内的值（每个值出现的概率是均等的）。 虽然我们可以自己编写一个函数来执行此操作，但以产生无偏差结果的方式执行此操作并非易事。
+
+幸运的是，随机库可以以`随机数分布的形式`帮助我们。 随机数分布将 PRNG 的输出转换为其他一些数字分布：
+
+> 随机数分布只是设计用于将 PRNG 值作为输入的概率分布。
+
+```cpp
+#include <iostream>
+#include <random> // for std::mt19937 and std::uniform_int_distribution
+
+int main()
+{
+	std::mt19937 mt{};
+
+	// Create a reusable random number generator that generates uniform numbers between 1 and 6
+	std::uniform_int_distribution die6{ 1, 6 }; // for C++14, use std::uniform_int_distribution<> die6{ 1, 6 };
+
+	// Print a bunch of random numbers
+	for (int count{ 1 }; count <= 40; ++count)
+	{
+		std::cout << die6(mt) << '\t'; // generate a roll of the die here
+
+		// If we've printed 10 numbers, start a new row
+		if (count % 10 == 0)
+			std::cout << '\n';
+	}
+
+	return 0;
+}
+```
+
+因为种子相同，所以生成的随机数也相同。
+
+上面的程序如果多次运行该程序，您会注意到它每次都打印相同的数字！ 
+
+> 为了让我们的整个序列在每次运行程序时都以不同的方式随机化，我们需要选择一个不是固定数字的种子。 可能想到的第一个答案是我们的种子需要一个随机数！ 这是一个好主意，但如果我们需要一个随机数来生成随机数，那么我们就陷入了第 22 条军规(互相抵触之规律)。 
+
+有两种通常用于执行此操作的方法——我们只需要选择每次程序运行时都会改变的东西，然后我们可以使用我们的 PRNG 从该种子生成一个唯一的伪随机数序列。
+
+- 使用系统时钟
+- 使用系统的随机设备
+
+##### 使用系统时钟生成随机数种子
+
+C 和 C++ 长期以来一直使用当前时间（使用 std::time() 函数）播种 PRNG，因此您可能会在很多现有代码中看到这一点。
+
+> 幸运的是，C++ 有一个高分辨率的时钟，我们可以用它来生成种子值。 如果程序连续快速运行，为了尽量减少两个时间值相同的可能性，我们希望使用一些变化尽可能快的时间度量。 为此，我们将询问时钟自它可以测量的最早时间以来已经过去了多少时间。 这个时间以“ticks”来衡量，这是一个非常小的时间单位（通常是<font color="brown">纳秒</font>，但也可以是毫秒）。
+
+```cpp
+#include <iostream>
+#include <random> // for std::mt19937
+#include <chrono> // for std::chrono
+
+int main()
+{
+	// Seed our Mersenne Twister using the
+	std::mt19937 mt{ static_cast<unsigned int>(
+		std::chrono::steady_clock::now().time_since_epoch().count()
+		) };
+
+	// Create a reusable random number generator that generates uniform numbers between 1 and 6
+	std::uniform_int_distribution die6{ 1, 6 }; // for C++14, use std::uniform_int_distribution<> die6{ 1, 6 };
+
+	// Print a bunch of random numbers
+	for (int count{ 1 }; count <= 40; ++count)
+	{
+		std::cout << die6(mt) << '\t'; // generate a roll of the die here
+
+		// If we've printed 10 numbers, start a new row
+		if (count % 10 == 0)
+			std::cout << '\n';
+	}
+
+	return 0;
+}
+```
+
+这种方法的缺点是，如果程序快速连续运行多次，每次运行生成的种子不会有太大差异，从统计的角度来看，这会影响随机结果的质量。 对于普通程序，这无所谓，但对于需要高质量、独立结果的程序，这种seeding方法可能不够。
+
+##### 使用随机设备生成随机数种子
+
+random 库包含一个名为 `std::random_device` 的类型，它是一个依据**实现定义**的 PRNG。 通常我们会避免**依实现定义**的功能，因为它们无法保证质量或可移植性，但这是一种例外情况。 通常 std::random_device 会向操作系统询问一个随机数（它如何做到这一点取决于操作系统）。
+
+```cpp
+#include <iostream>
+#include <random> // for std::mt19937 and std::random_device
+
+int main()
+{
+	std::mt19937 mt{ std::random_device{}() };
+
+	// Create a reusable random number generator that generates uniform numbers between 1 and 6
+	std::uniform_int_distribution die6{ 1, 6 }; // for C++14, use std::uniform_int_distribution<> die6{ 1, 6 };
+
+	// Print a bunch of random numbers
+	for (int count{ 1 }; count <= 40; ++count)
+	{
+		std::cout << die6(mt) << '\t'; // generate a roll of the die here
+
+		// If we've printed 10 numbers, start a new row
+		if (count % 10 == 0)
+			std::cout << '\n';
+	}
+
+	return 0;
+}
+```
+
+问：如果 `std::random_device` 本身是随机的，为什么我们不直接使用它来代替 Mersenne Twister？
+
+因为 std::random_device 是实现定义的，所以我们不能对它做太多假设。 它的访问成本可能很高，或者可能导致我们的程序在等待更多随机数可用时暂停。 它从中提取的数字池也可能很快耗尽，这将影响通过相同方法请求随机数的其他应用程序的随机结果。 出于这个原因，<font color="brown">std::random_device 更好地用于播种其他 PRNG 而不是作为 PRNG 本身</font>。
+
+**最佳实践：**使用 std::random_device 为您的 PRNG 提供种子（除非它没有针对您的目标编译器/架构正确实现）。
+
+##### 只为 PRNG 播种一次
+
+许多 PRNG 可以在初始播种后重新播种。 这实质上重新初始化了随机数生成器的状态，使其从新的种子状态开始生成结果。 除非有特殊原因，否则通常应避免重新播种，因为这会导致结果随机性降低或根本不随机。
+
+Best practice: Only seed a given pseudo-random number generator once, and do not reseed it.
+
+##### 跨多个函数的随机数
+
+如果我们想在多个函数中使用随机数生成器会怎样？
+
+1. 一种方法是在我们的 main() 函数中创建（和播种）我们的 PRNG，然后将它传递到我们需要的任何地方。 但对于我们可能只偶尔在不同地方使用的东西来说，这是很多传递。
+2. 在每个需要它的函数中创建一个静态本地 std::mt19937 变量（静态以便它只被播种一次），但让每个使用随机数生成器的函数定义和播种其自己的本地生成器是过犹不及的。 
+3. 在大多数情况下，更好的选择是创建一个全局随机数生成器（在命名空间内！）。
+
+> 虽然我们告诉过您避免使用非常量全局变量，但随机数是一个例外。
+
+```cpp
+#include <iostream>
+#include <random> // for std::mt19937 and std::random_device
+
+namespace Random // capital R to avoid conflicts with functions named random()
+{
+	std::mt19937 mt{ std::random_device{}() };
+
+	int get(int min, int max)
+	{
+		std::uniform_int_distribution die{ min, max }; // we can create a distribution in any function that needs it
+		return die(mt); // and then generate a random number from our global generator
+	}
+}
+
+int main()
+{
+	std::cout << Random::get(1, 6) << '\n';
+	std::cout << Random::get(1, 10) << '\n';
+	std::cout << Random::get(1, 20) << '\n';
+
+	return 0;
+}
+```
+
+在上面的示例中，`Random::mt` 是一个可以从任何函数访问的全局变量。 我们创建了 `Random::get() `作为获取最小值和最大值之间的随机数的简单方法。 `std::uniform_int_distribution` 的创建成本通常很低，因此可以在我们需要时创建。
+
+
+
+##### underseeding 问题
+
+underseeding就是种子的大小 < PRNG内部状态大小
+
+Mersenne Twister 的内部状态大小为 624 字节。 在上面的例子中，我们从时钟或 std::random_device 做种子，我们的种子只是一个 32 位整数。 这意味着我们实际上是在用一个<font color="brown">4 字节的值初始化一个 624 字节的对象</font>，这是显著地underseeding该PRNG。 random 库尽其所能用“随机”数据<font color="brown">填充</font>剩余的 620 个字节……但它无法发挥魔力。 Underseeded PRNG 生成对于需要最高质量结果的应用程序而言次优的结果。 例如，用单个 32 位值播种 std::mt19937 永远不会生成数字 42 作为其第一个输出。
+
+那么我们如何解决这个问题呢？ 借助`std::seed_seq`（代表“种子序列”），具体参考原[blog](https://www.learncpp.com/cpp-tutorial/generating-random-numbers-using-mersenne-twister/)，介绍了几种思路。
+
+**预热 PRNG**
+
+当 PRNG 的种子质量较差（或underseeded）时，PRNG 的初始结果可能不是高质量的。 出于这个原因，一些 PRNG 受益于“预热”，这是一种丢弃 PRNG 生成的前 N 个结果的技术。 
+
+**调试使用随机数的程序**
+
+调试时，使用导致错误行为发生的特定值（例如 5）为 PRNG 播种是一种有用的技术。 这将确保您的程序每次都生成相同的结果，从而使调试更容易。 发现错误后，您可以使用正常的播种方法再次开始生成随机结果。
+
+#### 7.x 第七章总结
+
+猜数字游戏：随机1～100的数字，用户7次机会猜测，每次提示大于或小于答案。猜对即胜利，7次猜错即失败。游戏结束提示是否再来一局。
+
+并处理无效猜测（例如“x”）、越界猜测（例如 0 或 101）或具有无关字符的有效猜测（例如 43x）。
+
+> 提示：编写一个单独的函数来处理用户输入他们的猜测（以及相关的错误处理）。
+
+```cpp
+#include <iostream>
+#include <random> // for std::mt19937
+#include <limits>
+
+int getGuess(int count)
+{
+	while (true) // loop until user enters valid input
+	{
+		std::cout << "Guess #" << count << ": ";
+
+		int guess{};
+		std::cin >> guess;
+
+		if (std::cin.fail()) // did the extraction fail?
+		{
+			// yep, so let's handle the failure
+			std::cin.clear(); // put us back in 'normal' operation mode
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // remove the bad input
+			continue; // and try again
+		}
+
+		// If the guess was out of bounds
+		if (guess < 1 || guess > 100)
+		{
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // remove the bad input
+			continue; // and try again
+		}
+
+		// We may have gotten a partial extraction (e.g. user entered '43x')
+		// We'll remove any extraneous input before we proceed
+		// so the next extraction doesn't fail
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		return guess;
+	}
+}
+
+// returns true if the user won, false if they lost
+bool playGame(int guesses, int number)
+{
+	// Loop through all of the guesses
+	for (int count{ 1 }; count <= guesses; ++count)
+	{
+		int guess{ getGuess(count) };
+
+		if (guess > number)
+			std::cout << "Your guess is too high.\n";
+		else if (guess < number)
+			std::cout << "Your guess is too low.\n";
+		else // guess == number
+			return true;
+	}
+	return false;
+}
+
+bool playAgain()
+{
+	// Keep asking the user if they want to play again until they pick y or n.
+	while (true)
+	{
+		char ch{};
+		std::cout << "Would you like to play again (y/n)? ";
+		std::cin >> ch;
+
+		switch (ch)
+		{
+		case 'y': return true;
+		case 'n': return false;
+		default:
+			// clear out any extraneous input
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+	}
+}
+
+int main()
+{
+	std::random_device rd;
+	std::seed_seq seq{ rd(), rd(), rd(), rd(), rd(), rd(), rd(), rd() };
+	std::mt19937 mt{ seq }; // Create a mersenne twister, seeded using the seed sequence
+
+	std::uniform_int_distribution die{ 1, 100 }; // generate random numbers between 1 and 100
+	constexpr int guesses{ 7 }; // the user has this many guesses
+	do
+	{
+		int number{ die(mt) }; // this is the number the user needs to guess
+		std::cout << "Let's play a game. I'm thinking of a number between 1 and 100. You have " << guesses << " tries to guess what it is.\n";
+		bool won{ playGame(guesses, number) };
+		if (won)
+			std::cout << "Correct! You win!\n";
+		else
+			std::cout << "Sorry, you lose. The correct number was " << number << "\n";
+	} while (playAgain());
+
+	std::cout << "Thank you for playing.\n";
+	return 0;
+}
+```
+
+### 类型转换和函数重载
+
+#### 8.1 隐式类型转换（强制）
+
+##### 类型转换介绍
+
+##### 隐式类型转换
