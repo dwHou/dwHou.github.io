@@ -3978,7 +3978,7 @@ double doDivision(int x, int y)
 
 在本课中，我们以用户通过 std::cin 输入无效文本为例，向您展示一些处理这些情况的不同方式。
 
-cin的工作原理：用户输入会先进入输入<font color="brown">缓冲区</font>，`>>` 从输入缓冲区中提取尽可能多的数据到变量中，无法提取的任何数据则留在缓冲区中供下一次提取。
+**cin的工作原理：**用户输入会先进入输入<font color="brown">缓冲区</font>，`>>` 从输入缓冲区中提取尽可能多的数据到变量中，无法提取的任何数据则留在缓冲区中供下一次提取。
 
 ```cpp
 int x{};
@@ -3986,7 +3986,239 @@ std::cin >> x;
 // 如果用户输入“5a”，5将被提取，转换为整数，并赋值给变量x。 “a\n”将留在输入缓冲区中以供下一次提取。
 ```
 
-验证输入：检查用户输入是否符合程序预期的过程称为输入验证。
+**验证输入：**检查用户输入是否符合程序预期的过程称为输入验证。
 
+> Let the user enter whatever they want into a string, then validate whether the string is correct, and if so, convert the string to the final variable format.
 
+一些图形用户界面和高级文本界面可以让您在用户输入时（逐个字符）验证输入。 一般来说，程序员会提供一个验证函数，接受用户目前已经输入的输入，如果输入有效则返回true，否则返回false。 每次用户按下一个键时都会调用此函数。 如果验证函数返回 true，则用户刚刚按下的键被接受。 如果验证函数返回 false，则用户刚刚输入的字符将被丢弃（并且不会显示在屏幕上）。 使用此方法，您可以确保用户输入的任何输入都保证有效，因为任何无效的击键都会被立即发现并丢弃。 不过，std::cin 不支持这种验证方式。
 
+> Let the user enter whatever they want, let std::cin and operator>> try to extract it, and handle the error cases.
+
+大多数情况下，我们让 std::cin 和提取运算符完成复杂的工作。 在这种方法下，我们让用户输入他们想要的任何内容，让 std::cin 和 operator>> 尝试提取它，并在失败时处理后果。 
+
+##### 四则运算代码例
+
+`void printResult(double x, char operation, double y)`
+
+4种错误：
+
+- 输入提取成功，但输入对程序没有意义（例如，输入“k”作为数学运算符）。
+- 输入提取成功，但用户输入了额外的输入（例如，输入“*q hello”作为您的数学运算符）。
+- 输入提取失败（例如，尝试在数字输入中输入“q”）。
+- 输入提取成功，但用户溢出了一个数值。
+
+因此，为了使我们的程序健壮，每当我们要求用户输入时，理想情况下我们应该确定上述每种情况是否可能发生，如果是，则编写代码来处理这些情况。
+
+```cpp
+#include <iostream>
+#include <limits>
+
+// std::cin.ignore(100, '\n')可以从缓冲区中清除最多 100 个字符，或者直到删除一个'\n' 字符。可以解决第2类错误。
+void ignoreLine()
+{
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+double getDouble()
+{
+    while (true) // Loop until user enters a valid input
+    {
+        std::cout << "Enter a double value: ";
+        double x{};
+        std::cin >> x;
+
+        // Check for failed extraction
+        if (!std::cin) // has a previous extraction failed?
+        {
+          	// std::cin 有一个布尔转换，表示最后一次输入是否成功。利用该函数，可以解决第3、第4类错误。因为它们都会使std::cin进入“失败模式”，布尔转换后为假。
+            // yep, so let's handle the failure
+            std::cin.clear(); // put us back in 'normal' operation mode
+            ignoreLine(); // and remove the bad input
+            std::cerr << "Oops, that input is invalid.  Please try again.\n";
+        }
+        else
+        {
+            ignoreLine(); // remove any extraneous input
+            return x;
+        }
+    }
+}
+
+char getOperator()
+{
+    while (true) // Loop until user enters a valid input
+    {
+        std::cout << "Enter one of the following: +, -, *, or /: ";
+        char operation{};
+        std::cin >> operation;
+        ignoreLine(); // // remove any extraneous input
+
+        // Check whether the user entered meaningful input
+        switch (operation)
+        {
+            // 第1类错误的处理很简单：我们使用 while 循环不断循环，直到用户提供有效输入。 如果他们不这样做，我们会要求他们再试一次，直到他们给我们提供有效输入、关闭程序或毁坏他们的计算机。
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+            return operation; // return it to the caller
+        default: // otherwise tell the user what went wrong
+            std::cerr << "Oops, that input is invalid.  Please try again.\n";
+        }
+    } // and try again
+}
+
+void printResult(double x, char operation, double y)
+{
+    switch (operation)
+    {
+    case '+':
+        std::cout << x << " + " << y << " is " << x + y << '\n';
+        break;
+    case '-':
+        std::cout << x << " - " << y << " is " << x - y << '\n';
+        break;
+    case '*':
+        std::cout << x << " * " << y << " is " << x * y << '\n';
+        break;
+    case '/':
+        std::cout << x << " / " << y << " is " << x / y << '\n';
+        break;
+    default: // Being robust means handling unexpected parameters as well, even though getOperator() guarantees operation is valid in this particular program
+        std::cerr << "Something went wrong: printResult() got an invalid operator.\n";
+    }
+}
+
+int main()
+{
+    double x{ getDouble() };
+    char operation{ getOperator() };
+    double y{ getDouble() };
+
+    printResult(x, operation, y);
+
+    return 0;
+}
+```
+
+**总结：**
+
+在编写程序时，请考虑用户将如何滥用您的程序，尤其是在文本输入方面。 对于每个文本输入点，请考虑：
+
+- 会不会提取失败？
+- 用户可以输入比预期更多的输入吗？
+- 用户可以输入无意义的输入吗？
+- 用户可以溢出输入吗？
+
+> 作者注：输入验证很重要也很有用，但它也往往会使示例变得更加复杂和难以理解。 因此，在以后的课程中，除非与我们正在尝试教授的内容相关，否则我们通常不会进行任何类型的输入验证。
+
+#### 7.17 断言和静态断言
+
+在一个带参数的函数中，调用者可以传递语法上有效但语义上无意义的参数。 例如，传递0给分母。
+
+前面我们讨论了处理此类问题的几种方法，包括**停止程序**或**跳过违规语句**。
+
+1. 但跳过和打印（`std::cerr`），它实际上是在默默地失败。 尤其是在我们编写和调试程序时，静默故障是不好的，因为它们掩盖了真正的问题。
+2. 如果程序终止（ `std::exit`），那么我们将丢失调用堆栈和任何可能帮助我们隔离问题的调试信息。 对于这种情况，`std::abort` 是更好的选择，因为通常开发人员可以选择在程序abort处开始调试。
+
+**先决条件、不变量和后置条件**
+
+在编程中，先决条件是在执行代码组件之前必须始终为真的任何条件（最常见）。 不变量是在某些组件执行时必须为真的条件。类似地，后置条件是在某些代码组件执行后必须为真的东西。
+
+> 分母不为零就是除法函数的先决条件。
+
+##### 断言
+
+<font color="brown">断言 = 条件语句检测+打印错误消息+终止程序</font>，是对问题的常见响应，因此 C++ 提供了执行此操作的快捷方法。
+
+**断言是一个表达式，除非程序中存在错误，否则该表达式为真。** 
+
+如果表达式的计算结果为真，则断言语句不执行任何操作。 如果条件表达式的计算结果为假，则显示错误消息并终止程序（通过 std::abort）。 此错误消息通常包含作为文本失败的表达式，以及代码所在文件名和断言的行号。 
+
+>指出问题、定位问题，极大地帮助调试工作。
+
+在 C++ 中，运行时断言是通过位于 <cassert> 头中的断言预处理器宏实现的：
+
+```cpp
+#include <cassert> // for assert()
+#include <cmath> // for std::sqrt
+#include <iostream>
+
+double calculateTimeUntilObjectHitsGround(double initialHeight, double gravity)
+{
+  assert(gravity > 0.0); // The object won't reach the ground unless there is positive gravity.
+
+  if (initialHeight <= 0.0)
+  {
+    // The object is already on the ground. Or buried.
+    return 0.0;
+  }
+
+  return std::sqrt((2.0 * initialHeight) / gravity);
+}
+
+int main()
+{
+  std::cout << "Took " << calculateTimeUntilObjectHitsGround(100.0, -9.8) << " second(s)\n";
+
+  return 0;
+}
+```
+
+当程序调用 `calculateTimeUntilObjectHitsGround(100.0, -9.8) `时，`assert(gravity > 0.0)` 将评估为 `false`，这将触发断言，从而打印类似如下的消息：
+
+dropsimulator: src/main.cpp:6: double calculateTimeUntilObjectHitsGround(double, double): Assertion 'gravity > 0.0' failed.
+
+:warning:注：
+
+1. 实际消息因您使用的编译器而异。
+2. 虽然断言最常用于验证函数参数，但它们可以用于任何你想验证某事是否为真的地方。
+3. 断言有时也用于记录未实现的案例，因为在程序员编写代码时不需要它们。
+4. 尽管我们之前告诉过您要避免使用预处理器宏，但断言是少数被认为可以使用的预处理器宏之一。 我们鼓励您在整个代码中自由使用 assert 语句。
+
+Tips: 使您的断言语句更具描述性
+
+```cpp
+// 有一个小技巧可以让你的断言语句更具描述性。 只需添加一个由逻辑 AND 连接的字符串文字：
+assert(found && "Car could not be found in database");
+```
+
+它行之有效的原因是，字符串字面量的计算结果始终为布尔值 true。因此，对字符串字面量进行逻辑AND-ing不会影响断言的评估。
+
+Assertion failed: found && "Car could not be found in database", file C:\\VCProjects\\Test.cpp, line 34
+
+这便能提供一些有关问题出在哪里的额外上下文信息。
+
+断言vs错误处理：可以比较7.15和7.17的内容。
+
+最佳实践：使用断言来记录逻辑上不可能的案例。
+
+##### NDEBUG
+
+每次检查断言条件时，断言宏都会带来很小的性能成本。 此外，断言应该（理想情况下）永远不会在生产代码 (<font color="brown">production code</font>) 中遇到（因为您的代码应该已经过彻底测试）。 因此，许多开发人员更喜欢断言仅在调试版本中有效。 C++ 提供了一种在<font color="brown">生产代码中关闭断言</font>的方法。 如果定义了宏 NDEBUG，断言宏将被禁用。
+
+某些 IDE 默认将 NDEBUG 设置为发布配置的项目设置的一部分。 例如，在 Visual Studio 中，以下预处理器定义在项目级别设置：WIN32；NDEBUG；_CONSOLE。 如果您使用的是 Visual Studio 并希望您的断言在发布版本中触发，则需要从此设置中删除 NDEBUG。
+
+如果您使用的 IDE 或构建系统不会在发布配置中自动定义 NDEBUG，则需要手动将其添加到项目或编译设置中。
+
+**一些断言的限制和警告**
+
+断言有一些陷阱和限制。 
+
+1.首先，断言本身可能有错误。 如果发生这种情况，断言将在不存在错误的地方报告错误，或者在存在错误的地方不报告错误。
+
+2.其次，您的断言应该没有副作用——也就是说，程序在有断言和没有断言的情况下都应该运行相同。 否则，您在调试配置中测试的内容将与在发布配置中测试的内容不同（假设您附带 NDEBUG）。
+
+3.另请注意，abort() 函数会立即终止程序，而没有机会进行任何进一步的清理（例如关闭文件或数据库）。 因此，只有在程序意外终止时不太可能发生损坏的情况下才应使用断言。
+
+##### 静态断言
+
+C++ 还有另一种类型的断言，称为 `static_assert`。 **static_assert** 是在编译时而非运行时检查的断言，失败的 static_assert 会导致编译错误。 与在 <cassert> 标头中声明的 assert 不同，static_assert 是一个关键字，因此无需包含标头即可使用它。
+
+`static_assert` 采用以下形式：
+
+```cpp
+static_assert(condition, diagnostic_message)
+```
+
+#### 7.18 随机数生成

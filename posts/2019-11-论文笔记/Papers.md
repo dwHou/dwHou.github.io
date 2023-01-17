@@ -382,7 +382,26 @@ https://www.yuque.com/lart/architecture
 
 #### :page_with_curl:IQA: Unifying Structure and Texture Similarity
 
+#### :page_with_curl:Super Resolution for Compressed Screen Content Video
 
+屏幕内容超分
+
+现有超分失效的原因：
+
+1. 数据gap：自然场景内容相对平滑，带有附加传感器噪声。 相比之下，屏幕内容视频可能具有锐利的边缘、高对比度的纹理和无噪声的内容。
+
+   经过编码的屏幕内容：局部切入和截断在屏幕内容视频中很常见，这可能会由于缺少有利的参考而导致编码质量下降。
+
+2. 其次，现有方法采用连续的相邻帧作为输入，而不考虑场景瞬间切换或局部突变。
+
+3. 大多现有方面没有考虑压缩失真。
+
+本文贡献：
+
+- luminance-sharpness similarity作为loss
+- 网络结构主要就是利用3个输入：当前帧、前一帧、两帧差异的指数
+
+数据有网页、游戏画面、动画和中英文文档等等。
 
 ### 智能编码系列
 

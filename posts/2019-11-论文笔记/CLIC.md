@@ -522,19 +522,39 @@ ELIC提出可以前面的分组包含的通道更少，使其信息更集中，�
 
 还有一个比较<font color="brown">关键的细节</font>是：ELIC用的是单一的高斯模型，而不是GMM。
 
-> 我们使用<font color="brown">混合量化估计器</font>来训练通道上下文模型，遵循 Minnen 等人[40]。 它有助于优化单个高斯mean-scale熵模型 [39]，使其可与 GMM [15、22、29、35] 等混合模型相媲美。 根据之前的工作 [24、39] 和社区讨论[1](https://groups.google.com/g/tensorflow-compression/c/LQtTAo6l26U)，我们将每个 ⌈y − μ⌋ 编码到比特流而不是 ⌈y⌋ 并将编码符号恢复为 ⌈y − μ⌋ + μ，这可以进一步使单个 Gaussiann熵模型受益。
+> **我们使用<font color="brown">混合量化估计器</font>来训练通道上下文模型，遵循 Minnen 等人[40]。 它有助于优化单个高斯mean-scale熵模型 [39]，使其可与 GMM [15、22、29、35] 等混合模型相媲美。 根据之前的工作 [24、39] 和社区讨论[1](https://groups.google.com/g/tensorflow-compression/c/LQtTAo6l26U)，我们将每个 ⌈y − μ⌋ 编码到比特流而不是 ⌈y⌋ 并将编码符号恢复为 ⌈y − μ⌋ + μ，这可以进一步使单个 Gaussiann熵模型受益。**
 >
-> 关于混合量化估计器，[40]Channel-wise这篇分析了现有的量化方式，①均匀噪声是模拟“noisy quantization”，或者②使用直通梯度，自定义导数为1。由于篇幅限制，[40]没有放不同训练方法效果的完整报告，但他们凭经验发现①+②的混合方法可以提高 RD 性能。
+> <font color="purple">关于混合量化估计器，</font>[40]Channel-wise这篇分析了现有的量化方式，①均匀噪声是模拟“noisy quantization”，或者②使用直通梯度，自定义导数为1。由于篇幅限制，[40]没有放不同训练方法效果的完整报告，但他们凭经验发现①+②的混合方法可以提高 RD 性能。
 >
 > 所谓混合方法就是：训练熵模型时用均匀噪声，但传给synthesis transform时还是用的rounded。相当于对于ST模块，能够保证训推一致。这个方法可以和《soft-then-hard》论文对比来看。
 >
-> mixed和soft-then-hard的区别是均解决了train-test mismatch问题的同时，是D一直仅仅影响解码器(mixed)，还是分两步，soft阶段D、R均影响编码器，hard阶段D只影响解码器(soft-then-hard)。 
+> <font color="red">注：</font>round(),ceil(),floor()，这几个会导致梯度变成0，不再反传。
 >
-> （不过不管哪种实现，我们的设计都遵循D只影响解码器、编码器；R只影响熵模型、编码器）
+> ~~mixed和soft-then-hard的区别是均解决了train-test mismatch问题的同时，是D一直仅仅影响解码器(mixed)，还是分两步，soft阶段D、R均影响编码器，hard阶段D只影响解码器(soft-then-hard)。~~ 
 >
-> 我认为soft-then-hard可能更好，可以专门写soft-then-hard的训练方式(hard时仅仅self.decoder有梯度)。因此，这方面我们能够比ELIC做得更好。
+> ~~（不过不管哪种实现，我们的设计都遵循D只影响解码器、编码器；R只影响熵模型、编码器）~~
+>
+> ~~我认为soft-then-hard可能更好，可以专门写soft-then-hard的训练方式(hard时仅仅self.decoder有梯度，甚至改进一点，hard时除了encoder，因为它得到round(y)，剩下都有梯度)。因此，这方面我们能够比ELIC做得更好。~~
+>
+> 我前面理解成了传给ST模块的不需要梯度。实际上，仍然可以用SteQuant或者HardQuant来提供直通梯度。这样，mixed和soft-then-hard应该区别不大了，mixed优点是不需要分阶段训练，缺点是D一直以直通梯度的方式影响编码器。
+>
+> 或许可以二者结合，soft时全用NoiseQuant，hard时就转为mixed形式。作为我的idea。
+>
+> 这一段分析也可以作为论文材料。
+>
+> <font color="purple">关于实际量化和算术编码的是⌈y − μ⌋，</font>[这里](https://groups.google.com/g/tensorflow-compression/c/LQtTAo6l26U)有Minnen的亲自解答，
+>
+> 诸多干货（比如：从较高的lambda开始训练，中途逐渐降低lambda。对于解码器由易到难。），强烈推荐反复看。至于用[y − μ]更佳完全是实践性的结论，我认为
+>
+> ① ~~和归一化有点关系，这里类似都归一化到了零均值。~~
+>
+> ② symbol数目没有变，但[y − μ]比[y]小很多，变相相当于增加了symbol数目，表达能力更强了。
+>
+> 而直观来说只有单个高斯模型才能用到⌈y − μ⌋。所以就形成了对GMM的一个优势。
 >
 > 
+
+
 
 我认为是GMM对速度和显存的影响特别大，我这边发现GMM少一个高斯模型，对速度的提升和显存的下降影响都是巨大的。
 
@@ -663,6 +683,14 @@ for v in mask:
 
 27.描述scalable video coding的好处，算力弱或者带宽受限的接收端可以只接收第一段码流。
 
+28.从较高的lambda开始训练，中途逐渐降低lambda。由易到难。同一个seed，尝试网络插值。
+
+
+
+https://groups.google.com/g/clic-list/c/JJPQ1ovaWHI
+
+这里有CLIC的视频talk报告。
+
 
 
 #### 备注：
@@ -672,6 +700,8 @@ for v in mask:
 我们可以叫ELIC++或者MagIC
 
 <font color="brown">Multi-stage and symbol Gathering I C</font>
+
+MAsk Gathering IC
 
 MUSIC
 
