@@ -4631,4 +4631,205 @@ int main()
 
 ##### 类型转换介绍
 
+对象的值存储为比特序列，对象的数据类型告诉编译器如何将这些比特解释为有意义的值。 不同的数据类型可能以不同的方式表示“相同”的数字。 例如，整数值 3 可能存储为二进制 `0000 0000 0000 0000 0000 0000 0000 0011`，而浮点值 3.0 可能存储为二进制 `0100 0000 0100 0000 0000 0000 0000 0000`。
+
+将值从一种数据类型转换为另一种数据类型的过程称为**类型转换**。
+
+可以通过以下两种方式之一调用类型转换：隐式（根据编译器需要）或显式（当程序员请求时）。 我们将在本课中介绍隐式类型转换，在8.5中介绍显式类型转换。
+
 ##### 隐式类型转换
+
+当需要一种数据类型但提供了另一种数据类型时，编译器会自动执行<font color="purple">隐式</font>类型转换（也称为<font color="purple">自动</font>类型转换或<font color="purple">强制</font>转换）。 C++ 中的绝大多数类型转换都是隐式类型转换。 
+
+例如，隐式类型转换发生在以下所有情况：
+
+```cpp
+1.当使用不同数据类型的值初始化（或赋值）变量时：
+double d{ 3 }; // int value 3 implicitly converted to type double
+d = 6; // int value 6 implicitly converted to type double
+
+2.当返回值的类型与函数声明的返回类型不同时：
+float doSomething()
+{
+    return 3.0; // double value 3.0 implicitly converted to type float
+}
+
+3.将某些二元运算符与不同类型的操作数一起使用时：
+double division{ 4.0 / 3 }; // int value 3 implicitly converted to type double
+
+4.在if语句中使用非布尔值时：
+if (5) // int value 5 implicitly converted to type bool
+{
+}
+
+5.当传递给函数的参数与函数参数的类型不同时：
+void doSomething(long l)
+{
+}
+
+doSomething(3); // int value 3 implicitly converted to type long
+```
+
+**调用类型转换时会发生什么**
+
+当调用类型转换时（无论是隐式还是显式），编译器将确定它是否可以将值从当前类型转换为所需类型。 如果可以找到有效的转换，则编译器将生成所需类型的新值。 请注意，类型转换不会更改正在转换的值或对象的值或类型。
+
+如果编译器找不到可接受的转换，则编译将失败并出现编译错误。
+
+<u>那么编译器实际上如何确定它是否可以将一个值从一种类型转换为另一种类型呢？</u>
+
+##### 标准转换
+
+C++ 语言标准定义了如何将不同的基本类型（在某些情况下，复合类型）转换为其他类型。 这些转换规则称为标准转换。
+
+标准转换大致可分为 4 类，每类涵盖不同类型的转换：
+
+- 数字提升（在第 8.2 节中介绍 -- 浮点数和整数提升）
+- 数字转换（在第 8.3 节中介绍 -- 数字转换）
+- 算术转换（在第 8.4 节 -- 算术转换中介绍）
+- 其他转换（包括各种指针和引用转换）
+
+当需要类型转换时，编译器将查看是否有标准转换可用于将值转换为所需类型。 编译器可以在转换过程中应用零个、一个或多个标准转换。
+
+> 啥时候会用0个转换？…
+>
+> 例如，在 int 和 long 具有相同大小和范围的体系结构中，相同的位序列用于表示两种类型的值。 因此，在这两类型之间转换值不需要实际转换——可以简单地复制值。
+
+描述类型转换如何工作的整套规则既冗长又复杂，而且大多情况下，类型转换“正常工作”。 在下一组课程中，我们将介绍您需要了解的关于类型转换的最重要的事情。 如果某些不常见的情况需要更详细的信息，请参考[技术文档](https://en.cppreference.com/w/cpp/language/implicit_conversion)中完整的规则说明。
+
+让我们开始吧！
+
+#### 8.2 数字提升（浮点数和整数提升）
+
+在第 4.3节——占字节数中，我们注意到 C++ 对每个基本类型都有最小字节数保证。 但是，这些类型的实际大小可能因编译器和体系结构而异。
+
+允许这种可变性，以便可以将 int 和 double 数据类型设置为在给定体系结构上最大化性能的大小。 例如，一台 32 位计算机通常一次可以处理 32 位数据。 在这种情况下，int 可能会设置为 32 位宽度，因为这是 CPU 操作的数据的**“自然”大小**（并且可能是性能最高的）。
+
+但是当我们希望我们的 32 位 CPU 修改一个 8 位值（例如 char）或 16 位值时会发生什么？ 一些 32 位处理器（例如 x86 系列）可以直接操作 8 位或 16 位值。 但是，这样做通常比操作 32 位值慢！ 其他 32 位 CPU（如 PowerPC）只能对 32 位值进行操作，必须采用额外的技巧来操作更窄的值。
+
+##### 数字提升
+
+因为 C++ 被设计为在广泛的体系结构中具有可移植性和高性能，所以语言设计者不想假设给定的 CPU 能够有效地操作比该 CPU 的自然数据大小更窄的值。
+
+为了帮助应对这一挑战，C++ 定义了一种类型转换的类别，非正式地称为数字提升。 <font color="brown">数字提升是将较窄的数字类型（例如 char）转换为更宽的数字类型（通常是 int 或 double）</font>，可以有效地处理并且不太可能产生溢出的结果。
+
+> 所有数字提升都是**value-preserving**的，这意味着原类型的值在新类型里表示不会丢失数据或精度。 因为这样的提升是安全的，编译器会根据需要自由使用数字提升，并且无需发出警告。
+
+##### 数字提升减少代码冗余
+
+数字提升也解决了另一个问题。 考虑您想要编写一个函数来打印 int 类型的值的情况：
+
+```cpp
+#include <iostream>
+void printInt(int x)
+{
+    std::cout << x << '\n';
+}
+```
+
+虽然这很简单，但如果我们还想打印一个 short 类型或 char 类型的值，会发生什么？ 如果不存在类型转换，我们就必须为 short 和 char 分别编写一个不同的打印函数。 不要忘记还有 unsigned char、signed char、unsigned short、wchar_t、char8_t、char16_t 和 char32_t 的版本！
+
+数字提升在这里可以解决问题：我们可以编写具有 int 和/或 double 参数的函数（例如上面的 printInt() 函数）。 然后可以通过数字提升以匹配实参和形参的类型。
+
+##### 浮点数提升
+
+- 使用浮点提升规则，可以将 float 类型的值转换为 double 类型的值。
+
+
+这意味着我们可以编写一个接受双精度值的函数，然后使用双精度值或浮点值调用它。
+
+##### 整数提升
+
+- signed char 或 signed short 可以转换为 int。
+- 如果 int 可以容纳类型的整个范围，则 unsigned char、char8_t 和 unsigned short 可以转换为 int，否则可以转换为 unsigned int。
+- 如果 char 默认是有符号的，则遵循上面的 signed char 转换规则。 如果默认是unsigned，则遵循上面的unsigned char转换规则。
+- bool可以转int，false变为0，true变为1。
+
+某些保值类型转换（例如 char 到 short、int 到 long 或 int 到 double）在 C++ 中不被视为数字提升（它们是数字转换，我们将在第 8.3 节中将很快介绍）。 这是因为此类转换并不是实现将较小的类型转换为可以更有效地处理的较大类型的目标。
+
+区别主要是学术上的。 但是，在某些情况下，编译器会偏爱数字提升而不是数字转换。 当我们介绍8.11 函数重载决议和模糊匹配中，我们将看到这会产生不同的例子。
+
+#### 8.3 数字转换
+
+C++ 支持另一类数字类型转换，称为数字转换，<font color="brown">它涵盖数字提升规则未涵盖的其他类型转换</font>。
+
+有五种基本类型的数字转换。
+
+1. 将整数类型转换为任何其他整数类型（不包括整数提升）：
+
+   ```cpp
+   short s = 3; // convert int to short
+   long l = 3; // convert int to long
+   char ch = s; // convert short to cha
+   ```
+
+2. 将浮点类型转换为任何其他浮点类型（不包括浮点提升）：
+
+   ```cpp
+   float f = 3.0; // convert double to float
+   long double ld = 3.0; // convert double to long double
+   ```
+
+3. 将浮点类型转换为任何整数类型：
+
+   ```cpp
+   int i = 3.5; // convert double to int
+   ```
+
+4. 将整数类型转换为任何浮点类型：
+
+   ```cpp
+   double d = 3; // convert int to double
+   ```
+
+5. 将整数类型或浮点类型转换为布尔值：
+
+   ```cpp
+   bool b1 = 3; // convert int to bool
+   bool b2 = 3.0; // convert double to bool
+   ```
+
+   > 作为旁白…
+   >
+   > 因为大括号初始化不允许一些数字转换（稍后会详细介绍），我们在本课中使用复制初始化（没有任何此类限制）以保持示例简单。
+
+**数字变窄**
+
+与数字提升（它始终是安全的）不同，数字转换可能（也可能不会）导致数据或精度丢失。
+
+某些数字转换始终是安全的（例如 int 到 long，或 int 到 double）。 其他数字转换，例如 double 到 int，可能会导致数据丢失（取决于被转换的特定值和/或基础类型的范围）：
+
+```cpp
+int i1 = 3.5; // the 0.5 is dropped, resulting in lost data
+//报警告：warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+int i2 = 3.0; // okay, will be converted to value 3, so no data is lost
+```
+
+在 C++ 中，收窄转换是一种可能导致数据丢失的数字转换。 此类收窄转换包括：
+
+1. 从浮点型到整型。
+2. 从更宽的浮点类型到更窄的浮点类型，除非被转换的值是 constexpr 并且在目标类型的范围内（即使更窄的类型没有存储整数的精度）。
+3. 从整型到浮点类型，除非被转换的值是 constexpr 并且在目标类型的范围内并且可以转换回原始类型而不会丢失数据。
+4. 从更宽的整数类型到更窄的整数类型，除非被转换的值是 constexpr 并且在整数提升之后将适合目标类型。
+
+好消息是你不需要记住这些。 当您的编译器确定需要隐式收窄转换时，它通常会发出<font color="brown">警告（或错误）</font>。
+
+
+
+**最佳实践：**尽可能避免收窄转换。 如果确实需要执行一个，请使用 static_cast 使其成为显式转换。例如：
+
+```cpp
+void someFcn(int i)
+{
+}
+
+int main()
+{
+    double d{ 5.0 };
+    someFcn(d); // bad: will generate compiler warning about narrowing conversion
+    someFcn(static_cast<int>(d)); // good: we're explicitly telling the compiler this narrowing conversion is expected, no warning generated
+
+    return 0;
+}
+```
+

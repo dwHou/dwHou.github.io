@@ -396,12 +396,109 @@ https://www.yuque.com/lart/architecture
 
 3. 大多现有方面没有考虑压缩失真。
 
+相关工作：
+
+SSIM把两幅图的相似性按三个维度进行比较：亮度，对比度和结构。公式的设计遵循三个原则：对称性s(x,y)=s(y,x)、有界性s(x,y)<=1、极限值唯一s(x,y)=1当且仅当x=y。
+
+比如，亮度相似度：$l(x,y)=\frac{2\mu_{x}\mu_{y} + C_{1}}{\mu_{x}^{2}+\mu_{y}^{2}+C_{1}} $
+
 本文贡献：
 
-- luminance-sharpness similarity作为loss
+- luminance-sharpness similarity作为loss，
+
+  就是SSIM中亮度维度的相似度 + 提出的一个锐度的相似度。
+
 - 网络结构主要就是利用3个输入：当前帧、前一帧、两帧差异的指数
 
 数据有网页、游戏画面、动画和中英文文档等等。
+
+评价：感觉从网络结构来说有些道理，但损失函数其实不一定比4个方向的梯度损失好，就是尺寸大一点，方向多一点。
+
+#### :page_with_curl:CUF: Continuous Upsampling Filters
+
+Nerf的思想和上采样任务结合：将上采样内核参数化为神经场(Neural fields)。
+
+文章内容：
+
+神经场表示具有基于坐标的神经网络的信号，它已经在许多领域找到了应用，包括 3D 重建、视点合成等。
+
+最近的研究调查了神经场在单图超分辨率背景下的使用（[LIIF](https://openaccess.thecvf.com/content/CVPR2021/papers/Chen_Learning_Continuous_Image_Representation_With_Local_Implicit_Image_Function_CVPR_2021_paper.pdf)和[LTE](https://github.com/jaewon-lee-b/lte)）。这些模型基于以编码器产生的潜在表示为条件的多层感知器。 虽然这种架构允许连续尺度的超分辨率，但它们需要在目标分辨率下为每个像素执行条件神经场，这使得它们不适合计算资源有限的应用程序。 此外，与亚像素卷积等经典超分架构相比，性能的提高并不能证明如此大量使用资源是合理的。
+
+总而言之，神经领域尚未得到广泛采用，因为经典解决方案 1.实施起来更容易，2效率更高。 
+
+在本文中，我们专注于克服这些限制，同时注意到（回归）超分辨率性能处于饱和状态（即，如果不依赖生成模型，图像质量的进一步改进似乎不太可能，而 PSNR 的微小提升不一定与主观一致）。
+
+我们的动机假设是超分辨率卷积滤波器在空间和跨尺度上都是高度相关的。 因此，在<font color="purple">条件神经场的潜在空间中表示此类滤波器可以有效地捕获和压缩此类相关性</font>。
+
+
+
+#### :page_with_curl:Implicit Transformer Network for Screen Content Super-Resolution
+
+包括ITSRN和ITSRN++两篇文章。
+
+训练集使用的SCI1K-train。
+
+测试[数据集](https://drive.google.com/drive/folders/1uTQ2FAAUz5l-rtP35_fUhByRXxO25IFW)用到了SIQAD(20张600×800)、SCID(40张720p)、SCI1K-test。
+
+相关工作：[Meta-SR](https://openaccess.thecvf.com/content_CVPR_2019/papers/Hu_Meta-SR_A_Magnification-Arbitrary_Network_for_Super-Resolution_CVPR_2019_paper.pdf)、 [LIIF](https://openaccess.thecvf.com/content/CVPR2021/papers/Chen_Learning_Continuous_Image_Representation_With_Local_Implicit_Image_Function_CVPR_2021_paper.pdf)和[LTE](https://github.com/jaewon-lee-b/lte)，这些工作基本都属于连续超分（任意倍数）的范畴。这个领域最近关注度比较高。
+
+#### :page_with_curl:LAU-Net: Latitude Adaptive Upscaling Network for ODI SR
+
+全景图像(ODI)超分
+
+ODI 的特征：不同纬度区域具有不均匀分布的像素密度和纹理复杂度。
+
+本文思想：提出纬度自适应的超分网络，它允许不同纬度的像素采用不同的放大因子。
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230201111115714.png" alt="image-20230201111115714" style="zoom:50%;" />
+
+相关工作：PanoSwin: A Panoramic Shift Windowing Scheme for Panoramic Tasks
+
+#### :page_with_curl:SwinIR
+
+三部分：浅层特征提取+深层特征提取+图像重建
+
+SwinIR普遍适用于各类图像复原任务，无需改动特征提取模块，对不同的任务仅仅是使用不同的重建模块。
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230207160250936.png" alt="image-20230207160250936" style="zoom:50%;" />
+
+**1.浅层特征提取：**采用一层卷积，根据论文[Early Convolutions Help Transformers See Better](https://proceedings.neurips.cc/paper/2021/file/ff1418e8cc993fe8abcfe3ce2003e5c5-Paper.pdf)，得到特征$F_{0}$
+
+**2.深层特征提取：**集联K个residual Swin Transformer blocks (RSTB)，最后接一层卷积。得到特征$F_{DF}$
+
+>在特征提取的最后使用卷积层可以将卷积操作的归纳偏置带入基于Transformer的网络中，为后期浅层和深层特征的聚合打下更好的基础。
+
+**3.图像重建：**聚合浅层和深层特征 $I_{RHQ} = H_{REC} (F_{0} + F_{DF} )$, 浅层特征主要包含低频，而深层特征侧重于恢复丢失的高频。 通过long skip connection，SwinIR可以将低频信息直接传递给重建模块，帮助深度特征提取模块专注于高频信息，稳定训练。 (1) 对于超分任务，使用亚像素卷积层对特征进行上采样。(2) 对于不需要上采样的任务，单层卷积就可以完成重建。另外SwinIR的输出会和低质量图像相加，形成残差学习。
+
+
+
+
+
+#### :page_with_curl:Restormer
+
+#### :computer: Anime4K
+
+这是一个热门[项目](https://bloc97.github.io/Anime4K/)
+
+[reddit探讨](https://www.reddit.com/r/compsci/comments/cq9n8t/anime4k_a_realtime_anime_upscaling_algorithm_for/)
+
+[Preprint](https://github.com/h5mcbox/anime4k/blob/master/Preprint.md)
+
+现有方法：
+
+1. 核方法，比如Bicubic或xBR是为其他内容设计，倾向于软化边缘。不适合用于动漫内容。
+
+2. 传统的去模糊和锐化方法，会导致overshoot(过冲，之后通常发生振铃效应)，出现在边缘附近。这会分散观看者的注意力并降低图片的感知质量。
+
+3. 基于学习的方法（例如waifu2x、EDSR等）对于实时（<30ms）应用程序来说太慢了几个数量级。
+
+   >虽然waifu2x 或 EDSR 等算法的性能大大优于任何其他通用上采算法。
+   >
+   >然而，我们将利用我们的上采样算法只需要处理单一类型的内容（动画）这一事实的优势，因此我们可能有机会匹配（甚至超越）基于学习的算法。
+
+本文方法：
+
+Anime4K的出发点是寻找一种好的边缘细化算法，而不是寻求通用的放大算法。 与恢复纹理等小细节相比，清晰的边缘对于动漫升级更为重要。
 
 ### 智能编码系列
 

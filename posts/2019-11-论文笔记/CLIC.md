@@ -709,5 +709,7 @@ MUlti-stage and symbol Shuffling Image Compression
 
 
 
+Announcement: There will be no CLIC 2023
+
 
 
