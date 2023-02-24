@@ -602,6 +602,7 @@ git add . (提交所有)  or  git add +文件名 (提交单个文件)
 git commit -m "First commit"
 3.绑定远程仓库
 git remote add origin git@github.com:dwhou/xxx.git
+<a href="https://www.zhihu.com/question/27712995">'origin'只是个别名</a>
 4.推到master分支
 git push -u origin master
 
@@ -618,13 +619,28 @@ Git Commit + Pull + Push三步大法
 2、git clone 与 git pull 不同点
 git clone
 git clone --depth=1 -b master xxxxxx.git 
-当仓库过大时，用depth=1筛掉日志，用-b选择分支。最终减小下载文件的数目。
-是在本地没有版本库的时候，从远程服务器克隆整个版本库到本地，是一个本地从无到有的过程。
+当仓库过大时，只克隆某个指定分支的最近一次commit。depth=1表示只克隆最近一次commit，-b指定分支。最终减小下载文件的数目。
+
+2-1、重新拉取其他分支：
+$ git remote set-branches origin 'remote_branch_name'
+$ git fetch --depth 1 origin remote_branch_name
+$ git checkout remote_branch_name
+git remote 命令，用来管理追踪的远程分支，git ls-remote origin可以列出所有远程分支。
+
+2-2、重新拉取全部历史：
+$ git fetch --unshallow 
+
+3、放弃所有本地更改，用远程分支覆盖
+git fetch --all
+git reset --hard 'remote'/'branch_name' 或者 commit SHA 比如 origin/master或cf26392a...1d5b6
+(推荐用后者，SHA)
+4、git可视化命令，查看仓库的所有历史提交记录
+git log --graph --oneline --all
 
 git pull
 在本地有版本库的情况下，从远程库获取最新commit 数据（如果有的话），并merge（合并）到本地。
 
-git pull = git fetch + git merge
+<font color="red">git pull = git fetch + git merge</font>
 
 3、使用场景
 通常情况下，远程操作的第一步，是使用git clone从远程主机克隆一个版本库到本地。
