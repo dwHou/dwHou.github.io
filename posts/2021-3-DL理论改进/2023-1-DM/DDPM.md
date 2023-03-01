@@ -23,7 +23,7 @@
 1. 我们选择的固定（或预定义）前向扩散过程 $q$，逐渐将高斯噪声添加到图像中，直到最终得到纯噪声。
 2. 学习到的反向去噪扩散过程 $p_θ$，其中训练神经网络从纯噪声开始逐渐对图像进行去噪，直到最终得到实际图像。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230224162710062.png" alt="image-20230224162710062" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230224162710062.png" alt="image-20230224162710062" style="zoom:50%;" />
 
 由 $t$ 索引的前向和反向过程都发生在一定数量的有限时间步长 $T$内（DDPM 作者使用 $T=1000$）。 你从$t=0$开始，在那里你采样了一个真实的图像$\mathbf{x}_0$，来自您的数据分布（假设是来自 ImageNet 的***猫***图像），前向过程在每个时间步 $t$从高斯分布中采样一些噪声，这些噪声被添加到前一个时间步的图像中。 给定足够大的$T$和在每个时间步适宜地添加噪声，您最终会通过在$t=T$处得到所谓的各向同性高斯分布。
 
@@ -87,6 +87,12 @@ $p_\theta (\mathbf{x}_{t-1} | \mathbf{x}_t) = \mathcal{N}(\mathbf{x}_{t-1}; \mu_
 >    
 >    $\mathbf{\mu}_\theta(\mathbf{x}_t, t) = \frac{1}{\sqrt{\alpha_t}} \left( \mathbf{x}_t - \frac{\beta_t}{\sqrt{1- \bar{\alpha}_t}} \mathbf{\epsilon}_\theta(\mathbf{x}_t, t) \right)$
 
+如此：
+
+$\tilde\mu_t(x_t, x_0):= \frac{\sqrt{\bar\alpha_{t-1}}\beta_t}{1-\bar\alpha_t}x_0 + \frac{\sqrt{\alpha_t}(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}x_t$
+
+$\tilde\beta_t := \frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\beta_t$
+
 最终的目标函数 $L_t$ 就会看起来如下：
 
 $\| \mathbf{\epsilon} - \mathbf{\epsilon}_\theta(\mathbf{x}_t, t) \|^2 = \| \mathbf{\epsilon} - \mathbf{\epsilon}_\theta( \sqrt{\bar{\alpha}_t} \mathbf{x}_0 + \sqrt{(1- \bar{\alpha}_t) } \mathbf{\epsilon}, t) \|^2$. 
@@ -95,7 +101,7 @@ $\| \mathbf{\epsilon} - \mathbf{\epsilon}_\theta(\mathbf{x}_t, t) \|^2 = \| \mat
 
 训练算法现在可以总结如下：
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230301141221490.png" alt="image-20230301141221490" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230301141221490.png" alt="image-20230301141221490" style="zoom:50%;" />
 
 换句话说：
 
@@ -114,7 +120,9 @@ $\| \mathbf{\epsilon} - \mathbf{\epsilon}_\theta(\mathbf{x}_t, t) \|^2 = \| \mat
 
 在架构方面，DDPM 作者选择了<font color="brown"> U-Net</font>。 这个网络，像任何自动编码器一样，中间有一个瓶颈，确保网络只学习最重要的信息。 重要的是，它在编码器和解码器之间引入了残差连接，极大地改善了梯度流（受 ResNet [He et al., 2015] 启发）。
 
-### 五.位置向量
+### 五.网络模块
+
+#### 0.位置嵌入
 
 由于神经网络的参数跨时间共享（噪声水平），作者受 Transformer 的启发，采用正弦<font color="brown">位置向量（position embeddings）</font>对 $t$ 进行编码。 这使得神经网络“知道”它在哪个特定时间步长（噪声水平）运行。
 
@@ -132,9 +140,181 @@ class SinusoidalPositionEmbeddings(nn.Module):
         embeddings = math.log(10000) / (half_dim - 1)
         embeddings = torch.exp(torch.arange(half_dim, device=device) * -embeddings)
         embeddings = time[:, None] * embeddings[None, :]
+        # embeddings shape [batchsize, 1, dim//2]
         embeddings = torch.cat((embeddings.sin(), embeddings.cos()), dim=-1)
+        # embeddings shape [batchsize, 1, dim]
         return embeddings
 ```
+
+#### 1.残差块
+
+接下来，我们定义 U-Net 模型的核心构建块。 DDPM 作者采用了 Wide ResNet 块（Zagoruyko 等人，2016 年），但 Phil Wang 已将标准卷积层替换为“权重标准化”版本，该版本与组归一化结合使用效果更好（参见（Kolesnikov 等人， 2019）了解详情）。
+
+#### 2.注意力模块
+
+接下来，我们定义注意力模块，DDPM 作者将其添加到卷积块之间。这里使用了两种注意力变体：一种是常规的多头自注意力（在 Transformer 中使用），另一种是[线性注意力变体](https://github.com/cmsflash/efficient-attention)（Shen 等人，2018），是non-local模块的直接替代品。
+
+#### 3.组归一化
+
+DDPM 作者将 U-Net 的卷积层/注意力层与组归一化（GN）交织在一起。 下面，我们定义了一个 PreNorm 类，它将用于在注意力层之前应用 groupnorm。请注意，关于在 Transformers 中该在注意力之前还是之后应用归一化一直存在争议。
+
+### 六.条件U-Net
+
+现在我们已经定义了所有构建块（位置嵌入、残差块、注意力和组归一化），是时候定义整个神经网络了。 回想一下网络 $\mathbf{\epsilon}_\theta(\mathbf{x}_t, t)$ 的工作是接收一批噪声图像及其各自的噪声水平，并输出添加到输入中的噪声。 更正式地说：
+
+<font color="green">网络将一批形状为 (batch_size, num_channels, height, width) 的噪声图像和一批形状为 (batch_size, 1) 的噪声水平作为输入，并返回一个形状为 (batch_size, num_channels, height, width) 的张量</font>
+
+网络构建如下：
+
+- 首先，在一批噪声图像上应用卷积层，并为噪声水平计算位置嵌入
+- 接下来，应用一系列下采样阶段。 每个下采样阶段由 2 个 ResNet 块 + groupnorm + attention + 残差连接 + 一个下采样操作组成
+- 在网络的中间，再次应用 ResNet 块，与注意力交错
+- 接下来，应用一系列上采样阶段。 每个上采样阶段由 2 个 ResNet 块 + groupnorm + attention + 残差连接 + 一个上采样操作组成
+- 最后，应用一个 ResNet 块和一个卷积层。
+
+最终，神经网络层层叠叠，就好像它们是乐高积木一样（但了解它们的工作原理很重要）。
+
+### 七.定义前向扩散过程
+
+前向扩散过程在多个时间步长 $T$ 中逐渐向真实分布的图像添加噪声。 这是根据<font color="brown">方差表</font>发生的。 最初的 DDPM 作者采用了线性表：
+
+> We set the forward process variances to constants increasing linearly from $\beta_1 = 10^{−4}$ *to* $\beta_T = 0.02$.
+
+然而，在 (Nichol et al., 2021) 中表明，使用余弦方差表可以获得更好的结果。
+
+下面，我们为 $T$ 时间步定义了各种<font color="red">scheduler</font>（稍后我们将选择一个）。
+
+```python
+def cosine_beta_schedule(timesteps, s=0.008):
+    """
+    cosine schedule as proposed in https://arxiv.org/abs/2102.09672
+    """
+    steps = timesteps + 1
+    x = torch.linspace(0, timesteps, steps)
+    alphas_cumprod = torch.cos(((x / timesteps) + s) / (1 + s) * torch.pi * 0.5) ** 2
+    alphas_cumprod = alphas_cumprod / alphas_cumprod[0]
+    betas = 1 - (alphas_cumprod[1:] / alphas_cumprod[:-1])
+    return torch.clip(betas, 0.0001, 0.9999)
+
+def linear_beta_schedule(timesteps):
+    beta_start = 0.0001
+    beta_end = 0.02
+    return torch.linspace(beta_start, beta_end, timesteps)
+```
+
+首先，让我们使用 $T=300$ 时间步长的线性方差表，并定义我们需要的 $\beta_t $相关的各种变量，例如方差的累积乘积 $\bar{\alpha}_t$ 。 下面的每个变量都是一维张量，存储从 $t$ 到 $T$ 的值。 重要的是，我们还定义了一个提取函数，它将允许我们为一个batch的索引提取适当的 $t$ 的索引。
+
+```python
+timesteps = 300
+
+# define beta schedule
+betas = linear_beta_schedule(timesteps=timesteps)
+
+# define alphas 
+alphas = 1. - betas
+alphas_cumprod = torch.cumprod(alphas, axis=0)
+alphas_cumprod_prev = F.pad(alphas_cumprod[:-1], (1, 0), value=1.0)
+sqrt_recip_alphas = torch.sqrt(1.0 / alphas)
+
+# calculations for diffusion q(x_t | x_{t-1}) and others
+sqrt_alphas_cumprod = torch.sqrt(alphas_cumprod)
+sqrt_one_minus_alphas_cumprod = torch.sqrt(1. - alphas_cumprod)
+
+# calculations for posterior q(x_{t-1} | x_t, x_0)
+posterior_variance = betas * (1. - alphas_cumprod_prev) / (1. - alphas_cumprod)
+
+# 提取函数
+def extract(a, t, x_shape):
+    batch_size = t.shape[0]
+    out = a.gather(-1, t.cpu())
+    return out.reshape(batch_size, *((1,) * (len(x_shape) - 1))).to(t.device)
+```
+
+$\beta_t$ （betas）,  $\bar{\alpha}_t$ （alphas）, 
+
+$\sqrt{\bar{\alpha}_t}$ （sqrt_alphas_cumprod）,  $\sqrt{1-\bar{\alpha}_t}$（sqrt_one_minus_alphas_cumprod） , 
+
+$\frac{\sqrt{\bar\alpha_{t-1}}\beta_t}{1-\bar\alpha_t}$（posterior_variance）, 
+
+这些全是T个元素的一维向量。
+
+> torch.cumprod 和 torch.cumsum很熟悉，一个累乘一个累加。
+
+我们将用一张猫的图像来说明如何在扩散过程的每个时间步<font color="brown">添加噪声</font>。
+
+- 首先，图片转tensor，并且转到[-1,1]的范围，即/255 * 2 - 1，这确保了神经网络逆向过程从标准正态先验 $p(\mathbf{x}_T)$开始。
+
+- 定义前向扩散过程
+
+  ```python
+  # forward diffusion (using the nice property)
+  def q_sample(x_start, t, noise=None):
+      if noise is None:
+          noise = torch.randn_like(x_start)
+  
+      sqrt_alphas_cumprod_t = extract(sqrt_alphas_cumprod, t, x_start.shape)
+      
+      sqrt_one_minus_alphas_cumprod_t = extract(
+          sqrt_one_minus_alphas_cumprod, t, x_start.shape
+      )
+  
+      return sqrt_alphas_cumprod_t * x_start + sqrt_one_minus_alphas_cumprod_t * noise
+  ```
+
+  提取函数`extract` 配合 `sqrt_alphas_cumprod_t * x_start + sqrt_one_minus_alphas_cumprod_t * noise` 这段代码，就是一步到位的得到噪声图像<font color="brown"> $  \sqrt{\bar{\alpha}_t} \mathbf{x}_0 + \sqrt{(1- \bar{\alpha}_t) } \mathbf{\epsilon}$</font>
+
+  让我们在一个特定的噪声水平/时间步$t$测试一下：
+
+  ```python
+  def get_noisy_image(x_start, t):
+    # add noise
+    x_noisy = q_sample(x_start, t=t)
+  
+    # turn back into PIL image
+    noisy_image = reverse_transform(x_noisy.squeeze())
+  
+    return noisy_image
+  ```
+
+  `get_noisy_image(x_start, t)`就可以得到一个加噪图像，$  \sqrt{\bar{\alpha}_t} \mathbf{x}_0 + \sqrt{(1- \bar{\alpha}_t) } \mathbf{\epsilon}$：
+
+  <img src="../../../images/typora-images/image-20230301170607615.png" alt="image-20230301170607615" style="zoom:50%;" />
+
+- 这意味着我们现在可以定义给定模型的损失函数如下：
+
+  ```python
+  def p_losses(denoise_model, x_start, t, noise=None, loss_type="l1"):
+      if noise is None:
+          noise = torch.randn_like(x_start)
+  
+      x_noisy = q_sample(x_start=x_start, t=t, noise=noise)
+      predicted_noise = denoise_model(x_noisy, t)
+  
+      if loss_type == 'l1':
+          loss = F.l1_loss(noise, predicted_noise)
+      elif loss_type == 'l2':
+          loss = F.mse_loss(noise, predicted_noise)
+      elif loss_type == "huber":
+          loss = F.smooth_l1_loss(noise, predicted_noise)
+      else:
+          raise NotImplementedError()
+  
+      return loss
+  ```
+
+  denoise_model 将是我们上面定义的 U-Net。 我们将在真实噪声和预测噪声之间使用 Huber 损失。
+
+- 最后，[-1,1]范围的tensor转回图片，即(+1)/2 * 255。
+
+### 八.定义数据集及DataLoader
+
+这里我们定义了一个常规的 PyTorch 数据集。 数据集仅包含来自真实数据集的图像，如 Fashion-MNIST、CIFAR-10 或 ImageNet，线性缩放至 [−1, 1]]。
+
+每个图像都resize为相同的大小。 有趣的是，图像也会随机水平翻转。 
+
+> 来自论文：我们在 CIFAR10 的训练过程中使用了随机水平翻转； 我们尝试了使用翻转和不使用翻转的训练，发现翻转可以稍微提高样本质量。
+
+在这里，我们使用 🤗 Datasets 库从中心轻松加载 Fashion MNIST 数据集。 该数据集由已经具有相同分辨率（即 28x28）的图像组成。
 
 
 
@@ -166,17 +346,17 @@ class SinusoidalPositionEmbeddings(nn.Module):
 
   > 逐步学习将潜在变量解码为图像。 在每一步中，新的潜在变量都从依赖于当前潜在变量的高斯分布中采样。
 
-  <img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230301143418221.png" alt="image-20230301143418221" style="zoom:36%;" />
+  <img src="../../../images/typora-images/image-20230301143418221.png" alt="image-20230301143418221" style="zoom:36%;" />
 
 ## 纵向比较：
 
 ### DDPM
 
-**前向过程：**<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230301131220228.png" alt="image-20230301131220228" style="zoom:50%;" />
+**前向过程：**<img src="../../../images/typora-images/image-20230301131220228.png" alt="image-20230301131220228" style="zoom:50%;" />
 
 > DDPM 将给定图像$𝑥_0 $逐步编码为高斯噪声$𝑥_𝑇$，这被称为前向过程。
 
-**反向过程：**<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230301131242203.png" alt="image-20230301131242203" style="zoom:50%;" />
+**反向过程：**<img src="../../../images/typora-images/image-20230301131242203.png" alt="image-20230301131242203" style="zoom:50%;" />
 
 :warning:这里$p(x_{t-1}|x_t)$误写为$q(x_{t-1}|x_t)$
 
