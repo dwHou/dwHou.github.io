@@ -582,6 +582,8 @@ mc[R] * (1 - α) + (mr[R] / 3 + br[R] / 3 + bc[R] / 3) * α，
 
 参数推荐：<font color="lighblue">passes=1,strengthColor=0.1,strengthGradient=0.8,fastMode=True</font>
 
+
+
 ### 智能编码系列
 
 [2016~2022](./CLIC.html)

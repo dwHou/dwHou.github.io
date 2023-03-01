@@ -4899,4 +4899,24 @@ int y { 4 };
 double d = x / y; // does integer division, initializes d with value 2.0
 ```
 
-幸运的是，C++ 附带了许多不同的类型转换运算符（通常称为强制转换），程序员可以使用它们来请求编译器执行类型转换。 因为强制转换是程序员的显式请求，所以这种形式的类型转换通常称为显式类型转换（与隐式类型转换相反，隐式类型转换是编译器自动执行类型转换）。
+幸运的是，C++ 附带了许多不同的类型转换运算符/type casting operators（通常称为强制转换/cast），程序员可以使用它们来请求编译器执行类型转换。 因为强制转换是程序员的显式请求，所以这种形式的类型转换通常称为<font color="brown">显式类型转换</font>。
+
+C++支持5种不同类型的强制转换：
+
+- 1. <font color="blue">C风格强制转换（C-style casts）</font>
+
+- 命名转换：
+
+  2. <font color="blue">静态强制转换（static casts）</font>
+
+  3. 常量强制转换（const casts），避免使用
+
+  4. 动态强制转换（dynamic casts），18.10节介绍
+
+  5. 重新解释强制转换（reinterpret casts），避免使用
+
+本节我们将介绍 C风格强制转换 和 静态强制转换。
+
+##### C风格强制转换
+
+##### 静态强制转换
