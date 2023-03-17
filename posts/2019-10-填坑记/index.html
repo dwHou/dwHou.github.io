@@ -420,6 +420,52 @@ Terminal <--[<output]--- |       |                \ \
     nvidia-smi --query-gpu=temperature.gpu -i 7 --format=csv >> xxx.log
   </pre>
 
+  <h2>关于youtube视频下载器</h2>
+  做CV，经常会到youtube收集数据集。有时会有一些downloader的库会没有维护、过期。这时不用被block，果断换一个库尝试。
+<pre>
+    比如：
+    https://github.com/AliaksandrSiarohin/video-preprocessing的issue：
+</pre>
+<pre>
+def download(video_id, args):
+    video_path = os.path.join(args.video_folder, video_id + ".mp4")
+    subprocess.call([args.youtube, '-f', "''best/mp4''", '--write-auto-sub', '--write-sub',
+                     '--sub-lang', 'en', '--skip-unavailable-fragments',
+                     "https://www.youtube.com/watch?v=" + video_id, "--output",
+                     video_path], stdout=DEVNULL, stderr=DEVNULL)
+    return video_path
+</pre>
+替换为（youtube-dl替换为yt-dlp或pytube）
+<pre>
+def download(ytb_id, args, proxy=None):
+    """
+    ytb_id: youtube_id
+    save_folder: save video folder
+    proxy: proxy url, defalut None
+    """
+    video_path = os.path.join(args.video_folder, ytb_id + ".mp4")
+    if proxy is not None:
+        proxy_cmd = "--proxy {}".format(proxy)
+    else:
+        proxy_cmd = ""
+    if not os.path.exists(video_path):
+        down_video = " ".join([
+            "yt-dlp",
+            proxy_cmd,
+            '-f', "'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio'",
+            '--skip-unavailable-fragments',
+            '--merge-output-format', 'mp4',
+            "https://www.youtube.com/watch?v=" + ytb_id, "--output",
+            video_path, "--external-downloader", "aria2c",
+            "--external-downloader-args", '"-x 16 -k 1M"'
+        ])
+        print(down_video)
+        status = os.system(down_video)
+        if status != 0:
+            print(f"video not found: {ytb_id}")
+    return video_path
+</pre>
+
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
 A shortname is the unique identifier assigned to a Disqus site. 

@@ -25,3 +25,7 @@ AIGC即AI Generated Content，*是*指利用人工智能技术来生成内容，
 <img src="../../../images/typora-images/companies.png" alt="companies" style="zoom:50%;" />
 
 参考文献：[A SOTA Review of large Generative AI models](https://arxiv.org/pdf/2301.04655.pdf)
+
+推荐视频：[youtube video](https://www.youtube.com/watch?v=IpK9PNq15ao)
+
+推荐文章：[what-is-chatgpt](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/)

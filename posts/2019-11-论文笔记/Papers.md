@@ -582,8 +582,46 @@ mc[R] * (1 - α) + (mr[R] / 3 + br[R] / 3 + bc[R] / 3) * α，
 
 参数推荐：<font color="lighblue">passes=1,strengthColor=0.1,strengthGradient=0.8,fastMode=True</font>
 
-
+评价：挺不错的，可以结合RAISR的统计信息分析，对部分像素使用。
 
 ### 智能编码系列
 
 [2016~2022](./CLIC.html)
+
+### TalkingHead
+
+#### :page_with_curl:Perceptual Head Generation with Regularized Driver and Enhanced Renderer
+
+黄哲威的工作，基于俞睿师兄的PIRenderer
+
+#### :page_with_curl:PIRenderer: Controllable Portrait Image Generation
+
+俞睿师兄的工作，旨在得到具有语义和完全分离的参数——使用三维可变形面部模型（3DMM）的参数来控制面部运动。
+
+> 提供细粒度控制，直观且易于使用。这是FOMM等工作所不能达成的，它们阻碍了模型以直观方式编辑肖像的能力。
+
+结合技术的先验知识，人们可以期望控制类似于图形渲染处理的照片般逼真的肖像图像的生成。
+
+> 为了实现直观控制，运动描述符应该在语义上有意义，这需要将面部表情、头部旋转和平移表示为完全分离的变量。
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230314105220551.png" alt="image-20230314105220551" style="zoom:36%;" />
+
+我们表明，我们的模型不仅可以通过使用用户指定的动作编辑目标图像来实现<font color="brown">直观的（top）</font>图像控制，而且还可以在<font color="brown">间接（middle）</font>肖像编辑任务中生成逼真的结果，其中目标是模仿另一个人的动作。 此外，我们通过进一步扩展模型来解决音频驱动的面部重现任务，展示了我们模型作为高效神经渲染器的潜力。 由于高层完全分离的参数化，我们可以从<font color="brown">“弱”控制音频（bottom）</font>中提取令人信服的动作。
+
+>3DMM参数：人脸三维网格、模型在图像中的位置，以及当前人脸的形状特征参数和blendshape表情参数。（即 pose（包括旋转rotation和平移translation）, identity, expression）
+>
+>现在有些固定了pose和identity的应用场景，则只需要blendshape。
+
+PIRenderer包含三部分网络：
+
+> 0. 采用现成的 3D 人脸重建模型从真实世界的人像图像中提取相应的 3DMM 系数进行训练和评估；
+>
+>    注：为了缓解系数提取误差和噪声带来的影响，将具有**连续帧的窗口**的系数用作中心帧的运动描述符。
+
+1. Mapping Network：将3DMM参数映射为隐向量（a latent vector）；
+2. Warping Network：在隐向量的指导下，估计source和所需target之间的光流，并通过用估计的变形来warp源得到粗略的生成结果；
+3. Editing Network：从粗略的结果到精细的生成结果。
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230314142526847.png" alt="image-20230314142526847" style="zoom:50%;" />
+
+[Face3D 拓展](https://zhuanlan.zhihu.com/p/530830577)

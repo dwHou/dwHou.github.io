@@ -230,7 +230,7 @@ def extract(a, t, x_shape):
     return out.reshape(batch_size, *((1,) * (len(x_shape) - 1))).to(t.device)
 ```
 
-$\beta_t$ （betas）,  $\bar{\alpha}_t$ （alphas）, 
+$\beta_t$ （betas）,  $\bar{\alpha}_t$ （alphas）,  $\frac{1.0}{\sqrt{\alpha}}$（sqrt_recip_alphas）, 
 
 $\sqrt{\bar{\alpha}_t}$ （sqrt_alphas_cumprod）,  $\sqrt{1-\bar{\alpha}_t}$（sqrt_one_minus_alphas_cumprod） , 
 
@@ -314,11 +314,134 @@ $\frac{\sqrt{\bar\alpha_{t-1}}\beta_t}{1-\bar\alpha_t}$（posterior_variance）,
 
 > 来自论文：我们在 CIFAR10 的训练过程中使用了随机水平翻转； 我们尝试了使用翻转和不使用翻转的训练，发现翻转可以稍微提高样本质量。
 
-在这里，我们使用 🤗 Datasets 库从中心轻松加载 Fashion MNIST 数据集。 该数据集由已经具有相同分辨率（即 28x28）的图像组成。
+在这里，我们使用 [🤗 Datasets 库](https://huggingface.co/docs/datasets/index)从中心轻松加载 Fashion MNIST 数据集。 该数据集由已经具有相同分辨率（即 28x28）的图像组成。
 
+### 九.采样
 
+由于我们将在训练期间从模型中采样（以便跟踪进度），因此我们在下面定义了代码。 采样在论文中总结为算法 2：
 
-应用：https://cloud.tencent.com/developer/article/2090159
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230301213159951.png" alt="image-20230301213159951" style="zoom:50%;" />
+
+通过反向扩散过程从扩散模型生成新图像：我们从 $T$ 开始，我们从高斯分布中采样纯噪声，然后使用我们的神经网络逐渐对其进行去噪（使用它学到的条件概率），直到我们在时间步 $t = 0$ 结束。 如上所示，我们可以通过使用我们的噪声预测器插入均值的重参数化来导出稍微去噪的图像 $\mathbf{x}_{t-1 }$。 记住方差是提前知道的。
+
+理想情况下，我们最终会得到一张看起来像是来自真实数据分布的图像。
+
+下面的代码实现了这一点：
+
+```python
+@torch.no_grad()
+def p_sample(model, x, t, t_index):
+    betas_t = extract(betas, t, x.shape)
+    sqrt_one_minus_alphas_cumprod_t = extract(
+        sqrt_one_minus_alphas_cumprod, t, x.shape
+    )
+    sqrt_recip_alphas_t = extract(sqrt_recip_alphas, t, x.shape)
+    
+    # Equation 11 in the paper
+    # Use our model (noise predictor) to predict the mean
+    model_mean = sqrt_recip_alphas_t * (
+        x - betas_t * model(x, t) / sqrt_one_minus_alphas_cumprod_t
+    )
+
+    if t_index == 0:
+        return model_mean
+    else:
+        posterior_variance_t = extract(posterior_variance, t, x.shape)
+        noise = torch.randn_like(x)
+        # Algorithm 2 line 4:
+        return model_mean + torch.sqrt(posterior_variance_t) * noise 
+
+# Algorithm 2 (including returning all images)
+@torch.no_grad()
+def p_sample_loop(model, shape):
+    device = next(model.parameters()).device
+
+    b = shape[0]
+    # start from pure noise (for each example in the batch)
+    img = torch.randn(shape, device=device)
+    imgs = []
+
+    for i in tqdm(reversed(range(0, timesteps)), desc='sampling loop time step', total=timesteps):
+        img = p_sample(model, img, torch.full((b,), i, device=device, dtype=torch.long), i)
+        imgs.append(img.cpu().numpy())
+    return imgs
+
+@torch.no_grad()
+def sample(model, image_size, batch_size=16, channels=3):
+    return p_sample_loop(model, shape=(batch_size, channels, image_size, image_size))
+```
+
+论文公式11：$\mu_\theta(x_t, t)$（模型均值） = $\frac{1}{\sqrt{\alpha_t}}(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\epsilon_\theta(x_t, t))$
+
+因为我们的模型是预测噪声，但从$x_t$到$x_{t-1}$，需要的是<font color="brown">**$x_{t-1} = \mu_\theta + \sigma_tz$**</font>
+
+> :eyes: <font color="red">记住</font>扩散过程中的噪声是条件噪声，也就是<font color="red">信号相关噪声</font>。所以它的均值$\mu_\theta$是和$x_t$相关的，虽然$\sigma_t$是固定的。
+
+上面的代码是原始实现的简化版本。 我们发现与使用clipping的更复杂的原始实现一样有效。
+
+#### 采样（推理阶段）
+
+要从模型中采样，我们只需要使用上面定义的采样函数：
+
+```python
+# sample 64 images
+samples = sample(model, image_size=image_size, batch_size=64, channels=channels)
+```
+
+我们还可以观看去噪过程的 gif：
+
+```python
+import matplotlib.animation as animation
+
+random_index = 53
+
+fig = plt.figure()
+ims = []
+for i in range(timesteps):
+    im = plt.imshow(samples[i][random_index].reshape(image_size, image_size, channels), cmap="gray", animated=True)
+    ims.append([im])
+
+animate = animation.ArtistAnimation(fig, ims, interval=50, blit=True, repeat_delay=1000)
+animate.save('diffusion.gif')
+plt.show()
+```
+
+![diffusion-sweater](../../../images/typora-images/diffusion-sweater.gif)
+
+看起来该模型能够生成漂亮的 T 恤（分辨率28×28）！
+
+### 十.后续阅读
+
+请注意，DDPM 论文表明扩散模型是（非）条件图像生成的一个有前途的方向。 截止今日，它已经（极大地）得到了改进，最显着的是用于<font color="brown">文本条件图像生成</font>。 下面，我们列出了一些重要的（但远非详尽的）后续工作：
+
+- Improved Denoising Diffusion Probabilistic Models ([Nichol et al., 2021](https://arxiv.org/abs/2102.09672))：发现学习条件分布的方差（除了均值）有助于提高性能
+- Cascaded Diffusion Models for High Fidelity Image Generation ([Ho et al., 2021](https://arxiv.org/abs/2106.15282))：介绍了级联扩散，它包含多个扩散模型的管道，这些模型生成分辨率不断提高的图像，用于高保真图像合成
+- Diffusion Models Beat GANs on Image Synthesis ([Dhariwal et al., 2021](https://arxiv.org/abs/2105.05233))：表明扩散模型可以通过改进 U-Net 架构以及引入 分类指导
+- Classifier-Free Diffusion Guidance ([Ho et al., 2021](https://openreview.net/pdf?id=qw8AKxfYbI))：通过使用单个神经网络联合训练条件和无条件扩散模型，表明您不需要分类器来指导扩散模型
+- Hierarchical Text-Conditional Image Generation with CLIP Latents (DALL-E 2) ([Ramesh et al., 2022](https://cdn.openai.com/papers/dall-e-2.pdf))：使用先验将文本标题转换为 CLIP 图像嵌入，然后扩散模型将其解码为图像
+- Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding (ImageGen) ([Saharia et al., 2022](https://arxiv.org/abs/2205.11487))：表明将大型预训练语言模型（例如 T5）与级联扩散相结合非常适合文本到图像合成
+
+请注意，此列表仅包括撰写本文时（即 2022 年 6 月 7 日）之前的重要作品。
+
+目前看来，扩散模型的主要（也许是唯一）缺点是它们需要多次前向传播才能生成图像（对于 GAN 等生成模型而言并非如此）。 然而，[正在进行的研究](https://arxiv.org/abs/2204.13902) [主页](https://qsh-zh.github.io/deis/)可以在少至 10 步的去噪步骤中生成高保真图像。
+
+其他：
+
+综述
+
+https://arxiv.org/pdf/2209.00796.pdf
+
+https://arxiv.org/pdf/2209.04747.pdf
+
+应用
+
+https://cloud.tencent.com/developer/article/2090159 （扩散模型+EbSynth）
+
+https://imagen.research.google/ （值得留意的是 扩散模型生成 + 超分，是个很不错的思路）
+
+https://github.com/lllyasviel/ControlNet （ControlNet）
+
+https://www.youtube.com/watch?v=B-uojHRr7HE （安卓运行Stable Diffusion）
 
 # 扩散模型综述
 
