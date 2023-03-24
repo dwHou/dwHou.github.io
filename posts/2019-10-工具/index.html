@@ -647,6 +647,8 @@ git pull
 
 本地修改代码后，每次从本地仓库push到远程仓库之前都要先进行git pull操作，保证push到远程仓库时没有版本冲突。
 
+push前务必使用diff或者sourcetree的可视化界面查看修改。
+
 4、关于分支
 https://www.orchome.com/8160
 可以使用git branch -vv 看到本地和远程分支的对应关系。并随时用checkout切换分支。
@@ -658,6 +660,16 @@ https://cloud.tencent.com/developer/article/1352623  （这个方法只是改一
 所以最好还是<font color="red">养成习惯每次使用前检查账户</font>。
 
       </pre>
+
+<pre>
+对git提交进行签名可以使用<font color="red">GPG</font>: 
+<a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key">提交签名</a> 
+如果有仓库不需要GPG的，可以vim .git/config
+添加如下几行：
+[commit]
+    # https://help.github.com/articles/signing-commits-using-gpg/
+    gpgsign = false
+</pre>
 
 
   </ul>

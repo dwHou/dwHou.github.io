@@ -450,7 +450,7 @@ ODI 的特征：不同纬度区域具有不均匀分布的像素密度和纹理�
 
 本文思想：提出纬度自适应的超分网络，它允许不同纬度的像素采用不同的放大因子。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230201111115714.png" alt="image-20230201111115714" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20230201111115714.png" alt="image-20230201111115714" style="zoom:50%;" />
 
 相关工作：PanoSwin: A Panoramic Shift Windowing Scheme for Panoramic Tasks
 
@@ -460,7 +460,7 @@ ODI 的特征：不同纬度区域具有不均匀分布的像素密度和纹理�
 
 SwinIR普遍适用于各类图像复原任务，无需改动特征提取模块，对不同的任务仅仅是使用不同的重建模块。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230207160250936.png" alt="image-20230207160250936" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20230207160250936.png" alt="image-20230207160250936" style="zoom:50%;" />
 
 **1.浅层特征提取：**采用一层卷积，根据论文[Early Convolutions Help Transformers See Better](https://proceedings.neurips.cc/paper/2021/file/ff1418e8cc993fe8abcfe3ce2003e5c5-Paper.pdf)，得到特征$F_{0}$
 
@@ -604,7 +604,7 @@ mc[R] * (1 - α) + (mr[R] / 3 + br[R] / 3 + bc[R] / 3) * α，
 
 > 为了实现直观控制，运动描述符应该在语义上有意义，这需要将面部表情、头部旋转和平移表示为完全分离的变量。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230314105220551.png" alt="image-20230314105220551" style="zoom:36%;" />
+<img src="../../images/typora-images/image-20230314105220551.png" alt="image-20230314105220551" style="zoom:36%;" />
 
 我们表明，我们的模型不仅可以通过使用用户指定的动作编辑目标图像来实现<font color="brown">直观的（top）</font>图像控制，而且还可以在<font color="brown">间接（middle）</font>肖像编辑任务中生成逼真的结果，其中目标是模仿另一个人的动作。 此外，我们通过进一步扩展模型来解决音频驱动的面部重现任务，展示了我们模型作为高效神经渲染器的潜力。 由于高层完全分离的参数化，我们可以从<font color="brown">“弱”控制音频（bottom）</font>中提取令人信服的动作。
 
@@ -622,6 +622,22 @@ PIRenderer包含三部分网络：
 2. Warping Network：在隐向量的指导下，估计source和所需target之间的光流，并通过用估计的变形来warp源得到粗略的生成结果；
 3. Editing Network：从粗略的结果到精细的生成结果。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230314142526847.png" alt="image-20230314142526847" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20230314142526847.png" alt="image-20230314142526847" style="zoom:50%;" />
 
 [Face3D 拓展](https://zhuanlan.zhihu.com/p/530830577)
+
+#### :page_with_curl:Structure-Aware Motion Transfer with Deformable Anchor Model
+
+阿里妈妈的工作，基于FOMM。👉🏻[PR](https://blog.csdn.net/alimama_Tech/article/details/125419491)
+
+FOMM的缺陷：
+
+**源图像**和**驱动图像**关键点检出的对应关键点并没有指向同一个真实部位时，输出结果中这个区域的就有较强的结构模糊。另外，还有一个观察是通常这样的不匹配都源自关键点检测没有击中合理的部位，甚至都在人体/脸部以外了。
+
+本文改进：
+
+推理不变，训练则引入结构先验（或叫位置先验），关键点的对应点既可以通过根节点光流图计算得到，又可以通过模型直接直接预测出来。两路结果求Loss，就惩罚了不符合根节点先验约束的关键点位置预测。
+
+效果比较：
+
+FOMM vs. RegionMM vs. This paper

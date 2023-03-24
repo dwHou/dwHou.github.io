@@ -2,6 +2,20 @@ http://chuquan.me/2021/12/03/understand-concepts-in-xcode/
 
 
 
+点击蓝色的project，可以在building setting里找到search path，也就是该项目会在哪些路径找头文件。有些子项目会属于另一个项目，这里的search path有时会显示$inherited。
+
+新增的头文件（而非修改），如果不添加到工程，哪怕在search path里也找不到。所以可以用拖拽的方式，将其添加到工程。
+
+Xcode左边栏目一排图标要认识下，
+
+<img src="../../images/typora-images/image-20230324212936687.png" alt="image-20230324212936687" style="zoom:50%;" />
+
+悬浮可以看到分别是：
+
+<font color="blue">项目导航，版本管理导航，符号导航，搜索，错误和警告，测试导航，调试导航，断点导航，报告导航</font>
+
+比如，我们错误先看 错误和警告，再点进去详细看 报告导航，学会快速准确地debug代码。
+
 C++常见的内存错误及解决方法
 
 （1）内存分配未成功，却使用了它。

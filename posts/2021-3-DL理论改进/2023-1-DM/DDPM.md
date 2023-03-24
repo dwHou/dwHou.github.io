@@ -320,7 +320,7 @@ $\frac{\sqrt{\bar\alpha_{t-1}}\beta_t}{1-\bar\alpha_t}$（posterior_variance）,
 
 由于我们将在训练期间从模型中采样（以便跟踪进度），因此我们在下面定义了代码。 采样在论文中总结为算法 2：
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230301213159951.png" alt="image-20230301213159951" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230301213159951.png" alt="image-20230301213159951" style="zoom:50%;" />
 
 通过反向扩散过程从扩散模型生成新图像：我们从 $T$ 开始，我们从高斯分布中采样纯噪声，然后使用我们的神经网络逐渐对其进行去噪（使用它学到的条件概率），直到我们在时间步 $t = 0$ 结束。 如上所示，我们可以通过使用我们的噪声预测器插入均值的重参数化来导出稍微去噪的图像 $\mathbf{x}_{t-1 }$。 记住方差是提前知道的。
 
