@@ -208,6 +208,12 @@ https://zhuanlan.zhihu.com/p/23599229
     <pre>查看Docker的帮助信息：# docker --help。各种命令的用法也不再赘述，后边用到哪些命令时会作出一定的解释。</pre>
 
   <h3>关于镜像的基本操作</h3>
+  <pre>
+    在dockerhub选择镜像时，比如为pytorch构建的<a href="https://hub.docker.com/r/pytorch/pytorch/tags">不同tag</a>的cuda镜像区别：
+    base：基于cuda，包含最精简的依赖，用于部署预编译的cuda应用，需要手动安装所需的其他依赖
+    runtime：基于base，添加了cuda toolkit共享的库，涵盖了运行环境的最小集合如动态库等，但没有cuda的编译工具nvcc
+    devel：基于runtime，添加了编译工具链、调试工具、头文件、静态库，用于从源码编译cuda应用，是有nvcc的
+  </pre>
   <h3>关于容器的基本操作</h3>
   <pre>
       docker run -it --runtime=nvidia -p 9999:22 --restart=always --ipc=host -v /data/houdewang/containers-shared:/containers-shared --name=super-resolution hdw-pytorch:1.7.0 bash

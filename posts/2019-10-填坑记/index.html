@@ -421,7 +421,8 @@ Terminal <--[<output]--- |       |                \ \
   </pre>
 
   <h2>关于youtube视频下载器</h2>
-  做CV，经常会到youtube收集数据集。有时会有一些downloader的库会没有维护、过期。这时不用被block，果断换一个库尝试。
+  做CV，经常会到youtube收集数据集。有时会有一些downloader的库找不到视频，其实是被禁了。这时不用被block，果断换一个库尝试。
+  而且几个库可以换着尝试，它们都在不断维护、更新，上一次落伍的库可能下一次更新在前面了。
 <pre>
     比如：
     https://github.com/AliaksandrSiarohin/video-preprocessing的issue：
@@ -464,6 +465,15 @@ def download(ytb_id, args, proxy=None):
         if status != 0:
             print(f"video not found: {ytb_id}")
     return video_path
+</pre>
+<pre>
+    <a href="https://zhuanlan.zhihu.com/p/431013905">yt-dlp参数：</a> 
+    yt-dlp -f [下载ID] [代理配置] [视频链接] [合并语句] [外部下载器选择] [下载器参数]
+-f [id] #选择下载内容，注意和 -F 区分。例子中使用137+140，如果你只下载720p则填写22就好，后面的合并语句可不填写。
+--proxy #代理配置 见前文
+--merge-output-format [合并输出格式] #例子中选择mp4作为输出格式
+--external-downloader [下载器名称] #下载器选择 例子中选择aria2c
+--downloader-args [下载器名称]:"[下载器配置]" #下载器配置语句 例子中 x 16 代表16线程下载 -k 1M 代表块大小为1M 但youtube不支持分块故此句可忽略
 </pre>
 
 
