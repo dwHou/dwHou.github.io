@@ -622,19 +622,19 @@ mc[R] * (1 - α) + (mr[R] / 3 + br[R] / 3 + bc[R] / 3) * α，
 
 DNCM：
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230407135638072.png" alt="image-20230407135638072" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20230407135638072.png" alt="image-20230407135638072" style="zoom:50%;" />
 
 两阶段：
 
 在两阶段的方式中，编码器 E 被修改以输出 d 和 r，它们分别用作 nDNCM 和 sDNCM 的参数。E()共享权重，但nDNCM和sDNCM有不同的投影矩阵 P 和 Q。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230407141029803.png" alt="image-20230407141029803" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20230407141029803.png" alt="image-20230407141029803" style="zoom:50%;" />
 
 自监督：
 
 本文提出一种自监督策略：
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230408163706000.png" alt="image-20230408163706000" style="zoom:36%;" />
+<img src="../../images/typora-images/image-20230408163706000.png" alt="image-20230408163706000" style="zoom:36%;" />
 
 由于难以获取GT的风格化图像，我们有输入图像$I$制作两个伪风格图像。具体方式是通过对$I$色彩的扰动，获得两个不同色彩风格的数据增强样本$I_i$和$I_j$。扰动可以由色彩滤镜或LUT完成。
 

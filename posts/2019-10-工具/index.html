@@ -606,9 +606,21 @@ git remote add origin git@github.com:dwhou/xxx.git
 4.推到master分支
 git push -u origin master
 
+<font color="red">三个建议：</font>
+0. 建议git commit前，看看git diff HEAD，了解当前工作区和最新commit的区别。
+1. 建议git commit前先试试能不能通过编译（记得所有的依赖库都pull到最新）。
+2. 建议git push前先看看diff，git diff HEAD^1是当前工作区和上次commit的区别（如果刚commit马上查看，当前工作区相当于就是HEAD，等同于git diff HEAD^1 HEAD，所以一般简写），HEAD~2是上2次，依次类推。SourceTree软件里默认是git diff SHA^1 SHA。
+<font color="blue">git diff a b, diff显示的结果表示 后一个(b) 相对于 前一个(a)的修改。省略后一个时，后一个默认是workspace。</font>
+
+补充建议：
+3. 一般git push会提示merge request的网址。建议在PR或MR的GitLab页面再一次检查下change（就是git diff）。
+关于git diff：（图片引用自<a href="https://blog.csdn.net/GW569453350game/article/details/46998395">[1]</a>）
+<img src="gitdiff.png">
+
+
 <font color="red">实际完整命令是：</font>
 git push -u origin <本地分支名称>:<远程分支名称>
-但本地、远端相同名称时可以省略掉 “<本地分支名称>:”，也就是我们常见的形式。然后如果是用“ :<远程分支名称>” 则表示删除远端分支，因为这相当于把空的东西push到远端嘛。
+但本地、远端相同名称时可以省略掉 “<本地分支名称>:”，也就是我们常见的形式。然后如果是用“ :<远程分支名称>” 则表示删除远端分支，因为这相当于把空的东西push到远端嘛。git pull<a href="https://blog.csdn.net/Fan0920/article/details/120128883">类似</a>。
 
 仅添加文件、文件夹到已有仓库某路径下
 0. above ; 1. above ;
@@ -638,6 +650,8 @@ $ git fetch --unshallow
 git fetch --all
 git reset --hard 'remote'/'branch_name' 或者 commit SHA 比如 origin/master或cf26392a...1d5b6
 (推荐用后者，SHA)
+git pull
+建议放弃本地更改都用该方法，而不是git stash，后者感觉老是弄出冲突。
 4、git可视化命令，查看仓库的所有历史提交记录
 git log --graph --oneline --all
 
