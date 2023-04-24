@@ -148,3 +148,13 @@ show accurate and meaningful use of a range of grammatical structures and vocabu
 
 **考生在考试当天须出示与报名所用证件完全一致且有效的身份证件原件。**
 
+### 分数换算表 & 评分标准
+
+（改革后）
+
+https://m.koolearn.com/toefl/20230411/854823.html
+
+第一阶段保底分数 25*4
+
+
+

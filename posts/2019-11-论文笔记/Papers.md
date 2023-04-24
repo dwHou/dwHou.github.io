@@ -584,6 +584,30 @@ mc[R] * (1 - α) + (mr[R] / 3 + br[R] / 3 + bc[R] / 3) * α，
 
 评价：挺不错的，可以结合RAISR的统计信息分析，对部分像素使用。
 
+
+
+#### :computer: DaltonLens
+
+[DaltonLens](https://daltonlens.org/)是一个桌面实用程序，旨在帮助有色觉缺陷的人，尤其帮助他们解析颜色编码的图表和绘图。 它的主要特点是让用户点击一种颜色，并用相同的颜色突出显示图像的所有其他部分。 
+
+取消抗锯齿（undo line anti-aliasing）
+
+原因：
+
+这对于恒定颜色区域来说很容易实现，但对于细线、小标记或文本，它实际上变得更加复杂，尤其是在背景不均匀的情况下。 原因是抗锯齿。 为了获得漂亮的线条，描边路径会与背景混合，得到折中的颜色，而不是固定不变的颜色。
+
+<img src="../../images/typora-images/image-20230420175749748.png" alt="image-20230420175749748" style="zoom:30%;" /> 
+
+> 锯齿图像很难分割，但正如您所见，抗锯齿图像中的颜色不再恒定。 事实上，如果笔划宽度小于 1 像素，则在抗锯齿渲染中可能根本不会出现完全相同的原始实线的颜色。 为了解决这个问题，DaltonLens 在 HSV 空间中实现了更智能的阈值处理，它更加重视色调，而不太重视饱和度和值。 当背景均匀时，此方法相当有效，但当笔触非常细或背景更复杂时，它往往会失败，并且只会突出显示前景对象的一小部分。 
+
+价值：
+
+虽然我们做的是抗锯齿，我们应该可以利用这套取消抗锯齿的方法，来制作成对的数据集。
+
+
+
+
+
 #### :page_with_curl:Neural Preset for Color Style Transfer
 
 文章有不错的应用价值。作者原来是专门研究半监督/自监督学习的，最近开始将自监督引入一些CV任务中，提出了MODNet和本文的Neural Preset。比较有意思的是，Neural Preset不需要fine-tuneing就能用在暗光增强、水下图像增强、去雾和图像和谐化等多个任务中。
@@ -648,13 +672,63 @@ DNCM：
 
 #### :page_with_curl:Color Image Enhancement with Saturation Adjustment Method
 
+#### :page_with_curl:DVMark
 
+任务：视频不可见水印
+
+也称作video watermarking或者video steganography（隐写、密码学）
+
+DVMark 将消息隐藏视频中，并可得到鲁棒地恢复。 编码器网络采用封面视频和二进制消息，并生成在人眼看来相同（*imperceptible manner*）的带水印视频。 即使视频经过一系列常见的视频编辑操作，例如压缩、裁剪、颜色偏移以及用其他视频内容填充带水印的视频，我们的解码器仍然可以可靠地提取带水印的消息。
+
+传统方法：传统的水印方法通常是针对特定类型的失真手动设计的，因此不能同时处理广泛的失真。
+
+难点：一般存在鲁棒性和解码效率/视觉效果之间的trade-off。
+
+本文方法：
+
+- 端到端训练的深度学习方案
+- 水印分布在多个时空尺度上
+- 可微的失真层：借此获得对各种失真的鲁棒性，而不可微的失真，例如视频压缩标准，则由可微的代理（proxy）建模
 
 ### 智能编码系列
 
 [2016~2022](./CLIC.html)
 
 ### TalkingHead
+
+#### :page_with_curl:3D Face Reconstruction
+
+解决face images - ground truth 3D face数据的稀缺问题。
+
+1. 本文的思路是采用弱监督学习。组合了图像级损失和感知级损失。
+
+2. 从一组照片重建3D face，不再朴素聚合（简单地平均每张重建出来的形状）和一些启发式策略，而是基于置信度的聚合获得。另外可以利用姿势差异的互补信息更好的融合。
+
+   置信度预测子网络也以没有标签的弱监督方式进行训练。
+
+> 3D face shapes主流使用的3D Morphable Model (3DMM) coefficients。使用 3DMM，人脸形状 S 和纹理 T可用仿射模型（affine model）表示，即系数加权和。
+
+<font color="brown">3D建模：</font>
+
+$$S = S(\alpha,\beta) = \bar{S} + B_{id}\alpha + B_{exp}\beta $$
+
+$$T = T(\delta) = \bar{T} + B_t\delta$$
+
+$B_{id}$,  $B_{exp}$,  $B_t$分别是身份、表情和纹理PCA的基。
+
+<font color="brown">光照建模：</font>gamma，用[球谐函数](https://zhuanlan.zhihu.com/p/351289217)表示。用来描述不同方向光照的SH基函数我们一般用到二阶或者三阶，二阶是4个系数，三阶是9个系数。三阶拓展到rgb，就是9 * 3 = 27个系数。
+
+<font color="brown">相机建模：</font>姿态包括 angle（旋转角度）和translation（平移）。
+
+<font color="light blue">id.gamma.tex</font> 为<font color="light blue">静态特征</font>，**身份(80)**+光照(27)+**纹理(80)**
+
+<font color="light blue">angle.exp.trans</font> 为<font color="light blue">动态特征</font>，旋转(3)+**表情(64)**+平移(3)
+
+<img src="../../images/typora-images/image-20230424144543284.png" alt="image-20230424144543284" style="zoom:50%;" />
+
+图像损失：仅面部区域的像素级损失，关键点损失
+
+感知损失：注意使用的cosine距离
 
 #### :page_with_curl:Perceptual Head Generation with Regularized Driver and Enhanced Renderer
 
@@ -691,6 +765,13 @@ PIRenderer包含三部分网络：
 <img src="../../images/typora-images/image-20230314142526847.png" alt="image-20230314142526847" style="zoom:50%;" />
 
 [Face3D 拓展](https://zhuanlan.zhihu.com/p/530830577)
+
+#### :page_with_curl:SadTalker
+
+CVPR2023 音频驱动说话人的SOTA
+
+- 对3d系数中的表情系数和头部姿态分开建模，借助了Wav2Lip模型。
+- 对3d系数进行人脸合成，借助了[PIRenderer](https://link.zhihu.com/?target=https%3A//github.com/RenYurui/PIRender)模型合成人脸的方式，改进在于还将3D关键点用进来。
 
 #### :page_with_curl:Responsive Listening Head Generation: A Benchmark Dataset and Baseline
 

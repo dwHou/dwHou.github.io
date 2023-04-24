@@ -2309,6 +2309,24 @@ The use of the `static` keyword above is an example of a **storage class specifi
 
 `static`, `extern`, 和 `mutable` 都是和存储有关的关键字。
 
+来自Security Journey的一张图：
+
+This example shows how different memory management strategies cause our data to be stored in different sections of the process's address space: the **heap** if dynamically allocated; the **stack** if declared as a local variable; or the **data** or **bss** segments if declared with the `static` storage specifier.
+
+At runtime, these segments of memory are arranged in a predictable order, with the stack starting at the highest address and growing downward, then the heap starting a lower address and growing upward, followed by the fixed-size bss, data, and text segments.
+
+<img src="../../images/typora-images/image-20230414204849696.png" alt="image-20230414204849696" style="zoom:50%;" />
+
+**text** contains our program code, **data** contains static variables that we've explicitly initialized, and **bss** (which is zero-filled on startup) is used for static variables that haven't been given an initial value.
+
+Calls to `malloc` reserve memory in the **heap** segment: we can't predict exactly how much heap memory a process will use at runtime, so the heap provides access to a very large portion of system memory.
+
+The **stack** segment is used to keep track of program control flow, and it's where local variables and function call arguments are stored. Every function call pushes a new frame onto the stack, using more space in the stack segment and growing the stack down toward the heap.
+
+> A stack frame contains all the information that the program needs in order to execute a specific function call and then return to the caller.
+
+Security Journey：固定大小的缓冲区是一个非常合理的工具，但它们需要仔细检查边界。
+
 **单一定义规则和内部对象**
 
 在不同文件中定义的内部对象（和函数）被认为是独立的实体（即使它们的名称和类型相同），因此不违反单一定义规则。 每个内部对象只有一个定义。
