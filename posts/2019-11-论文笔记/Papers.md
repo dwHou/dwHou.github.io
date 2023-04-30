@@ -730,6 +730,45 @@ $B_{id}$,  $B_{exp}$,  $B_t$分别是身份、表情和纹理PCA的基。
 
 感知损失：注意使用的cosine距离
 
+
+
+#### :computer: face3d: Python tools for processing 3D face
+
+> 3D 人脸是非常有趣的研究领域。face3D 是一个基于 Python 的开源项目（https://github.com/YadiraF/face3d），实现了 3D 人脸研究的众多功能。它可以处理网格数据，用形变模型生成 3D 人脸，从单张二维人脸图片和关键点重建三维图像，渲染不同光照条件的人脸。
+>
+> face3D 非常轻量化，最开始完全是基于 Numpy 写的。但有些函数（比如光栅化）不能用向量化进行优化，在 Python 中非常慢。这部分函数作者改用 C++ 编写，没有调用 OpenCV、Eigen 等大型的库，再用 Cpython 编译以供 Python 调用。
+>
+> 项目作者考虑到初学者刚开始学习时应该聚焦在算法本身，同时让研究人员能够快速修改和验证他们的想法，Numpy 版本也被保留下来。此外，作者也尽量在每个函数中添加了引用的公式，以方便初学者学习基础知识、理解代码。更多的 3D 人脸研究信息，包括[论文](https://github.com/yfeng95/face3d/blob/master/3D%20Face%20Papers.md)和代码，也可以在项目Github中找到。
+>
+> Enjoy it :smile:
+
+结构：
+
+```python
+# Since triangle mesh is the most popular representation of 3D face, 
+# the main part is mesh processing.
+mesh/             # written in python and c++
+|  cython/               # c++ files, use cython to compile 
+|  io.py                 # read & write obj
+|  vis.py                # plot mesh
+|  transform.py          # transform mesh & estimate matrix
+|  light.py              # add light & estimate light(to do)
+|  render.py             # obj to image using rasterization render
+
+mesh_numpy/      # the same with mesh/, with each part written in numpy
+                 # slow but easy to learn and modify
+
+# 3DMM is one of the most popular methods to generate & reconstruct 3D face.
+morphable_model/
+|  morphable_model.py    # morphable model class: generate & fit
+|  fit.py                # estimate shape&expression parameters. 3dmm fitting.
+|  load.py               # load 3dmm data
+```
+
+shape 199, texture 199, expression 29
+
+注释参考[1](https://zhuanlan.zhihu.com/p/611044607), [2](https://github.com/peterjiang4648/BFM_model/releases/tag/1.0), [3](https://zhuanlan.zhihu.com/p/530830577)
+
 #### :page_with_curl:Perceptual Head Generation with Regularized Driver and Enhanced Renderer
 
 黄哲威的工作，基于俞睿师兄的PIRenderer
@@ -796,3 +835,7 @@ FOMM的缺陷：
 效果比较：
 
 FOMM vs. RegionMM vs. This paper
+
+### T2I
+
+这一波生成模型，对text-to-image任务的完成度相当高。

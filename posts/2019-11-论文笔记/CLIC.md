@@ -320,7 +320,7 @@ s仍位于A区间，所以第二字符还是A。
 
 > 和checkboard的比较，我认为是checkboard空间上一半像素的所有通道全是没有利用上下文信息的。但如果结合CC，前面解码的通道上下文是能利用上的。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221214180212481.png" alt="image-20221214180212481" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20221214180212481.png" alt="image-20221214180212481" style="zoom:50%;" />
 
 
 
@@ -346,7 +346,7 @@ s仍位于A区间，所以第二字符还是A。
 
 可视化发现y是可能存在多个most probable value，只用一个高斯分布也是次优的。
 
-![image-20221128095621959](/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221128095621959.png)
+![image-20221128095621959](../../images/typora-images/image-20221128095621959.png)
 
 <font color="purple">问题发现：</font>我们发现用于率估计的准确熵模型在很大程度上影响网络参数的优化，从而影响速率失真性能。
 
@@ -446,7 +446,7 @@ $\mathcal{L} = \mathcal{R(\hat{\boldsymbol{y}})} + \mathcal{R(\hat{\boldsymbol{z
 
 有着良好的开源，主体的编解码器仍是用Balle提出的，仅熵模型的非线性转换部分使用Transformer。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221126152104505.png" alt="image-20221126152104505" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20221126152104505.png" alt="image-20221126152104505" style="zoom:50%;" />
 
 熵模型是 Hyperprior+Context的联合模型。
 
@@ -510,11 +510,11 @@ K-chunk parallel原本分组粒度是均匀的。
 
 下图可视化（通道总数C=320，K=10，10-slice evenly grouping，每组通道数32）：
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221125170345328.png" alt="image-20221125170345328" style="zoom:35%;" />
+<img src="../../images/typora-images/image-20221125170345328.png" alt="image-20221125170345328" style="zoom:35%;" />
 
 类似传统编码，称这个现象为信息集中效应（Information Compaction）。
 
-![image-20221125172849401](/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221125172849401.png)
+![image-20221125172849401](../../images/typora-images/image-20221125172849401.png)
 
 ELIC提出可以前面的分组包含的通道更少，使其信息更集中，率失真性能会更好。
 
@@ -602,7 +602,7 @@ PyTorch有MultivariateNormal，可能就是看这个想到的。
 
 感觉直接用DAE也不是不可以。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20221202141747613.png" alt="image-20221202141747613" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20221202141747613.png" alt="image-20221202141747613" style="zoom:50%;" />
 
 ② K-chunk context model结合网络结构设计，创造多尺度loss
 
