@@ -690,6 +690,58 @@ DVMark 将消息隐藏视频中，并可得到鲁棒地恢复。 编码器网络
 - 水印分布在多个时空尺度上
 - 可微的失真层：借此获得对各种失真的鲁棒性，而不可微的失真，例如视频压缩标准，则由可微的代理（proxy）建模
 
+#### :page_with_curl:RedMark
+
+使用了downshuffle，因为考虑一个像素位置存不下长度较长的水印。且转换层基本是1x1卷积，这种设计的灵感来自传统的频域加水印方法。
+
+#### :page_with_curl:HiDDeN: Hiding Data With Deep Networks
+
+> 动机：对抗攻击，如果一个网络可以被小的扰动愚弄而做出错误的类别预测，那么应该有可能从类似的扰动中提取有意义的信息。
+
+最近的工作表明，深度神经网络对输入图像的微小扰动高度敏感，从而产生对抗样本。 尽管此属性通常被认为是深度神经网络的弱点，但我们探索它是否有益——神经网络可以学习使用不可见的扰动来编码大量有用的信息。 完成数据隐写/不可见水印任务。
+
+> Keywords: steganography, steganalysis, digital watermarking
+>
+> 略有不同，steganography目的更多是传输信息，steganalysis是第三方破译密码，digital watermarking目的是识别图像所有权。实现的技术层面是类似的，只是前者对防破译的要求高，后者对抗攻击的要求高。
+
+本文特点是将message膨胀成HW，再与图像特征concat。这样的好处是每个像素位置都有concat完整信息，最后的encoded图像有机会获得更佳的抗攻击能力。
+
+**core代码：**
+
+```python
+from model.hidden import Hidden
+from noise_layers.noiser import Noiser
+```
+
+本文使用的攻击更具挑战，比如一些cropout、dropout、JPEGout操作，会将一部分原图像素保留原貌。解码器就需要有能力更精细的区分哪些像素受到攻击。
+
+> Granting the noise layer access to the cover image makes it more challenging as well. 
+
+#### :page_with_curl:StegaStamp: Invisible Hyperlinks in Physical Photographs
+
+本文设计了一个有趣的应用，可以称之为自然图片二维码。扫描图片就可以得到网址。幕后的技术仍是视频不可见水印。进一步，未来，增强现实 (AR) 系统可能会执行此任务，将检索到的信息与用户视图中的照片一起视觉叠加（Ren Ng真是创新力相当强）。
+
+> *Another way to think about this is physical photographs that have unique QR codes invisibly embedded within them.* 
+
+后续有人开发了[*1](https://github.com/JisongXie/StegaStamp_pytorch)[*2](https://github.com/Charmve/StegaStamp-plus)[*demo](https://charmve.github.io/steganography.js/examples/showcase/)，可玩性比较不错。
+
+本文训练上比较特别的是：原作者的程序在前1500次迭代中将图像损失函数从总损失函数中去除，从而在一定程度上提高了比特精度。后面才加入图像损失。然后模型的初始化方式值得思考一下。
+
+HiDDeN vs. StegaStamp:
+
+1. 嵌入方式：HiDDeN是将消息膨胀后在通道维度和深度特征连接；StegaStamp是用全连接层预处理消息，再reshape和上采样到和图片一样的空间尺寸。（倾向HiDDeN）
+2. 损失函数：HiDDeN是$L_M+0.7*L_I+0.001*L_G$，整个训练期间使用不变的系数；StegaStamp加入了$L_{lpips}$，特别指出一开始$L_{lpips}$、$L_I$、$L_G$的系数都设为0，直到解码达到比较高的准确率，再线性增加$L_{lpips}$、$L_I$、$L_G$的系数。（倾向StegaStamp）
+3. 训练阶段：HiDDeN没有训练阶段的区别，只是攻击越难，训练总轮数越多；StegaStamp对于图像扰动/攻击，则是由易到难地慢慢增加。（倾向StegaStamp）
+4. 网络结构：HiDDeN是平铺型，靠膨胀（expand）和池化来编码和解码消息；StegaStamp是U型，使用残差学习。
+
+StegaStamp还使用了纠错码等传统方法。
+
+#### :page_with_curl:CIN
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230522171557052.png" alt="image-20230522171557052" style="zoom:50%;" />
+
+袁粒老师组的工作，结构可逆。
+
 ### 智能编码系列
 
 [2016~2022](./CLIC.html)
@@ -771,7 +823,7 @@ shape 199, texture 199, expression 29
 
 #### :page_with_curl:Perceptual Head Generation with Regularized Driver and Enhanced Renderer
 
-黄哲威的工作，基于俞睿师兄的PIRenderer
+黄哲威的工作，基于俞睿师兄的PIRenderer。PIRender总体效果挺好，但主要存在两个问题：背景扭曲 和 图像边缘失真。本工作使用了两个非常实用的方法缓解了上述问题，一个是背景分割后做滑动平均，一个是grid_sample函数使用border模式的padding。
 
 #### :page_with_curl:PIRenderer: Controllable Portrait Image Generation
 
@@ -803,7 +855,41 @@ PIRenderer包含三部分网络：
 
 <img src="../../images/typora-images/image-20230314142526847.png" alt="image-20230314142526847" style="zoom:50%;" />
 
+其中使用AdaIN 是比较精髓的部分，值得学习。AdaIN算子负责将 z 描述的运动注入Warping和Editing网络。AdaIN非常类似于SFT层，最早在风格迁移任务中使用。
+
+EditingNet应该有提升空间，把画质增强里面比较适用的做法用过来。
+
+> PIRender只需要输入3DMM中表情和姿态的系数，而不需要身份（identity）。这是由于有source image提供identity。但也因此，PIRender的训练没有引入GAN，就是想保id，GAN经常可能生成不真实的信息。
+
+PIRender的损失函数，训练refine网络时采用了<font color="brown">VGG-style-loss</font>，也就是在vgg特征的基础上经过格拉姆矩阵后再算L1距离。
+
+> 格拉姆矩阵（Gram matrix）：n维欧式空间中任意k个向量之间两两的内积所组成的矩阵，称为这k个向量的格拉姆矩阵(Gram matrix)。
+>
+> 内积判断向量a和向量b之间的夹角和方向关系
+>
+> - a·b>0   方向基本相同，夹角在0°到90°之间
+> - a·b=0   正交，相互垂直 
+> - a·b<0   方向基本相反，夹角在90°到180°之间 
+>
+> 所以Gram矩阵可以反映出**该组向量中各个向量之间的某种关系**。
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230522153133223.png" alt="image-20230522153133223" style="zoom:39%;" />
+
+**Gram计算的实际上是两两特征之间的相关性**，哪两个特征是同时出现的，哪两个是此消彼长的等等。格拉姆矩阵用于度量各个维度自己的特性以及各个维度之间的关系。内积之后得到的多尺度矩阵中，对角线元素提供了不同特征图各自的信息，其余元素提供了不同特征图之间的相关信息。这样一个矩阵，既能体现出有哪些特征，又能体现出不同特征间的紧密程度。
+
+>深度学习中经典的风格迁移大体流程是：
+>
+>1. 准备基准图像和风格图像
+>2. 使用深层网络分别提取基准图像（加白噪声）和风格图像的特征向量（或者说是特征图feature map）
+>3. 分别计算两个图像的特征向量的Gram矩阵，以两个图像的Gram矩阵的差异最小化为优化目标，不断调整基准图像，使风格不断接近目标风格图像
+>
+>关键的一个是在网络中提取的特征图，**一般来说浅层网络提取的是局部的细节纹理特征，深层网络提取的是更抽象的轮廓、大小等信息**。这些特征总的结合起来表现出来的感觉就是图像的风格，由这些特征向量计算出来的的Gram矩阵，就可以把图像特征之间隐藏的联系提取出来，也就是各个特征之间的相关性高低。
+>
+><img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230522160013986.png" alt="image-20230522160013986" style="zoom:30%;" />
+
 [Face3D 拓展](https://zhuanlan.zhihu.com/p/530830577)
+
+Gram matrix扩展[1](https://blog.csdn.net/bbbeoy/article/details/108195122),[2](https://www.zhihu.com/question/49805962)
 
 #### :page_with_curl:SadTalker
 
@@ -819,6 +905,10 @@ CVPR2023 音频驱动说话人的SOTA
 任务：聆听头部生成将来自说话者的音频和视觉信号作为输入，并以实时方式提供非语言反馈（例如，头部运动、面部表情）。
 
 本文主要是提供数据集，和尝试基于PIRender的baseline。
+
+#### :page_with_curl:VideoReTalking
+
+如果是全身人像，感觉更廉价的方案是 [video-retalking](https://opentalker.github.io/video-retalking/)。
 
 #### :page_with_curl:Structure-Aware Motion Transfer with Deformable Anchor Model
 
