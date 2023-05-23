@@ -412,7 +412,7 @@ SSIM把两幅图的相似性按三个维度进行比较：亮度，对比度和�
 
 数据有网页、游戏画面、动画和中英文文档等等。
 
-评价：感觉从网络结构来说有些道理，但损失函数其实不一定比4个方向的梯度损失好，就是尺寸大一点，方向多一点。
+评价：感觉从网络结构来说有些道理。
 
 #### :page_with_curl:CUF: Continuous Upsampling Filters
 
@@ -690,7 +690,7 @@ DVMark 将消息隐藏视频中，并可得到鲁棒地恢复。 编码器网络
 - 水印分布在多个时空尺度上
 - 可微的失真层：借此获得对各种失真的鲁棒性，而不可微的失真，例如视频压缩标准，则由可微的代理（proxy）建模
 
-#### :page_with_curl:RedMark
+#### :page_with_curl:ReDMark
 
 使用了downshuffle，因为考虑一个像素位置存不下长度较长的水印。且转换层基本是1x1卷积，这种设计的灵感来自传统的频域加水印方法。
 
@@ -717,6 +717,22 @@ from noise_layers.noiser import Noiser
 
 > Granting the noise layer access to the cover image makes it more challenging as well. 
 
+#### :page_with_curl:A Novel Two-stage Separable Framework for Practical Blind Watermarking
+
+刘杨和郭孟曦的一篇文章，张健等几位老师打磨以后可读性挺好。阅读下来，感觉方法确实比较实用。
+
+现有工作：HiDDeN、ReDMark等端到端训练的框架，一般有编码器、噪声层、解码器三个组件。它的缺点是
+
+- 不支持不可导的噪声，比如压缩
+- 不方便临时增加新的噪声类别，整个网络需要重新训练
+- 对于训练超参非常敏感，加入一种新的噪声，如果不调整超参，可能图像质量会下降来保证解码的准确率
+
+>It should be emphasized that, for the images with watermarks,thedistributionofdecoderoutputM wouldbeasclose as possible to -1 and 1, while for the images without watermarks,the distribution would be close to 0, therefore we make the binary message $M\in \left \{-1, 1\right \} ^L$ instead of $ \left \{0, 1\right \} ^L$ .
+
+这一段是非常重要的细节。另外由于GAN训练的不稳定性，该工作还加入了谱归一化（spectral normalization）。
+
+该工作还对深度学习的盲水印做了可解释性方面的研究，
+
 #### :page_with_curl:StegaStamp: Invisible Hyperlinks in Physical Photographs
 
 本文设计了一个有趣的应用，可以称之为自然图片二维码。扫描图片就可以得到网址。幕后的技术仍是视频不可见水印。进一步，未来，增强现实 (AR) 系统可能会执行此任务，将检索到的信息与用户视图中的照片一起视觉叠加（Ren Ng真是创新力相当强）。
@@ -741,6 +757,10 @@ StegaStamp还使用了纠错码等传统方法。
 <img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230522171557052.png" alt="image-20230522171557052" style="zoom:50%;" />
 
 袁粒老师组的工作，结构可逆。
+
+Q：注意FIN的代码，图像是在-1，1之间。不确定这是不是可逆网络所需要的。
+
+A：实验观察，应该是需要的，psnr会收敛得快很多。
 
 ### 智能编码系列
 

@@ -468,6 +468,20 @@ https://github.com/pytorch/pytorch/issues/48915
         https://github.com/Microsoft/DirectXShaderCompiler/issues/1671
       </pre>
 
+      <li>复杂网络结构的文件，添加系统环境变量</li>
+      <pre>
+        目的：防止出现 ModuleNotFound 错误
+        sys.path是一个列表 list ,它里面包含了已经添加到系统的环境变量路径。
+        当我们要添加自己的引用模块搜索目录时，可以通过列表 list 的 append()方法；
+        sys.path.append() # 绝对路径或相对路径均可
+        注1：这种方法是运行时修改，脚本运行后就会失效。
+        注2：系统环境只能是目录，不能是文件。
+        注3：如果需要自定义搜索优先级，可以使用如sys.path.insert(1, "./model")。
+
+        from pprint import pprint
+        pprint(sys.path) # 在这里，pprint模块只是用来使事情看起来漂亮
+      </pre>
+
   </ul>
 
 
