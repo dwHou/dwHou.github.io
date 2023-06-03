@@ -482,6 +482,19 @@ https://github.com/pytorch/pytorch/issues/48915
         pprint(sys.path) # 在这里，pprint模块只是用来使事情看起来漂亮
       </pre>
 
+      <li>RNN dataloader</li>
+      <pre>
+        RNN/LSTM关于不同长短视频的对齐，有内置的pad方式：
+        >>> x1 = torch.randn(90, 73)
+        >>> x2 = torch.randn(90, 73)
+        >>> x3 = torch.randn(87, 73)
+        >>> x4 = torch.randn(92, 73)
+        >>> y = [x1, x2, x3, x4]
+        >>> import torch.nn.utils.rnn as rnn_utils
+        >>> y = rnn_utils.pad_sequence(y, batch_first=True)
+        >>> 成为[4, 92, 73]形状的张量
+      </pre>
+
   </ul>
 
 

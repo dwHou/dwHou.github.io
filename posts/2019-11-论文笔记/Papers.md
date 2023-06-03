@@ -144,6 +144,18 @@ TCI 2016 *Google*
 
 
 
+#### :page_with_curl:Learning Steerable Function for Efficient Image Resampling
+
+感觉这篇文章非常值得看，可以对传统插值/RAISR/SR-LUT等方法的联系和区别，有更深刻的认识。
+
+RAISR是手工的特征，基于学习的规则。
+
+> Engineers design everything.
+>
+> Engineers design features. ML models learn rules from data.
+>
+> DL models learn both features and rules from data.
+
 #### :page_with_curl: BLADE: Best Linear Adaptive Enhancement
 
 **分析现有方法：**
@@ -430,8 +442,6 @@ Nerf的思想和上采样任务结合：将上采样内核参数化为神经场(
 
 我们的动机假设是超分辨率卷积滤波器在空间和跨尺度上都是高度相关的。 因此，在<font color="purple">条件神经场的潜在空间中表示此类滤波器可以有效地捕获和压缩此类相关性</font>。
 
-
-
 #### :page_with_curl:Implicit Transformer Network for Screen Content Super-Resolution
 
 包括ITSRN和ITSRN++两篇文章。
@@ -672,6 +682,19 @@ DNCM：
 
 #### :page_with_curl:Color Image Enhancement with Saturation Adjustment Method
 
+#### :page_with_curl:Survey on Robust Image Watermarking
+
+归纳为两类：
+
+- single-stage-training (SST)：比如单独训练嵌入网络，单独训练提取网络。
+  - Trained detection network (TDN)
+  - Trained embedding network (TEN)
+- double-stage-training (DST)：联合训练嵌入和提取网络。(更先进)
+  - embedding model
+  - detection model
+  - loss function
+  - attack training
+
 #### :page_with_curl:DVMark
 
 任务：视频不可见水印
@@ -717,6 +740,14 @@ from noise_layers.noiser import Noiser
 
 > Granting the noise layer access to the cover image makes it more challenging as well. 
 
+#### :page_with_curl:Romark: A robust watermarking system
+
+将对抗学习中的鲁棒优化用在该任务，提升了HiDDeN效果的鲁棒性。这个概念和困难样本挖掘有点类似，针对worst-case进行优化。
+
+#### :page_with_curl:Distortion Agnostic Deep Watermarking
+
+Romark的进阶版。
+
 #### :page_with_curl:A Novel Two-stage Separable Framework for Practical Blind Watermarking
 
 刘杨和郭孟曦的一篇文章，张健等几位老师打磨以后可读性挺好。阅读下来，感觉方法确实比较实用。
@@ -727,11 +758,15 @@ from noise_layers.noiser import Noiser
 - 不方便临时增加新的噪声类别，整个网络需要重新训练
 - 对于训练超参非常敏感，加入一种新的噪声，如果不调整超参，可能图像质量会下降来保证解码的准确率
 
->It should be emphasized that, for the images with watermarks,thedistributionofdecoderoutputM wouldbeasclose as possible to -1 and 1, while for the images without watermarks,the distribution would be close to 0, therefore we make the binary message $M\in \left \{-1, 1\right \} ^L$ instead of $ \left \{0, 1\right \} ^L$ .
+>It should be emphasized that, for the images with watermarks,the distribution of decoder output M would be as close as possible to -1 and 1, while for the images without watermarks,the distribution would be close to 0, therefore we make the binary message $M\in \left \{-1, 1\right \} ^L$ instead of $ \left \{0, 1\right \} ^L$ .
+>
+>这里有一个思路是视频盲水印时，提取M接近全0的可以判断为没有嵌入水印的帧。甚至可以设计为early-stop。
 
-这一段是非常重要的细节。另外由于GAN训练的不稳定性，该工作还加入了谱归一化（spectral normalization）。
+这一段是非常重要的细节（不过这也标志着我想转十进制做的方法行不通了，尽快转变思路）。另外由于GAN训练的不稳定性，该工作还加入了谱归一化（spectral normalization）。此外该方法沿用了ReDMark提出的强度系数（S_factor），训练时设置为1，推理时可以增大或减小来调节画质-准确率的trade-off。
 
-该工作还对深度学习的盲水印做了可解释性方面的研究，
+该工作还对深度学习的盲水印做了可解释性方面的研究。
+
+评价：主要思想确实有道理。因为是否受攻击，更应该是解码器考虑的事情。编码器去考虑只会影响图像质量。
 
 #### :page_with_curl:StegaStamp: Invisible Hyperlinks in Physical Photographs
 
@@ -761,6 +796,12 @@ StegaStamp还使用了纠错码等传统方法。
 Q：注意FIN的代码，图像是在-1，1之间。不确定这是不是可逆网络所需要的。
 
 A：实验观察，应该是需要的，psnr会收敛得快很多。
+
+#### :page_with_curl:CNN-Based Watermarking using DWT
+
+2023年的文章，很好的总结了传统频域方法。[code](https://github.com/alirezatwk/Convolutional-Neural-Network-Based-Image-Watermarking-using-Discrete-Wavelet-Transform)
+
+结合神经网络+确定性算法。我感觉分频带靠谱，只采用LL。
 
 ### 智能编码系列
 
@@ -925,6 +966,14 @@ CVPR2023 音频驱动说话人的SOTA
 任务：聆听头部生成将来自说话者的音频和视觉信号作为输入，并以实时方式提供非语言反馈（例如，头部运动、面部表情）。
 
 本文主要是提供数据集，和尝试基于PIRender的baseline。
+
+本文的数据集是音频采样率44100，视频帧率30。这样才是45 = curr_mfccs: 39 + rms: 3 + zcr: 3，如果手头有音频/视频帧率不满足该要求的。只要保证帧率比位44100:30即frame_n_samples = 1470即可。
+
+> 如果采样率44100帧率30，45 = curr_mfccs: 39 + rms: 3 + zcr: 3，和本作一样
+>
+> 如果采样率44100帧率25，86 = curr_mfccs：78 +  rms: 4 + zcr: 4
+>
+> 如果采样率16000帧率25，82 = curr_mfccs：78 +  rms: 2 + zcr: 2
 
 #### :page_with_curl:VideoReTalking
 
