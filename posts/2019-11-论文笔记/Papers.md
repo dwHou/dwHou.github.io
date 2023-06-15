@@ -83,6 +83,18 @@ CVPR 2021 *Inception Institute of AI, UAE*
 
 
 
+#### :page_with_curl: Pix2Pix
+
+Image-to-Image Translation with Conditional Adversarial Networks
+
+工作比较老了，提出了Patch-GAN。
+
+后面有[工作](https://openaccess.thecvf.com/content_cvpr_2018/papers/Wang_High-Resolution_Image_Synthesis_CVPR_2018_paper.pdf)改进了生成器
+
+<img src="../../images/typora-images/image-20230608231059047.png" alt="image-20230608231059047" style="zoom:30%;" />
+
+
+
 #### :page_with_curl: Series-Parallel Lookup Tables
 
 [SPLUT]()
@@ -155,6 +167,50 @@ RAISR是手工的特征，基于学习的规则。
 > Engineers design features. ML models learn rules from data.
 >
 > DL models learn both features and rules from data.
+
+而本文的LeRF，是采用基于学习的特征（structural priors learned by DNNs）。
+
+解决两个问题：效率和任意倍数，efficient and continuous solution
+
+<img src="../../images/typora-images/image-20230612161254918.png" alt="image-20230612161254918" style="zoom:36%;" />
+
+传统插值：
+
+1. 获取相对偏移量：将变换后的目标坐标（如上采样）投影回输入图像的坐标空间，获取其支持块（their support patches）中目标像素和源像素之间的相对空间偏移量。
+
+2. 预测重采样权重：根据相对空间偏移量，为支持块中的每个像素预测重采样权重，即重采样核。
+
+3. 聚合像素：通过加权求和聚合源像素以获取目标像素。
+
+本文方法：
+
+1. 与插值中的固定重采样函数不同，我们假设一种可控重采样函数 $Φ_Θ$，由 $Θ$ 参数化。 具体来说，我们利用各向异性高斯，其中 ρ、σX 和 σY 是超参数，因此重采样函数变为 $Φ(ρ,σ_X ,σ_Y )$ 。
+
+   从统计学的角度来看，$ρ$可以解释为二维变量与$σ_X$、$σ_Y$标准差之间的相关性。
+
+   <img src="../../images/typora-images/image-20230612164834974.png" alt="image-20230612164834974" style="zoom:45%;" />
+
+   可以看到通过调整超参数$(ρ，σ_X，σ_Y)$获得不同的方向和形状，显示其对各种局部结构的建模能力。
+
+2. 采用深度神经网络从外部数据集学习结构先验，以预测重采样函数中的超参数 $Θ$，即这里的$(ρ,σ_X ,σ_Y )$。
+
+3. DNN-to-LUT，采用查找表来加速。索引/键是输入图像的像素组合，值是对应的超参$(ρ,σ_X ,σ_Y )$。
+
+   <img src="../../images/typora-images/image-20230612170707145.png" alt="image-20230612170707145" style="zoom:50%;" />
+
+4. 不同于现有的基于 LUT 的方法，其 LUT 值是图像像素，本文的 LUT 存储反映结构特征的超参数。 因此，为了更好地提取结构先验，本文提出以下调整。
+
+   - 定向集成策略。 我们提出了一种定向集成 (DE) 策略来替代现有基于 LUT 的方法中的旋转集成 (RE) 策略。即只做180度旋转的集成学习，这符合 $ρ$ 的学习特性。
+
+     > 我注：90度旋转的集成，应该可以通过$ρ$ 反号来完成。得可视化观察才知道。
+
+   - 如图5 (c) 所示，本文增加了模式“C”和“X”以及默认的“S”模式，以更好地捕捉不同方向的边缘。 例如，“C”和“C'”图案分别对垂直和水平边缘敏感。相应地，DNN 遵循多分支设计，每个分支都由一个 LUT 加速。
+
+
+
+<img src="../../images/typora-images/image-20230612161340186.png" alt="image-20230612161340186" style="zoom:36%;" />
+
+
 
 #### :page_with_curl: BLADE: Best Linear Adaptive Enhancement
 
@@ -789,13 +845,17 @@ StegaStamp还使用了纠错码等传统方法。
 
 #### :page_with_curl:CIN
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230522171557052.png" alt="image-20230522171557052" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20230522171557052.png" alt="image-20230522171557052" style="zoom:50%;" />
 
 袁粒老师组的工作，结构可逆。
 
 Q：注意FIN的代码，图像是在-1，1之间。不确定这是不是可逆网络所需要的。
 
 A：实验观察，应该是需要的，psnr会收敛得快很多。
+
+#### :page_with_curl:A Compact Neural Network-based Algorithm for Robust Image Watermarking
+
+INN的损失，得用全。而且对于Cropout的攻击，损失记得调整有意义区域。二进制转其他进制，这个和我的idea差不多。
 
 #### :page_with_curl:CNN-Based Watermarking using DWT
 
@@ -934,7 +994,7 @@ PIRender的损失函数，训练refine网络时采用了<font color="brown">VGG-
 >
 > 所以Gram矩阵可以反映出**该组向量中各个向量之间的某种关系**。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230522153133223.png" alt="image-20230522153133223" style="zoom:39%;" />
+<img src="../../images/typora-images/image-20230522153133223.png" alt="image-20230522153133223" style="zoom:39%;" />
 
 **Gram计算的实际上是两两特征之间的相关性**，哪两个特征是同时出现的，哪两个是此消彼长的等等。格拉姆矩阵用于度量各个维度自己的特性以及各个维度之间的关系。内积之后得到的多尺度矩阵中，对角线元素提供了不同特征图各自的信息，其余元素提供了不同特征图之间的相关信息。这样一个矩阵，既能体现出有哪些特征，又能体现出不同特征间的紧密程度。
 
@@ -946,7 +1006,7 @@ PIRender的损失函数，训练refine网络时采用了<font color="brown">VGG-
 >
 >关键的一个是在网络中提取的特征图，**一般来说浅层网络提取的是局部的细节纹理特征，深层网络提取的是更抽象的轮廓、大小等信息**。这些特征总的结合起来表现出来的感觉就是图像的风格，由这些特征向量计算出来的的Gram矩阵，就可以把图像特征之间隐藏的联系提取出来，也就是各个特征之间的相关性高低。
 >
-><img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230522160013986.png" alt="image-20230522160013986" style="zoom:30%;" />
+><img src="../../images/typora-images/image-20230522160013986.png" alt="image-20230522160013986" style="zoom:30%;" />
 
 [Face3D 拓展](https://zhuanlan.zhihu.com/p/530830577)
 

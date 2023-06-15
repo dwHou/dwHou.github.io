@@ -522,6 +522,25 @@ int main()
 
 在编译之前，其实还进行了一个称作**translation**的操作。而translation中最值得注意的是它涉及到了预处理**preprocessor**。预处理指令都以#开头。
 
+常见预处理指令 [refer](https://www.cnblogs.com/zi-xing/p/4550246.html)：
+
+```cpp
+#        //空指令，无任何效果
+#include //包含一个源代码文件
+#define  //定义宏
+#undef   //取消已定义的宏
+#if      //如果给定条件为真，则编译下面代码
+#ifdef   //如果宏已经定义，则编译下面代码
+#ifndef  //如果宏没有定义，则编译下面代码
+#elif    //如果前面的#if给定条件不为真，当前条件为真，则编译下面代码
+#endif   //结束一个#if……#else条件编译块
+#error   //停止编译并显示错误信息
+```
+
+> 注1：前面带不带#的if，是预处理和语句的区别，是影响编译和运行逻辑的区别。语法也不尽相同。
+>
+> 注2：#ifdefined等价于#ifdef，#if!defined等价于#ifndef
+
 预处理也是短暂地在内存中进行的，它并不会改变原来的代码文本。
 
 常见的预处理指令（他们许多和C++的语法不同）：
@@ -550,6 +569,28 @@ int main()
   作用：
 
   Function-like macros比较危险，尽量不使用，而且普通函数都能取代它，这里就不讨论了。
+
+  比较危险的例子：
+
+  ```cpp
+  #include <stdio.h>
+  #define SQR(x) (x*x)
+  int main(void)
+  {
+      int b=3;
+  #ifdef SQR//只需要宏名就可以了，不需要参数，有参数的话会警告
+      printf("a = %d\n",SQR(b+2));
+  #endif
+      return 0;
+  }
+  
+  /*
+   *首先说明，这个宏的定义是错误的。并没有实现程序中的B+2的平方
+   * 预处理的时候，替换成如下的结果：b+2*b+2
+   * 正确的宏定义应该是：#define SQR(x) ((x)*(x))
+   * 所以，尽量使用小括号，将参数括起来。
+  */
+  ```
 
   Object-like macros with substitution text这里的标识符一般全用大写字母，预处理后全部被替换文本。如`#define MY_NAME "Alex"` 。它过去被作为常数（constant variables）的一种便捷的替代方法。除了一些遗留代码，现在基本不这么用了。
 
