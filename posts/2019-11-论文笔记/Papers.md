@@ -136,6 +136,8 @@ TCI 2016 *Google*
 
    2. 局部梯度的函数得到{角度, 强度, 连贯性}3个哈希表的键。最终经过散列计算得到索引值（散列意味着冲突尽可能少）
 
+      > 用eigenvector,eigenvalue
+
       哈希表键是局部梯度的[函数](https://www.academia.edu/download/42362012/feng_asilomar.pdf)，哈希表条目是相应的预学习过滤器。比“昂贵”的聚类（例如 K-means、GMM、字典学习）更加高效。
 
       > 假如每桶有n个filter，那么可设置index = f(angle, strength, coherence)的散列函数，在f(0,0,0)=0，f(1,1,1)=n。
@@ -391,6 +393,10 @@ class SimpleGate(nn.Module):
 而SamlingAug从训练样本的角度出发，则更为有意思一点。感觉和<font color="brown">困难样本挖掘</font>的思路有点类似，但绕了一道，不是直接SR和HR之间loss来决定是否反传。而是linearSR和HR之间的loss来决定是否反传。就成了与当前网络无关的独立因素了，避免了训练不稳定。
 
 > 我这种思路，再结合topk的代码，还是挺好实现的。
+
+#### :page_with_curl: Invertible Image Rescaling
+
+
 
 #### :page_with_curl: Pixel-Adaptive Convolutional Neural Networks
 
@@ -672,7 +678,9 @@ mc[R] * (1 - α) + (mr[R] / 3 + br[R] / 3 + bc[R] / 3) * α，
 
 
 
+:computer: Princeton Adaptive Camera
 
+人脸识别检测的精度反传影响相机参数。这是low level+high level一个更创新的解法。
 
 #### :page_with_curl:Neural Preset for Color Style Transfer
 
@@ -857,6 +865,10 @@ A：实验观察，应该是需要的，psnr会收敛得快很多。
 
 INN的损失，得用全。而且对于Cropout的攻击，损失记得调整有意义区域。二进制转其他进制，这个和我的idea差不多。
 
+#### :page_with_curl:MBRS:Mini-Batch of Real and Simulated JPEG Compression
+
+它的diffusion block值得仔细看看
+
 #### :page_with_curl:CNN-Based Watermarking using DWT
 
 2023年的文章，很好的总结了传统频域方法。[code](https://github.com/alirezatwk/Convolutional-Neural-Network-Based-Image-Watermarking-using-Discrete-Wavelet-Transform)
@@ -902,8 +914,6 @@ $B_{id}$,  $B_{exp}$,  $B_t$分别是身份、表情和纹理PCA的基。
 图像损失：仅面部区域的像素级损失，关键点损失
 
 感知损失：注意使用的cosine距离
-
-
 
 #### :computer: face3d: Python tools for processing 3D face
 

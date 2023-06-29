@@ -83,6 +83,8 @@ GDN的主要贡献是引入逐点的非线性，该模块沿通道聚合信息�
 
 术语2：在贝叶斯统计中，超先验是超参数上的先验分布。
 
+<center>Zoom Chat Avatar 🚀🚀🔥</center>
+
 <font color="purple">背景方法：</font>
 
 与所有有损压缩方法一样，ML-based图像压缩的工作原理很简单：对通常建模为像素强度向量 $x$ 的图像进行量化，减少存储或传输所需的信息量，但同时引入误差。 通常，直接量化的不是像素强度。 相反，找到图像的替代（潜在，<font color="brown">latent</font>）表示，即其他空间 $y$ 中的向量，并且在该表示中进行量化，产生离散值向量 $\hat{y}$。 因为它是离散的，所以可以使用熵编码方法（例如算术编码（Rissanen 和 Langdon，1981））对其进行无损压缩，以创建通过信道发送的比特流。 熵编码依赖于量化表示的先验概率模型，编码器和解码器都知道该模型（<font color="brown">熵模型</font>）。
@@ -573,6 +575,12 @@ PyTorch有MultivariateNormal，可能就是看这个想到的。
 ### ECCV 2022
 
 #### :page_with_curl:Implicit Neural Representations for Image Compression
+
+
+
+### ICLR2023 
+
+#### EVC: Real-time compression with mask decay
 
 
 
