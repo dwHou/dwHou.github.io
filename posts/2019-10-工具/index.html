@@ -668,6 +668,11 @@ git log --graph --oneline --all
 git pull
 在本地有版本库的情况下，从远程库获取最新commit 数据（如果有的话），并merge（合并）到本地。
 
+人生不如意之事十之八九，合并分支往往也不是一帆风顺的。当merge存在冲突时，需要解决冲突：
+详细参考<a href="https://www.liaoxuefeng.com/wiki/896043488029600/900004111093344">廖雪峰的文章</a>
+具体是git status查看哪些文件冲突，然后打开文件后将看到Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容。一些IDE或其插件，会有快捷的选择不同分支内容的点击项，方便快速解决冲突。
+
+
 <font color="red">git pull = git fetch + git merge</font>
 
 3、使用场景

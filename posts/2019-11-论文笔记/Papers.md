@@ -252,6 +252,10 @@ From the eigensystem, we define the features:
 
 和eSR-MAX某种意义上是等价，“This spatially-adaptive filtering is equivalent to passing image through a linear filterbank and then for each spatial position selecting one filter output”，但提前逐像素进行了模板选择，减少了计算资源的浪费。这篇文章提到，“three-dimensional index”，和我的思路是不谋而合的。
 
+#### :page_with_curl: Fast, trainable, multiscale denoising
+
+主要在RAISR基础上加了多尺度。
+
 
 
 #### :page_with_curl: Multiscale PCA for Image Local Orientation Estimation
@@ -547,6 +551,18 @@ SwinIR普遍适用于各类图像复原任务，无需改动特征提取模块�
 
 
 #### :page_with_curl:Restormer
+
+#### :computer:Contrast Adaptive Sharpening
+
+对比度自适应锐化 ([CAS](https://docs.o3de.org/docs/atom-guide/features/cas/)) 是一种图像锐化技术，在决定锐化程度时会考虑局部 3x3 邻域的对比度。 高对比度样本的锐化程度远低于低对比度样本。 这有助于防止在均匀锐化的标准锐化滤镜中出现过度锐化的外观。 您可以将 CAS 与临时抗锯齿 (TAA) 结合使用，以减少 [TAA](https://docs.o3de.org/docs/atom-guide/features/taa/) 给图像带来的柔和。 
+
+AMD的CAS和NVIDIA的Freestyle都使用的该技术，实现可参考 https://chainner.app/。
+
+PPT&DEMO:
+
+https://gpuopen.com/wp-content/uploads/2019/07/FidelityFX-CAS.pptx
+
+https://www.shadertoy.com/view/wtlSWB#
 
 #### :computer: Anime4K
 
