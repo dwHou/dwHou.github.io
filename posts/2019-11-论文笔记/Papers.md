@@ -256,7 +256,7 @@ From the eigensystem, we define the features:
 
 主要在RAISR基础上加了多尺度。
 
-
+固定尺度但当遇到比较高的噪声强度时，仅仅5x5或7x7的滤波核大小，也不足以
 
 #### :page_with_curl: Multiscale PCA for Image Local Orientation Estimation
 
@@ -760,6 +760,8 @@ DNCM：
 
 最终损失函数为：$\mathcal{L} = \mathcal{L}_{rec} + \lambda \, \mathcal{L}_{con}$，$\lambda$是一个可控的权重。
 
+#### :page_with_curl:Flexible Piecewise Curves
+
 #### :page_with_curl:Color Image Enhancement with Saturation Adjustment Method
 
 #### :page_with_curl:Survey on Robust Image Watermarking
@@ -1064,6 +1066,8 @@ CVPR2023 音频驱动说话人的SOTA
 #### :page_with_curl:VideoReTalking
 
 如果是全身人像，感觉更廉价的方案是 [video-retalking](https://opentalker.github.io/video-retalking/)。
+
+后续还有[SadTalker](https://github.com/OpenTalker/SadTalker)，[StyleSync](https://github.com/guanjz20/StyleSync_PyTorch)等新的SOTA。
 
 #### :page_with_curl:Structure-Aware Motion Transfer with Deformable Anchor Model
 

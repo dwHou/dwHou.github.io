@@ -54,13 +54,13 @@ CVPR 2020 教程将神经渲染定义为
 
 **Fundamentals** *Michael Zollhöfer*
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230703194341113.png" alt="image-20230703194341113" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230703194341113.png" alt="image-20230703194341113" style="zoom:50%;" />
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230703194548330.png" alt="image-20230703194548330" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230703194548330.png" alt="image-20230703194548330" style="zoom:50%;" />
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230703194827404.png" alt="image-20230703194827404" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230703194827404.png" alt="image-20230703194827404" style="zoom:50%;" />
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230703195910782.png" alt="image-20230703195910782" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230703195910782.png" alt="image-20230703195910782" style="zoom:50%;" />
 
 ### 生成对抗网络
 
