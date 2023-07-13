@@ -28,3 +28,13 @@ C++常见的内存错误及解决方法
 解决办法：动态内存的申请和释放必须配对，new-delete和malloc-free其使用次数必须相等。
 （5）已经释放内存还在使用它
 free或delete后 ，没有将指针设为NULL，产生“野指针”。
+
+
+
+Xcode → Product → Profile 里面有这些工具：
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230712110012273.png" alt="image-20230712110012273" style="zoom:50%;" />
+
+其中比较常用的
+ ·Time Profiler：分析代码的执行时间，执行对系统的CPU上运行的进程低负载时间为基础采样
+
