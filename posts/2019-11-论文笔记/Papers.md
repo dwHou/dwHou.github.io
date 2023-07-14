@@ -692,7 +692,11 @@ mc[R] * (1 - α) + (mr[R] / 3 + br[R] / 3 + bc[R] / 3) * α，
 
 虽然我们做的是抗锯齿，我们应该可以利用这套取消抗锯齿的方法，来制作成对的数据集。
 
+:computer: PWLF
 
+piecewise linear fit methods. 其实只需要三段直线，两行代码，就可以实现如下角度分类：
+
+<img src="../../images/typora-images/see360p.gif" alt="image-20230420175749748" style="zoom:60%;" />
 
 :computer: Princeton Adaptive Camera
 

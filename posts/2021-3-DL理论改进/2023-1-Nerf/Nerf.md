@@ -65,6 +65,8 @@ NeRF是视角生成算法，从少数相片（real camera）中学习生成新�
 
 神经网络形成了场景表示。
 
+###### 4.1 Coord MLP
+
 <img src="../../../images/typora-images/image-20230711143052516.png" alt="image-20230711143052516" style="zoom:50%;" />
 
 其实在NeRF之前，NIPS2020的一篇[论文](https://proceedings.neurips.cc/paper/2020/file/55053683268957697aa39fba6f231c68-Paper.pdf)有这样一种尝试：
@@ -137,5 +139,5 @@ GeoGebra作图：
 
 NTK的形式把loss function的作用和NN结构的作用分离开了，NN的结构贡献给了NTK。
 
-现在正式阅读这篇`tancik2020fourier`:
+现在正式阅读这篇==Coord MLP==:
 
