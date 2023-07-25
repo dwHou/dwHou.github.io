@@ -33,7 +33,7 @@ free或delete后 ，没有将指针设为NULL，产生“野指针”。
 
 Xcode → Product → Profile 里面有这些工具：
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230712110012273.png" alt="image-20230712110012273" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20230712110012273.png" alt="image-20230712110012273" style="zoom:50%;" />
 
 其中比较常用的
  ·Time Profiler：分析代码的执行时间，执行对系统的CPU上运行的进程低负载时间为基础采样

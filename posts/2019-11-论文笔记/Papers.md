@@ -692,7 +692,7 @@ mc[R] * (1 - α) + (mr[R] / 3 + br[R] / 3 + bc[R] / 3) * α，
 
 虽然我们做的是抗锯齿，我们应该可以利用这套取消抗锯齿的方法，来制作成对的数据集。
 
-:computer: PWLF
+#### :computer: PWLF
 
 piecewise linear fit methods. 其实只需要三段直线，两行代码，就可以实现如下角度分类：
 
@@ -1071,7 +1071,17 @@ CVPR2023 音频驱动说话人的SOTA
 
 如果是全身人像，感觉更廉价的方案是 [video-retalking](https://opentalker.github.io/video-retalking/)。
 
-后续还有[SadTalker](https://github.com/OpenTalker/SadTalker)，[StyleSync](https://github.com/guanjz20/StyleSync_PyTorch)等新的SOTA。
+后续还有[SadTalker](https://github.com/OpenTalker/SadTalker)，[StyleSync](https://github.com/guanjz20/StyleSync_PyTorch)，[DINet](https://github.com/MRzzm/DINet)，[FaceFormer](https://github.com/EvelynFan/FaceFormer)，[CodeTalker](https://github.com/Doubiiu/CodeTalker)等新的SOTA。
+
+产业界可以关注：
+
+Studio D-ID, [https://studio.d-id.com/ ](https://studio.d-id.com/), 2023
+
+Synthesia, https://share.synthesia.io/, 2023
+
+HourOne, https://hourone.ai/, 2023
+
+HeyGen, https://www.heygen.com/, 2023
 
 #### :page_with_curl:Structure-Aware Motion Transfer with Deformable Anchor Model
 
@@ -1088,6 +1098,14 @@ FOMM的缺陷：
 效果比较：
 
 FOMM vs. RegionMM vs. This paper
+
+#### :page_with_curl:DaGAN
+
+CVPR2022
+
+#### :page_with_curl:Thin-Plate-Spline-Motion-Model
+
+CVPR2022
 
 ### T2I
 

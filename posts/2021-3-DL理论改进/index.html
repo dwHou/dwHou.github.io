@@ -129,7 +129,7 @@
 
   </ul>
 
-   
+
   <h2>嫁接</h2>
   <ul>
   <li><b>出发点</b>  <a href="https://openaccess.thecvf.com/content_CVPR_2020/papers/Meng_Filter_Grafting_for_Deep_Neural_Networks_CVPR_2020_paper.pdf"><i class="fa fa-file-pdf-o"></i></a>
@@ -186,12 +186,12 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
       • 2018年，加州伯克利和谷歌将<a href="https://joechann0831.github.io/2019/06/24/Burst-Denoising-with-Kernel-Prediction-Networks/">KPN</a>用在Burst Denoising上。本质和localconv没有区别。提出的loss可以引导KPN既做align又做去噪，最后average。
       • 2019年，张磊老师组将KPN用于RealSR，解决blur kernel会跟随物距而改变的问题。因为kernel尺寸太大，复杂度增加很大，kernel尺寸太小，效果不好。所以该方法使用了金字塔结构，最后几层pixel-shuffle因子不一样，产生不同的kernel，作用于不同下采样倍数的图像上。
       • 2019年，更轻量的<a href="https://suhangpro.github.io/pac/">PAC</a>(pixel-adaptive convolution)被提出。认为权重共享的负面影响是使得content-agnostic. 这些缺点可以通过学习大量滤波器来尝试捕获图像和像素变化来解决。 然而，这增加了参数的数量，需要更大的内存占用和大量的标注数据。 另一种方法是在网络内使用content-adaptive卷积。
-          1. 一类技术使传统的图像自适应滤波器可微分，例如双边滤波、引导滤波和各向异性扩散，并将它们用作 CNN 的层。 这些内容自适应层通常设计用于增强 CNN 结果，但不能替代标准卷积。 
+          1. 一类技术使传统的图像自适应滤波器可微分，例如双边滤波、引导滤波和各向异性扩散，并将它们用作 CNN 的层。 这些内容自适应层通常设计用于增强 CNN 结果，但不能替代标准卷积。
           2. 另一类内容自适应网络涉及使用单独的子网络学习特定位置的kernel，该子网络预测每个像素的卷积滤波器权重。 这些被称为“动态滤波网络”（DFN），也称为交叉卷积（cross-convolution）或核预测网络（KPN），并且已被证明在几个计算机视觉任务中的有效性。尽管 DFN 是通用的并且可以用作标准卷积层的替代品，但这种核预测策略很难扩展到具有大量滤波器组的整个网络。
     </pre>
     <img src="../../images/typora-images/DynFilter.png">
   </ul>
-  
+
 
   <h2>不平衡损失</h2>
   <ul>
@@ -207,9 +207,9 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
   • 2017年，Loss max-pooling被提出，主要思想是：
     1. 通过pixel weighting functions自适应地对每个像素的contribution（实际展现的loss）进行re-weighting
     2. 通过普通的max-pooling在pixel-loss level上对pixel weighting function取最大
-    3. 而这个最大值是传统loss（即每个像素损失的权重是相等的）的上界  
+    3. 而这个最大值是传统loss（即每个像素损失的权重是相等的）的上界
   • 同年，何恺明团队提出Focal loss。
-    硬方案：OHEM 
+    硬方案：OHEM
     Focal loss可以看作soft OHEM。至于OHEM本身不能单独很好解决“简单样本支配”问题，私以为是focal loss可以"看全局"，而OHEM直接把easy ecample忽略使得许多pixel没有得到充分训练。
     软方案（sample reweighting）：Focal loss
     软性的难例加权，focal loss的思路是聚焦难例，并且自适应的削弱易例对最终的loss的贡献。
@@ -260,8 +260,8 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
         巧记
         HxW 看作一个实例 instance , 加一维 C 就看成 layter norm , 要是加一维 B 就是batch norm , 加部分C 就看做group。
       </pre>
-  
-      
+
+
   </ul>
 
   <h2>归一化和标准化</h2>
@@ -292,11 +292,11 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
         <a href="https://zhuanlan.zhihu.com/p/352668984">介绍</a>
         <a href="https://krutikabapat.github.io/Swish-Vs-Mish-Latest-Activation-Functions/">Swish vs. Mish</a>
      </pre>
-     
+
   </ul>
 
 
-  
+
   <h2>优化器与<a href="https://atcold.github.io/pytorch-Deep-Learning/zh/week14/14-3/">正则化</a></h2>
   <ul>
     <pre>
@@ -343,7 +343,7 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
       注意torch.optim集成的优化器只有L2正则化方法，api中参数weight_decay 的解析是：weight_decay (float, optional): weight decay (L2 penalty) (default: 0)，
       这里可以看出其weight_decay就是正则化项的作用。可以如下设置L2正则化：
       optimizer = optim.Adam(model.parameters(),lr=0.001,weight_decay=0.01)
-      
+
       自定义正则化类：
       https://blog.csdn.net/zhang2010hao/article/details/89339327
       自定义正交规范化：
@@ -371,18 +371,22 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
     </ol>
   </ul>
 
+  <h2>经验</h2>
+    <ul>
+      <li>很多时候，nn的设计，我们没法知道我们可以做什么一定可以提分，我们只知道我们绝对不可以做什么避免掉分以及我们应该可能可以做什么提分，这是调整nn的时候的一个深刻的感受</li>
+    </ul>
 
-  
 
 
 
 
-  
+
+
 
 
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
-A shortname is the unique identifier assigned to a Disqus site. 
+A shortname is the unique identifier assigned to a Disqus site.
 
 https://segmentfault.com/a/1190000005773009
 https://help.disqus.com/en/articles/1717111-what-s-a-shortname
