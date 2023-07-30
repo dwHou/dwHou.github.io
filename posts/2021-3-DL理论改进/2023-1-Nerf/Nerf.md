@@ -333,7 +333,7 @@ $k_\gamma(v_1, v_2) = \gamma(v_1)^T \gamma(v_2)  = \sum_{j=1}^m a_j^2 \cos\left(
 
 ###### 4.3 PE of NeRF
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230724202625603.png" alt="image-20230724202625603" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230724202625603.png" alt="image-20230724202625603" style="zoom:50%;" />
 
 同研究Coord MLP得到的结论类似，没有应用Positional Encoding时辐射场渲染结果看起来更“糊”。
 
@@ -345,17 +345,17 @@ PE把这些坐标投射到高维空间变成高维空间的basis，满足了平�
 
 对于NeRF，直观地看，输入是五维（3维表示位置，2维表示视角or入射光线角度or经纬度）。重建颜色和密度。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230725151450468.png" alt="image-20230725151450468" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230725151450468.png" alt="image-20230725151450468" style="zoom:50%;" />
 
 但我们不希望密度受视角的影响，一般的材料没有这种性质；（也不希望视角太多地影响颜色）：
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230725152329052.png" alt="image-20230725152329052" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230725152329052.png" alt="image-20230725152329052" style="zoom:50%;" />
 
 所以$(\theta, \phi)$只通过一层网络影响$(r,g,b)$
 
 采样也是采用了由粗到精的方式降低成本：
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230725152855615.png" alt="image-20230725152855615" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230725152855615.png" alt="image-20230725152855615" style="zoom:50%;" />
 
 ##### 6.Plenoxels
 
@@ -363,11 +363,11 @@ PE把这些坐标投射到高维空间变成高维空间的basis，满足了平�
 
 体素+球面谐波系数（只用到金字塔的前三层）
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230725154550204.png" alt="image-20230725154550204" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230725154550204.png" alt="image-20230725154550204" style="zoom:50%;" />
 
 体素中每一项不是常规的存rgb+$\delta$，而是存rgb上的球面谐波系数（以及密度），可视化就是下面这27个球：
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230725154517994.png" alt="image-20230725154517994" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230725154517994.png" alt="image-20230725154517994" style="zoom:50%;" />
 
 这个和NeRF的区别就类似于SRCNN和SRLUT的区别。
 
@@ -376,5 +376,7 @@ PE把这些坐标投射到高维空间变成高维空间的basis，满足了平�
 > 镜面反射、金属的高光学不了，但一般有材质感的反射效果都还是可以学出来的。
 
 存储时，体素剪枝：密度为0的点（如空气），和光线射到该点时能量很弱的点（如物体内部），可以被剪枝掉。
+
+[笔记1](https://zhuanlan.zhihu.com/p/549260115), [教程1](https://zhuanlan.zhihu.com/p/481275794), [教程2](https://zhuanlan.zhihu.com/p/482154458), [教程3](https://blog.csdn.net/minstyrain/article/details/123858806)
 
 #### 四.改进的工作

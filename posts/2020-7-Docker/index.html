@@ -223,16 +223,25 @@ https://zhuanlan.zhihu.com/p/23599229
   <pre>
       退出容器并结束容器运行 exit
       返回容器 先start,再attach
-      退出容器但容器仍运行 Ctrl+P+Q 
+      退出容器但容器仍运行 Ctrl+P+Q
       返回容器 docker attach container_id (或 docker exec -it container_id bashShell)
       进不去使用 docker exec -it containerID /bin/bash
   </pre>
 
   <pre>
+    docker存储的维护：
+    docker system df 查看存储占用情况，
+    docker rmi IMAGE 指定删除镜像
+    docker rm  CONTAINER 指定删除容器
+    docker system prune = docker image prune + docker container prune + docker network prune 自动清理未使用的镜像/容器/网络等。
+  </pre>
+
+
+  <pre>
       本地浏览器连容器内的tensorboard：
       1.创建容器时 -p 6166:6166/tcp -p 6167:6167/tcp 多映射几对端口。（平时9999:22，是因为ssh一般默认22端口）
       2.tensorboard --logdir dirname --bind_all --port 6167，可以tensorboard -h查看--bind_all的作用，可以知道它能将TensorBoard实例暴露给公网。
-      3.本地浏览器输入 http://服务器IP:6166 
+      3.本地浏览器输入 http://服务器IP:6166
   </pre>
 
   <pre>
@@ -241,7 +250,7 @@ https://zhuanlan.zhihu.com/p/23599229
     https://www.jianshu.com/p/c06d532ec8f8
     step2: 修改docker配置
     https://stackoverflow.com/questions/52225493/change-default-docker0-bridge-ip-address
-    
+
   </pre>
 
   <pre>
@@ -253,23 +262,23 @@ https://zhuanlan.zhihu.com/p/23599229
     对于一些教程类型的code，我们经常需要用到jupyter。那么如何在本地利用远程服务器的算力和docker容器启动jupyter呢？
     <b>step1</b>: 首先创建容器时，就记得提前多留出一个特定端口
     docker run -it --runtime=nvidia -p 9999:22 10000:8888 ...
-    
+
     <b>step2</b>: 安装jupyter并进行配置
     安装：pip install notebook
     生成配置文件：jupyter notebook --generate-config
-    修改配置：vim ~/.jupyter/jupyter_notebook_config.py 
+    修改配置：vim ~/.jupyter/jupyter_notebook_config.py
     c.NotebookApp.ip='*'    #表示同一网络的主机都可访问
     c.NotebookApp.password = u'sha1密文'
     c.NotebookApp.open_browser = False
     c.NotebookApp.port =8888    #随便指定一个
-    
+
     第二行的密码是可选的，为了安全起见，我们可以生成一个。
     In [1]: from notebook.auth import passwd
     In [2]: passwd()
     Enter password:
     Verify password:
     # 粘贴到c.NotebookApp.password = u'sha1密文'这儿
-    Out[2]:'sha1:xxxxxxxxx:xxxxxxxxxxxxxxxxxxxxx'   
+    Out[2]:'sha1:xxxxxxxxx:xxxxxxxxxxxxxxxxxxxxx'
 
     <b>step3</b>: 启动jupyter并在本地浏览器打开：
     启动：jupyter notebook
@@ -284,12 +293,12 @@ https://zhuanlan.zhihu.com/p/23599229
   <pre>
     设置管理员密码
     passwd root
-    
+
     enable管理员远程登录
     sudo service ssh start
     sudo vim /etc/ssh/sshd_config
     PermitRootLogin 改为yes
-    
+
     容器内open-ssh开机自动启动
     sudo service ssh restart
     sudo apt update && apt install systemd && systemd enable ssh
@@ -308,7 +317,7 @@ https://zhuanlan.zhihu.com/p/23599229
     ・ cd k8s folder
     ・ Run: sudo kubectl apply -f <yaml file>
     ・ Check status: sudo kubectl get pod -n video
-    ・ Check real-time logs: sudo kubectl logs <pod id> -n video 
+    ・ Check real-time logs: sudo kubectl logs <pod id> -n video
     ・ Stop: sudo kubectl delete –f <yaml file>
 
     （Pod: Kubernetes的基本调度单元称为“pod”。）
@@ -322,14 +331,14 @@ https://zhuanlan.zhihu.com/p/23599229
     alias kstat="sudo kubectl get pod -n video"
     alias kdel="sudo kubectl delete -f"
     alias klog="sudo kubectl logs -n video -f"
-    
+
     最后一个添加了-f，会stream log (持续更新log)，不加-f是一次性显示那一时刻的log。
   </pre>
 
   <pre>
     最后，最自由的使用方式是进入容器内。
     sudo kubectl exec -it <pod id> -n video -- /bin/bash 进 exit 出
- 
+
     也可以定义快捷方式
     alias kexec='AttachDocker(){ sudo kubectl exec -it $1 -n video -- /bin/bash;};AttachDocker'
     进容器后做什么都可以，但不要kill这个pod任务里的进程，不然当前pod会报Error，然后K8s又自动重新帮你开一个新的pod。
@@ -347,7 +356,7 @@ https://zhuanlan.zhihu.com/p/23599229
   <pre>
     现在比较流行的是挂载NFS网络盘，适合深度学习批量传输小文件的需求。
     sudo mount -t nfs -o rw xx.xx.xx.xx(IP):/export/xx(remote directory) /home/xx(local directory)
-    
+
     mount [-t vfstype] [-o  options] device dir
     其他参数见 https://www.cnblogs.com/linuxprobe/p/5473645.html
   </pre>
@@ -358,7 +367,7 @@ https://zhuanlan.zhihu.com/p/23599229
 
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
-A shortname is the unique identifier assigned to a Disqus site. 
+A shortname is the unique identifier assigned to a Disqus site.
 
 https://segmentfault.com/a/1190000005773009
 https://help.disqus.com/en/articles/1717111-what-s-a-shortname

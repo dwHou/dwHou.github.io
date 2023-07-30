@@ -903,6 +903,47 @@ INN的损失，得用全。而且对于Cropout的攻击，损失记得调整有�
 
 ### TalkingHead
 
+#### :page_with_curl:人类面部重演方法综述
+
+中国图像图形学报的一篇论文，[地址](http://www.cjig.cn/jig/ch/reader/view_abstract.aspx?file_no=20220906)
+
+#### :page_with_curl:Wav2Lip
+
+wav2lip的idea是非常自然的，和我思考的结果不谋而合。
+
+首先是输入既有cropout掉嘴部区域的当前帧/序列（<font color="blue">desired target pose prior</font>），也需要有相同ID的完整帧/序列（<font color="blue">unsynced face input</font>）。
+
+- cropout掉的区域选取整个下半矩形区域（cv2.rectangle），最简单高效。虽然如果是下颌区域分割出来进行mask会更精准，效果可能更好。但这样会增加复杂度。（其实根据关键点，cropout一个小patch会更不错）填0或许比填128好，因为最终是sigmoid/hardtanh激活，x=0被激活为y=0.5。
+- 其他时序的同ID序列可以提供嘴部的ID。（或许只需要同ID的下半区域，但需要一点overlap）
+
+它的网络组成部分包括一个生成器，两个判别器。
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230730103914107.png" alt="image-20230730103914107" style="zoom:36%;" />
+
+1. 判别器SyncNet：输入$T_v$时间戳的视频序列和$T_a$时间戳的音频序列，$T_a$的时间戳与$T_v$是否对齐构成了真假样本。
+
+   Wav2lip对SyncNet改造，提出了expert lip-sync discriminator，①将输入灰度图改为输入彩色图，②将网络加深并加入残差跳跃连接，③使用另一种损失函数，余弦相似度+BCE。
+
+2. 生成器LipGAN：[Towards automatic face-to-face translation](https://dl.acm.org/doi/abs/10.1145/3343031.3351066), 是Wav2lip同一作者的前序工作。
+
+   <img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230730084746007.png" alt="image-20230730084746007" style="zoom:50%;" />
+
+#### :page_with_curl:StyleSync
+
+提出很多时候换嘴更实用：
+
+> Under real-world scenarios like audio dubbing, one crucial need is to seamlessly alter the mouth or facial area while preserving other parts of the scene unchanged
+
+认为通过3D转一道可能反而有误差累积。启发咱们直接使用audio。
+
+#### :page_with_curl:Everybody’s Talkin
+
+前作Everything’s Talkin
+
+贡献：
+
+提出音频中身份信息的剥离，把ID-removing和Audio-to-Expression分两部做了。
+
 #### :page_with_curl:3D Face Reconstruction
 
 解决face images - ground truth 3D face数据的稀缺问题。
@@ -1043,6 +1084,18 @@ PIRender的损失函数，训练refine网络时采用了<font color="brown">VGG-
 [Face3D 拓展](https://zhuanlan.zhihu.com/p/530830577)
 
 Gram matrix扩展[1](https://blog.csdn.net/bbbeoy/article/details/108195122),[2](https://www.zhihu.com/question/49805962)
+
+至于输出使用`nn.Sigmoid()`, `nn.Identity()`, `nn.Tanh()`, or `nn.Hardtanh`的考虑：
+
+实验发现`nn.Identity()`即不用激活函数，似乎不如另外两种。
+
+而$tanh(x)=\frac{1-e^{-2x}}{1+e^{-2x}} = 2*(\frac{1}{1+e^{-2x}}-1) = 2sigmoid(2x) - 1$，
+
+它们的关系是线性关系, 所以`Tanh`和`Sigmoid`注定有很多相似点。
+
+相似点：① 有饱和区，在输入较大或较小的区域，梯度变为0，神经元无法更新② 都有指数运算，运算量大。（基于这个原因，我考虑到更高效的`Hardtanh`）
+
+差异点：① 首先，提到激活函数，经常会提到是否是以零为中心的。以零为中心的激活函数不会出现zigzag现象，因此相对来说收敛速度会变快。
 
 #### :page_with_curl:SadTalker
 

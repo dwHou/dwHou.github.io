@@ -36,6 +36,8 @@ CVPR 2020 教程将神经渲染定义为
 
 **[Nerfstudio: A Modular Framework for Neural Radiance Field Development.](https://docs.nerf.studio/en/latest/)** 
 
+**[Neural Volumetric Rendering.](https://www.bilibili.com/video/BV1vs4y1F7De/?share_source=copy_web&vd_source=f26f3b6f5d88e251cea5e8fa6c584e4a)** ECCV 2022.
+
 ## 细分方向
 
 - 逆渲染（去渲染）
