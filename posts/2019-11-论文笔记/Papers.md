@@ -907,26 +907,107 @@ INN的损失，得用全。而且对于Cropout的攻击，损失记得调整有�
 
 中国图像图形学报的一篇论文，[地址](http://www.cjig.cn/jig/ch/reader/view_abstract.aspx?file_no=20220906)
 
+#### :page_with_curl:SyncNet
+
+Out of time: automated lip sync in the wild
+
+> 音视频同步对于制作者和观众来说是电视广播/电影制作中的一个问题。 在电视中，高达数百毫秒的口型同步误差并不罕见。 如果错误原因在于传输，则视频通常会滞后于音频。 这些错误通常很明显——普通观众的可检测性阈值约为 -125 毫秒（音频滞后于视频）到 +45 毫秒（音频领先于视频）。
+
+音频：
+
+输入音频数据是MFCC值。 这是非线性梅尔频率上声音的短期功率谱的表示。 每个时间步使用 13 个梅尔频带。 这些特征以 100Hz 的采样率计算，为 0.2 秒的输入信号提供 20 个时间步长。
+
+视频：
+
+视觉网络的输入格式是一系列嘴部区域的灰度图像，如图 1 所示。5 帧的输入尺寸为 111×111×5 (W×H×T)，以 25Hz 的帧率计算，为 0.2 秒的输入信号。
+
+> 它取特征的方式值得思考下，一个是音频特征的采样率是视频帧率的4倍。另一个是SyncNet的视觉网络只输入嘴部周围，而不是下半张脸。
+
+SyncNet原版输入是
+
+```python
+audio = torch.randn(32, 1, T=5*4, Mel=13).cuda()
+video = torch.randn(32, 5, 120, 120).cuda()
+```
+
+Wav2Lip版SyncNet输入是
+
+```python
+audio = torch.randn(32, 1, Mel=80, T=16=5*16/5).cuda()
+video = torch.randn(32, 3*5, 48, 96).cuda()
+```
+
+注：SyncNet原版输入是MFCC特征，而Wav2Lip版输入是Mel Spectrogram
+
+[参考](https://blog.csdn.net/weixin_44885180/article/details/115718723)
+
+<img src="https://img-blog.csdnimg.cn/20210415105559528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDg4NTE4MA==,size_16,color_FFFFFF,t_70" alt="img" style="zoom:50%;" />
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230814193218217.png" alt="image-20230814193218217" style="zoom:50%;" />
+
+https://github.com/Rudrabha/Wav2Lip/blob/master/audio.py#L45 实现的这个，和torchaudio.compliance.kaldi.fbank是非常类似的，基本是等价，
+
+> 有些不一致的地方，可以通过参数调整
+
+但kaldi用了一些trick，使得更适合ASR项目。所以只能说几乎等价，但不能做到训推不一致那种替换着用。
+
+> https://librosa.org/doc/main/generated/librosa.stft.html 的center boolean参数值得注意，这个影响了音频特征帧数，也决定用idx:idx+step，还是是idx-radius:idx+radius。
+
+不过训练对数据集的精度要求非常高。尤其要确保AVsync。但real-world的数据集很少有满足要求的，所以要预处理：
+
+>- download dataset
+>- convert to 25fps.
+>- change sample rate to 16000hz.
+>- split video less than 5s.
+>- using syncnet_python to filter dataset in range [-3, 3], model works best with [-1,1].
+>- detect faces.
+>- train expert_syncnet with evaluation loss < 0.25 then you can stop your training
+>- train wav2lip model
+
+VoxCeleb的头文件dev_txt有如下信息：
+
+```shell
+Identity  : 	id10661
+Reference : 	lSI69L4DidQ
+Offset    : 	-1 # Offset is about time offset between video and audio
+FV Conf   : 	17.997 # FV: Face Verification
+ASD Conf  : 	6.338 # ASD: Active Speaker Detection
+
+FRAME 	X 	Y 	W 	H
+002316 	223 	80 	130 	130
+002317 	223 	80 	130 	130
+002318 	218 	75 	130 	130
+002319 	213 	71 	130 	130
+```
+
+要针对这个Offset做一些音视频对齐的调整。
+
+
+
+
+
 #### :page_with_curl:Wav2Lip
 
 wav2lip的idea是非常自然的，和我思考的结果不谋而合。
 
 首先是输入既有cropout掉嘴部区域的当前帧/序列（<font color="blue">desired target pose prior</font>），也需要有相同ID的完整帧/序列（<font color="blue">unsynced face input</font>）。
 
-- cropout掉的区域选取整个下半矩形区域（cv2.rectangle），最简单高效。虽然如果是下颌区域分割出来进行mask会更精准，效果可能更好。但这样会增加复杂度。（其实根据关键点，cropout一个小patch会更不错）填0或许比填128好，因为最终是sigmoid/hardtanh激活，x=0被激活为y=0.5。
+- cropout掉的区域选取整个下半矩形区域（cv2.rectangle），最简单高效。虽然如果是下颌区域分割出来进行mask会更精准，效果可能更好。但这样会增加复杂度。（其实根据关键点，cropout一个小patch会好收敛，但也更可能出现训练集泄漏和过拟合）用identity/sigmoid/tanh和输入的形式关系挺大。
 - 其他时序的同ID序列可以提供嘴部的ID。（或许只需要同ID的下半区域，但需要一点overlap）
 
 它的网络组成部分包括一个生成器，两个判别器。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230730103914107.png" alt="image-20230730103914107" style="zoom:36%;" />
+<img src="../../images/typora-images/image-20230730103914107.png" alt="image-20230730103914107" style="zoom:36%;" />
 
 1. 判别器SyncNet：输入$T_v$时间戳的视频序列和$T_a$时间戳的音频序列，$T_a$的时间戳与$T_v$是否对齐构成了真假样本。
+
+   <img src="../../images/typora-images/image-20230731154726583.png" alt="image-20230731154726583" style="zoom:50%;" />
 
    Wav2lip对SyncNet改造，提出了expert lip-sync discriminator，①将输入灰度图改为输入彩色图，②将网络加深并加入残差跳跃连接，③使用另一种损失函数，余弦相似度+BCE。
 
 2. 生成器LipGAN：[Towards automatic face-to-face translation](https://dl.acm.org/doi/abs/10.1145/3343031.3351066), 是Wav2lip同一作者的前序工作。
 
-   <img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230730084746007.png" alt="image-20230730084746007" style="zoom:50%;" />
+   <img src="../../images/typora-images/image-20230730084746007.png" alt="image-20230730084746007" style="zoom:50%;" />
 
 #### :page_with_curl:StyleSync
 
@@ -935,6 +1016,30 @@ wav2lip的idea是非常自然的，和我思考的结果不谋而合。
 > Under real-world scenarios like audio dubbing, one crucial need is to seamlessly alter the mouth or facial area while preserving other parts of the scene unchanged
 
 认为通过3D转一道可能反而有误差累积。启发咱们直接使用audio。
+
+#### :page_with_curl:StyleLipSync
+
+ICCV2023
+
+图像解码器使用了StyleGAN，提供嘴部先验。
+
+对latent使用了滑动平均进行平滑，使得时域更稳定。
+
+提到这几篇论文可以做person- specific finetune：`Mystyle`, `Synctalkface`, `Pivotal tuning for latent-based editing of real images`
+
+它将ref和audio都放在旁支网络了。
+
+#### :page_with_curl:DAE-GAN
+
+得到一个face embedder。我觉得这是一个思路，拿预处理时间换每例处理时间，和Neural voice puppetry需要提前处理得到3D face类似。
+
+我觉得face embedder可以和warpping net一起训练，确保只需warpping就可以得到任意想要的表情、姿态，无需无中生有。这样<font color="brown">embedded face</font>就是一个包含完整ID的没有表情/姿态的中立形式，这种形式也有利于后续的训练。
+
+face embedder的组成也是warppingnet+attention。一个得到displacement field一个得到attention map.
+
+<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230809112826576.png" alt="image-20230809112826576" style="zoom:50%;" />
+
+
 
 #### :page_with_curl:Everybody’s Talkin
 
@@ -977,6 +1082,12 @@ $B_{id}$,  $B_{exp}$,  $B_t$分别是身份、表情和纹理PCA的基。
 图像损失：仅面部区域的像素级损失，关键点损失
 
 感知损失：注意使用的cosine距离
+
+> 但是BFM用的PCA，不方便解耦来预设眼部表情。
+>
+> orthogonal PCA basis are widely used such as BFM [22] and FLAME [30];
+>
+> blendshapes, such as FaceWarehouse [9], FaceScape [53] and Feafa [52].
 
 #### :computer: face3d: Python tools for processing 3D face
 
@@ -1097,6 +1208,18 @@ Gram matrix扩展[1](https://blog.csdn.net/bbbeoy/article/details/108195122),[2]
 
 差异点：① 首先，提到激活函数，经常会提到是否是以零为中心的。以零为中心的激活函数不会出现zigzag现象，因此相对来说收敛速度会变快。
 
+> 当所有梯度同为正或者负时，参数在梯度更新时容易出现zigzag现象。因为梯度更新的最优方向 **不满足** 所有参数梯度正负向一致时，也就是有的参数梯度正向，有的参数梯度负向。（抛开激活函数，当参数量纲差异大时，也容易造成zigzag现象）
+
+<img src="https://picx.zhimg.com/80/v2-bedaefcfbff2453f003365c10fc86356_1440w.webp?source=1940ef5c" alt="img" style="zoom:50%;" />
+
+> zigzag现象如图所示，不妨假设一共两个参数， $w_0$ 和 $w_1$ ，紫色点为参数的最优解，蓝色箭头表示梯度最优方向，红色箭头表示实际梯度更新方向。由于参数的梯度方向一致，要么同正，要么同负，因此更新方向<font color="brown">只能为第三象限角度或第一象限角度</font>，而梯度的最优方向为第四象限角度，也就是参数 $w_0$ 要向着变小的方向， $w_1$ 要向着变大的方向，在这种情况下，每更新一次梯度，不管是同时变小(第三象限角度)还是同时变大(第四象限角度)，总是一个参数更接近最优状态，另一个参数远离最优状态，因此为了使参数尽快收敛到最优状态，出现交替向最优状态更新的现象，也就是zigzag现象。
+
+<font color="brown">所以可以看到`tanh`从效果上是优于`sigmoid`的：</font>
+
+优点：输出关于原点对称，0均值，因此输出有正有负，可以规避zigzag现象，另外原点对称本身是一个很好的优点，有益于网络的学习。
+
+缺点：存在梯度消失问题，tanh的导数计算为 $\frac{4e^{2x}}{(e^{2x}+1)^2} $，取值范围为(0,1]，虽然取值范围比sigmoid导数更广一些，可以缓解梯度消失，但仍然无法避免随着网络层数增多梯度连乘导致的梯度消失问题。 
+
 #### :page_with_curl:SadTalker
 
 CVPR2023 音频驱动说话人的SOTA
@@ -1159,6 +1282,14 @@ CVPR2022
 #### :page_with_curl:Thin-Plate-Spline-Motion-Model
 
 CVPR2022
+
+#### :page_with_curl:Inversion GAN: image2stylegan
+
+优化类方法
+
+#### :page_with_curl:Inversion GAN: pixel2style2pixel
+
+encoder类方法
 
 ### T2I
 

@@ -40,7 +40,13 @@ NeRF是视角生成算法，从少数相片（real camera）中学习生成新�
 ##### 2.应用
 
 - 渲染
+
 - 导出其他格式，比如mesh
+
+  > 现实中的3D数据主要有面数据、点数据、体数据，所以对应催生了一些Mesh、Point Cloud、Volume等中间表示。
+  >
+  > NeRF选择Volume作为场景的中间表达
+
 - 参与其他的计算机视觉任务，比如已有场景建模，再做深度估计、目标检测、反求观测者位置（iNeRF）
 
 ##### 3.体积渲染
@@ -341,6 +347,8 @@ PE把这些坐标投射到高维空间变成高维空间的basis，满足了平�
 
 ##### 5.NeRF
 
+###### 5.1 原理
+
 参考[1](https://zhuanlan.zhihu.com/p/622380174)
 
 对于NeRF，直观地看，输入是五维（3维表示位置，2维表示视角or入射光线角度or经纬度）。重建颜色和密度。
@@ -356,6 +364,75 @@ PE把这些坐标投射到高维空间变成高维空间的basis，满足了平�
 采样也是采用了由粗到精的方式降低成本：
 
 <img src="../../../images/typora-images/image-20230725152855615.png" alt="image-20230725152855615" style="zoom:50%;" />
+
+###### 5.2 代码
+
+[repo URL](https://colab.research.google.com/drive/1oRnnlF-2YqCDIzoc-uShQm8_yymLKiqr)
+
+> 原理上，NeRF的核心idea就是x,d->sigma,color，为了解决loss弄出了基于体素渲染的可微分渲染，为了方便输入特征可学习加入了positional encoding。实现上，代码注释后很容易抓住重点。代码引入相机位姿、ray、chunk等概念。
+
+5.2.1 加载原始数据
+
+```python
+# 加载ShapeNet数据，repo已经提供
+data_f = "66bdbc812bd0a196e194052f3f12cb2e.npz"
+data = np.load(data_f)
+
+# 图像归一化到[0,1]
+images = data["images"] / 255
+```
+
+5.2.2 准备生成光线的基准位置和朝向
+
+```python
+img_size = images.shape[1]
+# 注意: 图像上每个像素都对应一条光线
+# 以图像中心作为坐标原点，这里是要为后续的光线的基准位置和朝向作准备
+xs = torch.arange(img_size) - (img_size / 2 - 0.5)
+ys = torch.arange(img_size) - (img_size / 2 - 0.5)
+
+# 这里需要注意，coords错了会训练不出来，主要是meshgrid的indexing方式
+parms = inspect.signature(torch.meshgrid).parameters.keys()
+# torch.meshgrid的indexing参数官方一直变来变去，需要检查一下。目前版本的参数列表是['tensors', 'indexing']
+# 这里的-y是因为世界坐标系的y轴向上为正
+if 'indexing' in parms:
+    (xs, ys) = torch.meshgrid(xs, -ys, indexing='xy')
+else:
+    (ys, xs) = torch.meshgrid(-ys, xs)
+
+# 这里拿到相机的焦点位置
+focal = float(data["focal"])
+# 这里就是基准的相机平面，在世界坐标系中，注意z是-focal
+# （这里相机的基准为平面，后续进行旋转、缩放，就能还原真实的相机位姿）
+pixel_coords = torch.stack([xs, ys, torch.full_like(xs, -focal)], dim=-1)
+camera_coords = pixel_coords / focal # 相机平面缩放到z=-1位置
+# 光线的基准朝向 shape: [100, 100, 3]
+init_ds = camera_coords.to(device)
+# 光线的基准位置 shape: [3,]
+init_o = torch.Tensor(np.array([0, 0, float(data["camera_distance"])])).to(device)
+```
+
+> 生成光线：需要注意的是，训练集中每张图片都有其对应的相机姿态信息标注
+
+```python
+# 从训练集中随机挑一组相机位姿
+target_img_idx = np.random.randint(images.shape[0])
+target_pose = poses[target_img_idx].to(device)
+
+# 这里R就是熟悉的变换矩阵，看到3*3就知道里面只有旋转和缩放
+R = target_pose[:3, :3]
+
+# 翻译一下,对于100*100的平面上每个三维坐标，都用R进行变换
+# 最终的ds就是旋转后的光线方向向量
+ds = torch.einsum("ij,hwj->hwi", R, init_ds)
+# 因为位置是单独一个向量，直接左乘变换矩阵即可
+os = (R @ init_o).expand(ds.shape)
+
+# 对照原论文中光线公式Section 4: r(t) = o + t * d.
+# 此时我们就已经准备好了模型的输入o和d
+```
+
+
 
 ##### 6.Plenoxels
 
@@ -377,6 +454,8 @@ PE把这些坐标投射到高维空间变成高维空间的basis，满足了平�
 
 存储时，体素剪枝：密度为0的点（如空气），和光线射到该点时能量很弱的点（如物体内部），可以被剪枝掉。
 
-[笔记1](https://zhuanlan.zhihu.com/p/549260115), [教程1](https://zhuanlan.zhihu.com/p/481275794), [教程2](https://zhuanlan.zhihu.com/p/482154458), [教程3](https://blog.csdn.net/minstyrain/article/details/123858806)
+[笔记1](https://zhuanlan.zhihu.com/p/549260115), [教程1](https://zhuanlan.zhihu.com/p/481275794), [教程2](https://zhuanlan.zhihu.com/p/482154458), [教程3](https://blog.csdn.net/minstyrain/article/details/123858806), [教程4](https://blog.csdn.net/qq_44324007/article/details/129998545?spm=1001.2014.3001.5502)
+
+[代码解读](https://liwen.site/archives/2302)
 
 #### 四.改进的工作
