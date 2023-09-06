@@ -416,21 +416,31 @@ init_o = torch.Tensor(np.array([0, 0, float(data["camera_distance"])])).to(devic
 
 ```python
 # 从训练集中随机挑一组相机位姿
+poses = data["poses"]
 target_img_idx = np.random.randint(images.shape[0])
+# [800, 4, 4]
 target_pose = poses[target_img_idx].to(device)
 
 # 这里R就是熟悉的变换矩阵，看到3*3就知道里面只有旋转和缩放
+'''
+如何理解矩阵相乘的几何意义或现实意义？ - DBinary的回答 - 知乎
+https://www.zhihu.com/question/28623194/answer/1486711889
+''' 
 R = target_pose[:3, :3]
+R = torch.Tensor(R)
 
 # 翻译一下,对于100*100的平面上每个三维坐标，都用R进行变换
 # 最终的ds就是旋转后的光线方向向量
 ds = torch.einsum("ij,hwj->hwi", R, init_ds)
 # 因为位置是单独一个向量，直接左乘变换矩阵即可
+# @ 表示常规的数学上定义的矩阵相乘；* 表示两个矩阵对应位置处的两个元素相乘
 os = (R @ init_o).expand(ds.shape)
 
 # 对照原论文中光线公式Section 4: r(t) = o + t * d.
 # 此时我们就已经准备好了模型的输入o和d
 ```
+
+<img src="../../../images/typora-images/v2-bddb06555c7eb1d535091fdf047cc2a5_1440w.png" alt="image-20230725152855615" style="zoom:50%;" />
 
 
 

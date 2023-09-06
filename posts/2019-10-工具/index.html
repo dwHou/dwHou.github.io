@@ -164,7 +164,7 @@ print "---"$NF}' FS='/'</pre>
   <pre>find . -type d -print 2>/dev/null|awk '!/\.$/ {for (i=1;i < NF;i++){d=length($i);if ( d < 5 && i != 1 )d=5;
 printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   </ul>
-    
+
   <h2>远程文件传输</h2>
   <a href="https://man.linuxde.net/scp">scp</a> sftp ftp
   <li><b>FileZilla</b></li>
@@ -244,7 +244,7 @@ step 4 : 成功，A信任B，把公钥交给B。 A一般为服务器，可以从
   <li><b>Latex表格</b> http://www.tablesgenerator.com/latex_tables#  正确用法:在Excel里画好，导入进去自动生成latex</li>
   <li><b>论文压缩篇幅</b> https://blog.csdn.net/u011089523/article/details/83578005  https://blog.csdn.net/gokeyhps/article/details/46984497 </li>
   <li><b>Arxiv</b> 看到比较好的模板或公式，可以到Arxiv source里下载看该文章的源Latex文件</li>
-    
+
   </ul>
 
   <h2>tar打包</h2>
@@ -271,12 +271,12 @@ z就是用gzip这种方式压缩，所以czf就是把一堆文件创建成gzip�
       </pre>
   </ul>
 
- 
+
   <h2>overleaf</h2>
   <ul>
   <li><b>国内服务</b> cn.overleaf.com</li>
   <li><b>自动查错</b> 下划红色波浪线的部分可能有拼写错误。虽然overleaf的拼写检查功能不完善。 </li>
-    
+
   </ul>
 
   <h2>draw.io</h2>
@@ -303,12 +303,12 @@ convert image.png image.eps
 
   <h2>Pytorch/Tensorflow</h2>
   https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/linux-64/
-  
+
   <h2>Docker</h2>
   <ul>
   <li><b>Docker Hello World</b> https://www.runoob.com/docker/docker-hello-world.html </li>
   <li><b>Docker从入门到实践</b> https://yeasy.gitbooks.io/docker_practice/content/ </li>
-    
+
   </ul>
 
   <h2>Pip/Conda</h2>
@@ -333,6 +333,20 @@ export https_proxy=http://1.1.1.1:8082
 env | grep -i proxy 可以查看代理的情况。</pre>
 
       <li>清华TUNA协会很不错</li>
+      <li>当我们安装的包在conda中没有，需要用pip安装的情形&须知</li>
+      <pre>
+1、在anaconda下用pip装包的原因：尽管在anaconda下我们可以很方便的使用conda install来安装我们需要的依赖，但是anaconda本身只提供部分包，远没有pip提供的包多，有时conda无法安装我们需要的包，我们需要用pip将其装到conda环境里。
+
+2、用pip装包时候需要哪些注意事项？
+        
+    2.1 首先，我们需要判断目前我们用的pip指令，会把包装到哪里，通常情况下，pip不像conda一样，他不知道环境，我们首先要确保我们用的是本环境的pip，这样pip install时，包才会创建到本环境中，不然包会创建到base环境，供各个不同的其他conda环境共享，此时可能会产生版本冲突问题（不同环境中可能对同一个包的版本要求不同）
+    which -a pip (如base环境的pip可能在/root/anaconda3/bin/pip；而其他conda环境的pip,可能在/root/anaconda3/envs/my_env/bin/pip)
+    2.2 经试验，anaconda4.8版本，在conda create新的环境时，已经默认在新环境装了pip，此时source activate进入该环境后，用pip命令安装的包，默认会装在本环境中,不必担心pip一个包后后会将其他环境的包改变版本的情况)
+3、安装特定版本的包
+　　conda用“=”，pip用“==”
+　　conda install numpy=1.93
+　　pip  install numpy==1.93
+      </pre>
   </ul>
 
   <h2>SSH</h2>
@@ -386,7 +400,7 @@ env | grep -i proxy 可以查看代理的情况。</pre>
         <pre>bg默认的当前任务是1号，即 bg 等同于 bg %1</pre>
     <li><b>nohup </b>该命令可以在你退出帐户/关闭终端之后继续运行相应的进程</li>
   </ul>
- 
+
 
   <h2>Chrome</h2>
   <ul>
@@ -395,7 +409,7 @@ env | grep -i proxy 可以查看代理的情况。</pre>
   <li><b>高级设置</b> chrome://flags/</li>
   加速下载：Parallel downloading → Enable
   <pre>其他主流浏览器类似：edge://flags/</pre>
-     
+
   </ul>
 
   <h2>Gdown</h2>
@@ -403,16 +417,16 @@ env | grep -i proxy 可以查看代理的情况。</pre>
 
   <li><b>v4.3.0</b> Mitigate PermissionError after many accesses to a particular file. <a href="https://github.com/wkentaro/gdown/releases">releases</a></li>
   <pre>pip install --upgrade --no-cache-dir gdown</pre>
-     
+
   </ul>
-  
-  
+
+
   <h2>vim</h2>
   <ul>
 
   <li><b>命令</b> https://www.runoob.com/linux/linux-vim.html </li>
   <li>:set nu 行号对于调试还是很重要的</li>
-     
+
   </ul>
 
   <h2>crontab</h2>
@@ -427,15 +441,15 @@ env | grep -i proxy 可以查看代理的情况。</pre>
   /var/spool/cron/crontabs/ 查看每个用户的定时任务，然后如果是定时记录log，注意别冲突了，写成同一个路径的文件。
  </pre>
   </ul>
-  
+
   <h2>visio</h2>
   <ul>
-   
+
   <li><b>自动对齐</b> ctrl多选 ；开始→排列 ；开始→位置 </li>
   <li><b>画水平直线</b> 压住shift再拉长度。 这个会经常用到 </li>
   <li><b>手动调整</b> 视图→视觉帮助→对齐(取消) ；视图→网格(勾选) </li>
   <li><b>输出保存png</b> 文件→另存为可移植网络图形（*.png）</li>
-     
+
   </ul>
 
   <h2>HDFS</h2>
@@ -510,7 +524,7 @@ ffmpeg -i input -r 15 output
   <li><a href="https://zhuanlan.zhihu.com/p/85895180">ffmpeg抽帧</a> IBP帧，场景转换帧，均匀抽帧，特定时间抽帧</li>
 
   </ul>
-  
+
   <h2>vscode</h2>
   <ul>
 
@@ -535,7 +549,7 @@ ffmpeg -i input -r 15 output
 Ctrl + D 复制上一行；</pre>
 
   </ul>
-  
+
   <h2>调试</h2>
   写程序最痛苦的事情莫过于调试，程序往往会以你意想不到的流程来运行，你期待执行的语句其实根本没有执行，这时候，就需要调试了。
   <ul>
@@ -567,12 +581,12 @@ logging 模块是线程安全的，但不能保证多进程安全。
 
   <h2>github开源项目</h2>
   <ul>
-   
+
   <li><b>组合搜索</b> ①in:name/description/readme 超分 ②satrs:>1000 ③pushed:>2020-1-15 ④language:python  </li>
   <li><b>高级搜索</b> 上面记不住，可以直接进入 <a href="https://github.com/search/advanced">github.com/search/advanced</a> 对表单进行编辑</li>
   <li><b>话题搜索</b><a href="https://github.com/topics/deep-learning"> github.com/topics </a></li>
   <li><b>隐藏技巧</b><a href="https://www.bilibili.com/video/BV1q54y1f7h6?spm_id_from=333.851.b_7265636f6d6d656e64.1"> see comments</a></li>
-     
+
   </ul>
 
   <h2>github项目徽章</h2>
@@ -644,7 +658,7 @@ Git Commit + Pull + Push三步大法
 
 2、git clone 与 git pull 不同点
 git clone
-git clone --depth=1 -b master xxxxxx.git 
+git clone --depth=1 -b master xxxxxx.git
 当仓库过大时，只克隆某个指定分支的最近一次commit。depth=1表示只克隆最近一次commit，-b指定分支。最终减小下载文件的数目。
 
 2-1、重新拉取其他分支：
@@ -654,7 +668,7 @@ $ git checkout remote_branch_name
 git remote 命令，用来管理追踪的远程分支，git ls-remote origin可以列出所有远程分支。
 
 2-2、重新拉取全部历史：
-$ git fetch --unshallow 
+$ git fetch --unshallow
 
 3、放弃所有本地更改，用远程分支覆盖
 git fetch --all
@@ -688,15 +702,15 @@ https://www.orchome.com/8160
 
 5、关于用户权限
 有时候从个人账户切回公司账户，仍然报错：邮箱不符合规范
-https://blog.csdn.net/weixin_44296929/article/details/116984606 
+https://blog.csdn.net/weixin_44296929/article/details/116984606
 https://cloud.tencent.com/developer/article/1352623  （这个方法只是改一下log，欺骗眼睛，没有实际用处。）
 所以最好还是<font color="red">养成习惯每次使用前检查账户</font>。
 
       </pre>
 
 <pre>
-对git提交进行签名可以使用<font color="red">GPG</font>: 
-<a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key">提交签名</a> 
+对git提交进行签名可以使用<font color="red">GPG</font>:
+<a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key">提交签名</a>
 如果有仓库不需要GPG的，可以vim .git/config
 添加如下几行：
 [commit]
@@ -713,7 +727,7 @@ https://cloud.tencent.com/developer/article/1352623  （这个方法只是改一
   如果你不懂一个东西的内部原理，有时它会变得十分混乱。
   https://www.bilibili.com/video/BV1RJ411X7kh
   1.Git是如何存储信息的？
-    
+
   </pre>
 
   <h2>Sourcetree使用</h2>
@@ -735,7 +749,7 @@ https://cloud.tencent.com/developer/article/1352623  （这个方法只是改一
 
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
-A shortname is the unique identifier assigned to a Disqus site. 
+A shortname is the unique identifier assigned to a Disqus site.
 
 https://segmentfault.com/a/1190000005773009
 https://help.disqus.com/en/articles/1717111-what-s-a-shortname
