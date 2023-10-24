@@ -502,7 +502,90 @@ https://github.com/pytorch/pytorch/issues/48915
         Yeah, my advice to all my students is to never trust any image processing these libraries do. And always, ALWAYS verify visually that you get expected behavior, no matter how “trivial” the operation
       </pre>
 
+      <li>装饰器</li>
+      <pre>
+        注册器的预备知识 ———— 装饰器
+        代码运行期间动态增加功能的方式，称之为“装饰器”（Decorator）
+
+        <font color="brown">为什么要使用装饰器</font>
+        假如现有一个求和函数add，
+        def add(a, b):
+	        print(a + b)
+        现在要求统计函数执行的时长。
+      </pre>
+      <pre>
+        方式1：对原函数做修改。
+        def add(a, b):
+            start = time.time()
+            print(a + b)
+            time.sleep(2) # 模拟耗时操作
+            long = time.time() - start
+            print(f'共耗时{long}秒。')
+        方式1缺点：不仅增加了耦合性，扩展和复用也变得难以实现。如果再增加一个记录日志的功能以及对程序中所有的函数都进行时长统计，工作量将非常大，想想就瑟瑟发抖。
+      </pre>
+      <pre>
+        方式2：
+        def timer(func,*args):
+            start = time.time()
+            func(*args)
+            time.sleep(2)#模拟耗时操作
+            long = time.time() - start
+            print(f'共耗时{long}秒。')
+
+        timer(add,1,2)
+        方式2缺点：没有改变原函数，但是改变了函数调用方式，每个调用add的地方都需要修改。
+      </pre>
+      <pre>
+        方式3：
+        使用装饰器：既不用修改原函数，又不用改变调用方式，装饰器闪亮登场。
+        @timer 装饰器修饰函数 add ()：
+        def timer(func):
+            def wrapper(*args, **kwargs):
+                start = time.time()
+                func(*args, **kwargs) # 此处拿到了被装饰的函数func
+                time.sleep(2)# 模拟耗时操作
+                long = time.time() - start
+                print(f'共耗时{long}秒。')
+            return wrapper # 返回内层函数的引用
+
+        @timer
+        def add(a, b):
+            print(a+b)
+
+        add(1, 2) # 正常调用add
+        把@timer放到add()函数的定义处，相当于执行了语句：add = timer(add)
+      </pre>
+      <pre>
+        <font color="brown">什么是装饰器</font>
+        首先来看几个概念：
+        高阶函数（嵌套函数）：接受函数为入参，或者把函数作为结果返回的函数。
+        闭包：指延伸了作用域的函数，其中包含函数定义体中引用、但是不在定义体中定义的非全局变量。简单来说就是嵌套函数引用了外层函数的变量。
+
+        装饰器本质上就是一个返回函数的高阶函数，它可以让其它函数在不经过修改的情况下增加一些功能。这也就是装饰的意义，这种装饰本身代表着一种功能，如果用它修饰不同的函数，那么也就是为这些函数增加这种功能。
+        一般而言，我们可以使用装饰器提供的 @ 语法糖（Syntactic Sugar）来修饰其它函数或对象。
+      </pre>
+      <pre>
+        装饰器的加载到执行的流程：
+        模块加载 ->> 遇到@，执行timer函数，传入add函数 ->> 生成timer..wrapper函数并命名为add，其实是覆盖了原同名函数 ->> 调用add(1, 2) ->> 去执行timer..wrapper(1, 2) ->> wrapper内部持有原add函数引用(func)，调用func(1, 2) ->>继续执行完wrapper函数
+      </pre>
+      <pre>
+        <font color="seablue">其它问题</font> 
+        - 存在多个装饰器，执行顺序是什么样
+        - 怎么写一个带参数的装饰器
+        - 类装饰器，不带参数的类装饰器？
+        - 经过装饰器之后的函数还是原来的函数吗？如何伪装成原函数，拥有原函数的属性
+        参考链接：https://blog.csdn.net/u011331397/article/details/113481370
+      </pre>
+
+      <li>注册器</li>
+      注册器管理共享相似功能的不同模块， 比如说目标检测中的backbones, head, and necks，许多深度学习的工程使用注册管理数据集和模型模块。
+      <pre>
+      </pre>
+
   </ul>
+
+
+
 
 
 

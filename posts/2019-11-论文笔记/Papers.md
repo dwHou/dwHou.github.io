@@ -454,6 +454,26 @@ $\mathbf{v}'_i = \sum_{j \in \Omega(i)} K\left(\mathbf{f}_i, \mathbf{f}_j\right)
 
 https://www.yuque.com/lart/architecture
 
+
+
+#### :page_with_curl:Component Divide-and-Conquer for Real SR
+
+现有方法：学习具有传统像素级损失的 SR 模型通常很容易受到平坦区域和强边缘的支配。
+
+动机：SR的目标随着具有不同low-level图像元素的LR区域而变化，例如，平坦区域的平滑度保持、边缘的锐化以及纹理的细节增强。
+
+> 复原难度上：纹理 > 边缘 > 平坦区域
+
+本文：提出CDC策略的网络，提出Gradient-Weighted (GW) loss.
+
+GW loss有点类似Focal loss，平衡了不同难度样本的学习问题。
+
+
+
+#### :page_with_curl:GFP-GAN
+
+
+
 #### :page_with_curl:Null-Space Learning for Consistent SR
 
 零空间学习
@@ -1009,6 +1029,20 @@ wav2lip的idea是非常自然的，和我思考的结果不谋而合。
 
    <img src="../../images/typora-images/image-20230730084746007.png" alt="image-20230730084746007" style="zoom:50%;" />
 
+#### :page_with_curl:Wav2Lip 2.0
+
+[paper](https://openaccess.thecvf.com/content/WACV2023/papers/Gupta_Towards_Generating_Ultra-High_Resolution_Talking-Face_Videos_With_Lip_Synchronization_WACV_2023_paper.pdf)
+
+VQ-GAN
+
+#### :page_with_curl:PC-AVS
+
+可以做到音频来自视频A，pose来自视频B，身份来自图片C，合成视频D。
+
+使用了modulated convolution，并且比较了它相对AdaIN的优势。
+
+> StyleGAN2用的前者，StarGAN v2用的后者。 
+
 #### :page_with_curl:StyleSync
 
 提出很多时候换嘴更实用：
@@ -1028,6 +1062,12 @@ ICCV2023
 提到这几篇论文可以做person- specific finetune：`Mystyle`, `Synctalkface`, `Pivotal tuning for latent-based editing of real images`
 
 它将ref和audio都放在旁支网络了。
+
+使用Sync regularizer增加短视频训练对于音频的泛化性。
+
+> fine-tuning the decoder on a short video of a single identity leads to over-fitting and losing the lip-sync generality as the generator can memorize the target video.
+
+和我们的做法不谋而合，很容易想到。区别点只是，该工作先训general的，再finetune person-specific的，过程中加上大规模数据集的音频完成Sync regularizer。 且普通的sync loss一直都在。
 
 #### :page_with_curl:DAE-GAN
 
@@ -1251,13 +1291,11 @@ CVPR2023 音频驱动说话人的SOTA
 
 产业界可以关注：
 
-Studio D-ID, [https://studio.d-id.com/ ](https://studio.d-id.com/), 2023
+[https://aman-agarwal.com/2022/07/01/deepfake-videos-kristof-szabo-colossyan/](https://www.google.com/url?q=https://aman-agarwal.com/2022/07/01/deepfake-videos-kristof-szabo-colossyan/&sa=D&source=docs&ust=1696838688057700&usg=AOvVaw1DRSXTs2lZf5W7CNtDd8y7)
 
-Synthesia, https://share.synthesia.io/, 2023
+现有方法：恢复牙齿使用teeth proxy
 
-HourOne, https://hourone.ai/, 2023
-
-HeyGen, https://www.heygen.com/, 2023
+本文方法：使用预训练的人脸解析网络，配合GFP-GAN修复牙齿
 
 #### :page_with_curl:Structure-Aware Motion Transfer with Deformable Anchor Model
 

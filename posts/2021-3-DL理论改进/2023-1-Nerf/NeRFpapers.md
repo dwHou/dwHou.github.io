@@ -66,7 +66,7 @@ $\sigma, c = F(x_{can},d,\omega_{i}^{a})$，$\omega_{i}^{a}$是外观的不一�
 
 <img src="../../../images/typora-images/image-20230725152329052.png" alt="image-20230725152329052" style="zoom:50%;" />
 
-$d : (x,y,z,\theta, \phi)$ （每一束光线）
+$x_{can}, d : (x,y,z,\theta, \phi)$ （每一束光线）
 
 $x_{can}: voxel$
 
@@ -127,3 +127,4 @@ step 4. 最后，局部变形将基于距离的权重相加 $\sum_{l}{W(x_{obs}-
 <font color="brown">Instant-NGP</font>引入了用于静态场景建模的哈希编码体素网格，允许通过紧凑的模型实现快速和高质量的渲染。 <font color="brown">RAD-NeRF</font>首先将该技术应用于语音肖像合成，并构建了SOTA的实时框架。 然而，这种方法需要一个复杂的基于 MLP 的网格编码器来隐式学习区域的 音频-运动 映射，这限制了其收敛和重建质量。
 
 #### :page_with_curl:Instant-NGP
+
