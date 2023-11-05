@@ -584,6 +584,14 @@ https://gpuopen.com/wp-content/uploads/2019/07/FidelityFX-CAS.pptx
 
 https://www.shadertoy.com/view/wtlSWB#
 
+#### :page_with_curl:Frequency-Assisted Adaptive Sharpening
+
+考虑码率和质量的trade-off。
+
+首先标注最优的锐化水平：
+
+> Given the uncompressed video, we first sharpen it at seven levels (0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0) using the built-in USM function of FFmpeg [2], and then encode the sharpened videos using the HEVC/H.265 codec [3] across five CRF values (21, 24, 27, 30, 33). We define the pre- sharpening encoding process as different encoders by sharpening levels and plot the RD curves for each encoder using the bitrate and VMAF. The overall seven curves are displayed in Fig. 2 (a). Then we consider the encoder with sharpening level 0.0 as the anchor to calculate the BD-Rate of the other sharpening levels. 
+
 #### :computer: Anime4K
 
 这是一个热门[项目](https://bloc97.github.io/Anime4K/)
@@ -1035,6 +1043,12 @@ wav2lip的idea是非常自然的，和我思考的结果不谋而合。
 
 VQ-GAN
 
+#### :page_with_curl:SIDGAN
+
+提出Sync Loss和主观画质的相悖的，因为它提取的embeddings是平均的表征，最小的Sync loss并不和person-specific的嘴形、细节对齐。
+
+本文提出shift-invariant改进版的Sync Loss，利用了polyphase sampling与contextual loss。
+
 #### :page_with_curl:PC-AVS
 
 可以做到音频来自视频A，pose来自视频B，身份来自图片C，合成视频D。
@@ -1266,6 +1280,10 @@ CVPR2023 音频驱动说话人的SOTA
 
 - 对3d系数中的表情系数和头部姿态分开建模，借助了Wav2Lip模型。
 - 对3d系数进行人脸合成，借助了[PIRenderer](https://link.zhihu.com/?target=https%3A//github.com/RenYurui/PIRender)模型合成人脸的方式，改进在于还将3D关键点用进来。
+
+#### :page_with_curl:Speech2Lip
+
+ICCV2023
 
 #### :page_with_curl:Responsive Listening Head Generation: A Benchmark Dataset and Baseline
 
