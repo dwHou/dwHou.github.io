@@ -121,7 +121,7 @@
   <ul>
 
   <li><a href="./PyTorch常用代码段.html"> 📓Cookbook </a></li>
-    
+
   </ul>
 
 
@@ -137,7 +137,7 @@
   以一个开源<a class="hovertext" href="https://github.com/L1aoXingyu/Deep-Learning-Project-Template">codebase</a>为例，
   如果长期维护一个深度学习项目，代码的组织就比较重要了。如何设计一个简单而可扩展的结构是非常重要的。
   这就需要用到软件工程中的OOP设计。让我们高效、标准化地管理深度学习实验。
-  
+
   <ul>
       <style>.hovertext:hover {font-weight: bold; color: #58ACFA; }</style>
       <li><b><a href="./实验管理.html" class="hovertext">跳转</a></b></li>
@@ -145,7 +145,7 @@
       <li>参数管理</li>
       <li>日志管理</li>
   </ul>
-  
+
 
   <h2>遇到的坑/bug</h2>
   <ul>
@@ -569,7 +569,7 @@ https://github.com/pytorch/pytorch/issues/48915
         模块加载 ->> 遇到@，执行timer函数，传入add函数 ->> 生成timer..wrapper函数并命名为add，其实是覆盖了原同名函数 ->> 调用add(1, 2) ->> 去执行timer..wrapper(1, 2) ->> wrapper内部持有原add函数引用(func)，调用func(1, 2) ->>继续执行完wrapper函数
       </pre>
       <pre>
-        <font color="seablue">其它问题</font> 
+        <font color="seablue">其它问题</font>
         - 存在多个装饰器，执行顺序是什么样
         - 怎么写一个带参数的装饰器
         - 类装饰器，不带参数的类装饰器？
@@ -582,6 +582,35 @@ https://github.com/pytorch/pytorch/issues/48915
       <pre>
       </pre>
 
+      <li>lambda表达式</li>
+      lambda表达式也称匿名函数或单表达式函数。
+      <pre>
+        函数式编程（Functional Programming）源自于数学理论，它似乎也更适用于数学计算相关的场景。
+        很多人都在谈论函数式编程，只是很多人站在不同的角度看到的是完全不一样的风景。坚持实用主义的 Python 老司机们对待 FP 的态度应该更加包容，虽然他们不相信银弹，但冥冥中似乎能感觉到 FP 暗合了 Python 教义（The Zen of Python）的某些思想，而且既然 Python 是一门多范式编程语言，并在很大程度上支持函数式编程，那就更没有理由拒绝它。
+      </pre>
+      <pre>
+        map()：将序列中的元素通过处理函数处理后返回一个新的列表
+        filter()：将序列中的元素通过函数过滤后返回一个新的列表
+        reduce()：将序列中的元素通过一个二元函数处理返回一个结果
+
+        filter/reduce/map等基本的内置数据处理函数，需要两个参数,第一个是一个处理函数,第二个是一个序列(list,tuple,dict)。
+      </pre>
+      <pre>
+        lambda是Python支持一种有趣的语法，它允许你快速定义单行的最小函数，类似与C语言中的宏。
+        结合内置函数，可以既高效又简洁：
+        li = [1, 2, 3, 4, 5]
+        # 序列中的每个元素加1
+        map(lambda x: x+1, li) # [2,3,4,5,6]
+
+        # 返回序列中的偶数
+        filter(lambda x: x % 2 == 0, li) # [2, 4]
+
+        # 返回所有元素相乘的结果
+        reduce(lambda x, y: x * y, li) # 1*2*3*4*5 = 120
+      </pre>
+
+
+
   </ul>
 
 
@@ -590,7 +619,7 @@ https://github.com/pytorch/pytorch/issues/48915
 
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
-A shortname is the unique identifier assigned to a Disqus site. 
+A shortname is the unique identifier assigned to a Disqus site.
 
 https://segmentfault.com/a/1190000005773009
 https://help.disqus.com/en/articles/1717111-what-s-a-shortname

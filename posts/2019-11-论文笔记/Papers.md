@@ -402,6 +402,15 @@ class SimpleGate(nn.Module):
 
 
 
+#### :page_with_curl:Rate-Perception Optimized Preprocessing
+
+RPP是b站上产线的一个编码前处理方法。
+
+- 提出adaptive Discrete Cosine Transform (DCT) loss 
+- 结合high-order degra- dation model
+- 结合efficient lightweight network design (1080p@87FPS)
+- 结合Image Quality Assessment model
+
 #### :page_with_curl: Pixel-Adaptive Convolutional Neural Networks
 
 [PAC](https://suhangpro.github.io/pac/)
@@ -1042,6 +1051,18 @@ wav2lip的idea是非常自然的，和我思考的结果不谋而合。
 [paper](https://openaccess.thecvf.com/content/WACV2023/papers/Gupta_Towards_Generating_Ultra-High_Resolution_Talking-Face_Videos_With_Lip_Synchronization_WACV_2023_paper.pdf)
 
 VQ-GAN
+
+#### :page_with_curl:Diff2Lip
+
+We use a PatchGAN [23] discriminator Dψ. This task requires more context than just two frames [4] but no optical flow [52].
+
+[4] Everybody dance now.
+
+[23]  Image-to-image translation with conditional adversarial networks.
+
+[52] Video-to-video synthesis. [intro](https://www.youtube.com/watch?v=GrP_aOSXt5U)
+
+
 
 #### :page_with_curl:SIDGAN
 
