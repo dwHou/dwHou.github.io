@@ -5051,3 +5051,310 @@ int main()
 在现代 C++ 中，惯例是命名您自己定义的类型别名（或任何其他类型），以大写字母开头，不使用后缀。 大写字母有助于区分类型名称与变量和函数名称（以小写字母开头），并防止它们之间的命名冲突。
 
 > 最佳实践：以大写字母开头命名您的类型别名，不要使用后缀（除非您有特殊原因这样做）。
+
+<font color="brown">注：</font>别名实际上并不定义一个新的、不同的类型——它只是为现有类型引入一个新的标识符。 
+
+##### 类型别名的作用域
+
+由于作用域是标识符的属性，因此类型别名标识符遵循与变量标识符相同的作用域规则：块内定义的类型别名具有块作用域并且仅在该块内可用，而全局命名空间中定义的类型别名具有全局作用域，作用域到文件末尾。
+
+##### Typedef
+
+typedef（关键字）是一种为类型创建别名的较旧方法：
+
+```cpp
+// The following aliases are identical
+typedef long Miles;
+using Miles = long;
+
+// typedef其他用法参考：
+https://zhuanlan.zhihu.com/p/413574268
+```
+
+出于向后兼容性的原因，Typedef 仍在 C++ 中使用，但它们已在很大程度上被现代 C++ 中的类型别名所取代。
+
+Typedef 有一些语法问题。 首先，很容易忘记 typedef 的语法：别名和类型哪个在前在后？其次，对于复杂类型，typedef 的语法可能会变得丑陋。最后，“typedef”从字面理解是定义一个新类型，但事实并非如此，它只是一个别名。
+
+> Best practice：Prefer type aliases over typedefs.
+
+###### 知识小灶1
+
+虽然不建议用Typedef定义类型别名，但以下typedef的四种用法还是必要知道的：
+
+1. **定义类型别名**
+
+   ```cpp
+   char *pa, *pb;
+   //char* pa,pb; 同时声明多个指针变量容易漏写星号
+   
+   typedef char* pCHAR;
+   pCHAR pa,pb;
+   ```
+
+2. **typedef struct**
+
+   ```cpp
+   struct Teacher
+   {   
+       int age;
+   }Tea;  //Tea是一个变量  
+   
+   typedef struct Student
+   {   
+       int age;
+   }Stu;  //Stu是一个结构体类型 = struct Student
+   
+   void main()
+   {
+       Tea.age = 30;  //为结构成员赋值
+       Stu Zhang;   //先声明结构类型变量
+       Zhang.age = 15;   //访问结构成员并赋值
+   }
+   ```
+
+3. **定义与平台无关的数据类型**
+
+   ```cpp
+   //比如定义一个叫 REAL 的浮点类型，在目标平台一上，让它表示最高精度的类型为：
+   typedef long double REAL; 
+   //在不支持 long double 的平台二上，改为：
+   typedef double REAL; 
+   //在连 double 都不支持的平台三上，改为：
+   typedef float REAL; 
+   
+   /*
+   也就是说，当跨平台时，只要改下 typedef 本身就行，不用对其他源码做任何修改。 标准库就广泛使用了这个技巧，比如size_t。 另外，因为typedef是定义了一种类型的新别名，不是简单的字符串替换，所以它比宏来得稳健（虽然用宏有时也可以完成以上的用途）。
+   */
+   ```
+
+4. **为复杂的声明定义一个简单别名**
+
+   > 见知识小灶2
+
+   ```cpp
+   //如果觉得这个语法易读性比较差，可以用using
+   typedef int (*FcnType)(double, char); // FcnType hard to find
+   using FcnType = int(*)(double, char); // FcnType easier to find
+   ```
+
+###### 知识小灶2
+
+在阅读Linux的内核代码是经常会遇到一些复杂的声明和定义，例如：
+
+```cpp
+typedef double (* (* (*fp3) ()) [10]) ();
+fp3 a;
+//或用using fp3 = double (* (* (*) ()) [10]) ();
+//根据右左法则解析：fp3 是一个指针（注：函数指针），它指向一个函数，该函数返回一个指针，该指针（注：数组指针）指向一个长度为10的数组，该数组的元素是指向函数的指针，这些函数返回 double 类型。
+```
+
+刚看到这些声明或者定义时，甚至有一定经验的工程师都有可能费解。要理解这些复杂的声明和定义，应该由浅而深，逐步突破。下面先看一些简单的定义：
+
+```cpp
+int a; 		//定义一个整型数
+int *p; 	//定义一个指向整型数的指针
+int **pp; //定义一个指向指针的指针，它指向的指针指向一个整型数
+p = &a;   // p指向整数a所在的地址
+pp = &p;  // pp指向指针p
+
+/*进一步*/
+int arr[10]; //定义一个包含10个整型数的数组
+int (*pArr) [10]; //定义一个指向包含10个整型数数组的指针
+pArr = &arr;
+
+/*更进一步*/
+int (*pfunc) (int); //定义一个指向函数的指针，被指向的函数有一个整型参数并返回整型值
+int (*arr[10]) (int); //定义一个包含10个指针的数组，其中包含的指针指向函数，这些函数有一个整型参数并返回整型值
+arr[0] = pfunc;
+```
+
+###### <font color="brown">**右左法则**</font>
+
+当声明和定义逐渐复杂时，需要使用用于理解复杂定义的“ **右左法则** ”：
+
+> <font color="blue">从变量名看起，先往右，再往左，碰到圆括号就调转阅读的方向；括号内分析完就跳出括号，还是先右后左的顺序。如此循环，直到分析完整个定义。</font>
+
+然后再来分析int (*pfunc) (int);
+
+找到变量名pfunc，先往右是圆括号，调转方向，左边是一个*号，这说明pfunc是一个指针；然后跳出这个圆括号，先看右边，又遇到圆括号，这说明(*pfunc)是一个函数，所以pfunc是一个指向这类函数的指针，即函数指针，这类函数具有一个int类型的参数，返回值类型是int。
+
+同样的，对于int (*arr[10]) (int);
+
+找到变量名arr，先往右是[]运算符，说明arr是一个数组；再往左是一个*号，说明arr数组的元素是指针（**注意**：这里的*修饰的不是arr，而是arr[10]。原因是[]运算符的优先级比*要高，arr先与[]结合。）；跳出圆括号，先往右又遇到圆括号，说明arr数组的元素是指向函数的指针，它指向的函数有一个int类型的参数，返回值类型是int。
+
+参考自[知乎](https://zhuanlan.zhihu.com/p/413574268)
+
+怎么判断定义的是函数指针，还是数组指针，或是数组呢？可以抽象出几个模式：
+
+```cpp
+typedef (*var)(...); // 变量名var与*结合，被圆括号括起来，右边是参数列表。表明这是函数指针
+typedef (*var)[];  //变量名var与*结合，被圆括号括起来，右边是[]运算符。表示这是数组指针
+typedef (*var[])...;// 变量名var先与[]结合，说明这是一个数组（至于数组包含的是什么，由旁边的修饰决定） 
+```
+
+继续熟练<font color="brown">右左法则</font>：
+
+```cpp
+void * (* (*fp1) (int)) [10];
+```
+
+找到变量名fp1，往右看是圆括号，调转方向往左看到*号，说明fp1是一个指针；跳出内层圆括号，往右看是参数列表，说明fp1是一个函数指针，接着往左看是*号，说明指向的函数返回值是指针；再跳出外层圆括号，往右看是[]运算符，说明函数返回的是一个数组指针，往左看是void *，说明数组包含的类型是void *。 简言之 ，fp1是一个指向函数的指针，该函数接受一个整型参数并返回一个指向含有10个void指针数组的指针。
+
+##### 类型别名的作用
+
+1. 使用类型别名进行平台无关的编码
+
+   为了确保每个别名类型解析为正确大小的类型，这种类型别名通常与预处理器指令结合使用：
+
+   ```cpp
+   #ifdef INT_2_BYTES
+   using int8_t = char;
+   using int16_t = int;
+   using int32_t = long;
+   #else
+   using int8_t = char;
+   using int16_t = short;
+   using int32_t = int;
+   #endif
+   ```
+
+   > 第 4.6 课介绍的定宽整数和 size_t 实际上只是各种基本类型的类型别名。
+
+2. 使用类型别名使复杂类型更易于阅读（用得最多）
+
+   ```cpp
+   // 本来易读性差，且容易犯打字错误
+   std::vector<std::pair<std::string, int>> pairlist;
+   
+   // 易读性好很多
+   using VectPairSI = std::vector<std::pair<std::string, int>>; // make VectPairSI an alias for this crazy type
+   ```
+
+   > 如果您还不知道 std::vector、std::pair 或所有这些疯狂的尖括号是什么，请不要担心。 这里您真正需要理解的唯一一件事是，类型别名允许您采用复杂的类型并给它们一个更简单的名称，这使您的代码更易于阅读并节省输入。
+
+3. 使用类型别名来表示值的含义（用得少，不如注释写好一点）
+
+   变量我们有标识符来表示含义，但对于函数的返回值，返回类型并没有告诉我们太多信息。
+
+   ```cpp
+   using TestScore = int;
+   TestScore gradeTest();
+   ```
+
+4. 使用类型别名更容易维护代码（用得少）
+
+    (e.g. from `using StudentId = short;` to `using StudentId = long;`).
+
+   有利有弊，未良好利用的类型别名可能会将熟悉的类型（例如 std::string）隐藏在需要查找的自定义名称后面。
+
+> 最佳实践：当类型别名为代码可读性或代码维护带来明显好处时，请明智地使用类型别名。
+>
+
+#### 10.8 使用 auto 关键字进行对象的类型推导
+
+**类型推导 type deduction）**也称为**类型推断 type inference** ，是一项功能，允许编译器<font color="brown">从对象的初始值设定项推断对象的类型</font>。 
+
+要使用类型推导，请使用 auto 关键字来代替变量的类型：
+
+```cpp
+int main()
+{
+    auto d{ 5.0 }; // 5.0 is a double literal, so d will be type double
+    auto i{ 1 + 2 }; // 1 + 2 evaluates to an int, so i will be type int
+    auto x { i }; // i is an int, so x will be type int too
+    
+    return 0;
+}
+```
+
+尽管对基本数据类型使用类型推导只能节省一些（如果有的话）击键次数，但在以后的课程中，我们将看到类型变得复杂且冗长的示例（并且在某些情况下，可能很难弄清楚）。 在这些情况下，使用 <font color="brown">auto 可以节省大量打字</font>（和拼写错误）。
+
+>相关内容：
+>
+>1. 指针和引用的类型推导规则稍微复杂一些，将会在12.14课讨论。
+>2. 由于历史原因，C++ 中的字符串字面量具有奇怪的类型。 如果您希望从字符串字面量推导出类型 std::string 或 std::string_view，则需要使用 s 或 sv 文字后缀。
+
+##### 类型推导会丢弃 const / constexpr 限定符
+
+```cpp
+int main()
+{
+    const int x { 5 };  // x has type const int (compile-time const)
+    auto y { x };       // y will be type int (const is dropped)
+    constexpr auto z { x }; // z will be type constexpr int (constexpr is reapplied)
+
+    return 0;
+}
+```
+
+##### 类型推导的优点和缺点
+
+优点：
+
+1. 方便代码对齐起来工整
+2. 避免无意中未初始化变量
+3. 保证不会无意中出现影响性能的类型转换
+
+缺点：
+
+1. 掩盖了代码中对象的类型信息。
+2. 初始值的类型发生变化，可能无意中导致类型推导的类型也会发生变化。
+
+#### 10.9 函数的类型推导（一般不建议用）
+
+在C++14中，auto关键字被扩展以进行函数返回类型推导：
+
+```cpp
+auto add(int x, int y)
+{
+    return x + y;
+}
+```
+
+⚠️类型推导不能用于函数参数类型
+
+#### 10.10 函数重载
+
+##### 函数重载的简介
+
+函数重载允许我们创建多个具有相同名称的函数，只要每个相同名称的函数具有不同的参数类型（或者可以通过其他方式区分函数）。 每个共享名称（在同一范围内）的函数称为<font color="brown">重载函数</font>（有时简称为重载）。
+
+```cpp
+int add(int x, int y) // 重载函数，integer version
+{
+    return x + y;
+}
+
+double add(double x, double y) // 重载函数，floating point version
+{
+    return x + y;
+}
+
+int main()
+{
+  	std::cout << add(1, 2); // 重载解析，calls add(int, int)
+    std::cout << '\n';
+    std::cout << add(1.2, 3.4); // 重载解析，calls add(double, double)
+    return 0;
+}
+```
+
+上面的程序将正常编译。 尽管您可能期望这些函数会导致命名冲突，但这里的情况并非如此。 由于<font color="blue">这些函数的参数类型不同，编译器能够区分这些函数</font>，并将它们视为恰好共享名称的单独函数。
+
+##### 重载解析的简介
+
+此外，当对已重载的函数进行函数调用时，编译器将尝试<font color=blue>根据函数调用中使用的参数将函数调用与适当的重载相匹配</font>。 这称为重载解析。
+
+
+
+> 使其编译
+>
+> 为了使使用重载函数的程序能够编译，必须满足以下两点：
+>
+> - 每个重载函数都必须与其他函数区分开来。 我们在第 10.11 课讨论。
+> - 对重载函数的每次调用都必须解析为重载函数。 我们在第 10.12 课——函数重载解析和模糊匹配中讨论编译器如何将函数调用与重载函数相匹配。
+
+#### 10.11 函数重载区分
+
+
+

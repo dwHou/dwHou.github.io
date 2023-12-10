@@ -580,6 +580,110 @@ https://github.com/pytorch/pytorch/issues/48915
       <li>注册器</li>
       注册器管理共享相似功能的不同模块， 比如说目标检测中的backbones, head, and necks，许多深度学习的工程使用注册管理数据集和模型模块。
       <pre>
+        什么是注册：
+        注册器可以看作是完成了string类型->类名（如模型名称->模型类）的一个映射。单个注册器包含的这些类通常具有相似的API，但是实现不同的算法。比如说目标检测中的主干网络。
+      </pre>
+      实现方式：
+      <pre>
+      要注册的模块
+      models/model.py:
+      class Model:
+          pass
+
+      @Registers.model.register
+      class Model1(Model):
+          pass
+
+
+      @Registers.model.register
+      class Model2(Model):
+          pass
+
+
+      @Registers.model.register
+      class Model3(Model):
+          pass
+      </pre>
+      <pre>
+      注册器 Register
+      class Register:
+
+      def __init__(self, registry_name):
+          self._dict = {}
+          self._name = registry_name
+
+      def __setitem__(self, key, value):
+          if not callable(value):
+              raise Exception(f"Value of a Registry must be a callable!\nValue: {value}")
+          if key is None:
+              key = value.__name__
+          if key in self._dict:
+              logging.warning("Key %s already in registry %s." % (key, self._name))
+          self._dict[key] = value
+
+      def register(self, target):
+          """Decorator to register a function or class."""
+
+          def add(key, value):
+              self[key] = value
+              return value
+
+          if callable(target):
+              # @reg.register
+              return add(None, target)
+          # @reg.register('alias')
+          return lambda x: add(target, x)
+
+      def __getitem__(self, key):
+          return self._dict[key]
+
+      def __contains__(self, key):
+          return key in self._dict
+
+      def keys(self):
+          """key"""
+          return self._dict.keys()
+      </pre>
+      <pre>
+        补充一个知识点，<font color="blue">@是python的装饰器语法糖</font>。
+        @decorate
+        def func():
+        等价于
+        func = decorate(func)
+      </pre>
+      <pre>
+        关键是register函数，它可以作为装饰器，注册一个函数或者一个类。例如：
+        @register_obj.register("model_one")
+        class Model1:
+        最终执行的是add("model_one", Model_1)。参考<a href="https://applenob.github.io/python/register/">link</a>
+      </pre>
+      注册器使用实例：我们定义一些简单的函数，例如加减乘除等函数，为了省略重复代码，我们就直接给他们用Register注册了。
+      <pre>
+        1. 注册Register。
+        Register_func = Register("Register_func")
+
+        @Register_func.register
+        def add(x,y):
+            return x+y
+
+        @Register_func.register
+        def minus(x,y):
+            return x-y
+        '''
+        这里register函数是一个装饰器，相当于注册了{minus.__name__:minus}到字典里。
+        '''
+
+        @Register_func.register
+        def multi(x,y):
+            return x*y
+
+        @Register_func.register
+        def div(x,y):
+            return x/y
+        2. 使用注册模块。
+        operation = Register_func["add"]
+        result = operation(1,2)
+        print(result)
       </pre>
 
       <li>lambda表达式</li>

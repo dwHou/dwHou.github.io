@@ -909,6 +909,6 @@ print("Done!")
 
 [笔记1](https://zhuanlan.zhihu.com/p/549260115), [教程1](https://zhuanlan.zhihu.com/p/481275794), [教程2](https://zhuanlan.zhihu.com/p/482154458), [教程3](https://blog.csdn.net/minstyrain/article/details/123858806), [教程4](https://blog.csdn.net/qq_44324007/article/details/129998545?spm=1001.2014.3001.5502)
 
-[代码解读](https://liwen.site/archives/2302)
+[代码解读1](https://liwen.site/archives/2302), [代码解读2](https://zhuanlan.zhihu.com/p/524523357)
 
 #### 四.改进的工作

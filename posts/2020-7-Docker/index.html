@@ -361,6 +361,13 @@ https://zhuanlan.zhihu.com/p/23599229
     其他参数见 https://www.cnblogs.com/linuxprobe/p/5473645.html
   </pre>
 
+  <h3>docker存储清理</h3>
+  <pre>
+    docker system prune -a && docker volume prune
+    前一个命令安全，后一个不到不得已慎用。
+    BE CAREFUL docker volume prunewill remove all your data that was persisted from docker to host disk........ system prune is safe though
+  </pre>
+
 
 
 
