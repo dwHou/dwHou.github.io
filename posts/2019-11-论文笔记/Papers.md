@@ -407,7 +407,7 @@ class SimpleGate(nn.Module):
 RPP是b站上产线的一个编码前处理方法。
 
 - 提出adaptive Discrete Cosine Transform (DCT) loss 
-- 结合high-order degra- dation model
+- 结合high-order degradation model
 - 结合efficient lightweight network design (1080p@87FPS)
 - 结合Image Quality Assessment model
 

@@ -219,6 +219,7 @@ https://zhuanlan.zhihu.com/p/23599229
       docker run -it --runtime=nvidia -p 9999:22 --restart=always --ipc=host -v /data/houdewang/containers-shared:/containers-shared --name=super-resolution hdw-pytorch:1.7.0 bash
       通过宿主机的9999端口可以ssh登录到容器中 (和vscode的remote-SSH功能搭配使用，很方便)
       -v 把宿主机上的目录映射到容器内
+      这样进去的用户名默认都是root，如果为了方便主环境管理员，可以把起容器的命令改进，加一组参数-v /etc/passwd:/etc/passwd -u $(id -u):$(id -g)，使得容器内外的用户名一致。
   </pre>
   <pre>
       退出容器并结束容器运行 exit

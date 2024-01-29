@@ -653,6 +653,7 @@ git push -u origin master
 <font color="red">实际完整命令是：</font>
 git push -u origin <本地分支名称>:<远程分支名称>
 但本地、远端相同名称时可以省略掉 “<本地分支名称>:”，也就是我们常见的形式。然后如果是用“ :<远程分支名称>” 则表示删除远端分支，因为这相当于把空的东西push到远端嘛。git pull<a href="https://blog.csdn.net/Fan0920/article/details/120128883">类似</a>。
+-u或--set-upstream选项用于将本地分支与远程分支关联起来。将本地（远程）分支设置为远程（本地）分支的上游分支。这样，你在后续只需执行git push/pull即可将更改推送/拉取到关联的分支。
 
 仅添加文件、文件夹到已有仓库某路径下
 0. above ; 1. above ;
