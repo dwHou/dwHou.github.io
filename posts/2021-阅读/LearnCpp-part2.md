@@ -444,3 +444,125 @@ int max(int x, int y)
 
 函数模板最好通过示例来教授，因此让我们将上面示例中的普通 max(int, int) 函数转换为函数模板。 这非常简单，我们将解释一路上发生的事情。
 
+```cpp
+int max(int x, int y)
+{
+    return (x < y) ? y : x;
+}
+```
+
+##### 创建模板化 max 函数
+
+1. 请注意，我们在此函数中使用了三次 int 类型：一次用于参数 x，一次用于参数 y，一次用于函数的返回类型。要创建函数模板，我们要做两件事。 首先，我们将用类型模板参数替换特定类型。 在这种情况下，因为我们只有一种需要替换的类型（int），所以我们只需要一个类型模板参数（我们将其称为 T）。这是我们使用单一模板类型的新函数：
+
+   ```cpp
+   T max(T x, T y) // won't compile because we haven't defined T
+   {
+       return (x < y) ? y : x;
+   }
+   ```
+
+   这是一个好的开始——但是，它不会编译，因为编译器不知道 T 是什么！ 而且这仍然是一个普通函数，而不是函数模板。
+
+2. 我们将告诉编译器这是一个函数模板，并且 T 是一个类型模板参数，它是任何类型的占位符。 这是使用所谓的<font color="brown">模板参数声明</font>来完成的。 模板参数声明的范围仅限于后面的函数模板（或类模板）。 因此，每个函数模板（或类）都需要有自己的模板参数声明。
+
+   ```cpp
+   template <typename T> // this is the template parameter declaration
+   T max(T x, T y) // this is the function template definition for max<T>
+   {
+       return (x < y) ? y : x;
+   }
+   ```
+
+   在模板参数声明中，我们从**关键字 template** 开始，它告诉编译器我们正在创建一个模板。 接下来，我们在尖括号 (<>) 内指定模板将使用的所有模板参数。 对于每个类型模板参数，我们使用关键字 typename 或 class，后跟类型模板参数的名称（例如 T）。
+
+> 1. 我们在第 11.8 课中讨论如何创建具有多种模板类型的函数模板
+> 2. 在这种情况下，typename 和 class 关键字没有区别。 您经常会看到人们使用 class 关键字，因为它是较早引入到语言中的。 但是，我们更喜欢较新的 typename 关键字，因为它更清楚地表明类型模板参数可以替换为任何类型（例如基本类型），而不仅仅是类类型。
+
+不管你信不信，我们已经完成了！ 我们创建了 max 函数的模板版本，它现在可以接受不同类型的参数。
+
+因为该函数模板有一个名为 T 的模板类型，所以我们将其称为 max<T>。 在下一课中，我们将了解如何使用 max<T> 函数模板生成一个或多个具有不同类型参数的 max() 函数。
+
+##### 命名模板参数
+
+略 ： ① 简单情况约定用T ② 如果类型模板参数具有某些要求，可以用（T前缀+）大写字母开头的名字
+
+#### 11.7 函数模板实例化
+
+```cpp
+template <typename T>
+T max(T x, T y)
+{
+    return (x < y) ? y : x;
+}
+```
+
+本节，我们将重点介绍如何使用函数模板。
+
+##### 使用函数模板
+
+函数模板实际上并不是函数——它们的代码不会直接编译或执行。 相反，函数模板只有一项工作：生成函数（被编译和执行）。
+
+要使用 max<T> 函数模板，我们可以使用以下语法进行函数调用：
+
+```cpp
+max<actual_type>(arg1, arg2); // actual_type is some actual type, like int or double
+```
+
+这看起来很像普通的函数调用——主要区别是在尖括号中添加了类型（称为模板实参），它指定将用于代替模板类型 T 的实际类型。
+
+```cpp
+#include <iostream>
+
+template <typename T>
+T max(T x, T y)
+{
+    return (x < y) ? y : x;
+}
+
+int main()
+{
+    std::cout << max<int>(1, 2) << '\n';    // instantiates and calls function max<int>(int, int)
+    std::cout << max<int>(4, 3) << '\n';    // calls already instantiated function max<int>(int, int)
+    std::cout << max<double>(1, 2) << '\n'; // instantiates and calls function max<double>(double, double)
+    return 0;
+}
+/*
+当编译器遇到函数调用 max<int>(1, 2) 时，它将确定 max<int>(int, int) 的函数定义尚不存在。 因此，编译器将使用我们的 max<T> 函数模板来创建一个。
+从函数模板（具有模板类型）创建函数（具有特定类型）的过程称为函数模板实例化（或简称实例化）。 当这个过程由于函数调用而发生时，称为隐式实例化。 实例化的函数通常称为函数实例（简称实例）或模板函数。 函数实例在所有方面都是普通函数。
+*/
+```
+
+上述程序里，我们的函数模板将用于生成两个函数：一次将 T 替换为 int，另一次将 T 替换为 double。 所有实例化之后，程序将如下所示：
+
+> 将隐式实例化写为显式形式
+
+```cpp
+#include <iostream>
+
+// a declaration for our function template (we don't need the definition any more)
+template <typename T>
+T max(T x, T y);
+
+template<>
+int max<int>(int x, int y) // the generated function max<int>(int, int)
+{
+    return (x < y) ? y : x;
+}
+
+template<>
+double max<double>(double x, double y) // the generated function max<double>(double, double)
+{
+    return (x < y) ? y : x;
+}
+
+int main()
+{
+    std::cout << max<int>(1, 2) << '\n';    // instantiates and calls function max<int>(int, int)
+    std::cout << max<int>(4, 3) << '\n';    // calls already instantiated function max<int>(int, int)
+    std::cout << max<double>(1, 2) << '\n'; // instantiates and calls function max<double>(double, double)
+
+    return 0;
+}
+```
+

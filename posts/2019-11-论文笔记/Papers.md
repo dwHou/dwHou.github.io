@@ -411,6 +411,12 @@ RPP是b站上产线的一个编码前处理方法。
 - 结合efficient lightweight network design (1080p@87FPS)
 - 结合Image Quality Assessment model
 
+#### :page_with_curl:Netflix Downsampler
+
+https://netflixtechblog.com/for-your-eyes-only-improving-netflix-video-quality-with-neural-networks-5b8d032da09c
+
+Netflix做点播，可以不那么在乎复杂度（相对ZOOM）。看的人多，省的带宽也多，处理片源的成本就不算什么了。
+
 #### :page_with_curl: Pixel-Adaptive Convolutional Neural Networks
 
 [PAC](https://suhangpro.github.io/pac/)
