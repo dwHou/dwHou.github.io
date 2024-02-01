@@ -561,8 +561,288 @@ int main()
     std::cout << max<int>(1, 2) << '\n';    // instantiates and calls function max<int>(int, int)
     std::cout << max<int>(4, 3) << '\n';    // calls already instantiated function max<int>(int, int)
     std::cout << max<double>(1, 2) << '\n'; // instantiates and calls function max<double>(double, double)
+  /*
+  注：当我们实例化 max<double> 时，实例化的函数具有 double 类型的形参。 因为我们提供了 int 实参，所以这些参数将隐式转换为 double。
+  */
+    return 0;
+}
+```
+
+##### 模板参数推导
+
+如果参数的类型与我们想要的实际类型匹配，我们不需要指定实际类型 - 相反，我们可以使用模板参数推导来让编译器在函数调用中<font color="brown">从参数类型中推导应该使用的实际类型</font>。
+
+例如，不用进行这样的函数调用：
+
+```cpp
+std::cout << max<int>(1, 2) << '\n'; // specifying we want to call max<int>
+```
+
+我们可以改为执行以下操作之一：
+
+```cpp
+std::cout << max<>(1, 2) << '\n';
+std::cout << max(1, 2) << '\n';
+
+/*
+两种情况之间的差异与编译器如何从一组重载函数解析函数调用有关。 在最上面的情况下（带有空尖括号），编译器在确定要调用哪个重载函数时将仅考虑 max<int> 模板函数重载。 在最下面的情况下（没有尖括号），编译器将同时考虑 max<int> 模板函数重载和 max 非模板函数重载。
+*/
+```
+
+请注意底例（`std::cout << max(1, 2) << '\n';`）中的<font color="brown">语法看起来与普通函数调用相同！</font> <font color="blue">最佳实践：</font> 在大多数情况下，我们将使用这种正常的函数调用语法来调用从函数模板实例化的函数。
+
+原因如下：
+
+- 语法更加简洁。
+
+- 我们很少会同时拥有匹配的非模板函数和函数模板。
+
+- 如果我们确实有一个匹配的非模板函数和一个匹配的函数模板，我们通常会更喜欢调用非模板函数。
+
+  > 最后一点可能并不明显。 函数模板具有适用于多种类型的实现——但因此，它必须是通用的。 非模板函数仅处理特定的类型组合。 它可以有一个比函数模板版本更优化或更专门针对这些特定类型的实现。 
+
+##### 具有非模板参数的函数模板
+
+```cpp
+// T is a type template parameter
+// double is a non-template parameter
+template <typename T>
+int someFcn (T, double)
+{
+    return 5;
+}
+
+int main()
+{
+    someFcn(1, 3.4); // matches someFcn(int, double)
+    someFcn(1, 3.4f); // matches someFcn(int, double) -- the float is promoted to a double
+    someFcn(1.2, 3.4); // matches someFcn(double, double)
+    someFcn(1.2f, 3.4); // matches someFcn(float, double)
+    someFcn(1.2f, 3.4f); // matches someFcn(float, double) -- the float is promoted to a double
 
     return 0;
 }
 ```
 
+##### 实例化函数可能并不总是可以编译
+
+##### 实例化函数可能并不总是在语义上有意义
+
+```cpp
+#include <iostream>
+#include <string>
+
+template <typename T>
+T addOne(T x);
+{
+    return x + 1;
+}
+
+int main()
+{
+    std::string hello{ "Hello, world!" };
+    std::cout << addOne(hello) << '\n'; // 编译失败，x是std::string时，没法进行x+1
+    std::cout << addOne("Hello, world!") << '\n'; // 虽然C++语法上允许将整数值添加到字符串字面量，但语义上没有意义
+    return 0;
+}
+```
+
+我们可以告诉编译器不允许使用某些参数实例化函数模板。 这是通过使用函数模板专门化来完成的，用到了 <font color="brown">`= delete`</font> 来删除函数。
+
+```cpp
+// Use function template specialization to tell the compiler that addOne(const char*) should emit a compilation error
+template <>
+const char* addOne(const char* x) = delete;
+
+int main()
+{
+    std::cout << addOne("Hello, world!") << '\n'; // compile error
+    return 0;
+}
+```
+
+##### 在多文件中使用函数模板
+
+考虑以下程序，该程序<font color="brown">无法正常工作</font>：
+
+```cpp
+//代码位于文件main.cpp
+#include <iostream>
+
+template <typename T>
+T addOne(T x); // function template forward declaration
+
+int main()
+{
+    std::cout << addOne(1) << '\n';
+    std::cout << addOne(2.3) << '\n';
+
+    return 0;
+}
+```
+
+```cpp
+//代码位于文件add.cpp
+template <typename T>
+T addOne(T x) // function template definition
+{
+    return x + 1;
+}
+```
+
+如果 addOne 是非模板函数，则此程序可以正常工作：在 main.cpp 中，编译器会对 addOne 的前向声明感到满意，并且链接器会将 main.cpp 中对 addOne() 的调用连接到该函数 定义在add.cpp中。
+
+但是因为 addOne 是一个模板，所以这个程序不起作用，我们得到一个链接器错误`...error LNK2019: unresolved external symbol "int __cdecl addOne<int>(int) ...`
+
+**这里编译器的行为是：**
+
+> 在 main.cpp 中，我们调用 addOne<int> 和 addOne<double>。 但是，由于编译器看不到函数模板 addOne 的定义，因此无法在 main.cpp 中实例化这些函数。 不过，它确实看到了 addOne 的前向声明，并且会假设这些函数存在于其他地方，并将在稍后链接。
+>
+> 当编译器去编译add.cpp时，它会看到函数模板addOne的定义。 但是，add.cpp 中没有使用此模板，因此编译器不会实例化任何内容。 最终结果是链接器无法将对 main.cpp 中的 addOne<int> 和 addOne<double> 的调用连接到实际函数，因为这些函数从未实例化。
+
+<font color="blue">最佳实践：</font>解决此问题的最传统方法是将<font color="brown">所有模板代码放入头文件 (.h)</font>，而不是源文件 (.cpp)：
+
+```cpp
+//代码位于文件add.h
+//在main.cpp里再 #include "add.h"
+#ifndef ADD_H
+#define ADD_H
+
+template <typename T>
+T addOne(T x) // function template definition
+{
+    return x + 1;
+}
+
+#endif
+```
+
+您可能想知道为什么这不会导致违反单一定义规则 (one-definition rule)。 ODR 规定类型、模板、内联函数和内联变量允许在不同文件中具有相同的定义。 因此，如果将模板定义复制到多个文件中（只要每个定义相同），就没有问题。
+
+但是实例化函数本身又如何呢？ 如果一个函数在多个文件中实例化，如何不导致违反 ODR？ 答案是从模板隐式实例化的函数是隐式内联的。 如您所知，内联函数可以在多个文件中定义，只要每个文件中的定义相同即可。
+
+>关键见解：
+>
+>模板定义不受单一定义规则的约束，该规则要求每个程序只需要一个定义，因此将相同的模板定义#included 到多个源文件中不是问题。 从函数模板隐式实例化的函数是隐式内联的，因此它们可以在多个文件中定义，只要每个定义都是相同的。
+>
+>模板本身不是内联的，因为内联的概念仅适用于变量和函数。
+
+##### 泛型编程
+
+由于模板类型可以替换为任何实际类型，因此模板类型有时称为泛型类型。 由于模板的编写可以与特定类型无关，因此使用模板进行编程有时称为泛型编程。 C++ 通常非常关注类型和类型检查，相比之下，泛型编程让我们专注于算法逻辑和数据结构设计，而不必过多担心类型信息。
+
+##### 总结
+
+一旦习惯了编写函数模板，您就会发现它们实际上并不比编写具有实际类型的函数花费更长的时间。 函数模板可以通过最大限度地减少需要编写和维护的代码量来显着减少代码维护和错误。
+
+函数模板确实有一些缺点，如果我们不提及它们，那就太失职了。 首先，编译器将为每个函数调用创建（并编译）一个具有唯一参数类型集的函数。 因此，虽然函数模板编写起来很紧凑，但它们可能会扩展为大量代码，从而导致代码膨胀和编译时间变慢。 函数模板的更大缺点是它们往往会产生看起来疯狂的、几乎无法阅读的错误消息，这些错误消息比常规函数更难破译。 这些错误消息可能非常令人生畏，但是一旦您了解了它们想要告诉您的内容，它们所指出的问题通常就很容易解决。
+
+与模板为编程工具包带来的强大功能和安全性相比，这些缺点相当小，因此在需要类型灵活性的任何地方都可以自由使用模板！ 一个好的经验法则是首先创建普通函数，然后如果您发现需要不同参数类型的重载，则将它们转换为函数模板。
+
+#### 11.8 具有多种模板类型的函数模板
+
+下面的程序会编译失败，
+
+```cpp
+#include <iostream>
+
+template <typename T>
+T max(T x, T y)
+{
+    return (x < y) ? y : x;
+}
+
+int main()
+{
+    std::cout << max(2, 3.5) << '\n';  // compile error
+
+    return 0;
+}
+```
+
+在函数调用 max(2, 3.5) 中，我们传递两种不同类型的参数：一种 int 和一种 double。 因为我们在不使用尖括号来指定实际类型的情况下进行函数调用，所以编译器将首先查看 max(int, double) 是否存在非模板匹配。 它不会找到一个。
+
+接下来，编译器将查看是否可以找到函数模板匹配（使用模板参数推导）。 然而，这也会失败，原因很简单：T 只能代表单一类型。 T 没有任何类型允许编译器将函数模板 max<T>(T, T) 实例化为具有两种不同参数类型的函数。 换句话说，由于函数模板中的两个参数都是 T 类型，因此它们必须解析为相同的实际类型。
+
+由于未找到非模板匹配，并且未找到模板匹配，因此函数调用无法解析，并且我们收到编译错误。
+
+您可能想知道为什么编译器不生成函数 max<double>(double, double)，然后使用数值转换将 int 参数类型转换为 double。 答案很简单：<font color="brown">类型转换仅在解决函数重载时完成，而不是在执行模板参数推导时完成。</font>
+
+> 这种类型转换的缺乏是有意为之的，至少有两个原因。 
+>
+> 首先，它有助于使事情变得简单：我们要么找到函数调用参数和模板类型参数之间的精确匹配，要么找不到。 其次，它允许我们设计需要确保两个或多个参数具有相同类型的函数模板。
+
+我们必须找到另一个解决方案。 幸运的是，我们可以通过（至少）三种方式解决这个问题。
+
+##### 1. 使用 static_cast 将实参转换为匹配类型
+
+第一个解决方案是让调用者承担将参数转换为匹配类型的负担。 例如：
+
+```cpp
+std::cout << max(static_cast<double>(2), 3.5) << '\n'; // convert our int to a double so we can call max(double, double)
+```
+
+然而，这个解决方案很笨拙并且难以阅读。
+
+##### 2.提供显式类型模板参数
+
+幸运的是，如果我们指定要使用的显式类型模板参数，则不必使用模板参数推导：
+
+```cpp
+// we've explicitly specified type double, so the compiler won't use template argument deduction
+std::cout << max<double>(2, 3.5) << '\n';
+```
+
+在上面的例子中，我们调用 max<double>(2, 3.5)。 因为我们已经明确指定 T 应替换为 double，所以编译器不会使用模板参数推导。 相反，它只会实例化函数 max<double>(double, double)，然后对任何不匹配的参数进行类型转换。 我们的 int 参数将隐式转换为 double。
+
+虽然这比使用 static_cast 更具可读性，但如果我们在对 max 进行函数调用时根本不需要考虑类型，那就更好了。
+
+##### 3.具有多个模板类型参数的函数模板
+
+问题的根源（root cause）在于我们只为函数模板定义了单一模板类型 (T)，然后指定两个参数必须是同一类型。
+
+解决这个问题的最好方法是重写我们的函数模板，使我们的参数可以解析为不同的类型。 我们现在将使用两个（T 和 U），而不是使用一个模板类型参数 T：
+
+```cpp
+#include <iostream>
+
+template <typename T, typename U> // We're using two template type parameters named T and U
+auto max(T x, U y) // x can resolve to type T, and y can resolve to type U
+{
+    return (x < y) ? y : x; // uh oh, we have a narrowing conversion problem here
+}
+
+int main()
+{
+    std::cout << max(2, 3.5) << '\n';
+    return 0;
+}
+/*
+小tips：为了防止函数的返回经历数字变窄，我们使用了自动返回类型——我们将让编译器从 return 语句中推断出返回类型应该是什么。 
+*/
+```
+
+##### 缩写函数模板 `C++20`
+
+C++20引入了auto关键字的新用法：当auto关键字在普通函数中用作参数类型时，编译器会自动将函数转换为函数模板，每个auto参数成为独立的模板类型参数。 这种创建函数模板的方法称为缩写函数模板。
+
+```cpp
+auto max(auto x, auto y)
+{
+    return (x < y) ? y : x;
+}
+```
+
+是 C++20 中以下内容的简写：
+
+```cpp
+template <typename T, typename U>
+auto max(T x, U y)
+{
+    return (x < y) ? y : x;
+}
+```
+
+如果您希望每个模板类型参数都是独立类型，可以首选此形式，因为它更加简洁和可读。但当您希望多个自动参数为同一类型时，则没有一个简单的缩写函数模板可以实现这样的功能。
+
+#### 11.9 非类型模板参数
