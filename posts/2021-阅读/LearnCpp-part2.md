@@ -893,8 +893,77 @@ int main()
 
 #### 12.1 复合数据类型简介
 
+在第 4.1 课——基本数据类型简介中，我们介绍了基本数据类型，它们是 C++ 作为核心语言的一部分提供的基本数据类型。
+
+到目前为止，我们在程序中已经大量使用了这些基本类型，尤其是 int 数据类型。 虽然这些基本类型对于简单的使用非常有用，但当我们开始做更复杂的事情时，它们并不能满足我们的全部需求。
+
+##### 复合数据类型
+
+<font color="blue">复合数据类型（有时也称为组合数据类型）是可以从基本数据类型（或其他复合数据类型）构造的数据类型。 每种复合数据类型也有其独特的属性。</font>
+
+我们可以使用复合数据类型来优雅地解决一些基本类型难以解决的挑战。
+
+C++ 支持以下复合类型：
+
+- Functions
+- Arrays
+- Pointer types:
+  - Pointer to object
+  - Pointer to function
+- Pointer to member types:
+  - Pointer to data member
+  - Pointer to member function
+- Reference types:
+  - L-value references
+  - R-value references
+- Enumerated types:
+  - Unscoped enumerations
+  - Scoped enumerations
+- Class types:
+  - Structs
+  - Classes
+  - Unions
+
+您已经经常使用一种复合类型：函数（functions）。例如，考虑这个函数：
+
+```cpp
+void doSomething(int x, double y)
+{
+}
+```
+
+该函数的类型为 `void(int, double)`。 请注意，该类型由基本类型组成，因此是复合类型。 当然，函数也有自己的特殊行为（例如可调用）。
+
+#### 12.2 值类别（左值和右值）
+
+在我们讨论第一个复合类型（左值引用）之前，我们先绕道讨论一下什么是<font color="brown">左值</font>。
+
+前面5.4节，介绍过自增/自减运算符的副作用：一个函数或表达式如果存在超过它生命的影响，则被称为有副作用的。
+
+```cpp
+#include <iostream>
+int main()
+{
+    int x { 5 };
+    ++x; // This expression statement has the side-effect of incrementing x
+    std::cout << x << '\n'; // prints 6
+    return 0;
+}
+```
+
+在上面的程序中，表达式 ++x 递增 x 的值，并且即使在表达式完成计算后该值仍保持更改。
+
+##### 表达式的属性
+
+为了帮助确定表达式应如何计算以及可以在何处使用它们，C++ 中的所有表达式都有两个属性：**类型（a type）和 值类别（a value category）**。
+
+**表达式的类型**
+
+表达式的类型等同于由计算表达式得出的值、对象或函数的类型。
 
 
 
 
-## 复合类型：枚举和结构体
+
+
+
