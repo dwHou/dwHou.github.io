@@ -957,13 +957,117 @@ int main()
 
 为了帮助确定表达式应如何计算以及可以在何处使用它们，C++ 中的所有表达式都有两个属性：**类型（a type）和 值类别（a value category）**。
 
-**表达式的类型**
+###### **表达式的类型**
 
 表达式的类型等同于由计算表达式得出的值、对象或函数的类型。
 
+> 请注意，表达式的类型必须在编译时确定（否则类型检查和类型推导将不起作用）——但是，表达式的值可以在编译时（如果表达式是 constexpr）或运行时确定 （如果表达式不是 constexpr）。
 
+###### **表达式的值类别**
 
+```cpp
+int main()
+{
+    int x{};
+    x = 5; // valid: we can assign 5 to x
+    5 = x; // error: can not assign value of x to literal value 5
+    return 0;
+}
+// Assignment requires the left operand to be a modifiable lvalue expression and the right operand to be an rvalue expression （结合左值到右值的转换来思考）
+```
 
+表达式（或子表达式）的值类别指示表达式是否解析为值、函数或某种类型的对象。
 
+在 C++11 之前，只有两种值类别：左值和右值。
 
+> 在 C++11 中，添加了三个值类别（glvalue、prvalue 和 xvalue）。我们将在以后的章节中介绍移动语义（以及附加的三个值类别）。
 
+**左值和右值表达式**
+
+<font color="brown">左值，lvalue</font>（发音为“ell-value”，是“left value”或“locator value”的缩写）是计算结果为<font color="brown">可识别</font>（identifiable）对象或函数（或位字段）的表达式。
+
+> C++ 标准使用了术语“identify”。 具有身份的实体（例如对象或函数）可以与其他类似实体区分开来（通常通过比较实体的地址）。
+
+具有身份🆔的实体可以通过标识符、引用或指针进行访问，并且通常有比单个表达式或语句更长的生命周期。
+
+自从语言中引入常量以来，左值有两种子类型：modifiable / non-modifiable
+
+1. 可修改左值
+2. 不可修改左值（因为左值是 const 或 constexpr）
+
+<font color="brown">右值，rvalue</font>（发音为“arr-value”，是“right value”的缩写）是一个不是左值的表达式。 右值表达式计算结果为一个值。 常见的右值包括字面量（C 风格的字符串字面量除外，它们是左值）以及按值返回的函数和运算符的返回值。 右值是<font color="brown">不可识别的（意味着它们必须立即使用）</font>，并且仅存在于使用它们的表达式的范围内。
+
+```cpp
+int return5()
+{
+    return 5;
+}
+
+int main()
+{
+    int x{ 5 }; // 5 is an rvalue expression
+    const double d{ 1.2 }; // 1.2 is an rvalue expression
+
+    int y { x }; // x is a modifiable lvalue expression
+    const double e { d }; // d is a non-modifiable lvalue expression
+    int z { return5() }; // return5() is an rvalue expression (since the result is returned by value)
+
+    int w { x + 1 }; // x + 1 is an rvalue expression
+    int q { static_cast<int>(d) }; // the result of static casting d to an int is an rvalue expression
+
+    return 0;
+}
+```
+
+您可能想知道为什么 `return5()`、`x + 1` 和 `static_cast<int>(d)` 是右值：答案是因为这些表达式生成不是可识别对象的临时值。
+
+> these expressions produce temporary values that are not identifiable objects.
+
+关键见解
+
+- 左值表达式计算结果为可识别对象。
+- 右值表达式计算结果为一个值。
+
+:bulb: 小Tips：如果您不确定表达式是左值还是右值，请尝试使用运算符&获取其地址，这要求其操作数是左值。 如果 `&(expression);` 可以编译过，表达式必须是左值。
+
+**左值到右值的转换**
+
+让我们再看一下这个例子：
+
+```cpp
+int main()
+{
+    int x { 5 };
+    int y { x }; // x is an lvalue expression
+  	x = x + 1; // 
+    return 0;
+}
+```
+
+如果 `x` 是计算结果为变量 `x` 的左值表达式，那么 `y` 如何最终得到值 `5`？
+
+答案是，在需要右值但提供了左值的上下文中，左值表达式将隐式转换为右值表达式。 int 变量的初始值设定项应为右值表达式。 因此，左值表达式 x 经历了**左值到右值的转换**，计算结果为值 5，然后用该值来初始化 y。
+
+###### **关键见解**
+
+识别左值和右值表达式的经验法则：
+
+- lvalue表达式是指评估为变量或其他可识别对象的表达式，这些对象在表达式结束后仍然存在。
+- rvalue表达式是指评估为字面值或由函数/运算符返回的值的表达式，这些值在表达式结束后被丢弃。
+
+或者更通俗的理解：
+
+- lvalue表达式是指在C++中具有标识符的表达式，这些表达式代表存储位置或对象，其值可以被读取和修改。
+- rvalue表达式是指在C++中没有标识符的表达式，这些表达式代表临时值或中间结果，其值在使用后将被丢弃。
+
+#### 12.3 左值引用
+
+在 C++ 中，引用是现有对象的别名。 一旦定义了引用，对该引用的任何操作都会应用于被引用的对象。
+
+> 关键见解：引用本质上与被引用的对象相同。
+
+这意味着我们可以使用引用来读取或修改被引用的对象。 尽管引用一开始可能看起来很愚蠢、无用或多余，但引用在 C++ 中随处可见（我们将在几节课中看到这样的示例）。
+
+您还可以创建对函数的引用，尽管这样做的频率较低。
+
+现代 C++ 包含两种类型的引用：左值引用和右值引用。 在本章中，我们将讨论左值引用。
