@@ -318,15 +318,67 @@ out += self.time_bias(self.activation(time_emb))[:, :, None, None]
 
 ### DDPM的应用
 
+DDPM的流程图：
+
+<img src="../../../images/typora-images/image-20240401131336101.png" alt="image-20240401131336101" style="zoom:50%;" />
+
 #### 2-1 SR3
+
+Image Super-Resolution via Iterative Refinement（https://ar5iv.labs.arxiv.org/html/2104.07636）
+
+<img src="../../../images/typora-images/image-20240401131547713.png" alt="image-20240401131547713" style="zoom:50%;" />
+
+相对DDPM的改动：
+
+- 改动1：将LR作为condition，与噪声图concat之后送给UNet重建，即UNet现在是输入6通道，输出3通道
+- 改动2：不再直接取$\bar{\alpha}_t$，而是取均匀分布$U[\bar{\alpha}_{t-1}, \bar{\alpha}_t]$
+- 改动3：不再输入$t$给UNet，而是直接输入noise level，也就是改动2中均匀采样的值
+
+> 个人解读：
+>
+> 1. UNet处似乎可以改为pixel-shuffle减少复杂度
+> 2. 之前有文章认为与其隐晦地给一个 $t$，不如将噪声强度  $\bar{\alpha}_t$ 作为条件。
+> 3. 改动2是为改动3作铺垫的，二者连用。从均匀分布 $U[\bar{\alpha}_{t-1}, \bar{\alpha}_t]$ 里取噪声强度，它更<font color="brown">连续</font>，也给后面我们为了推理加速设定新的 $T$​ 提供了支持。
+
+改动2是为可以<font color="blue">任意改变采样的步数</font>铺路，不然UNet只见过离散的条件。
+
+对于 `np.linspace(low, high, T)`，假设训练时 `low=1e-4, high=2e-2, T=2000`，推理时 我们可以设定 新的 $\beta_T$ 和 $T$，比如`low=1e-4, high=0.1, T=100`，只要最后满足$\bar{\alpha}_T \approx 0$。从`T=2000`到`T=100`推理速度快了20倍。
 
 #### 2-2 deblur
 
+Deblurring via Stochastic Refinement（https://openaccess.thecvf.com/content/CVPR2022/papers/Whang_Deblurring_via_Stochastic_Refinement_CVPR_2022_paper.pdf）
+
+> Stochastic Refinement 就是指的扩散模型
+
+提出问题：目前的图像去模糊问题主要是deterministic的方法，重建的视觉质量不好
+
+提出解决方案：1. 提出一个新框架，基于条件扩散模型 2. 同时也提出一个有效的predict-and-refine的方法，并给出扩散模型在PD曲线上遍历的方法
+
+<img src="../../../images/typora-images/image-20240401133238235.png" alt="image-20240401133238235" style="zoom:30%;" />
+
+> 以前的经验和分析得出，在模型能力（size）一定的情况下，它的Perception和Distortion的指标是有trade-off的。
+
+- 改进1：predict and refine策略，实际上就是扩散模型的$x_0$​不再是原图，而是原图和predictor的残差。
+
+  > 由于学残差相对容易，Denoiser（UNet）可以设计得更轻量。
+  >
+  > 这篇文章补充材料就提到initial predictor和denoiser结构是一样的，只是base channel不一样，前者是64，后者是32。参数量上前者约26M，后者约7M。
+
+  <img src="../../../images/typora-images/image-20240401133909118.png" alt="image-20240401133909118" style="zoom:45%;" />
+
+- 改进2：Sample averaging：由于每一次的采样具有随机性，所以可以多重建几次，然后取平均。这是一种比较简单的self-ensemble的方法。
+
+- 改进3：Traversing the PD curve：采样的步数越多，则主观质量越好，反之则客观质量越好。
+
+  <img src="../../../images/typora-images/image-20240401134814277.png" alt="image-20240401134814277" style="zoom:45%;" />
+
+- 改进4：训练时使用小patch，测试时用整张图。很多low-level模型训练都是这么做。
+
 #### 2-3 DDIM
 
-### Score-based model介绍
+Denoising Diffusion Implicit Models（https://ar5iv.labs.arxiv.org/html/2010.02502）
 
-> 扩散模型可以分别溯源到<font color="brown">score-based</font> model（其实出现得更早）和<font color="brown">DDPM</font>，形成了两个分支 。偏理论的follow score-based的多一点，偏应用的follow DDPM的多一点。而它们本质上是一样的。
+回顾DDPM：
 
-### Score-based model的应用
+<img src="../../../images/typora-images/image-20240401164218887.png" alt="image-20240401164218887" style="zoom:35%;" />
 
