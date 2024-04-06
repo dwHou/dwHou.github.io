@@ -2,6 +2,24 @@
 
 （余济闻师弟  研究领域AIGC-related Applications & Generation Models）
 
+#### 1-0 前置知识
+
+1. Markov：当前位置的概率只会受前一时刻概率影响
+
+2. 正态分布（高斯分布）叠加性 
+
+   $E(N1+N2) = \mu_1 + \mu_2$​
+
+   $Var(N1+N2) = \sigma^2_1 + \sigma^2_2$
+
+3. 贝叶斯
+
+   $P(A|B) = \frac{P(B|A)P(A)}{P(B)}$​
+
+   给定条件C下的贝叶斯
+
+   $P(A|B,C)=\frac{P(B|A,C)P(A|C)}{P(B|C)}$
+
 #### 1-1 概述
 
 扩散模型相比GAN的优势是：训练难度（调参）、训练的稳定性、损失函数的简易程度（损失的指向性、可观测性）等方面。
@@ -73,7 +91,7 @@ $N(\mu, \sigma^2) \propto exp(-\frac{1}{2}\frac{(x - \mu)^2}{\sigma^2})$
 
 让我们推一下：
 
-$q(X_{t-1}|X_t)=\frac{q(X_{t-1},X_t)}{q(X_t)}=\frac{q(X_t|X_{t-1})q(X_{t-1})}{q(X_t)}$​
+$q(X_{t-1}|X_t)=\frac{q(X_{t-1},X_t)}{q(X_t)}=\frac{q(X_t|X_{t-1})q(X_{t-1})}{q(X_t)}=\frac{q(X_t|X_{t-1},X_0)q(X_{t-1}|X_0)}{q(X_t|X_0)}=\frac{q(X_t|X_{t-1})q(X_{t-1}|X_0)}{q(X_t|X_0)}$
 
 $\propto exp(-\frac{1}{2}(\frac{(X_t-\sqrt{\alpha_t}X_{t-1})^2}{1-\alpha_t} + \frac{(X_{t-1}-\sqrt{\bar{\alpha}_{t-1}}X_0)^2}{1-\bar{\alpha}_{t-1}} - \frac{(X_t-\sqrt{\bar{\alpha}_t}X_0)^2}{1-\bar{\alpha}_t}))$​
 
@@ -378,7 +396,67 @@ Deblurring via Stochastic Refinement（https://openaccess.thecvf.com/content/CVP
 
 Denoising Diffusion Implicit Models（https://ar5iv.labs.arxiv.org/html/2010.02502）
 
-回顾DDPM：
+回顾DDPM（去噪扩散概率模型）：
+
+> 在 DDPM 中，生成过程被定义为马尔可夫扩散过程的反向过程，在逆向采样过程的每一步，模型预测噪声。
 
 <img src="../../../images/typora-images/image-20240401164218887.png" alt="image-20240401164218887" style="zoom:35%;" />
+
+DDIM（去噪扩散隐式模型）：
+
+> DDIM 的作者发现，扩散过程并不是必须遵循马尔科夫链， 在之后的基于分数的扩散模型以及基于随机微分等式的理论都有相同的结论。 基于此，DDIM 的作者重新定义了扩散过程和逆过程，并提出了一种新的采样技巧， 可以大幅<font color="brown">减少采样</font>的步骤，极大的提高了图像生成的效率，代价是牺牲了一定的多样性， 图像质量略微下降，但在可接受的范围内。
+
+DDIM用待定系数法推导：
+
+回到$q(X_{t-1}|X_t,X_0)=\frac{q(X_t|X_{t-1},X_0)q(X_{t-1}|X_0)}{q(X_t|X_0)}$​
+
+假设$q(X_{t-1}|X_t,X_0)$为任意满足上述等式的分布
+
+待定系数
+
+设：$q(X_{t-1}|X_t,X_0) \sim N(kX_0 + mX_t, \sigma^2I)$​,
+
+$X_{t-1} = kX_0 + mX_t + \sigma Z_t, Z_t \sim N(0, I)$​
+
+$\because X_t = \sqrt{\bar{\alpha}_t} X_0 + \sqrt{1 - \bar{\alpha}_t}Z$
+
+（DDIM论文里的$\alpha_t$、$\beta_t$符号和DDPM里区别很大，我们还是调整一致）
+
+$\therefore X_{t-1} = kX_0 + m(\sqrt{\bar{\alpha}_t} X_0 + \sqrt{1 - \bar{\alpha}_t}Z_t) + \sigma Z$
+
+$= (k + m\sqrt{\bar{\alpha}_t})X_0 + m\sqrt{1 - \bar{\alpha}_t}Z_t + \sigma Z$​
+
+$= (k + m\sqrt{\bar{\alpha}_t})X_0 + {Z}', {Z}' \sim N(0,m^2(1-\bar{\alpha}_t)+\sigma^2)$
+
+$\because X_{t-1} = \sqrt{\bar{\alpha}_{t-1}} X_0 + \sqrt{1 - \bar{\alpha}_{t-1}}Z_{t-1}$
+
+$\therefore k + m\sqrt{\bar{\alpha}_t} = \sqrt{\bar{\alpha}_{t-1}} $ 和 $m^2(1-\bar{\alpha}_t)+\sigma^2 = 1 - \bar{\alpha}_{t-1}$​
+
+求得：$m = \frac{\sqrt{1 - \bar{\alpha}_{t-1} - \sigma^2}}{\sqrt{1 - \bar{\alpha}_t}}$ 和 $k = \sqrt{\bar{\alpha}_{t-1}} - \sqrt{1 - \bar{\alpha}_{t-1} - \sigma^2}\frac{\sqrt{\bar{\alpha}_t}}{\sqrt{1 - \bar{\alpha}_t}}$​
+
+$\therefore q(X_{t-1}|X_t,X_0) \sim N((\sqrt{\bar{\alpha}_{t-1}} - \sqrt{1 - \bar{\alpha}_{t-1} - \sigma^2}\frac{\sqrt{\bar{\alpha}_t}}{\sqrt{1 - \bar{\alpha}_t}})X_0 + \frac{\sqrt{1 - \bar{\alpha}_{t-1} - \sigma^2}}{\sqrt{1 - \bar{\alpha}_t}}X_t, \sigma^2I)$$\sim N((\sqrt{\bar{\alpha}_{t-1}} - \sqrt{1 - \bar{\alpha}_{t-1} - \sigma^2}\frac{\sqrt{\bar{\alpha}_t}}{\sqrt{1 - \bar{\alpha}_t}})(\frac{X_t - \sqrt{1 - \bar{\alpha_t}}\tilde{Z}_\theta}{\sqrt{\bar{\alpha_t}}}) + \frac{\sqrt{1 - \bar{\alpha}_{t-1} - \sigma^2}}{\sqrt{1 - \bar{\alpha}_t}}X_t, \sigma^2I)$​
+
+$\sim N(\sqrt{\bar{\alpha}_{t-1}}(\frac{X_t - \sqrt{1 - \bar{\alpha_t}}\tilde{Z}_\theta}{\sqrt{\bar{\alpha_t}}}) + \sqrt{1 - \bar{\alpha}_{t-1} - \sigma^2}\tilde{Z}_\theta, \sigma^2I)$​
+
+<font color = "brown">$X_{t-1} = \sqrt{\bar{\alpha}_{t-1}}(\frac{X_t - \sqrt{1 - \bar{\alpha_t}}\tilde{Z}_\theta}{\sqrt{\bar{\alpha_t}}}) + \sqrt{1 - \bar{\alpha}_{t-1} - \sigma^2}\tilde{Z}_\theta + \sigma^2 Z$</font>
+
+> DDIM仅用待定系数法假设满足$q(X_{t-1}|X_t,X_0)=\frac{q(X_t|X_{t-1},X_0)q(X_{t-1}|X_0)}{q(X_t|X_0)}$，没有任何其他强假设。推导过程中也没有用到$q(X_t|X_{t-1})$。
+>
+> DDIM 可以看做是 DDPM 的扩展， DDPM 是 DDIM 的一个特例
+
+因为DDIM不是马尔可夫假设，所以不需要严格遵守$X_t \to  X_{t-1}$​​​
+
+$s = t-1, z = t$
+
+$\therefore X_s = \sqrt{\bar{\alpha}_s}(\frac{X_k - \sqrt{1 - \bar{\alpha_k}}\tilde{Z}_\theta}{\sqrt{\bar{\alpha_k}}}) + \sqrt{1 - \bar{\alpha}_s - \sigma^2}\tilde{Z}_\theta + \sigma^2 Z$
+
+$s < k, k \le T, s和k不需要连续$
+
+由于推导中$\sigma^2$全程没有用到，所以神奇的是$\sigma$取任何值，等式都成立。
+
+### 其他优秀博客
+
+[科学空间 生成扩散模型漫谈-系列](https://spaces.ac.cn/archives/9119)
+
+
 
