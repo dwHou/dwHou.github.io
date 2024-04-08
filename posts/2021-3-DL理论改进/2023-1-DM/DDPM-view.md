@@ -93,6 +93,8 @@ $N(\mu, \sigma^2) \propto exp(-\frac{1}{2}\frac{(x - \mu)^2}{\sigma^2})$
 
 $q(X_{t-1}|X_t)=\frac{q(X_{t-1},X_t)}{q(X_t)}=\frac{q(X_t|X_{t-1})q(X_{t-1})}{q(X_t)}=\frac{q(X_t|X_{t-1},X_0)q(X_{t-1}|X_0)}{q(X_t|X_0)}=\frac{q(X_t|X_{t-1})q(X_{t-1}|X_0)}{q(X_t|X_0)}$
 
+> 这里$q(X_t|X_0,X_{t-1})$可以写为$q(X_t|X_{t-1})$，是因为马尔可夫性质，$X_t$时刻只和$X_{t-1}$有关。
+
 $\propto exp(-\frac{1}{2}(\frac{(X_t-\sqrt{\alpha_t}X_{t-1})^2}{1-\alpha_t} + \frac{(X_{t-1}-\sqrt{\bar{\alpha}_{t-1}}X_0)^2}{1-\bar{\alpha}_{t-1}} - \frac{(X_t-\sqrt{\bar{\alpha}_t}X_0)^2}{1-\bar{\alpha}_t}))$​
 
 我们最希望构造出$exp(-\frac{1}{2}\frac{(x - \mu)^2}{\sigma^2})$，其中$x$是这里的$x_{t-1}$
@@ -142,7 +144,11 @@ $= \frac{1-\bar{\alpha}_t}{(1-\bar{\alpha}_t)\sqrt{\alpha}_t}X_t - \frac{\beta_t
 
 $\tilde{Z} = UNet(X_t, t)$，$Z \sim N(0, I)$
 
-> Tips：每一次$X_t$到$X_{t-1}$的去噪过程，还要再加一个新的噪声。这也是希望在它整个reverse过程中增加一些不确定性。实际上整个reverse过程也是想模拟一个分子热运动的布朗运动的过程：<font color="blue">每一步既有确定性的部分，也有随机的扰动</font>。
+> Tips：每一次$X_t$到$X_{t-1}$​的去噪过程，还要再加一个新的噪声。这也是希望在它整个reverse过程中增加一些不确定性。实际上整个reverse过程也是想模拟一个分子热运动的布朗运动的过程：<font color="blue">每一步既有确定性的部分，也有随机的扰动</font>。
+>
+> Q：为什么UNet预测噪声，而不是直接预测$X_{t-1}$
+>
+> 一方面UNet预测噪声比预测图像更容易，另一方面如果是预测图像就形成了Deterministic的过程，失去多样性，最后一方面，论文将变分下界（Variational LB）作为优化目标。
 
 #### 1-5 整理总结
 
@@ -406,13 +412,23 @@ DDIM（去噪扩散隐式模型）：
 
 > DDIM 的作者发现，扩散过程并不是必须遵循马尔科夫链， 在之后的基于分数的扩散模型以及基于随机微分等式的理论都有相同的结论。 基于此，DDIM 的作者重新定义了扩散过程和逆过程，并提出了一种新的采样技巧， 可以大幅<font color="brown">减少采样</font>的步骤，极大的提高了图像生成的效率，代价是牺牲了一定的多样性， 图像质量略微下降，但在可接受的范围内。
 
-DDIM用待定系数法推导：
+去马尔可夫化，DDIM用待定系数法推导：
 
-回到$q(X_{t-1}|X_t,X_0)=\frac{q(X_t|X_{t-1},X_0)q(X_{t-1}|X_0)}{q(X_t|X_0)}$​
+回到$q(X_{t-1}|X_t,X_0)=\frac{q(X_t|X_{t-1},X_0)q(X_{t-1}|X_0)}{q(X_t|X_0)}$​​
+
+> $q(X_s|X_k,X_0)=\frac{q(X_k|X_s,X_0)q(X_s|X_0)}{q(X_k|X_0)} \sim Non-Markov, s<k-1$
+>
+> 由于不是马尔可夫过程，等式右边$q(X_k|X_s,X_0)$, $q(X_s|X_0)$, $q(X_k|X_0)$理论上我们都不知道，左边分布的解的可能性会更多。但由于DDIM只是采样方法，我们用的UNet模型还是DDPM一样的方式训练的，所以$q(X_s|X_0)$, $q(X_k|X_0)$​需要满足DDPM的公式。 
+>
+> 现在仅仅是$q(X_k|X_s,X_0)$是未知的。在DDPM里是转换成了$q(X_t|X_{t-1})$，但这个<font color="brown">马尔可夫的强假设，并不是必要的</font>，因为训练过程中并没有$X_{t-1}$到$X_t$​的加噪。我们不妨使用待定系数法，不限制它的形式。
+>
+> 其实DDIM里前向的增噪过程$q(X_k|X_s,X_0)$也已经和DDPM不一样了，但是因为训练过程中没用到，就没事，只要训练中一步到位加噪的$q(X_t|X_0)$一致，我们的噪声预测模型就依然是DDPM/DDIM通用的。
 
 假设$q(X_{t-1}|X_t,X_0)$为任意满足上述等式的分布
 
-待定系数
+##### 待定系数
+
+:heavy_exclamation_mark:<font color="blue">注：以下推导中的$t-1$都可以替换为$s$，$t$都可以替换为$k$。同样成立</font>
 
 设：$q(X_{t-1}|X_t,X_0) \sim N(kX_0 + mX_t, \sigma^2I)$​,
 
@@ -448,11 +464,58 @@ $\sim N(\sqrt{\bar{\alpha}_{t-1}}(\frac{X_t - \sqrt{1 - \bar{\alpha_t}}\tilde{Z}
 
 $s = t-1, z = t$
 
-$\therefore X_s = \sqrt{\bar{\alpha}_s}(\frac{X_k - \sqrt{1 - \bar{\alpha_k}}\tilde{Z}_\theta}{\sqrt{\bar{\alpha_k}}}) + \sqrt{1 - \bar{\alpha}_s - \sigma^2}\tilde{Z}_\theta + \sigma^2 Z$
+<font color="brown">$\therefore X_s = \sqrt{\bar{\alpha}_s}(\frac{X_k - \sqrt{1 - \bar{\alpha_k}}\tilde{Z}_\theta}{\sqrt{\bar{\alpha_k}}}) + \sqrt{1 - \bar{\alpha}_s - \sigma^2}\tilde{Z}_\theta + \sigma^2 Z$</font>
 
 $s < k, k \le T, s和k不需要连续$
 
-由于推导中$\sigma^2$全程没有用到，所以神奇的是$\sigma$取任何值，等式都成立。
+由于推导中$\sigma^2$全程没有用到，所以神奇的是$\sigma$​取任何值，等式都成立。
+
+> DDIM推导中的<font color="brown">$\sigma$</font>是待定系数法假设来的，是一个<font color="brown">自由随机变量</font>。
+
+- 如果 $\sigma=0$ 就是一个Deterministic的过程（除了一开始的 $X_T$​​ 引入了随机性），牺牲了多样性。
+
+- 如果 $\sigma=\sqrt{\frac{\beta_t(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}}$​ ，代回去推导发现，DDIM和DDPM是等价的。
+
+- 作者发现 $\sigma=0$ 时效果最好。做了一个实验 令$\sigma = \eta \sqrt{\frac{\beta_t(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha}_t}}$​
+
+  <img src="../../../images/typora-images/image-20240407221402514.png" alt="image-20240407221402514" style="zoom:50%;" />
+
+> DDIM牺牲了多样性，提升了图片质量。
+
+<font color="brown">总结，DDIM特点：多样性↓，速度↑，图像质量↑</font> 
+
+在DDIM里，取了$X_T$，后面过程是有一个确定（Deterministic）路径的，已经对应了生成的图像。这也带来一个好处，这使得$X_T$​有点类似VAE、GAN里的latent space，方便进一步研究它的性质（如transfer, similarity, editting）。
+
+##### 直接分析构造（高视角）
+
+<img src="../../../images/typora-images/image-20240408204622924.png" alt="image-20240408204622924" style="zoom:35%;" />
+
+可以看到这每一步都好理解，
+
+- 前三个等式就是解释训练过程中加噪的方式和UNet学到的去噪能力。
+- 第三个等式到第四个等式的转换（$\varepsilon$ 到 $\varepsilon_\theta$）就是一般到特殊。
+- 第五个等式再将噪声拆开，只要满足二者方差相加等于原先的方差。折中回到一个相对比较一般的公式。且当$\sigma \ne 0$时可以增加多样性。
+
+> 等式中用特殊代替一般是成立的。而且确定性更强。
+
+<font color="brown">$X_s = \sqrt{\bar{\alpha}_s}\hat{X}_{0|k}+\sqrt{1-\bar{\alpha}_s-\sigma^2_k}\varepsilon_\theta(X_k,k)+\sigma_k\varepsilon $</font>
+
+#### 2-4 guided-diffusion
+
+Diffusion Models Beat GANs on Image Synthesis （https://proceedings.neurips.cc/paper_files/paper/2021/file/49ad23d1ec9fa4bd8d77d02681df5cfa-Paper.pdf）
+
+> 扩散模型提出后有两大优势：1.生成效果较好，保真度高，2.生成图像多样性高。但直到guided-diffusion这篇文章发表之前，扩散模型在保真度的指标（FID）上一直没有超过GAN。
+
+- 改进1：网络结构优化。
+- 改进2：引入classifier guidance的采样方法，分类器做监督。
+  - 条件生成既可以使得模型可控，又可以增加保真度（研究conditional GAN的学者发现条件生成可以提高FID）。
+  - 不影响训练过程，和DDIM一样，只作为一种采样方式。
+
+
+
+classifier guidance和classifier-free guidance
+
+
 
 ### 其他优秀博客
 
