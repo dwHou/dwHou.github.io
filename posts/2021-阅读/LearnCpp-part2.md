@@ -1066,8 +1066,173 @@ int main()
 
 > 关键见解：引用本质上与被引用的对象相同。
 
-这意味着我们可以使用引用来读取或修改被引用的对象。 尽管引用一开始可能看起来很愚蠢、无用或多余，但引用在 C++ 中随处可见（我们将在几节课中看到这样的示例）。
+这意味着我们可以使用引用来读取或修改被引用的对象。 尽管引用一开始可能看起来很愚蠢、无用或多余，但<font color="blue">引用在 C++ 中随处可见</font>（我们将在几节课中看到这样的示例）。
 
 您还可以创建对函数的引用，尽管这样做的频率较低。
 
 现代 C++ 包含两种类型的引用：左值引用和右值引用。 在本章中，我们将讨论左值引用。
+
+**1. 左值引用类型**
+
+左值引用（通常简称为引用，因为在 C++11 之前只有这一种引用）充当现有左值（例如变量）的别名。
+
+要声明左值引用类型，我们在类型声明中使用与号 (&)：
+
+```cpp
+int      // a normal int type
+int&     // an lvalue reference to an int object
+double&  // an lvalue reference to a double object
+```
+
+**2. 左值引用变量**
+
+我们可以使用lvalue引用类型做的事情之一是创建lvalue引用变量。lvalue引用变量是一个充当lvalue（通常是另一个变量）引用的变量：
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    int x { 5 };    // x is a normal integer variable
+    int& ref { x }; // ref is an lvalue reference variable that can now be used as an alias for variable x
+
+    std::cout << x << '\n';  // print the value of x (5)
+    std::cout << ref << '\n'; // print the value of x via ref (5)
+
+    return 0;
+}
+```
+
+从编译器的角度来看，& 符号是“附加”到类型名称 (int& ref) 还是变量名称 (int &ref) 并不重要，您选择哪个只是风格问题。 现代 C++ 程序员倾向于将 & 附加到类型上，因为它更清楚地表明引用是类型信息的一部分，而不是标识符。
+
+**3. 通过左值引用修改值**
+
+在上面的例子中，我们展示了可以使用引用来读取被引用对象的值。 我们还可以使用引用来修改被引用对象的值：
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    int x { 5 }; // normal integer variable
+    int& ref { x }; // ref is now an alias for variable x
+    std::cout << x << ref << '\n'; // print 55
+    
+    x = 6; // x now has value 6
+    std::cout << x << ref << '\n'; // prints 66
+
+    ref = 7; // the object being referenced (x) now has value 7
+    std::cout << x << ref << '\n'; // prints 77
+
+    return 0;
+}
+```
+
+**4. 左值引用的初始化**
+
+与常量非常相似，所有引用都必须初始化。
+
+<font color="brown">**reference binding**:</font> 当一个引用被对象（或函数）初始化时，我们说它绑定到（is bound to）该对象（或函数）。 
+
+> 被引用的对象（或函数）有时称为引用对象（referent）。即 reference is bound to referent.
+
+- 左值引用必须绑定到可修改的lvalue。
+- 在大多数情况下，引用的类型必须与引用对象的类型匹配（此规则有一些例外，我们将在讨论继承时讨论）
+- 不允许对 void 进行左值引用（这有什么意义？）。
+
+```cpp
+int main()
+{
+    int x { 5 };
+    int& ref { x }; // valid: lvalue reference bound to a modifiable lvalue
+
+    const int y { 5 };
+    int& invalidRef { y };  // invalid: can't bind to a non-modifiable lvalue
+    int& invalidRef2 { 0 }; // invalid: can't bind to an rvalue
+    double& invalidRef3 { x }; // invalid: reference to double cannot bind to int variable
+    return 0;
+}
+```
+
+> 因此，左值引用有时也称为非常量左值引用（有时简称为非常量引用）。
+
+**5. 引用无法重新定位（更改为引用另一个对象）**
+
+一旦初始化，C++ 中的引用就无法重新定位（reseated），这意味着无法将其更改为引用另一个对象。
+
+:warning:新的 C++ 程序员经常尝试通过使用赋值来为引用提供另一个要引用的变量来重新设置引用。 这将编译并运行——但不会按预期运行。 考虑以下程序：
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    int x { 5 };
+    int y { 6 };
+
+    int& ref { x }; // ref is now an alias for x
+
+    ref = y; // assigns 6 (the value of y) to x (the object being referenced by ref)
+    // The above line does NOT change ref into a reference to variable y!
+
+    std::cout << x << '\n'; // user is expecting this to print 5. Perhaps surprisingly, this prints 6.
+
+    return 0;
+}
+```
+
+当在表达式中计算引用时，它会解析为其引用的对象。 所以 ref = y 不会将 ref 更改为现在的引用 y。 相反，因为 ref 是 x 的别名，所以表达式的计算结果就好像写成 x = y ——并且由于 y 的计算结果为值 6，因此为 x 分配了值 6。
+
+**6. 左值引用的范围和持续时间**
+
+引用变量遵循与普通变量相同的范围和持续时间规则。
+
+**引用（reference）和引用对象（referent）具有独立的生命周期**
+
+除了一个例外（我们将在下一课中介绍），引用的生命周期和其所指对象的生命周期是独立的。 换句话说，以下两条都是正确的：
+
+- A reference can be destroyed before the object it is referencing.
+- The object being referenced can be destroyed before the reference.
+
+当reference在referent之前被销毁时，referent不受影响。 以下程序演示了这一点：
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    int x { 5 };
+    {
+        int& ref { x };   // ref is a reference to x
+        std::cout << ref << '\n'; // prints value of ref (5)
+    } // ref is destroyed here -- x is unaware of this
+    std::cout << x << '\n'; // prints value of x (5)
+    return 0;
+} // x destroyed here
+
+/*
+当 ref 消失时，变量 x 照常运行，幸福地没有意识（blissfully unaware）到对它的引用已被销毁。
+The above prints:
+5
+5
+*/
+```
+
+反之，当referent在reference之前被销毁时，该reference将继续引用不再存在的对象，这种引用被称为悬空引用（或 野引用）。 访问悬空引用会导致未定义的行为。悬空引用比较容易避免。
+
+<font color="brown">**7. 引用不是对象**</font>
+
+也许令人惊讶的是，引用在 C++ 中并不是对象。 引用不需要存在或占用存储空间。 如果可能，编译器将通过将所有出现的引用替换为所指对象来优化引用。 然而，这并不总是可能的，在这种情况下，引用可能需要存储。
+
+> 理论上 引用不需要存在或占用存储空间，但实践中可能涉及编译器设计的因素。
+>
+> 具体地：在许多情况下，引用可以完全从程序中被优化掉。 但如果不能，它们通常使用指针来实现，而指针是需要内存的对象。
+
+这也意味着“引用变量”这个术语有点用词不当（misnomer），因为变量是有名称的对象，而引用不是对象。
+
+#### 12.4 对 const 的左值引用
+
+在上一课（12.3——左值引用）中，我们讨论了左值引用如何只能绑定到可修改的左值。 
+
+但是，如果我们想要创建一个 const 变量的引用怎么办？ 普通的左值引用是行不通的。
+

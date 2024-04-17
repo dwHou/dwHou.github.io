@@ -511,7 +511,21 @@ Diffusion Models Beat GANs on Image Synthesis （https://proceedings.neurips.cc/
   - 条件生成既可以使得模型可控，又可以增加保真度（研究conditional GAN的学者发现条件生成可以提高FID）。
   - 不影响训练过程，和DDIM一样，只作为一种采样方式。
 
+设 $y$​ 是类别条件，首先根据贝叶斯公式：
 
+> $\hat{q}(X_{t-1}|y) = \frac{\hat{q}(y|X_{t-1})\hat{q}(X_{t-1})}{\hat{q}(y)}$，再添$X_t$的条件。但数学功底够好，可以直接看出得到下面的等式。
+
+$\hat{q}(X_{t-1}|X_t,y) = \frac{\hat{q}(y|X_{t-1},X_t)\hat{q}(X_{t-1}|X_t)}{\hat{q}(y|X_t)}$​ 
+
+如果沿用DDPM的训练，只是在采样阶段使用classifier guidance，有：
+
+$\hat{q}(X_t|X_{t-1},y) = q(X_t|X_{t-1})$
+
+$\hat{q}(X_0) = q(X_0)$
+
+$\hat{q}(X_T|X_0,y) = \prod_{t=1}^{T}\hat{q}(X_t|X_{t-1},y) $  `Markov`
+
+我们继续推：
 
 classifier guidance和classifier-free guidance
 

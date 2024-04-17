@@ -107,7 +107,7 @@
 
 
 
- 
+
 
 
 
@@ -122,7 +122,7 @@
 
   <h2>CUDA和显卡驱动以及pytorch版本的对应关系</h2>
   <a href="https://developer.aliyun.com/article/1294181">参考文章</a>
-  
+
   <h2>安装多版本CUDA时</h2>
 
   <style>
@@ -151,22 +151,27 @@
   <li><b>修改用户环境</b> https://blog.csdn.net/weixin_38361347/article/details/93392842 </li>
   <li><b>具体修改CUDA环境</b> https://blog.csdn.net/Tesion_001/article/details/89737044 </li>
   <li><b>关于沿用root配置的环境</b> usermod -g root devonn</li>
-  
+
 
   </ul>
 
 
   <h2>安装CUDA</h2>
 
-  
+
     去官网，会生成所需版本的安装命令，如：
     <p><i>wget http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.run</i></p>
     <p><i>sudo sh cuda_10.1.243_418.87.00_linux.run</i></p>
     <p><div align="left">附1：<font color="#FF9797">CUDA对应的NVIDIA驱动版本对照表</font></div> https://blog.csdn.net/zhw864680355/article/details/90411288</p>
     <p>附2：看看别人的填坑记 https://blog.csdn.net/QLULIBIN/article/details/78714596</p>
     <p>注1：配置环境一般考虑较新的稳定版，而不是追求最新。版本还可以再更新，而不要现在去冒着driver、toolkit、platform兼容上的风险。</p>
- 
 
+
+  <h2>安装版本检查</h2>
+  pip安装一般会自动检查，只可以安装和系统适配的whl（Wheel，是Python软件包的一种二进制分发格式）。
+  但希望pip install xx.whl时，一般可以根据名称检查是否适配。下载合适的whl文件。
+  <pre>python -m pip debug --verbose</pre>可以检查环境版本。
+  <pre>xxx-cp310-cp310-manylinux_2_28_x86_64.whl</pre>名称指示了适配的环境版本。
 
 
   <h2>TensorFlow安装</h2>
@@ -215,7 +220,7 @@
     <li><b>驱动卸载重装</b> https://blog.csdn.net/Netooo/article/details/84888755</li>
     <li>记得chmod赋予run文件执行的权限</li>
   </ul>
-  
+
   <h2>关于调试</h2>
   <ul>
     <li><b>|tee log.txt</b> 可以将终端内容输出记录到文本</li>
@@ -269,6 +274,14 @@
             apt-get install ffmpeg libsm6 libxext6  -y
             pip3 install opencv-python
           '''
+          再就是opencv如果不是在ffmpeg之后构建的，可能会有视频数据I/O方面的问题。
+          '''
+          apt update
+          apt install -y ffmpeg
+          pip uninstall -y opencv
+          pip install opencv-python-headless (or apt install -y python3-opencv)
+          '''
+          最后可以打印python3 -c "import cv2; print(cv2.getBuildInformation())"|grep FFMPEG看是不是yes
       </pre>
   </ul>
 
@@ -383,7 +396,7 @@ Terminal <--[<output]--- |       |                \ \
       https://blog.csdn.net/u012759006/article/details/103629003
       不过这个还没正式用过，不晓得有帮助不
 
-      宕机查看下 /var/log/kern.log 
+      宕机查看下 /var/log/kern.log
       也可以看看last -F 宕机当天的用户登录情况
   </pre>
 
@@ -409,10 +422,44 @@ Terminal <--[<output]--- |       |                \ \
   <h2>根据安全要求升级软件包</h2>
   <pre>
     sudo apt update
-    apt list --upgradable 
+    apt list --upgradable
     sudo apt-get install --only-upgrade package1 package2 ...
     或
     sudo apt upgrade package1 package2 ...
+  </pre>
+
+  <h2>man apt查看手册</h2>
+  <pre>
+    apt-get 是在基于 Debain 的机器(如Ubuntu)中进行包/应用程序管理的命令。
+
+    更新和升级选项之间存在细微差别。
+
+    ・sudo apt-get update # 获取最新资源包
+    是更新源列表的命令，如果您修改源列表或者想要进行同步刷新或添加新的ppa源，那么您应该执行上面的命令。
+
+    ・sudo apt-get upgrade # 更新本机已安装的软件包
+    命令将尝试下载在apt服务器上具有更新的所有软件包，然后尝试按下“y”时安装它们。这就像系统升级到新包。
+
+    ・sudo apt-get dist-upgrade # 本机系统软件更新
+    dist-upgrade命令也算更新所有软件包，但是当 upgrade 更新时，如果依赖关系无法解决时可能会报错或者停止，但是 dist-upgrade 命令可以自动解决依赖关系
+
+    但是 dist-update 有一定的危险性，因为可能会更新很大您不希望更新的软件，导致原理的一些需要依赖旧包的软件无法运行。
+    所以，使用 apt-get dist-upgrade 时，请慎重使用，一般是 apt-get update && apt-get upgrade 可以保证系统的完整性。
+  </pre>
+  <pre>
+    apt-get是某些linux发行版使用的一个“包管理器”（还有别的发行版使用yum等，以及brew等其他平台上的包管理器，工作原理类似）。
+包管理器的作用是从 <font color="brown">源（Source）服务器那里下载最新的软件包列表</font> (PS：软件源服务器地址可以在/etc/apt/sources.list里面看到。)，然后在你需要安装某个软件包（apt-get install）的时候从列表里面查询这个软件包的版本信息、系统要求、翻译、依赖项（该软件正常运行必须安装的其它软件）并且添加到同时安装的列表里面，再查询所有安装列表里面的软件包的.deb文件下载地址，最后批量下载，自动分析安装顺序然后安装完成。
+<font color="brown">但是这个软件包列表是不会被自动下载的，需要用户使用apt-get update更新</font>。这样，apt-get才能知道每个软件包的最新信息，从而正确地下载最新版本的软件。
+<font color="brown">至于apt-get upgrade，则是对已经安装的软件包本身进行更新的过程</font>。由于确定要更新的软件包需要对本地安装的版本和列表的版本进行比较，所以要在update以后运行这一条。
+<font color="brown">apt-get dist-upgrade会识别出当依赖关系改变的情形并作出处理</font>(所以通常这个会被认为是有点风险的升级)，而apt-get upgrade对此情形不处理。
+<font color="gray">例如软件包 a 原先依赖 b c d，但是在源里面可能已经升级了，现在是 a 依赖 b c e。这种情况下，dist-upgrade 会删除 d 安装 e，并把 a 软件包升级，而 upgrade 会认为依赖关系改变而拒绝升级 a 软件包。</font>
+  </pre>
+  <pre>
+    <font color="skyblue">请改用 apt 命令</font>
+
+    apt-get 是一个传统的低级命令，可以做很多事情。它适合由其他工具或系统管理员在脚本中使用。
+    apt 命令是一个简化版本，面向普通的临时用户。它比 apt-get 做得更好、更简单。
+    apt 命令被设计为对用户更加友好的 apt-get 替代方案，来自<a href="https://aws.amazon.com/cn/compare/the-difference-between-apt-and-apt-get/">AWS建议</a>
   </pre>
 
   <h2>关于显卡的温度监控</h2>
@@ -471,7 +518,7 @@ def download(ytb_id, args, proxy=None):
     return video_path
 </pre>
 <pre>
-    <a href="https://zhuanlan.zhihu.com/p/431013905">yt-dlp参数：</a> 
+    <a href="https://zhuanlan.zhihu.com/p/431013905">yt-dlp参数：</a>
     yt-dlp -f [下载ID] [代理配置] [视频链接] [合并语句] [外部下载器选择] [下载器参数]
 -f [id] #选择下载内容，注意和 -F 区分。例子中使用137+140，如果你只下载720p则填写22就好，后面的合并语句可不填写。
 --proxy #代理配置 见前文
@@ -482,7 +529,7 @@ def download(ytb_id, args, proxy=None):
 
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
-A shortname is the unique identifier assigned to a Disqus site. 
+A shortname is the unique identifier assigned to a Disqus site.
 
 https://segmentfault.com/a/1190000005773009
 https://help.disqus.com/en/articles/1717111-what-s-a-shortname
