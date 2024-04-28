@@ -39,9 +39,11 @@
 
 <img src="../../../images/typora-images/image-20240316113649024.png" alt="image-20240316113649024" style="zoom:50%;" />
 
-通过公式代入，推导一次$X_t$和$X_{t-2}$的关系，可以找到规律得到$X_t=f^\prime (X_0)$：
+通过公式代入，推导一次$X_t$和$X_{t-2}$的关系，可以找到规律/归纳法得到$X_t=f^\prime (X_0)$​：
 
-**<font color="blue">核心公式</font>** <font color="brown">$X_t = \sqrt{\bar{\alpha_t}} X_0 + \sqrt{1 - \bar{\alpha_t}}Z$,  $\bar{\alpha_t}=\prod_{i=1}^{t}\alpha_i$</font>
+>  [!IMPORTANT]
+>
+> **<font color="blue">核心公式</font>** <font color="brown">$X_t = \sqrt{\bar{\alpha_t}} X_0 + \sqrt{1 - \bar{\alpha_t}}Z$,  $\bar{\alpha_t}=\prod_{i=1}^{t}\alpha_i$</font>
 
 $X_t=f^\prime (X_0)$使得我们获取某一步的扩散数据变得非常方便。
 
@@ -185,7 +187,9 @@ $X_{t-1} = \frac{1}{\sqrt{\alpha}_t}(X_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}_t
 
 #### 1-6 代码实现
 
-:warning: 注：只讲关键部分的代码实现，可以一定程度上减轻复现或者读懂代码的难度。
+>  [!NOTE]
+>
+> 只讲关键部分的代码实现，可以一定程度上减轻复现或者读懂代码的难度。
 
 - 比较简单的玩具代码：https://github.com/abarankab/DDPM
 - 比较实用的代码：https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement
@@ -257,7 +261,9 @@ def get_losses(self, x, t, y):
 # 经过训练得到一个条件去噪网络（这里是UNet）
 ```
 
-> :thumbsup: 在这套代码展开的细节中，运用了很多python的实用的语法。
+>  [!TIP]
+>
+> 在这套代码展开的细节中，运用了很多python的实用的语法。
 
 （3）推理过程？
 
@@ -428,7 +434,9 @@ DDIM（去噪扩散隐式模型）：
 
 ##### 待定系数
 
-:heavy_exclamation_mark:<font color="blue">注：以下推导中的$t-1$都可以替换为$s$，$t$都可以替换为$k$。同样成立</font>
+> [!IMPORTANT]
+>
+> <font color="blue">以下推导中的$t-1$都可以替换为$s$，$t$都可以替换为$k$。同样成立</font>
 
 设：$q(X_{t-1}|X_t,X_0) \sim N(kX_0 + mX_t, \sigma^2I)$​,
 

@@ -1072,9 +1072,28 @@ We use a PatchGAN [23] discriminator Dψ. This task requires more context than j
 
 #### :page_with_curl:SIDGAN
 
+ICCV 2023
+
 提出Sync Loss和主观画质的相悖的，因为它提取的embeddings是平均的表征，最小的Sync loss并不和person-specific的嘴形、细节对齐。
 
 本文提出shift-invariant改进版的Sync Loss，利用了polyphase sampling与contextual loss。
+
+> 改进了SyncNet的网络结构，主要是其中的下采样层使用了自适应多相采样（adaptive polyphase sampling）
+
+#### :page_with_curl:IP Lap
+
+介绍了现状：*person-specific*的方法在应用上的局限，*person-generic*的方法难在保持ID的同时生成好的效果。
+
+#### :page_with_curl:GAIA
+
+扩散模型的数据人效果挺惊艳的，有EMO、VASA-1等文章。我们先从这篇简单一点的baseline（GAIA盖亚，Generative AI for Avatar）入手。
+
+关键：
+
+- 音频驱动avatar，背景保持
+- 大规模数据集，16K的ID
+
+
 
 #### :page_with_curl:PC-AVS
 

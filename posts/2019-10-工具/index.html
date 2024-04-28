@@ -715,6 +715,13 @@ https://blog.csdn.net/weixin_44296929/article/details/116984606
 https://cloud.tencent.com/developer/article/1352623  （这个方法只是改一下log，欺骗眼睛，没有实际用处。）
 所以最好还是<font color="red">养成习惯每次使用前检查账户</font>。
 
+6、强制同步远程分支
+有时候git被弄乱了，希望强制同步为远程分支。可以：
+mv -v .git .git_old &&            # Remove old Git files
+git init &&                       # Initialise new repository
+git remote add origin "${url}" && # Link to old repository
+git fetch &&                      # Get old history
+git reset origin/master --hard # Force update to old history
       </pre>
 
 <pre>
