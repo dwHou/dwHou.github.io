@@ -1236,5 +1236,77 @@ The above prints:
 
 但是，如果我们想要创建一个 const 变量的引用怎么办？ 普通的左值引用是行不通的。
 
-对 const 的左值引用
+**对 const 的左值引用**
+
+通过在声明左值引用时使用 const 关键字，可以绑定到不可修改的左值：
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    const int x { 5 };    // x is a non-modifiable lvalue
+    const int& ref { x }; // okay: ref is a an lvalue reference to a const value
+
+  /*
+  ref可用于访问但不能修改所引用的值
+  */
+    std::cout << ref << '\n'; // okay: we can access the const object
+    ref = 6;                  // error: we can not modify an object through a const reference
+    return 0;
+}
+```
+
+也许令人惊讶的是，
+
+1. 对 const 的左值引用也可以绑定到右值
+2. 对 const 的左值引用甚至可以绑定到不同类型的值，只要这些值可以隐式转换为引用类型
+
+> [!NOTE]
+>
+> 背后原理都是绑定到了临时对象
+
+```cpp
+    const int& ref { 5 }; // okay: 5 is an rvalue
+    std::cout << ref << '\n'; // prints 5
+/*
+发生这种情况时，将创建一个临时对象并使用右值进行初始化，并且对 const 的引用绑定到该临时对象。
+关于临时对象参考第2.4节--局部范围
+*/
+#include <iostream>
+
+
+    // case 1
+    const double& r1 { 5 };  // temporary double initialized with value 5, r1 binds to temporary
+    std::cout << r1 << '\n'; // prints 5
+    // case 2
+    char c { 'a' };
+    const int& r2 { c };     // temporary int initialized with value 'a', r2 binds to temporary
+    std::cout << r2 << '\n'; // prints 97 (since r2 is a reference to int)
+
+/*
+在case1中，创建了一个 double 类型的临时对象，并使用 int 值 5 进行初始化。然后 const double& r1 绑定到该临时 double 对象。
+在case2中，创建了一个 int 类型的临时对象，并使用 char 值 a 进行初始化。 然后 const int& r2 绑定到该临时 int 对象。
+在这两种情况下，引用的类型和临时的类型都匹配。
+*/
+
+```
+
+**对 const 的左值引用也可以绑定可修改的左值**
+
+```cpp
+#include <iostream>
+
+int main()
+{
+    int x { 5 };          // x is a modifiable lvalue
+    const int& ref { x }; // okay: we can bind a const reference to a modifiable lvalue
+
+    std::cout << ref << '\n'; // okay: we can access the object through our const reference
+    ref = 7;                  // error: we can not modify an object through a const reference
+    x = 6;                // okay: x is a modifiable lvalue, we can still modify it through the original identifier
+
+    return 0;
+}
+```
 
