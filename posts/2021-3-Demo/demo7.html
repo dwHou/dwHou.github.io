@@ -6,6 +6,37 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Contact - Dew Hou's blog</title>
 
+        <style>
+            .transcript-container {
+              padding: 20px;
+              background-color: #f8f8f8;
+              border: 1px solid #e0e0e0;
+              border-radius: 4px;
+            }
+
+            .transcript-btn {
+              display: block;
+              margin-bottom: 10px;
+              padding: 10px 20px;
+              background-color: #007bff;
+              color: #fff;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            }
+
+            .transcript-content {
+              font-size: 16px;
+              line-height: 1.5;
+            }
+
+            .timestamp {
+              font-weight: bold;
+              margin-bottom: 5px;
+            }
+        </style>
+
+
         <link rel="shortcut icon" href="images/favicon.ico"/>
 
         <link rel="stylesheet" href="../../fonts/Serif/cmun-serif.css" />
@@ -109,7 +140,7 @@
                             <i class="glyphicon glyphicon-flash" style="transform: rotate(0deg); transform-origin: 50% 50%;"> Playout Graphics and Editing </i>
                         </a> -->
 
-                            <li>The digital human told me a joke</li>
+                            <li>A video demo of an AI-powered digital human telling jokes</li>
                             <video
                                 id="video_chat"
                                 class="video-js vjs-fluid "
@@ -129,6 +160,25 @@
                                   >
                                 </p>
                             </video>
+
+                            <div class="transcript-container">
+                                <button class="transcript-btn">View Transcript</button>
+                                <div class="transcript-content" style="display: none;">
+                                  <div class="timestamp">00:00:00</div>
+                                  <p>In a classroom. The teacher asked the students if you had 10 apples, and I took 9 of them. What would you have? A student eagerly raised his hand and answered, a severe case of kleptomania, ma'am. The whole class erupted into laughter, and even the teacher couldn't help but chuckle. Impressed by the wit, she replied, well, I suppose I should be more careful with my apple picking habits. From that day on the student became known for his quick thinking.</p>
+                                  <div class="timestamp">00:00:25</div>
+                                  <p>and the teacher appreciated the humour in her classroom.</p>
+                                </div>
+                            </div>
+
+                            <script>
+                            const transcriptBtn = document.querySelector('.transcript-btn');
+                            const transcriptContent = document.querySelector('.transcript-content');
+
+                            transcriptBtn.addEventListener('click', () => {
+                                transcriptContent.style.display = transcriptContent.style.display === 'none' ? 'block' : 'none';
+                            });
+                            </script>
 
                             <br>
 
