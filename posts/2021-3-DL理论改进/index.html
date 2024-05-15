@@ -247,7 +247,7 @@ weights 作为神经网络边的权重，这样在测试数据上效果更好。
         将channel方向分group，然后每个group内做归一化，算(C//G)HW的均值；这样与batchsize无关，不受其约束。
         事实上，GN的极端情况就是LN和IN，分别对应G等于1和G等于C，作者在论文中给出G设为32较好.
 
-        注：对于<a href="https://zhuanlan.zhihu.com/p/395855181">LN</a>其实是有两种说法，分别是1. paper or PyTorch style 2. transformer or ConvNext style。不要混淆了：https://github.com/apple/ml-cvnets/issues/34
+        注：对于<a href="https://zhuanlan.zhihu.com/p/395855181">LN</a>其实是有两种说法，分别是1. paper or PyTorch style 2. transformer or ConvNext style。<font color="red">不要混淆</font>了：https://github.com/apple/ml-cvnets/issues/34
 
         有<a href="https://arxiv.org/pdf/2210.05960.pdf">方法</a>提出了PN层，适用于超分辨率任务，因为它在空间上是不均一(inhomogeneous)的。
         BN是(B,HW)维度，GN是(G(ltC),HW)维度，LN是(C,HW)维度，IN是(1,HW)维度，PN是(C)维度。
