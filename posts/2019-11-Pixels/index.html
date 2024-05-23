@@ -132,6 +132,14 @@
     view(batch_size, channels, out_height, block_size, out_width, block_size)是down-shuffle，
     view(batch_size, channels, block_num, out_height, block_num, out_width)是图像分块。 
 </pre>
+<pre>
+    其实有个类似的有趣的话题，关于时序的建模
+    加入source_clip是B,T,C,H,W维度的时序序列。
+    方式1: source_clip = torch.cat(torch.split(source_clip, 1, dim=1), 0).squeeze(1).float().cuda()
+    方式2: source_clip = source_clip.reshape(B*T,C,H,W)
+    这两个也是有些许不同的，网络可以从 batch 维度学习到一些有价值的信息，如样本的采样顺序、相关性、噪声干扰等。
+    但我觉得最终这两应该都影响，只是大家都沿用了Wav2Lip的实现方式。
+</pre>
 
 <h2>Global-skip-connection and Meanshift</h2>
 <pre>

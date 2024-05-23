@@ -986,7 +986,7 @@ video = torch.randn(32, 3*5, 48, 96).cuda()
 
 <img src="https://img-blog.csdnimg.cn/20210415105559528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDg4NTE4MA==,size_16,color_FFFFFF,t_70" alt="img" style="zoom:50%;" />
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230814193218217.png" alt="image-20230814193218217" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20230814193218217.png" alt="image-20230814193218217" style="zoom:50%;" />
 
 https://github.com/Rudrabha/Wav2Lip/blob/master/audio.py#L45 实现的这个，和torchaudio.compliance.kaldi.fbank是非常类似的，基本是等价，
 
@@ -1124,6 +1124,8 @@ ICCV 2023
 
 认为通过3D转一道可能反而有误差累积。启发咱们直接使用audio。
 
+
+
 #### :page_with_curl:StyleLipSync
 
 ICCV2023
@@ -1150,7 +1152,7 @@ ICCV2023
 
 face embedder的组成也是warppingnet+attention。一个得到displacement field一个得到attention map.
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230809112826576.png" alt="image-20230809112826576" style="zoom:50%;" />
+<img src="../../images/typora-images/image-20230809112826576.png" alt="image-20230809112826576" style="zoom:50%;" />
 
 
 
@@ -1376,7 +1378,7 @@ ICCV2023
 
 #### :page_with_curl:DINet
 
-目前对参考图像利用比较充分的一个方法。但id的保持仍然不佳，有很大的提升空间。
+目前对参考图像利用比较充分的一个方法。但id的保持仍然不佳（尤其是stage4的训练之后），有很大的提升空间。
 
 它的数据处理值得注意一下，crop人脸是根据landmark来的，主要是鼻子和嘴角的4个点，以及最下方（y值最大）的一个点。鼻子的两个点确定crop的位置。
 
@@ -1392,7 +1394,21 @@ ICCV2023
 >
 > 假设w为10a的话，h是13a，嘴部是边长8a的正方形mask。 8a=64、128、256一步一步的三阶段训练。这有两方面好处。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20240509160435695.png" alt="image-20240509160435695" style="zoom:35%;" />
+<img src="../../images/typora-images/image-20240509160435695.png" alt="image-20240509160435695" style="zoom:35%;" />
+
+Issue区很好玩，可以从卖nerfs的广告哥的主页浏览到诸多热门的lipsync模型。<img src="../../images/typora-images/image-20240523170707633.png" alt="image-20240523170707633" style="zoom:30%;" />
+
+#### :page_with_curl:Codeformer
+
+https://youtu.be/0wJezYHWA1c lipsync后面接gpen + codeformer效果很好
+
+https://github.com/TencentARC/GFPGAN
+
+https://github.com/yangxy/GPEN 
+
+https://github.com/sczhou/CodeFormer
+
+ComfyUI整合：https://www.youtube.com/watch?v=HGB0Toul2Yw
 
 #### :page_with_curl:Structure-Aware Motion Transfer with Deformable Anchor Model
 
