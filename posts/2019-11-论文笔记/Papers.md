@@ -1106,7 +1106,15 @@ ICCV 2023
 - 音频驱动avatar，背景保持
 - 大规模数据集，16K的ID
 
+> EMO和VASA-1也用了海量数据集，可以说“规模就是一切（scale is all you need）”![img](https://miro.medium.com/v2/resize:fit:1280/1*MTJM-uGBaIhINgbsJm5Z9g.png)
 
+#### :page_with_curl:Diffused Heads
+
+https://github.com/MStypulkowski/diffused-heads/tree/train
+
+开源了训练代码，是个不错的baseline。
+
+腾讯也开源了一个：https://github.com/tencent-ailab/V-Express
 
 #### :page_with_curl:PC-AVS
 
@@ -1395,6 +1403,8 @@ ICCV2023
 > 假设w为10a的话，h是13a，嘴部是边长8a的正方形mask。 8a=64、128、256一步一步的三阶段训练。这有两方面好处。
 
 <img src="../../images/typora-images/image-20240509160435695.png" alt="image-20240509160435695" style="zoom:35%;" />
+
+大角度用selfref，小角度不用。
 
 Issue区很好玩，可以从卖nerfs的广告哥的主页浏览到诸多热门的lipsync模型。<img src="../../images/typora-images/image-20240523170707633.png" alt="image-20240523170707633" style="zoom:30%;" />
 
