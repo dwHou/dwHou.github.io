@@ -60,3 +60,7 @@ FFmpeg采用LGPL或GPL （GNU General Public License）许可证。
       如果你将GPL软件部署在云服务(如AWS)上,向用户提供服务,但用户无法访问你的服务器,那么你不需要发布修改后的源代码。因为你只是在提供一个服务,而不是分发该软件。
 
    > 云计算与传统软件购买之间的关键区别是：在云计算环境下, 用户不是在为运行GPL软件而付费,而是为使用底层的硬件资源而付费。
+
+3. 相关问答——SaaS 漏洞：https://opensource.stackexchange.com/questions/11467/can-i-use-gpl-software-to-provide-a-commercial-cloud-service
+
+   GPLv2和GPLv3只要求在您发布二进制文件时一并发布源代码。在软件即服务(SaaS)的情况下,您并没有发布二进制文件,因此您也没有义务发布您的源代码。这有时被称为"[SaaS loophole](https://resources.whitesourcesoftware.com/blog-whitesource/the-saas-loophole-in-gpl-open-source-licenses)" 
