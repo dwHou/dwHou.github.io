@@ -64,3 +64,5 @@ FFmpeg采用LGPL或GPL （GNU General Public License）许可证。
 3. 相关问答——SaaS 漏洞：https://opensource.stackexchange.com/questions/11467/can-i-use-gpl-software-to-provide-a-commercial-cloud-service
 
    GPLv2和GPLv3只要求在您发布二进制文件时一并发布源代码。在软件即服务(SaaS)的情况下,您并没有发布二进制文件,因此您也没有义务发布您的源代码。这有时被称为"[SaaS loophole](https://resources.whitesourcesoftware.com/blog-whitesource/the-saas-loophole-in-gpl-open-source-licenses)" 
+   
+   但要提防一种新的许可AGPL（Affero General Public License）。它修复了GPL中存在的"SaaS 漏洞"。
