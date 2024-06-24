@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Board Game Table</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
+
+    .intro-section {
+            background-color: #f0f8ff; /* 淡蓝色背景 */
+            width: 80%; /* 与表格相同的宽度 */
+            margin: 20px auto; /* 上下边距20px，左右自动边距以实现居中 */
+            padding: 20px;
+            text-align: center; /* 左对齐文本 */
+            box-sizing: border-box; /* 边框计算在宽度内 */
+        }
+    .intro-section h1 {
+        text-align: center; /* 左对齐文本 */
+        font-size: 24px; /* 标题字体大小 */
+        margin-bottom: 10px;
+    }
+    .rating-list {
+            /* list-style-type: none; */
+            list-style-type: disc;
+            padding: 0;
+            text-align: center;
+        }
+    .rating-list li {
+        margin-left: 20%;
+        margin-bottom: 5px;
+        text-align: left;
+    }
+    .golden-star {
+        color: gold;
+        font-size: 24px;
+    }
+
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ccc;
+    }
+    th {
+        background-color: #f2f2f2;
+        position: sticky;
+        top: 0;
+    }
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    tr:hover {
+        background-color: #eaeaea;
+    }
+    a {
+        color: #007bff;
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    /* 为不同的中文名设置不同的颜色 */
+    .class1 { color: #ff6347; }
+    .class2 { color: #b132cd; }
+    .class3 { color: #ffa500; }
+    .class4 { color: #4169e1; }
+    .class5 { color: #7ec39f; }
+</style>
+</head>
+<body>
+
+<div class="intro-section">
+    <h1>Welcome to our game rating page</h1>
+    <p><span class="golden-star">&#9733;</span> Here is a list of recommended ratings:</p>
+    <ul class="rating-list">
+        <li><b>10</b> - Outstanding. Always want to play and expect this will never change.</li>
+        <li><b>&nbsp;&nbsp;9</b> - Excellent game. Always want to play it.</li>
+        <li><b>&nbsp;&nbsp;8</b> - Very good game. I like to play. Probably I'll suggest it and will never turn down a game.</li>
+        <li><b>&nbsp;&nbsp;7</b> - Good game, usually willing to play.</li>
+        <li><b>&nbsp;&nbsp;6</b> - Ok game, some fun or challenge at least, will play sporadically if in the right mood.</li>
+        <li><b>&nbsp;&nbsp;5</b> - Average game, slightly boring, take it or leave it.</li>
+        <li><b>&nbsp;&nbsp;4</b> - Not so good, it doesn't get me but could be talked into it on occasion.</li>
+        <li><b>&nbsp;&nbsp;3</b> - Likely won't play this again although could be convinced. Bad.</li>
+        <li><b>&nbsp;&nbsp;2</b> - Extremely annoying game, won't play this ever again.</li>
+        <li><b>&nbsp;&nbsp;1</b> - Defies description of a game. You won't catch me dead playing this. Clearly broken.</li>
+    </ul>
+</div>
+
+<table id="gameTable">
+    <thead>
+        <tr>
+            <th>排名</th>
+            <th>中文名</th>
+            <th>Eng_Name With BGG Link</th>
+            <th>平均分(Avg)</th>
+            <th>Devonn</th>
+            <th>Yoyo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- 示例行，其余行根据数据添加 -->
+        <!-- 请将示例行替换为实际数据 -->
+    </tbody>
+</table>
+
+<script>
+// JavaScript 函数，用于动态计算平均分
+function calculateAverage(devonn, yoyo) {
+    // 检查两个评分是否都不为空
+    if (devonn === '' && yoyo === '') {
+        return ''; // 如果评分都为空，则返回空字符串
+    } else if (devonn === '') {
+        return yoyo; // 如果只有Devonn评分为空，则返回Yoyo评分
+    } else if (yoyo === '') {
+        return devonn; // 如果只有Yoyo评分为空，则返回Devonn评分
+    } else {
+        return ((devonn + yoyo) / 2).toFixed(2); // 两个评分都不为空，返回平均值
+    }
+}
+
+// 动态填充示例数据并计算平均分
+function populateTable(data) {
+    var tableBody = document.getElementById('gameTable').getElementsByTagName('tbody')[0];
+    data.forEach(function(rowData, index) {
+        var row = tableBody.insertRow();
+        row.insertCell(0).textContent = index + 1; // 排名
+        row.insertCell(1).textContent = rowData.name; // 中文名
+        // 创建链接并放入第3列
+        var linkCell = row.insertCell(2);
+        var link = document.createElement('a');
+        link.href = rowData.link;
+        link.textContent = rowData.englishName;
+        link.target = '_blank'; // 新标签页打开链接
+        linkCell.appendChild(link);
+        // 计算平均分并放入第4列
+        var avgCell = row.insertCell(3);
+        avgCell.textContent = calculateAverage(rowData.devonn, rowData.yoyo) || '评分人数不足';
+        row.insertCell(4).textContent = rowData.devonn ? rowData.devonn : ''; // Devonn评分放入第5列
+        row.insertCell(5).textContent = rowData.yoyo ? rowData.yoyo : ''; // Yoyo评分放入第6列
+        // 根据中文名设置不同的颜色
+        row.cells[1].className = rowData.colorClass;
+    });
+}
+
+// 根据平均分排序表格行
+function sortTableByAverage() {
+    var table = document.getElementById("gameTable");
+    var tbody = table.tBodies[0];
+    var rows = Array.from(tbody.rows).slice(1); // 获取所有行，排除表头
+
+    // 比较函数，用于根据平均分进行排序
+    function compare(a, b) {
+        var avgA = parseFloat(a.cells[3].textContent) || 0; // 第4列为平均分
+        var avgB = parseFloat(b.cells[3].textContent) || 0; // 第4列为平均分
+        return avgB - avgA; // 降序排序
+    }
+
+    // 根据比较函数对行进行排序
+    rows.sort(compare);
+
+    // 重新排列tbody中的行
+    for (var i = 0; i < rows.length; i++) {
+        tbody.appendChild(rows[i]);
+    }
+}
+
+// 示例数据，您需要根据实际情况替换或动态获取这些数据
+var gameData = [
+    // 德式
+    { name: '璀璨宝石', englishName: 'Splendor: Pokemon', link: 'https://boardgamegeek.com/boardgame/406291/seupeulrendeo-pokemon-splendor-pokemon', devonn: 9, yoyo: 9, colorClass: 'class1' },
+    {name: '璀璨宝石', englishName: 'Splendor', link: 'https://boardgamegeek.com/boardgame/148228/splendor', devonn: '', yoyo: '', colorClass: 'class1' },
+    { name: '得分沙拉', englishName: 'Point Salad', link: 'https://boardgamegeek.com/boardgame/274960/point-salad', devonn: 7.5, yoyo: '', colorClass: 'class1' },
+    { name: '拉斯维加斯', englishName: 'Las Vegas Royale', link: 'https://boardgamegeek.com/boardgame/271319/las-vegas-royale', devonn: 7.5, yoyo: '', colorClass: 'class1' },
+    { name: '达芬奇密码', englishName: 'Da Vinci Code', link: 'https://boardgamegeek.com/boardgame/8946/da-vinci-code', devonn: 7.5, yoyo: '', colorClass: 'class1' },
+    { name: 'Faraway', englishName: 'Wavelength', link: 'https://boardgamegeek.com/boardgame/262543/wavelength', devonn: 7, yoyo: '', colorClass: 'class1' },
+    { name: '卡卡颂', englishName: 'Carcassonne', link: 'https://boardgamegeek.com/boardgame/822/carcassonne', devonn: 7, yoyo: '', colorClass: 'class1' },
+    { name: '现代艺术', englishName: 'Modern Art', link: 'https://boardgamegeek.com/boardgame/118/modern-art', devonn: 7, yoyo: '', colorClass: 'class1' },
+
+    // 语言
+    { name: '险恶疑航', englishName: 'Feed The Kraken', link: 'https://boardgamegeek.com/boardgame/271601/feed-the-kraken', devonn: 8, yoyo: '', colorClass: 'class2' },
+    { name: '一夜终极狼人', englishName: 'One Night Ultimate Werewolf', link: 'https://boardgamegeek.com/boardgame/147949/one-night-ultimate-werewolf', devonn: 8, yoyo: '', colorClass: 'class2' },
+    { name: '阿瓦隆', englishName: 'The Resistance: Avalon', link: 'https://boardgamegeek.com/boardgame/128882/the-resistance-avalon', devonn: 7, yoyo: '', colorClass: 'class2' },
+    { name: '血染钟楼', englishName: 'Blood On The Clocktower', link: 'https://boardgamegeek.com/boardgame/240980/blood-on-the-clocktower', devonn: 6.5, yoyo: 6, colorClass: 'class2' },
+
+    // 角色
+    { name: '地城勇士', englishName: 'Dungeon Fighter', link: 'https://boardgamegeek.com/boardgame/102548/dungeon-fighter', devonn: 8, yoyo: '', colorClass: 'class3' },
+    { name: '三国杀：国战', englishName: 'War Of The Three Kingdoms: Kingdom Wars', link: 'https://boardgamegeek.com/boardgame/283492/war-of-the-three-kingdoms-kingdom-wars', devonn: 7, yoyo: '', colorClass: 'class3' },
+    { name: '风声', englishName: 'The Message', link: 'https://boardgamegeek.com/boardgame/67919/the-message', devonn: 7, yoyo: '', colorClass: 'class3' },
+    { name: '三国杀', englishName: 'War Of The Three Kingdoms', link: 'https://boardgamegeek.com/boardgame/265286/war-of-the-three-kingdoms', devonn: 6, yoyo: '', colorClass: 'class3' },
+    
+    // 思维
+    { name: '行动代号：图片版', englishName: 'Codenames: Pictures', link: 'https://boardgamegeek.com/boardgame/198773/codenames-pictures', devonn: 7.5, yoyo: '', colorClass: 'class4' },
+    { name: '命悬一线', englishName: 'ITO', link: 'https://boardgamegeek.com/boardgame/327778/ito', devonn: 6.8, yoyo: '', colorClass: 'class4' },
+    { name: '行动代号', englishName: 'Codenames', link: 'https://boardgamegeek.com/boardgame/178900/codenames', devonn: 6.8, yoyo: '', colorClass: 'class4' },
+    
+    // 趣玩 & 其他
+    { name: '签签入扣', englishName: 'Stick Stack', link: 'https://boardgamegeek.com/boardgame/204734/stick-stack', devonn: 5, yoyo: '', colorClass: 'class5' },
+    { name: '优诺', englishName: 'UNO', link: 'https://boardgamegeek.com/boardgame/2223/uno', devonn: 4, yoyo: '', colorClass: 'class5' },
+    
+    // ... 其他游戏数据
+    // 请确保没有重复的条目，并且链接是正确的
+];
+
+// 页面加载完成后填充表格并进行排序
+window.onload = function() {
+    populateTable(gameData);
+    sortTableByAverage(); // 填充数据后直接调用排序函数
+};
+
+</script>
+
+</body>
+</html>
