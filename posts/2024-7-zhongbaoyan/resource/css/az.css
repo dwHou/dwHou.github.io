@@ -1,0 +1,87 @@
+.same-width-font {
+    font-family: Monaco, Consolas, MingLiU, "Courier New", Courier, monospace;
+}
+
+.blue {
+    color: #2196F3;
+}
+
+.cyan {
+    color: #00BCD4;
+}
+
+.red {
+    color: #f44336;
+}
+
+.red-bg {
+    background-color: #f44336;
+}
+
+.green {
+    color: #4CAF50;
+}
+
+.green-bg {
+    background-color: #4CAF50;
+}
+
+.lime {
+    color: #CDDC39;
+}
+
+.yellow {
+    color: #FFEB3B;
+}
+
+.yellow-bg {
+    background-color: #FFEB3B;
+}
+
+.orange {
+    color: #FF9800;
+}
+
+.orange-bg {
+    background-color: #FF9800;
+}
+
+.brown {
+    color: #795548;
+}
+
+.pink {
+    color: #E91E63;
+}
+
+.purple {
+    color: #9C27B0;
+}
+
+.grey {
+    color: #9E9E9E;
+}
+
+.grey-bg {
+    background-color: #9E9E9E;
+}
+
+.blue-grey {
+    color: #607D8B;
+}
+
+.black {
+    color: #000000;
+}
+
+.white {
+    color: #FFFFFF;
+}
+
+.font-yahei {
+    font-family: 'Microsoft YaHei', sans-serif;
+}
+
+.line-through {
+    text-decoration: line-through;
+}

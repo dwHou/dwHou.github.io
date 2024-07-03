@@ -1,0 +1,56 @@
+@charset "utf-8";
+@keyframes scaleToggle1 {
+    0    { transform:scale(1); -webkit-transform:scale(1) }
+    50%  { transform:scale(2); -webkit-transform:scale(2) }
+    100% { transform:scale(1); -webkit-transform:scale(1) }
+}
+@keyframes scaleToggle2 { 
+    0    { transform:scale(1); -webkit-transform:scale(1) }
+    20%  { transform:scale(1); -webkit-transform:scale(1) }
+    60%  { transform:scale(2); -webkit-transform:scale(2) }
+    100% { transform:scale(1); -webkit-transform:scale(1) }
+}
+@keyframes scaleToggle3 { 
+    0    { transform:scale(1); -webkit-transform:scale(1) }
+    33%  { transform:scale(1); -webkit-transform:scale(1) }
+    66%  { transform:scale(2); -webkit-transform:scale(2) }
+    100% { transform:scale(1); -webkit-transform:scale(1) }
+}
+
+.animated { -webkit-animation-duration: .5s; animation-duration: .5s; -webkit-animation-fill-mode: both; animation-fill-mode: both }
+.ripple-btn { width: 44px; height: 44px; border-radius: 50%; position: fixed; bottom: 50px; right: 40px; opacity: 0; -webkit-box-shadow: 0 5px 10px 0 rgba(35,50,56,.3); box-shadow: 0 5px 10px 0 rgba(35,50,56,.3); z-index: 0; transform: translateY(0); -webkit-transform: translateY(0); -ms-transform: translateY(0); cursor: pointer; -webkit-transition: all 1s cubic-bezier(.86, 0, .07, 1); transition: all 1s cubic-bezier(.86, 0, .07, 1) }
+.ripple-btn:focus { outline: 0 }
+.ripple-btn.animated { opacity: 1; transform: translateY(-40px); -webkit-transform: translateY(-40px); -ms-transform: translateY(-40px) }
+.ripple-btn:after { content: ''; width: 12px; height: 12px; border-radius: 50%; /*background-image: linear-gradient(to bottom, #26c7fc, #26c7fc);*/ position: absolute; right: 1px; top: 1px; z-index: 50 }
+.ripple-btn .image { position: absolute; top: 0; left: 0; width: 100%; height: auto; z-index: 50 }
+.ripple-btn .icon { position: absolute; top: 20px; left: 24px; width: 100%; height: auto; z-index: 50;color: #FFF; }
+.ripple-btn .animated-circles .circle { background: rgba(38,199,252,.25); width: 60px; height: 60px; border-radius: 50%; position: absolute; z-index: 49; transform: scale(1); -webkit-transform: scale(1) }
+.ripple-btn .animated-circles.animated .c-1 { animation: 2.0s scaleToggle1 cubic-bezier(.25, .46, .45, .94) forwards }
+.ripple-btn .animated-circles.animated .c-2 { animation: 2.5s scaleToggle2 cubic-bezier(.25, .46, .45, .94) forwards }
+.ripple-btn .animated-circles.animated .c-3 { animation: 3.0s scaleToggle3 cubic-bezier(.25, .46, .45, .94) forwards }
+.ripple-btn.animation-stopped .circle { opacity: 0!important }
+.ripple-btn.animation-stopped .circle { opacity: 0!important }
+.ripple-btn .livechat-hint { position: absolute; right: 30px; top: 65%; margin-top: -20px; opacity: 0; z-index: 0; -webkit-transition: all .3s cubic-bezier(.86, 0, .07, 1); transition: all .3s cubic-bezier(.86, 0, .07, 1) }
+.ripple-btn .livechat-hint.show_hint { -webkit-transform: translateX(-40px); transform: translateX(-40px); opacity: 1 }
+.ripple-btn .livechat-hint.hide_hint { opacity: 0; -webkit-transform: translateX(0); transform: translateX(0) }
+.ripple-btn .livechat-hint.rd-notice-tooltip { max-width: 1296px!important }
+.ripple-btn .livechat-hint.rd-notice-tooltip .rd-notice-content { width: auto; overflow: hidden; text-overflow: ellipsis }
+
+@media only screen and (max-width:1599px) {
+.ripple-btn .livechat-hint.rd-notice-tooltip { max-width: 1060px!important }
+}
+@media only screen and (max-width:1309px) {
+.ripple-btn .livechat-hint.rd-notice-tooltip { max-width: 984px!important }
+}
+@media only screen and (max-width:1124px) {
+.ripple-btn .livechat-hint.rd-notice-tooltip { max-width: 600px!important }
+}
+.rd-notice-tooltip { -webkit-box-shadow: 0 2px 2px rgba(0,0,0,.2); box-shadow: 0 2px 2px rgba(0,0,0,.2); font-size: 14px; border-radius: 3px; line-height: 1.25; position: absolute; z-index: 65; max-width: 350px; opacity: 1 }
+.rd-notice-tooltip:after { position: absolute; display: block; content: ''; height: 20px; width: 20px; -webkit-box-shadow: none; box-shadow: none; -webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -o-transform: rotate(-45deg); transform: rotate(-45deg); -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; z-index: 50 }
+.rd-notice-tooltip .rd-notice-content { background: 0; border-radius: 3px; width: 100%; color: #fff; position: relative; z-index: 60; padding: 20px; font-weight: 400; line-height: 1.45 }
+.rd-notice-type-success { background-color: #26c7fc; -webkit-box-shadow: 0 5px 10px 0 rgba(38,199,252,.2); box-shadow: 0 5px 10px 0 rgba(38,199,252,.2) }
+.rd-notice-type-success .rd-notice-content { background-color: #26c7fc }
+.rd-notice-type-success:after { background-color: #26c7fc; -webkit-box-shadow: 0 5px 10px 0 rgba(38,199,252,.2); box-shadow: 0 5px 10px 0 rgba(38,199,252,.2) }
+.rd-notice-position-left { margin-left: -20px }
+.rd-notice-position-left:after { right: -6px; top: 50%; margin-top: -10px }
+.rd-notice-tooltip.single-line .rd-notice-content { height: 40px; padding: 0 20px; line-height: 40px; white-space: nowrap }
