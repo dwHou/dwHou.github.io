@@ -1408,17 +1408,21 @@ ICCV2023
 
 Issue区很好玩，可以从卖nerfs的广告哥的主页浏览到诸多热门的lipsync模型。<img src="../../images/typora-images/image-20240523170707633.png" alt="image-20240523170707633" style="zoom:30%;" />
 
+finetune时需要冻结BN，https://dl.acm.org/doi/pdf/10.1145/3503161.3547915
+
 #### :page_with_curl:Codeformer
 
 https://youtu.be/0wJezYHWA1c lipsync后面接gpen + codeformer效果很好
 
-https://github.com/TencentARC/GFPGAN
+https://github.com/TencentARC/GFPGAN 
 
 https://github.com/yangxy/GPEN 
 
 https://github.com/sczhou/CodeFormer
 
 ComfyUI整合：https://www.youtube.com/watch?v=HGB0Toul2Yw
+
+都可以用facefusion这个项目来跑，最终效果感觉GPEN-BFR-2048效果最好，GFPGAN效果也不错，其中gfpgan1.2主要是做sharpen和噪声的抑制，保持id好一点，gfpgan1.3、1.4虽然更美观了但有点像做了美颜。codefomer、restoreformer++的效果相对略差一点。
 
 #### :page_with_curl:Structure-Aware Motion Transfer with Deformable Anchor Model
 
