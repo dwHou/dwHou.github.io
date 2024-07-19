@@ -41,9 +41,17 @@ secret3:value3    # 父路径
 
 ### 3.1 注册应用
 
-在使用CSMS之前，应用程序需要在CSMS上创建application
+在使用CSMS之前，应用程序需要在CSMS上创建application，可参考对应文档。
 
 ### 3.2 创建和获取secret
+
+如何创建secret，可参考对应文档。
+
+>  [!NOTE]
+>
+> 对于Dev和Prod，因为安全级别和合规性要求不同，它们创建应用程序、创建密钥的方式是不同的。
+
+
 
 ### 3.3 安全
 
