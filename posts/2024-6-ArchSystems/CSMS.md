@@ -39,3 +39,18 @@ secret3:value3    # 父路径
 
 ## 3. 工作流
 
+### 3.1 注册应用
+
+在使用CSMS之前，应用程序需要在CSMS上创建application
+
+### 3.2 创建和获取secret
+
+### 3.3 安全
+
+### 3.4 高可用
+
+high availability
+
+### 3.5 容错切换
+
+failover

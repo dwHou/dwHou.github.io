@@ -99,3 +99,12 @@ docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
 ```
 
 其中，`SOURCE_IMAGE` 是要标记的源镜像，可以是镜像的名称或镜像ID。`:TAG` 是可选的标签，用于指定特定的版本或标识符。`TARGET_IMAGE` 是目标镜像的名称和可选的标签，用于创建新的标签。
+
+## 叁：查看镜像
+
+`docker history IMAGE_NAME:TAG` 可以查看docker镜像的构建历史；
+
+`docker inspect IMAGE_NAME:TAG` 可以查看docker对象的元数据信息。
+
+>尤其是当我们从一些基础镜像构建时，除了在dockerhub网站上查看，也可以用这些命令查看镜像，更为方便。
+

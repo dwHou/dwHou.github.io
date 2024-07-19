@@ -156,6 +156,8 @@ TCI 2016 *Google*
    1. 考虑许多上采样kernel中心对称的特性。可以减少一半冗余。
    2. 考虑使用量化。RAISR只有单层，不存在误差累积。
 
+5. av1 CDEF 有8个方向mode，DCC就是把里面的8个方向mode简化为4个，这个方向mode，在raisr、deringing里也有机会用到。[CDEF介绍](https://blog.csdn.net/weixin_44696799/article/details/109284068)
+
 
 
 #### :page_with_curl:Learning Steerable Function for Efficient Image Resampling
@@ -946,6 +948,8 @@ INN的损失，得用全。而且对于Cropout的攻击，损失记得调整有�
 
 ### TalkingHead
 
+### 1.LipSync
+
 #### :page_with_curl:人类面部重演方法综述
 
 中国图像图形学报的一篇论文，[地址](http://www.cjig.cn/jig/ch/reader/view_abstract.aspx?file_no=20220906)
@@ -1068,7 +1072,16 @@ We use a PatchGAN [23] discriminator Dψ. This task requires more context than j
 
 [52] Video-to-video synthesis. [intro](https://www.youtube.com/watch?v=GrP_aOSXt5U)
 
+#### :page_with_curl:SadTalker
 
+CVPR2023 音频驱动说话人的SOTA
+
+- 对3d系数中的表情系数和头部姿态分开建模，借助了Wav2Lip模型。
+- 对3d系数进行人脸合成，借助了[PIRenderer](https://link.zhihu.com/?target=https%3A//github.com/RenYurui/PIRender)模型合成人脸的方式，改进在于还将3D关键点用进来。
+
+#### :page_with_curl:Speech2Lip
+
+ICCV2023
 
 #### :page_with_curl:SIDGAN
 
@@ -1097,25 +1110,6 @@ ICCV 2023
 
 它和Wav2Lip一样，应该会遇到数据集过小就没法训练的问题（https://github.com/Rudrabha/Wav2Lip/issues/260）
 
-#### :page_with_curl:GAIA
-
-扩散模型的数据人效果挺惊艳的，有EMO、VASA-1等文章。我们先从这篇简单一点的baseline（GAIA盖亚，Generative AI for Avatar）入手。
-
-关键：
-
-- 音频驱动avatar，背景保持
-- 大规模数据集，16K的ID
-
-> EMO和VASA-1也用了海量数据集，可以说“规模就是一切（scale is all you need）”![img](https://miro.medium.com/v2/resize:fit:1280/1*MTJM-uGBaIhINgbsJm5Z9g.png)
-
-#### :page_with_curl:Diffused Heads
-
-https://github.com/MStypulkowski/diffused-heads/tree/train
-
-开源了训练代码，是个不错的baseline。
-
-腾讯也开源了一个：https://github.com/tencent-ailab/V-Express
-
 #### :page_with_curl:PC-AVS
 
 可以做到音频来自视频A，pose来自视频B，身份来自图片C，合成视频D。
@@ -1131,8 +1125,6 @@ https://github.com/MStypulkowski/diffused-heads/tree/train
 > Under real-world scenarios like audio dubbing, one crucial need is to seamlessly alter the mouth or facial area while preserving other parts of the scene unchanged
 
 认为通过3D转一道可能反而有误差累积。启发咱们直接使用audio。
-
-
 
 #### :page_with_curl:StyleLipSync
 
@@ -1163,6 +1155,89 @@ face embedder的组成也是warppingnet+attention。一个得到displacement fie
 <img src="../../images/typora-images/image-20230809112826576.png" alt="image-20230809112826576" style="zoom:50%;" />
 
 
+
+#### :page_with_curl:VideoReTalking
+
+如果是全身人像，感觉更廉价的方案是 [video-retalking](https://opentalker.github.io/video-retalking/)。
+
+后续还有[SadTalker](https://github.com/OpenTalker/SadTalker)，[StyleSync](https://github.com/guanjz20/StyleSync_PyTorch)，[DINet](https://github.com/MRzzm/DINet)，[FaceFormer](https://github.com/EvelynFan/FaceFormer)，[CodeTalker](https://github.com/Doubiiu/CodeTalker)等新的SOTA。
+
+产业界可以关注：
+
+[https://aman-agarwal.com/2022/07/01/deepfake-videos-kristof-szabo-colossyan/](https://www.google.com/url?q=https://aman-agarwal.com/2022/07/01/deepfake-videos-kristof-szabo-colossyan/&sa=D&source=docs&ust=1696838688057700&usg=AOvVaw1DRSXTs2lZf5W7CNtDd8y7)
+
+现有方法：恢复牙齿使用teeth proxy
+
+本文方法：使用预训练的人脸解析网络，配合GFP-GAN修复牙齿
+
+#### :page_with_curl:DINet
+
+目前对参考图像利用比较充分的一个方法。但id的保持仍然不佳（尤其是stage4的训练之后），有很大的提升空间。
+
+它的数据处理值得注意一下，crop人脸是根据landmark来的，主要是鼻子和嘴角的4个点，以及最下方（y值最大）的一个点。鼻子的两个点确定crop的位置。
+
+嘴角的两点的距离确定crop的w。
+
+鼻梁和最下方的两点的距离确定crop的h。
+
+最终每帧的半径会取 `max(w，h) // 2`，并在此基础随机放大一点点。
+
+位置是帧级的，半径是片段级（连续9帧），并行处理后取9帧里的最大半径。
+
+> crop之后就保存了，没有经过reshape。所以有大有小，但ratio都是1.3。
+>
+> 假设w为10a的话，h是13a，嘴部是边长8a的正方形mask。 8a=64、128、256一步一步的三阶段训练。这有两方面好处。
+
+<img src="../../images/typora-images/image-20240509160435695.png" alt="image-20240509160435695" style="zoom:35%;" />
+
+大角度用selfref，小角度不用。
+
+Issue区很好玩，可以从卖nerfs的广告哥的主页浏览到诸多热门的lipsync模型。<img src="../../images/typora-images/image-20240523170707633.png" alt="image-20240523170707633" style="zoom:30%;" />
+
+finetune时需要冻结BN，https://dl.acm.org/doi/pdf/10.1145/3503161.3547915
+
+#### :page_with_curl:Codeformer
+
+https://youtu.be/0wJezYHWA1c lipsync后面接gpen + codeformer效果很好
+
+https://github.com/TencentARC/GFPGAN 
+
+https://github.com/yangxy/GPEN 
+
+https://github.com/sczhou/CodeFormer
+
+ComfyUI整合：https://www.youtube.com/watch?v=HGB0Toul2Yw
+
+都可以用facefusion这个项目来跑，最终效果感觉GPEN-BFR-2048效果最好，GFPGAN效果也不错，其中gfpgan1.2主要是做sharpen和噪声的抑制，保持id好一点，gfpgan1.3、1.4虽然更美观了但有点像做了美颜。codefomer、restoreformer++的效果相对略差一点。
+
+
+
+### 2.PhotoAnimate
+
+#### **:page_with_curl:LivePortrait**
+
+https://liveportrait.github.io/
+
+快手的工作，效果很精细
+
+#### :page_with_curl:GAIA
+
+扩散模型的数据人效果挺惊艳的，有EMO、VASA-1等文章。我们先从这篇简单一点的baseline（GAIA盖亚，Generative AI for Avatar）入手。
+
+关键：
+
+- 音频驱动avatar，背景保持
+- 大规模数据集，16K的ID
+
+> EMO和VASA-1也用了海量数据集，可以说“规模就是一切（scale is all you need）”![img](https://miro.medium.com/v2/resize:fit:1280/1*MTJM-uGBaIhINgbsJm5Z9g.png)
+
+#### :page_with_curl:Diffused Heads
+
+https://github.com/MStypulkowski/diffused-heads/tree/train
+
+开源了训练代码，是个不错的baseline。
+
+腾讯也开源了一个：https://github.com/tencent-ailab/V-Express
 
 #### :page_with_curl:Everybody’s Talkin
 
@@ -1343,17 +1418,6 @@ Gram matrix扩展[1](https://blog.csdn.net/bbbeoy/article/details/108195122),[2]
 
 缺点：存在梯度消失问题，tanh的导数计算为 $\frac{4e^{2x}}{(e^{2x}+1)^2} $，取值范围为(0,1]，虽然取值范围比sigmoid导数更广一些，可以缓解梯度消失，但仍然无法避免随着网络层数增多梯度连乘导致的梯度消失问题。 
 
-#### :page_with_curl:SadTalker
-
-CVPR2023 音频驱动说话人的SOTA
-
-- 对3d系数中的表情系数和头部姿态分开建模，借助了Wav2Lip模型。
-- 对3d系数进行人脸合成，借助了[PIRenderer](https://link.zhihu.com/?target=https%3A//github.com/RenYurui/PIRender)模型合成人脸的方式，改进在于还将3D关键点用进来。
-
-#### :page_with_curl:Speech2Lip
-
-ICCV2023
-
 #### :page_with_curl:Responsive Listening Head Generation: A Benchmark Dataset and Baseline
 
 生成聆听者的头部视频的任务。
@@ -1369,60 +1433,6 @@ ICCV2023
 > 如果采样率44100帧率25，86 = curr_mfccs：78 +  rms: 4 + zcr: 4
 >
 > 如果采样率16000帧率25，82 = curr_mfccs：78 +  rms: 2 + zcr: 2
-
-#### :page_with_curl:VideoReTalking
-
-如果是全身人像，感觉更廉价的方案是 [video-retalking](https://opentalker.github.io/video-retalking/)。
-
-后续还有[SadTalker](https://github.com/OpenTalker/SadTalker)，[StyleSync](https://github.com/guanjz20/StyleSync_PyTorch)，[DINet](https://github.com/MRzzm/DINet)，[FaceFormer](https://github.com/EvelynFan/FaceFormer)，[CodeTalker](https://github.com/Doubiiu/CodeTalker)等新的SOTA。
-
-产业界可以关注：
-
-[https://aman-agarwal.com/2022/07/01/deepfake-videos-kristof-szabo-colossyan/](https://www.google.com/url?q=https://aman-agarwal.com/2022/07/01/deepfake-videos-kristof-szabo-colossyan/&sa=D&source=docs&ust=1696838688057700&usg=AOvVaw1DRSXTs2lZf5W7CNtDd8y7)
-
-现有方法：恢复牙齿使用teeth proxy
-
-本文方法：使用预训练的人脸解析网络，配合GFP-GAN修复牙齿
-
-#### :page_with_curl:DINet
-
-目前对参考图像利用比较充分的一个方法。但id的保持仍然不佳（尤其是stage4的训练之后），有很大的提升空间。
-
-它的数据处理值得注意一下，crop人脸是根据landmark来的，主要是鼻子和嘴角的4个点，以及最下方（y值最大）的一个点。鼻子的两个点确定crop的位置。
-
-嘴角的两点的距离确定crop的w。
-
-鼻梁和最下方的两点的距离确定crop的h。
-
-最终每帧的半径会取 `max(w，h) // 2`，并在此基础随机放大一点点。
-
-位置是帧级的，半径是片段级（连续9帧），并行处理后取9帧里的最大半径。
-
-> crop之后就保存了，没有经过reshape。所以有大有小，但ratio都是1.3。
->
-> 假设w为10a的话，h是13a，嘴部是边长8a的正方形mask。 8a=64、128、256一步一步的三阶段训练。这有两方面好处。
-
-<img src="../../images/typora-images/image-20240509160435695.png" alt="image-20240509160435695" style="zoom:35%;" />
-
-大角度用selfref，小角度不用。
-
-Issue区很好玩，可以从卖nerfs的广告哥的主页浏览到诸多热门的lipsync模型。<img src="../../images/typora-images/image-20240523170707633.png" alt="image-20240523170707633" style="zoom:30%;" />
-
-finetune时需要冻结BN，https://dl.acm.org/doi/pdf/10.1145/3503161.3547915
-
-#### :page_with_curl:Codeformer
-
-https://youtu.be/0wJezYHWA1c lipsync后面接gpen + codeformer效果很好
-
-https://github.com/TencentARC/GFPGAN 
-
-https://github.com/yangxy/GPEN 
-
-https://github.com/sczhou/CodeFormer
-
-ComfyUI整合：https://www.youtube.com/watch?v=HGB0Toul2Yw
-
-都可以用facefusion这个项目来跑，最终效果感觉GPEN-BFR-2048效果最好，GFPGAN效果也不错，其中gfpgan1.2主要是做sharpen和噪声的抑制，保持id好一点，gfpgan1.3、1.4虽然更美观了但有点像做了美颜。codefomer、restoreformer++的效果相对略差一点。
 
 #### :page_with_curl:Structure-Aware Motion Transfer with Deformable Anchor Model
 
