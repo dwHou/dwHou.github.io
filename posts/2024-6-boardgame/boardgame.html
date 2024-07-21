@@ -153,7 +153,8 @@ function populateTable(data) {
 function sortTableByAverage() {
     var table = document.getElementById("gameTable");
     var tbody = table.tBodies[0];
-    var rows = Array.from(tbody.rows).slice(1); // 获取所有行，排除表头
+    // var rows = Array.from(tbody.rows).slice(1); // 获取所有行，排除表头
+    var rows = Array.from(tbody.rows)
 
     // 比较函数，用于根据平均分进行排序
     function compare(a, b) {
@@ -167,6 +168,7 @@ function sortTableByAverage() {
 
     // 重新排列tbody中的行
     for (var i = 0; i < rows.length; i++) {
+        rows[i].cells[0].textContent = i+1;
         tbody.appendChild(rows[i]);
     }
 }
@@ -185,7 +187,7 @@ var gameData = [
     { name: '拼布艺术：中国版', englishName: 'Patchwork', link: 'https://boardgamegeek.com/boardgame/163412/patchwork', devonn: 8, yoyo: 8, colorClass: 'class1' },
     { name: '拉密/以色列麻将', englishName: 'Rummikub', link: 'https://boardgamegeek.com/boardgame/811/rummikub', devonn: 7.8, yoyo: 8, colorClass: 'class1' },
     { name: '绝顶聪明', englishName: 'Ganz Schön Clever', link: 'https://boardgamegeek.com/boardgame/244522/thats-pretty-clever', devonn: 8.3, yoyo: 8.5, colorClass: 'class1' },
-    { name: '海盐折纸', englishName: 'Sea Salt And Paper', link: 'https://boardgamegeek.com/boardgame/367220/sea-salt-and-paper', devonn: 8, yoyo: 8, colorClass: 'class1' },
+    { name: '海盐折纸', englishName: 'Sea Salt And Paper', link: 'https://boardgamegeek.com/boardgame/367220/sea-salt-and-paper', devonn: 8.1, yoyo: 8.5, colorClass: 'class1' },
 
 
     // 语言
@@ -199,6 +201,7 @@ var gameData = [
     { name: '三国杀：国战', englishName: 'War Of The Three Kingdoms: Kingdom Wars', link: 'https://boardgamegeek.com/boardgame/283492/war-of-the-three-kingdoms-kingdom-wars', devonn: 7, yoyo: 6.8, colorClass: 'class3' },
     { name: '风声', englishName: 'The Message', link: 'https://boardgamegeek.com/boardgame/67919/the-message', devonn: 7, yoyo: '', colorClass: 'class3' },
     { name: '三国杀', englishName: 'War Of The Three Kingdoms', link: 'https://boardgamegeek.com/boardgame/265286/war-of-the-three-kingdoms', devonn: 6, yoyo: 6.8, colorClass: 'class3' },
+    { name: '王权骰铸：第一/二季', englishName: 'Dice Throne: Season One/Two', link: 'https://boardgamegeek.com/boardgame/216734/dice-throne-season-one', devonn: 8.3, yoyo: 8.2, colorClass: 'class3' },
 
     // 思维 & 战棋
     { name: '行动代号：图片版', englishName: 'Codenames: Pictures', link: 'https://boardgamegeek.com/boardgame/198773/codenames-pictures', devonn: 7.5, yoyo: 8, colorClass: 'class4' },
@@ -209,6 +212,7 @@ var gameData = [
     // 趣玩 & 其他
     { name: '签签入扣', englishName: 'Stick Stack', link: 'https://boardgamegeek.com/boardgame/204734/stick-stack', devonn: 5, yoyo: 4, colorClass: 'class5' },
     { name: '优诺', englishName: 'UNO', link: 'https://boardgamegeek.com/boardgame/2223/uno', devonn: 4, yoyo: 6.8, colorClass: 'class5' },
+    { name: '小城大案：罪恶都市', englishName: 'MicroMacro: Crime City', link: 'https://boardgamegeek.com/boardgame/318977/micromacro-crime-city', devonn: 7, yoyo: 6.8, colorClass: 'class5' },
 
     // ... 其他游戏数据
     // 请确保没有重复的条目，并且链接是正确的
