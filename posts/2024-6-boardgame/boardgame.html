@@ -17,6 +17,16 @@
             text-align: center; /* 左对齐文本 */
             box-sizing: border-box; /* 边框计算在宽度内 */
         }
+    
+    .comment-section {
+        background-color: #dda2bd49; /* 淡蓝色背景 */
+        width: 80%; /* 与表格相同的宽度 */
+        margin: 20px auto; /* 上下边距20px，左右自动边距以实现居中 */
+        padding: 20px;
+        text-align: center; /* 左对齐文本 */
+        box-sizing: border-box; /* 边框计算在宽度内 */
+    }
+
     .intro-section h1 {
         text-align: center; /* 左对齐文本 */
         font-size: 24px; /* 标题字体大小 */
@@ -33,6 +43,19 @@
         margin-bottom: 5px;
         text-align: left;
     }
+
+    .comment-list {
+            /* list-style-type: none; */
+            list-style-type: disc;
+            padding: 0;
+            text-align: left;
+        }
+    .comment-list li {
+        margin-left: 10%;
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
     .golden-star {
         color: gold;
         font-size: 24px;
@@ -226,7 +249,23 @@ window.onload = function() {
     sortTableByAverage(); // 填充数据后直接调用排序函数
 };
 
+
 </script>
+
+<div class="comment-section">
+    <h1>Remarks & Reviews</h1>
+    <ul class="comment-list">
+        <li> There are many factors to consider when evaluating a board game.
+            
+            And using "War Of The Three Kingdoms" as an example, the game was highly enjoyable in its earlier, more balanced state with a group of veteran players. During that period, I would have rated it 9 to 10 out of 10. 
+
+            However, considering that the design of new characters has become increasingly uneven, with abilities/mechanics that are more and more lengthy and complex, it's also quite difficult to gather a group of experienced players to start a game. As a result, the desire to replay this game is not high, and the rating would decline significantly.
+            
+            Overall, The rating would depend on the specific version and players involved.</li>
+        <li>Small box board games are highly portable, with a lightweight feel that invites more opportunities for replay.</li>
+        <li>Aesthetically-pleasing game tokens are also visually delightful, making one more inclined to collect them and bring them out to replay the game.</li>
+    </ul>
+</div>
 
 </body>
 </html>
