@@ -166,10 +166,29 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   </ul>
 
   <h2>远程文件传输</h2>
-  <a href="https://man.linuxde.net/scp">scp</a> sftp ftp
+  <a href="https://man.linuxde.net/scp">scp</a> sftp ftp rsync
   <li><b>FileZilla</b></li>
   <li>支持<b>ftp、sftp</b>的非常顺手的工具，可以记住众多的站点，并且支持默认的打开目录</li>
   <li>站点管理器 > 高级 > 默认远程目录</li>
+
+  <li><b>sftp</b></li>
+  <pre>
+    批量上传多个文件：
+        sftp user@host &lt;&lt;EOF
+    put source1.pth target1.pth
+    put source2.pth target2.pth
+    put source3.pth target3.pth
+    EOF
+    可在后台进行：sftp命令 + ctrl z + bg命令
+  </pre>
+
+  <li><b>rsync</b></li>
+  <pre>
+    取一个别名：
+    alias scpr="rsync -P --rsh=ssh"
+    rsync就可以当作scp用，命令的语法类似。能更好的支持断点续传。
+  </pre>
+
   <li><b>scp</b></li>
   <pre>
     后台进行：scp命令 + ctrl z + bg命令
