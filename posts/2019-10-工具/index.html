@@ -459,6 +459,7 @@ env | grep -i proxy 可以查看代理的情况。</pre>
   <h2>top</h2>
   <ul>
   <li><b>监控linux系统状况、性能分析</b></li>
+  <li>cpu资源监控</li>
 <pre>
     top命令
     [root@fpm_nginx /app]# top
@@ -474,8 +475,8 @@ env | grep -i proxy 可以查看代理的情况。</pre>
 </pre>
 <pre>
     <font color="brown">第一行</font>:
-    top - 12:19:58 up  3:45             # 启动了3小时45分钟，当前时间系统时间-12:19:58
-    1 user                              # 同时在线的用户
+    top - 12:19:58 up  3:45             # 系统已运行3小时45分钟，当前时间系统时间-12:19:58
+    1 user                              # 当前在线的用户数量
     load average: 0.00, 0.02, 0.05      # 服务器的负载，1min的负载、5min的负载、15min的负载
 </pre>
 <pre>
@@ -495,6 +496,21 @@ env | grep -i proxy 可以查看代理的情况。</pre>
     0.0 hi                      # 硬中断
     0.0 si                      # 软中断
     0.0 st                      # 虚拟机占用物理机的百分比
+</pre>
+<pre>
+    监控项名称 / 监控项含义
+    Host.cpu.idle                               当前空闲CPU百分比(%)
+    ・当前CPU处于空闲状态的百分比
+    Host.cpu.system                             当前内核空间占用CPU百分比(%)
+    ・指系统上下文切换的消耗,该监控项数值比较高，说明服务器开了太多的进程或者线程
+    Host.cpu.user                               当前用户空间占用CPU百分比(%)
+    ・用户进程对CPU的消耗
+    Host.cpu.iowait                             当前等待IO操作的CPU百分比(%)
+    ・该项数值比较高说明有很频繁的IO操作
+    Host.cpu.other                              其他占用CPU百分比(%)
+    ・其他消耗，计算方式为（Nice + SoftIrq + Irq + Stolen）的消耗
+    Host.cpu.totalUsed                          当前消耗的总CPU百分比(%)
+    ・指以上各项CPU消耗的总和，通常用于报警
 </pre>
   </ul>
 
