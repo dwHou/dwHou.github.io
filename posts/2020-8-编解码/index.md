@@ -23,6 +23,10 @@ Liu, Dong, et al. "Deep learning-based video coding: A review and a case study."
 
 ## 端到端视频压缩
 
+![AI-based Compression](https://s7d1.scene7.com/is/image/dmqualcommprod/image_1_23-1?$QC_Responsive$&fmt=png-alpha&wid=814)
+
+AI-based compression has many compelling benefits over traditional techniques.
+
 ## 利用解码信息的视频后处理
 
 ## 基于AI模型的视频质量评估
