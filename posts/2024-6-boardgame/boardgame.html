@@ -170,7 +170,7 @@ function populateTable(data) {
         linkCell.appendChild(link);
         // 计算平均分并放入第4列
         var avgCell = row.insertCell(3);
-        avgCell.textContent = calculateAverage(rowData.devonn, rowData.yoyo) || '评分人数不足';
+        avgCell.textContent = calculateAverage(rowData.devonn, rowData.yoyo) || '待评';
         row.insertCell(4).textContent = rowData.devonn ? rowData.devonn : ''; // Devonn评分放入第5列
         row.insertCell(5).textContent = rowData.yoyo ? rowData.yoyo : ''; // Yoyo评分放入第6列
         // 根据中文名设置不同的颜色
@@ -205,16 +205,16 @@ function sortTableByAverage() {
 // 示例数据，您需要根据实际情况替换或动态获取这些数据
 var gameData = [
     // 德式
-    { name: '璀璨宝石：宝可梦', englishName: 'Splendor: Pokemon', link: 'https://boardgamegeek.com/boardgame/406291/seupeulrendeo-pokemon-splendor-pokemon', devonn: 9, yoyo: 9, colorClass: 'class1' },
+    { name: '璀璨宝石：宝可梦', englishName: 'Splendor: Pokemon', link: 'https://boardgamegeek.com/boardgame/406291/seupeulrendeo-pokemon-splendor-pokemon', devonn: 8.8, yoyo: 8.5, colorClass: 'class1' },
     {name: '璀璨宝石', englishName: 'Splendor', link: 'https://boardgamegeek.com/boardgame/148228/splendor', devonn: 7.5, yoyo: 7.5, colorClass: 'class1' },
     { name: '得分沙拉', englishName: 'Point Salad', link: 'https://boardgamegeek.com/boardgame/274960/point-salad', devonn: 7.2, yoyo: 8.2, colorClass: 'class1' },
     { name: '拉斯维加斯', englishName: 'Las Vegas Royale', link: 'https://boardgamegeek.com/boardgame/271319/las-vegas-royale', devonn: 7.5, yoyo: 7.8, colorClass: 'class1' },
     { name: '达芬奇密码', englishName: 'Da Vinci Code', link: 'https://boardgamegeek.com/boardgame/8946/da-vinci-code', devonn: 7.5, yoyo: 7.5, colorClass: 'class1' },
     { name: '遥远', englishName: 'Faraway', link: 'https://boardgamegeek.com/boardgame/385761/faraway', devonn: 7.5, yoyo: 8.5, colorClass: 'class1' },
     { name: '卡卡颂', englishName: 'Carcassonne', link: 'https://boardgamegeek.com/boardgame/822/carcassonne', devonn: 7.1, yoyo: 7.8, colorClass: 'class1' },
-    { name: '卡坦岛', englishName: 'Catan', link: 'https://boardgamegeek.com/boardgame/13/catan', devonn: 7.3, yoyo: '', colorClass: 'class1' },
-    { name: '荣耀之城（富饶之城：加强版）', englishName: 'Citadels', link: 'https://boardgamegeek.com/boardgame/205398/citadels', devonn: 7.6, yoyo: '', colorClass: 'class1' },
-    { name: '现代艺术', englishName: 'Modern Art', link: 'https://boardgamegeek.com/boardgame/118/modern-art', devonn: 7, yoyo: '', colorClass: 'class1' },
+    { name: '卡坦岛', englishName: 'Catan', link: 'https://boardgamegeek.com/boardgame/13/catan', devonn: 7.3, yoyo: 8.5, colorClass: 'class1' },
+    { name: '荣耀之城（富饶之城）', englishName: 'Citadels', link: 'https://boardgamegeek.com/boardgame/205398/citadels', devonn: 7.6, yoyo: 8.5, colorClass: 'class1' },
+    { name: '现代艺术', englishName: 'Modern Art', link: 'https://boardgamegeek.com/boardgame/118/modern-art', devonn: '', yoyo: '', colorClass: 'class1' },
     { name: '拼布艺术：中国版', englishName: 'Patchwork', link: 'https://boardgamegeek.com/boardgame/163412/patchwork', devonn: 8, yoyo: 8, colorClass: 'class1' },
     { name: '拉密/以色列麻将', englishName: 'Rummikub', link: 'https://boardgamegeek.com/boardgame/811/rummikub', devonn: 7.4, yoyo: 8, colorClass: 'class1' },
     { name: '绝顶聪明', englishName: 'Ganz Schön Clever', link: 'https://boardgamegeek.com/boardgame/244522/thats-pretty-clever', devonn: 8.3, yoyo: 8.5, colorClass: 'class1' },
