@@ -57,7 +57,7 @@ ViT对Transformer的改造很简单直接，但没考虑视觉信号的一些特
 
 用shifting window而不是sliding window。
 
-### Low-level Vision
+## 画质增强
 
 #### :page_with_curl: Multi-Stage Progressive Image Restoration
 
@@ -589,6 +589,16 @@ SwinIR普遍适用于各类图像复原任务，无需改动特征提取模块�
 
 #### :page_with_curl:Restormer
 
+CVPR2022
+
+transformer-based 通用图像复原
+
+#### :page_with_curl:RestoreFormer
+
+CVPR2022 (RestoreFormer), TPAMI 2023 (RestoreFormer++)
+
+transformer-based 人脸图像复原
+
 #### :computer:Contrast Adaptive Sharpening
 
 对比度自适应锐化 ([CAS](https://docs.o3de.org/docs/atom-guide/features/cas/)) 是一种图像锐化技术，在决定锐化程度时会考虑局部 3x3 邻域的对比度。 高对比度样本的锐化程度远低于低对比度样本。 这有助于防止在均匀锐化的标准锐化滤镜中出现过度锐化的外观。 您可以将 CAS 与临时抗锯齿 (TAA) 结合使用，以减少 [TAA](https://docs.o3de.org/docs/atom-guide/features/taa/) 给图像带来的柔和。 
@@ -813,6 +823,10 @@ DNCM：
 
 #### :page_with_curl:Color Image Enhancement with Saturation Adjustment Method
 
+
+
+## 视频传输
+
 #### :page_with_curl:Survey on Robust Image Watermarking
 
 归纳为两类：
@@ -942,13 +956,13 @@ INN的损失，得用全。而且对于Cropout的攻击，损失记得调整有�
 
 结合神经网络+确定性算法。我感觉分频带靠谱，只采用LL。
 
-### 智能编码系列
+#### 智能编码系列
 
 [2016~2022](./CLIC.html)
 
-### TalkingHead
+## 数字化身 / 说话人
 
-### 1.LipSync
+### 1. LipSync
 
 #### :page_with_curl:人类面部重演方法综述
 
@@ -1212,7 +1226,7 @@ ComfyUI整合：https://www.youtube.com/watch?v=HGB0Toul2Yw
 
 
 
-### 2.PhotoAnimate
+### 2. PhotoAnimate
 
 #### **:page_with_curl:LivePortrait**
 
