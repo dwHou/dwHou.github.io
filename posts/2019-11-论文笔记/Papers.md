@@ -1004,8 +1004,6 @@ video = torch.randn(32, 3*5, 48, 96).cuda()
 
 <img src="https://img-blog.csdnimg.cn/20210415105559528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDg4NTE4MA==,size_16,color_FFFFFF,t_70" alt="img" style="zoom:50%;" />
 
-<img src="../../images/typora-images/image-20230814193218217.png" alt="image-20230814193218217" style="zoom:50%;" />
-
 https://github.com/Rudrabha/Wav2Lip/blob/master/audio.py#L45 实现的这个，和torchaudio.compliance.kaldi.fbank是非常类似的，基本是等价，
 
 > 有些不一致的地方，可以通过参数调整
@@ -1042,6 +1040,12 @@ FRAME 	X 	Y 	W 	H
 ```
 
 要针对这个Offset做一些音视频对齐的调整。
+
+AVSync要求高，主要是负样本的选取：
+
+wav2lip里，v差一帧：https://github.com/Rudrabha/Wav2Lip/blob/master/color_syncnet_train.py#L79   
+
+lipgan里，mfcc差10帧，相当于v差3帧左右，https://github.com/Rudrabha/LipGAN/blob/master/train.py#L136
 
 
 
