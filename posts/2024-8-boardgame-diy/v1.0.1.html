@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桌游卡牌制作器</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        canvas { border: 1px solid #000; }
+        .color-buttons { margin-bottom: 10px; }
+        .color-button {
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            cursor: pointer;
+            border: 1px solid #000;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>桌游卡牌制作器</h1>
+    <label>卡牌类型: 
+        <select id="cardType">
+            <option value="武将">武将</option>
+            <option value="城池">城池</option>
+            <option value="令">令</option>
+        </select>
+    </label><br>
+    
+    <div id="colorPicker" class="color-buttons"></div>
+    
+    <label>卡牌名称: <input type="text" id="cardName" placeholder="请输入卡牌名称"></label><br>
+    <label>描述: <textarea id="description" placeholder="请输入卡牌描述"></textarea></label><br>
+    <label>插画: <input type="file" id="imageInput"></label><br>
+    <button id="generateCard">生成卡牌</button>
+    <canvas id="cardCanvas" width="488" height="680"></canvas>
+    <a id="downloadLink" style="display: none;">下载卡牌</a>
+
+    <script>
+        const canvas = document.getElementById('cardCanvas');
+        const ctx = canvas.getContext('2d');
+        let bgColor = '#C72C29'; // 默认颜色
+
+        const colors = {
+            '武将': ['#C72C29', '#4E4E2B', '#2A52BE', '#7D7B7A'],
+            '令': ['#C72C29', '#4E4E2B', '#2A52BE', '#7D7B7A'],
+            '城池': ['#D2B48C']
+        };
+
+        function updateColorPicker() {
+            const cardType = document.getElementById('cardType').value;
+            const colorPicker = document.getElementById('colorPicker');
+            colorPicker.innerHTML = '';
+
+            colors[cardType].forEach(color => {
+                const button = document.createElement('div');
+                button.className = 'color-button';
+                button.style.backgroundColor = color;
+                button.onclick = () => {
+                    bgColor = color;
+                };
+                colorPicker.appendChild(button);
+            });
+        }
+
+        document.getElementById('cardType').addEventListener('change', updateColorPicker);
+        updateColorPicker();
+
+        document.getElementById('generateCard').addEventListener('click', function() {
+            const cardType = document.getElementById('cardType').value;
+            const cardName = document.getElementById('cardName').value;
+            const description = document.getElementById('description').value.split('\n');
+            const imageInput = document.getElementById('imageInput').files[0];
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (imageInput) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height / 2);
+                        drawText(cardType, cardName, description);
+                    }
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(imageInput);
+            } else {
+                drawText(cardType, cardName, description);
+            }
+
+            const link = document.getElementById('downloadLink');
+            link.href = canvas.toDataURL();
+            link.download = 'card.png';
+            link.style.display = 'block';
+            link.innerText = '下载卡牌';
+        });
+
+        function drawText(cardType, cardName, description) {
+            ctx.fillStyle = '#000';
+            ctx.font = '20px Arial';
+            ctx.fillText(cardType, 10, 30); // 卡牌类型
+
+            if (cardType === '令') {
+                ctx.font = '60px Arial';
+                ctx.fillText('令', canvas.width / 2 - 30, canvas.height / 2 + 20); // 大字
+            } else {
+                ctx.font = '30px Arial';
+                ctx.fillText(cardName, canvas.width / 2 - ctx.measureText(cardName).width / 2, 60); // 卡牌名称
+
+                // 处理换行描述，放在中央偏下
+                ctx.font = '24px Arial'; // 增加字体大小
+                const lineHeight = 30;
+                const startY = canvas.height / 2 + 50; // 描述文本起始y坐标
+                description.forEach((line, index) => {
+                    ctx.fillText(line, canvas.width / 2 - ctx.measureText(line).width / 2, startY + index * lineHeight);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
