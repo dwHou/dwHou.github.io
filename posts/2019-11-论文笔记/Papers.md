@@ -1305,6 +1305,8 @@ $B_{id}$,  $B_{exp}$,  $B_t$分别是身份、表情和纹理PCA的基。
 >
 > blendshapes, such as FaceWarehouse [9], FaceScape [53] and Feafa [52].
 
+https://github.com/peterjiang4648/BFM_model/releases/tag/1.0 有人分享了mat文件。可以不用自行下载和matlab得到BFM.mat了。
+
 #### :computer: face3d: Python tools for processing 3D face
 
 > 3D 人脸是非常有趣的研究领域。face3D 是一个基于 Python 的开源项目（https://github.com/YadiraF/face3d），实现了 3D 人脸研究的众多功能。它可以处理网格数据，用形变模型生成 3D 人脸，从单张二维人脸图片和关键点重建三维图像，渲染不同光照条件的人脸。
