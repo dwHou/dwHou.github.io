@@ -252,9 +252,17 @@ step 2 : 查看~/.ssh 私钥id_rsa 公钥id_rsa.pub
 step 3 : A对B建立信任，将id_rsa.pub拷贝到B机的~/.ssh/authorized_keys里，>是覆盖，>>是追加。cat id_rsa.pub >> authorized_keys
 step 4 : 成功，A信任B，把公钥交给B。 A一般为服务器，可以从B免密登录
 
-二.
-注意，不是root用户，.ssh都在~/.ssh</pre>
+Note：不是root用户，.ssh都在~/.ssh
 
+三.更新ssh密钥
+1. 仍是生成公私钥 ssh-keygen -t ed25519 or rsa -C "comment" 。
+Note：如果有同类型的密钥，会自动重命名。
+2. 查看当前可被识别的密钥ssh-add -l 。
+3. 清除所有可被识别的密钥ssh-add -D，清除指定可被识别密钥ssh-add -d ~/.ssh/oldsecret.pub 。
+Note：ssh-add -d命令不会删除密钥文件本身,它只会从SSH代理程序(通常是ssh-agent)的密钥列表中删除指定的密钥。而直接删除密钥文件是更加"破坏性"的操作。在实际工作中,通常更建议使用 ssh-add -d 来暂时删除密钥,保留密钥文件。只有在确实不再需要该密钥时,才考虑直接删除密钥文件。
+4. ssh-add ~/.ssh/newsecret 添加新的可识别密钥。
+5. 再次查看当前可被识别的密钥ssh-add -l 。
+</pre>
 
 
   <h2>Latex</h2>
