@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态表格计算</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input, select {
+            width: 80%;
+            padding: 5px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        .textarea {
+            width: 80%;
+            height: 60px;
+            resize: none;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .result {
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+<ul style="list-style-type: none;">
+    <li>&#9675; 识破：使对方严阵/挑衅/叫阵失效。</li>
+    <li>&#9675; 严阵：防守时武力值+2。</li>
+    <li>&#9675; 无双：对方武将不可消耗士气。 </li>
+    <li>&#9675; 叫阵：和对方武将单挑，对方不可计入城池戍卫值。</li>
+    <li>&#9675; 挑衅：其所在城池被优先进攻。</li>
+    <li>&#9675; 驰援：部署在城池上时，也可在防守回合支援对方指定攻打的城池。</li>
+    <li>&#9675; 暴怒：武力值+1。</li>
+    <li>&#9675; 冲锋：进攻时无需弃牌。</li>
+</ul>
+<h1>动态表格计算</h1>
+<table id="data-table">
+    <thead>
+        <tr>
+            <th>卡牌名称</th>
+            <th>卡牌种类</th>
+            <th>卡牌描述</th>
+            <th>武力 (平均数值)</th>
+            <th>识破</th>
+            <th>严阵</th>
+            <th>无双</th>
+            <th>叫阵</th>
+            <th>挑衅</th>
+            <th>驰援</th>
+            <th>暴怒</th>
+            <th>冲锋</th>
+            <th>J (选项)</th>
+            <th>K (选项)</th>
+            <th>L (选项)</th>
+            <th>M (数值)</th>
+            <th>N (数值)</th>
+            <th>O (数值)</th>
+            <th>P (结果)</th>
+            <th>Q (结果)</th>
+            <th>R (结果)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input type="text" class="card-name"></td>
+            <td><input type="text" class="card-type"></td>
+            <td><textarea class="textarea card-description" oninput="autoResize(this)"></textarea></td>
+            <td><input type="number" class="input-a"></td>
+
+            <td><select class="input-b"><option value="0">无识破</option>
+                <option value="1.2">消耗士气</option>
+                <option value="1.5">1士气解锁</option>
+                <option value="1.5">2士气解锁</option>
+                <option value="1.5">3士气解锁</option>
+                <option value="1.8">条件触发</option>
+                <option value="1.8">天然自带</option></select></td>
+
+            <td><select class="input-c"><option value="0">无严阵</option>
+                <option value="1.2">消耗士气</option>
+                <option value="1.5">1士气解锁</option>
+                <option value="1.5">2士气解锁</option>
+                <option value="1.5">3士气解锁</option>
+                <option value="1.8">条件触发</option>
+                <option value="1.8">天然自带</option></select></td>
+
+            <td><select class="input-d"><option value="0">无无双</option>
+                <option value="1.2">消耗士气</option>
+                <option value="1.5">1士气解锁</option>
+                <option value="1.5">2士气解锁</option>
+                <option value="1.5">3士气解锁</option>
+                <option value="1.8">条件触发</option>
+                <option value="1.8">天然自带</option></select></td>
+
+
+            <td><select class="input-e"><option value="0">无叫阵</option>
+                <option value="1.2">消耗士气</option>
+                <option value="1.5">1士气解锁</option>
+                <option value="1.5">2士气解锁</option>
+                <option value="1.5">3士气解锁</option>
+                <option value="1.8">条件触发</option>
+                <option value="1.8">天然自带</option></select></td>
+
+            <td><select class="input-f"><option value="0">无挑衅</option>
+                <option value="1.2">消耗士气</option>
+                <option value="1.5">1士气解锁</option>
+                <option value="1.5">2士气解锁</option>
+                <option value="1.5">3士气解锁</option>
+                <option value="1.8">条件触发</option>
+                <option value="1.8">天然自带</option></select></td>
+
+            <td><select class="input-g"><option value="0">无驰援</option>
+                <option value="1.2">消耗士气</option>
+                <option value="1.5">1士气解锁</option>
+                <option value="1.5">2士气解锁</option>
+                <option value="1.5">3士气解锁</option>
+                <option value="1.8">条件触发</option>
+                <option value="1.8">天然自带</option></select></td>
+
+            <td><select class="input-h"><option value="0">无暴怒</option>
+                <option value="1.2">消耗士气</option>
+                <option value="1.5">1士气解锁</option>
+                <option value="1.5">2士气解锁</option>
+                <option value="1.5">3士气解锁</option>
+                <option value="1.8">条件触发</option>
+                <option value="1.8">天然自带</option></select></td>
+
+            <td><select class="input-i"><option value="0">无冲锋</option>
+                <option value="1.2">消耗士气</option>
+                <option value="1.5">1士气解锁</option>
+                <option value="1.5">2士气解锁</option>
+                <option value="1.5">3士气解锁</option>
+                <option value="1.8">条件触发</option>
+                <option value="1.8">天然自带</option></select></td>
+
+
+            <td><select class="input-j"><option value="0">选择</option><option value="1.2">e1</option><option value="1.5">f1</option><option value="1.8">g1</option></select></td>
+            <td><select class="input-k"><option value="0">选择</option><option value="1.0">h1</option><option value="2.0">i1</option><option value="3.0">j1</option></select></td>
+            <td><select class="input-l"><option value="0">选择</option><option value="1.1">k1</option><option value="1.3">l1</option><option value="1.9">m1</option></select></td>
+            <td><input type="number" class="input-m"></td>
+            <td><input type="number" class="input-n"></td>
+            <td><input type="number" class="input-o"></td>
+            <td class="result-p">0</td>
+            <td class="result-q">0</td>
+            <td class="result-r">0</td>
+        </tr>
+    </tbody>
+</table>
+
+<button onclick="addRow()">添加行</button>
+<button onclick="calculateResult()">计算结果</button>
+<button onclick="saveData()">保存数据为Excel</button>
+
+<script>
+    function calculateResult() {
+        const rows = document.querySelectorAll('#data-table tbody tr');
+
+        rows.forEach(row => {
+            const a = parseFloat(row.querySelector('.input-a').value) || 0;
+            const b = parseFloat(row.querySelector('.input-b').value) || 0;
+            const c = parseFloat(row.querySelector('.input-c').value) || 0;
+            const d = parseFloat(row.querySelector('.input-d').value) || 0;
+            const e = parseFloat(row.querySelector('.input-e').value) || 0;
+            const f = parseFloat(row.querySelector('.input-f').value) || 0;
+            const g = parseFloat(row.querySelector('.input-g').value) || 0;
+            const h = parseFloat(row.querySelector('.input-h').value) || 0;
+            const i = parseFloat(row.querySelector('.input-i').value) || 0;
+            const j = parseFloat(row.querySelector('.input-j').value) || 0;
+            const k = parseFloat(row.querySelector('.input-k').value) || 0;
+            const l = parseFloat(row.querySelector('.input-l').value) || 0;
+            const m = parseFloat(row.querySelector('.input-m').value) || 0;
+            const n = parseFloat(row.querySelector('.input-n').value) || 0;
+            const o = parseFloat(row.querySelector('.input-o').value) || 0;
+
+            const resultP = a + b + (c * d) + e + f;
+            const resultQ = (m + n) * o + (g - h);
+            const resultR = (i + j) / (k + 1) + l;
+
+            row.querySelector('.result-p').innerText = resultP.toFixed(2);
+            row.querySelector('.result-q').innerText = resultQ.toFixed(2);
+            row.querySelector('.result-r').innerText = resultR.toFixed(2);
+        });
+    }
+
+    function addRow() {
+        const tableBody = document.querySelector('#data-table tbody');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td><input type="text" class="card-name"></td>
+            <td><input type="text" class="card-type"></td>
+            <td><textarea class="textarea card-description" oninput="autoResize(this)"></textarea></td>
+            <td><input type="number" class="input-a"></td>
+            <td><select class="input-b"><option value="0">选择</option><option value="1.2">a</option><option value="1.5">b</option><option value="1.8">c</option></select></td>
+            <td><select class="input-c"><option value="0">选择</option><option value="1.0">x</option><option value="2.0">y</option><option value="3.0">z</option></select></td>
+            <td><select class="input-d"><option value="0">选择</option><option value="1.1">m</option><option value="1.3">n</option><option value="1.9">o</option></select></td>
+            <td><select class="input-e"><option value="0">选择</option><option value="1.4">p</option><option value="1.6">q</option><option value="1.7">r</option></select></td>
+            <td><select class="input-f"><option value="0">选择</option><option value="1.2">s</option><option value="1.5">t</option><option value="1.8">u</option></select></td>
+            <td><select class="input-g"><option value="0">选择</option><option value="1.0">v</option><option value="2.0">w</option><option value="3.0">x</option></select></td>
+            <td><select class="input-h"><option value="0">选择</option><option value="1.1">y</option><option value="1.3">z</option><option value="1.9">a1</option></select></td>
+            <td><select class="input-i"><option value="0">选择</option><option value="1.4">b1</option><option value="1.6">c1</option><option value="1.7">d1</option></select></td>
+            <td><select class="input-j"><option value="0">选择</option><option value="1.2">e1</option><option value="1.5">f1</option><option value="1.8">g1</option></select></td>
+            <td><select class="input-k"><option value="0">选择</option><option value="1.0">h1</option><option value="2.0">i1</option><option value="3.0">j1</option></select></td>
+            <td><select class="input-l"><option value="0">选择</option><option value="1.1">k1</option><option value="1.3">l1</option><option value="1.9">m1</option></select></td>
+            <td><input type="number" class="input-m"></td>
+            <td><input type="number" class="input-n"></td>
+            <td><input type="number" class="input-o"></td>
+            <td class="result-p">0</td>
+            <td class="result-q">0</td>
+            <td class="result-r">0</td>
+        `;
+        tableBody.appendChild(newRow);
+    }
+
+    function saveData() {
+        const rows = document.querySelectorAll('#data-table tbody tr');
+        const data = [];
+        const header = [
+            "卡牌名称", "卡牌种类", "卡牌描述", "武力 (数值)", "识破","严阵","无双","叫阵","挑衅","驰援","暴怒","冲锋", "J (选项)", "K (选项)", "L (选项)", "M (数值)",
+            "N (数值)", "O (数值)", "P (结果)", "Q (结果)", "R (结果)"
+        ];
+
+        data.push(header);
+
+        rows.forEach(row => {
+            const name = row.querySelector('.card-name').value;
+            const type = row.querySelector('.card-type').value;
+            const description = row.querySelector('.card-description').value.replace(/\|/g, '');
+            const a = row.querySelector('.input-a').value;
+            const b = row.querySelector('.input-b').value;
+            const c = row.querySelector('.input-c').value;
+            const d = row.querySelector('.input-d').value;
+            const e = row.querySelector('.input-e').value;
+            const f = row.querySelector('.input-f').value;
+            const g = row.querySelector('.input-g').value;
+            const h = row.querySelector('.input-h').value;
+            const i = row.querySelector('.input-i').value;
+            const j = row.querySelector('.input-j').value;
+            const k = row.querySelector('.input-k').value;
+            const l = row.querySelector('.input-l').value;
+            const m = row.querySelector('.input-m').value;
+            const n = row.querySelector('.input-n').value;
+            const o = row.querySelector('.input-o').value;
+            const resultP = row.querySelector('.result-p').innerText;
+            const resultQ = row.querySelector('.result-q').innerText;
+            const resultR = row.querySelector('.result-r').innerText;
+
+            data.push([
+                name, type, description, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, resultP, resultQ, resultR
+            ]);
+        });
+
+        // 创建工作簿
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "卡牌数据");
+
+        // 导出文件
+        XLSX.writeFile(wb, "table_data.xlsx");
+    }
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto'; // Reset height to auto
+        textarea.style.height = textarea.scrollHeight + 'px'; // Set new height
+    }
+</script>
+
+</body>
+</html>

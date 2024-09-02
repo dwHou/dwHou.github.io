@@ -1214,6 +1214,16 @@ Issue区很好玩，可以从卖nerfs的广告哥的主页浏览到诸多热门�
 
 finetune时需要冻结BN，https://dl.acm.org/doi/pdf/10.1145/3503161.3547915
 
+DINet作者设计和训练了一个版本的syncnet，这个感觉也有研究价值，它的syncnet出来不是普通的标量，而是有空间维度的，类似于patch-GAN，可能对画质有帮助。
+
+至于开源的syncnet_pytorch是
+
+https://github.com/joonson/syncnet_python/issues/65
+
+AV offset: the offset between Audio and Video, -1 means the audio is faster than the video for 1 frame, +1 means the opposite;
+Min dist: Min dist is the mean feature-wise distance between the audio and video at `AV offset`.
+Confidence: Confidence is a score of how much closer the mean feature-wise distance is at the `AV offset` compared to other wrong offsets. Higher the confidence, more likely the sync offset is to be correct.
+
 #### :page_with_curl:Codeformer
 
 https://youtu.be/0wJezYHWA1c lipsync后面接gpen + codeformer效果很好
