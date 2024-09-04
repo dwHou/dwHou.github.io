@@ -462,6 +462,20 @@ Terminal <--[<output]--- |       |                \ \
     apt 命令被设计为对用户更加友好的 apt-get 替代方案，来自<a href="https://aws.amazon.com/cn/compare/the-difference-between-apt-and-apt-get/">AWS建议</a>
   </pre>
 
+  <h2>安装nvidia显卡驱动</h2>
+  <pre>
+    <font color="blue">方式1：</font><a href="https://www.nvidia.com/en-us/drivers/">官网</a>下载run包，然后运行即可。
+    会询问 是否安装32位兼容库；是否安装NVIDIA 3D媒体库；是否更新X配置；是否要安装DKMS。
+    <font color="blue">方式2：</font>可以依次执行sudo apt-get update, sudo apt-get upgrade, sudo ubuntu-drivers autoinstall 自动安装驱动。
+    但英伟达驱动有bug，会导致机器能进入自动休眠，可以查看/var/log/syslog | grep sleep了解。
+    以下操作关闭自动休眠：
+    sudo systemctl stop nvidia-suspend.service  nvidia-hibernate.service nvidia-resume.services
+    sudo systemctl mask  nvidia-suspend.service  nvidia-hibernate.service  nvidia-resume.service
+    sudo rm /lib/systemd/system-sleep/nvidia
+    sudo systemctl stop sleep.target suspend.target hibernate.target hybrid-sleep.target
+    sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+  </pre>
+
   <h2>关于显卡的温度监控</h2>
   <pre>
     指定显卡重启：

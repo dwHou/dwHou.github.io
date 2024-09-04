@@ -230,15 +230,6 @@ https://zhuanlan.zhihu.com/p/23599229
   </pre>
 
   <pre>
-    docker存储的维护：
-    docker system df 查看存储占用情况，
-    docker rmi IMAGE 指定删除镜像
-    docker rm  CONTAINER 指定删除容器
-    docker system prune = docker image prune + docker container prune + docker network prune 自动清理未使用的镜像/容器/网络等。
-  </pre>
-
-
-  <pre>
       本地浏览器连容器内的tensorboard：
       1.创建容器时 -p 6166:6166/tcp -p 6167:6167/tcp 多映射几对端口。（平时9999:22，是因为ssh一般默认22端口）
       2.tensorboard --logdir dirname --bind_all --port 6167，可以tensorboard -h查看--bind_all的作用，可以知道它能将TensorBoard实例暴露给公网。
@@ -367,7 +358,18 @@ https://zhuanlan.zhihu.com/p/23599229
     docker system prune -a && docker volume prune
     前一个命令安全，后一个不到不得已慎用。
     BE CAREFUL docker volume prunewill remove all your data that was persisted from docker to host disk........ system prune is safe though
+
+    清理容器前，可以查看容器状态：
+    docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Status}}"
   </pre>
+  <pre>
+    docker存储的维护：
+    docker system df 查看存储占用情况，
+    docker rmi IMAGE 指定删除镜像
+    docker rm  CONTAINER 指定删除容器
+    docker system prune = docker image prune + docker container prune + docker network prune 自动清理未使用的镜像/容器/网络等。
+  </pre>
+
 
   <h3>docker存储迁移</h3>
   docker安装时，存储位置默认在/var/lib/docker。一般这个是挂载在系统盘。而系统盘一般空间较小，无法满足docker用户增长的需求。并且出问题会带来一些风险。放数据盘更安全。
