@@ -1,0 +1,823 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+
+<link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+.mac-os-11 { --title-bar-height: 28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5 { white-space: pre-wrap; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.428571; overflow-x: hidden; background: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; font-size-adjust: inherit; font-kerning: inherit; font-variant-alternates: inherit; font-variant-ligatures: inherit; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-variant-position: inherit; font-variant-emoji: inherit; font-feature-settings: inherit; font-optical-sizing: inherit; font-variation-settings: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+thead, tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right-width: 0px; border-right-style: none; border-right-color: currentcolor; background-color: inherit; }
+.CodeMirror-linenumber { -webkit-user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+svg { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; border-color: transparent !important; padding-top: 0px !important; padding-bottom: 0px !important; }
+  .typora-export * { print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  #write > p:nth-child(1) { margin-top: 0px; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+  figure { overflow-x: visible; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: medium; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.reversefootnote { font-family: ui-monospace, sans-serif; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom-width: 0px; border-bottom-style: none; border-bottom-color: currentcolor; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: medium; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background: inherit; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex: 2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; overflow-wrap: anywhere; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.428571rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left-width: 28px; border-left-style: solid; border-left-color: transparent; border-right-width: 28px; border-right-style: solid; border-right-color: transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right-width: 8px; border-right-style: solid; border-right-color: transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+mjx-container { break-inside: avoid; }
+.md-alert.md-alert-note { border-left-color: rgb(9, 105, 218); }
+.md-alert.md-alert-important { border-left-color: rgb(130, 80, 223); }
+.md-alert.md-alert-warning { border-left-color: rgb(154, 103, 0); }
+.md-alert.md-alert-tip { border-left-color: rgb(31, 136, 61); }
+.md-alert.md-alert-caution { border-left-color: rgb(207, 34, 46); }
+.md-alert { padding: 0px 1em; margin-bottom: 16px; color: inherit; border-left-width: 0.25em; border-left-style: solid; border-left-color: rgb(0, 0, 0); }
+.md-alert-text-note { color: rgb(9, 105, 218); }
+.md-alert-text-important { color: rgb(130, 80, 223); }
+.md-alert-text-warning { color: rgb(154, 103, 0); }
+.md-alert-text-tip { color: rgb(31, 136, 61); }
+.md-alert-text-caution { color: rgb(207, 34, 46); }
+.md-alert-text { font-size: 0.9rem; font-weight: 700; }
+.md-alert-text svg { fill: currentcolor; position: relative; top: 0.125em; margin-right: 1ch; overflow: visible; }
+.md-alert-text-container::after { content: attr(data-text); text-transform: capitalize; pointer-events: none; margin-right: 1ch; }
+
+
+/* meyer reset -- http://meyerweb.com/eric/tools/css/reset/ , v2.0 | 20110126 | License: none (public domain) */
+
+@include-when-export url(https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext);
+
+/* =========== */
+
+/* pt-serif-regular - latin */
+/* pt-serif-italic - latin */
+/* pt-serif-700 - latin */
+/* pt-serif-700italic - latin */
+:root {
+	--active-file-bg-color: #dadada;
+	--active-file-bg-color: rgba(32, 43, 51, 0.63);
+	--active-file-text-color: white;
+	--bg-color: #f3f2ee;
+	--text-color: #1f0909;
+	--control-text-color: #444;
+	--rawblock-edit-panel-bd: #e5e5e5;
+
+	--select-text-bg-color: rgba(32, 43, 51, 0.63);
+  --select-text-font-color: white;
+}
+
+pre {
+	--select-text-bg-color: #36284e;
+	--select-text-font-color: #fff;
+}
+
+html {
+	font-size: 16px;
+	-webkit-font-smoothing: antialiased;
+}
+
+html, body {
+	background-color: #f3f2ee;
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+	color: #1f0909;
+	line-height: 1.5em;
+}
+
+/*#write {
+	overflow-x: auto;
+    max-width: initial;
+	padding-left: calc(50% - 17em);
+    padding-right: calc(50% - 17em);
+}
+
+@media (max-width: 36em) {
+ 	#write {
+ 		padding-left: 1em;
+    	padding-right: 1em;
+ 	}
+}*/
+
+#write {
+	max-width: 40em;
+}
+
+@media only screen and (min-width: 1400px) {
+	#write {
+			max-width: 914px;
+	}
+}
+
+ol li {
+	list-style-type: decimal;
+	list-style-position: outside;
+}
+ul li {
+	list-style-type: disc;
+	list-style-position: outside;
+}
+
+ol,
+ul {
+	list-style: none;
+}
+
+blockquote,
+q {
+	quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* styles */
+
+/* ====== */
+
+/* headings */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: bold;
+}
+h1 {
+	font-size: 1.875em;
+	/*30 / 16*/
+	line-height: 1.6em;
+	/* 48 / 30*/
+	margin-top: 2em;
+}
+h2,
+h3 {
+	font-size: 1.3125em;
+	/*21 / 16*/
+	line-height: 1.15;
+	/*24 / 21*/
+	margin-top: 2.285714em;
+	/*48 / 21*/
+	margin-bottom: 1.15em;
+	/*24 / 21*/
+}
+h3 {
+	font-weight: normal;
+}
+h4 {
+	font-size: 1.125em;
+	/*18 / 16*/
+	margin-top: 2.67em;
+	/*48 / 18*/
+}
+h5,
+h6 {
+	font-size: 1em;
+	/*16*/
+}
+h1 {
+	border-bottom: 1px solid;
+	margin-bottom: 1.875em;
+	padding-bottom: 0.8125em;
+}
+/* links */
+
+a {
+	text-decoration: none;
+	color: #065588;
+}
+a:hover,
+a:active {
+	text-decoration: underline;
+}
+/* block spacing */
+
+p,
+blockquote,
+.md-fences {
+	margin-bottom: 1.5em;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-bottom: 1.5em;
+}
+/* blockquote */
+
+blockquote {
+	font-style: italic;
+	border-left: 5px solid;
+	margin-left: 2em;
+	padding-left: 1em;
+}
+/* lists */
+
+ul,
+ol {
+	margin: 0 0 1.5em 1.5em;
+}
+/* tables */
+.md-meta,.md-before, .md-after {
+	color:#999;
+}
+
+table {
+	margin-bottom: 1.5em;
+	/*24 / 16*/
+	font-size: 1em;
+	/* width: 100%; */
+}
+thead th,
+tfoot th {
+	padding: .25em .25em .25em .4em;
+	text-transform: uppercase;
+}
+th {
+	text-align: left;
+}
+td {
+	vertical-align: top;
+	padding: .25em .25em .25em .4em;
+}
+
+code,
+.md-fences {
+	background-color: #dadada;
+}
+
+code {
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.md-fences {
+	margin-left: 2em;
+	margin-bottom: 3em;
+	padding-left: 1ch;
+	padding-right: 1ch;
+}
+
+pre,
+code,
+tt {
+	font-size: .875em;
+	line-height: 1.714285em;
+}
+/* some fixes */
+
+h1 {
+	line-height: 1.3em;
+	font-weight: normal;
+	margin-bottom: 0.5em;
+}
+
+p + ul,
+p + ol{
+	margin-top: .5em;
+}
+
+h3 + ul,
+h4 + ul,
+h5 + ul,
+h6 + ul,
+h3 + ol,
+h4 + ol,
+h5 + ol,
+h6 + ol {
+	margin-top: .5em;
+}
+
+li > ul,
+li > ol {
+	margin-top: inherit;
+	margin-bottom: 0;
+}
+
+li ol>li {
+	list-style-type: lower-alpha;
+}
+
+li li ol>li{
+	list-style-type: lower-roman;
+}
+
+h2,
+h3 {
+	margin-bottom: .75em;
+}
+hr {
+	border-top: none;
+	border-right: none;
+	border-bottom: 1px solid;
+	border-left: none;
+}
+h1 {
+	border-color: #c5c5c5;
+}
+blockquote {
+	border-color: #bababa;
+	color: #656565;
+}
+
+blockquote ul,
+blockquote ol {
+	margin-left:0;
+}
+
+.ty-table-edit {
+	background-color: transparent;
+}
+thead {
+	background-color: #dadada;
+}
+tr:nth-child(even) {
+	background: #e8e7e7;
+}
+hr {
+	border-color: #c5c5c5;
+}
+.task-list{
+	padding-left: 1rem;
+}
+
+.md-task-list-item {
+	padding-left: 1.5rem;
+	list-style-type: none;
+}
+
+.md-task-list-item > input:before {
+	content: '\221A';
+	display: inline-block;
+	width: 1.25rem;
+  	height: 1.6rem;
+	vertical-align: middle;
+	text-align: center;
+	color: #ddd;
+	background-color: #F3F2EE;
+}
+
+.md-task-list-item > input:checked:before,
+.md-task-list-item > input[checked]:before{
+	color: inherit;
+}
+
+#write pre.md-meta-block {
+	min-height: 1.875rem;
+	color: #555;
+	border: 0px;
+	background: transparent;
+	margin-top: -4px;
+	margin-left: 1em;
+	margin-top: 1em;
+}
+
+.md-image>.md-meta {
+	color: #9B5146;
+}
+
+.md-image>.md-meta{
+	font-family: Menlo, 'Ubuntu Mono', Consolas, 'Courier New', 'Microsoft Yahei', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', serif;
+}
+
+
+#write>h3.md-focus:before{
+	left: -1.5rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h4.md-focus:before{
+	left: -1.5rem;
+	top: .25rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h5.md-focus:before{
+	left: -1.5rem;
+	top: .0.3125rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h6.md-focus:before{
+	left: -1.5rem;
+	top: 0.3125rem;
+	color:#999;
+	border-color:#999;
+}
+
+.md-toc:focus .md-toc-content{
+	margin-top: 19px;
+}
+
+.md-toc-content:empty:before{
+	color: #065588;
+}
+.md-toc-item {
+	color: #065588;
+}
+#write div.md-toc-tooltip {
+	background-color: #f3f2ee;
+}
+
+#typora-sidebar {
+	background-color: #f3f2ee;
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+  	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+}
+
+.pin-outline #typora-sidebar {
+	background: inherit;
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+.pin-outline #typora-sidebar:hover .outline-title-wrapper {
+	border-left:1px dashed;
+}
+
+.outline-item:hover {
+  background-color: #dadada;
+  border-left: 28px solid #dadada;
+  border-right: 18px solid #dadada;
+}
+
+.typora-node .outline-item:hover {
+  	border-right: 28px solid #dadada;
+}
+
+.outline-expander:before {
+  content: "\f0da";
+  font-family: FontAwesome;
+  font-size:14px;
+  top: 1px;
+}
+
+.outline-expander:hover:before,
+.outline-item-open>.outline-item>.outline-expander:before {
+  content: "\f0d7";
+}
+
+.modal-content {
+	background-color: #f3f2ee;
+}
+
+.auto-suggest-container ul li {
+	list-style-type: none;
+}
+
+/** UI for electron */
+
+.megamenu-menu,
+#top-titlebar, #top-titlebar *,
+.megamenu-content {
+	background: #f3f2ee;
+	color: #1f0909;
+}
+
+.megamenu-menu-header {
+	border-bottom: 1px dashed #202B33;
+}
+
+.megamenu-menu {
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+header, .context-menu, .megamenu-content, footer {
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+    color: #1f0909;
+}
+
+#megamenu-back-btn {
+	color: #1f0909;
+	border-color: #1f0909;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title:before {
+	color: #1f0909;
+}
+
+.megamenu-menu-list li a:hover, .megamenu-menu-list li a.active {
+	color: inherit;
+	background-color: #e8e7df;
+}
+
+.long-btn:hover {
+	background-color: #e8e7df;
+}
+
+#recent-file-panel tbody tr:nth-child(2n-1) {
+    background-color: transparent !important;
+}
+
+.megamenu-menu-panel tbody tr:hover td:nth-child(2) {
+    color: inherit;
+}
+
+.megamenu-menu-panel .btn {
+	background-color: #D2D1D1;
+}
+
+.btn-default {
+	background-color: transparent;
+}
+
+.typora-sourceview-on #toggle-sourceview-btn,
+.ty-show-word-count #footer-word-count {
+	background: #c7c5c5;
+}
+
+#typora-quick-open {
+    background-color: inherit;
+}
+
+.md-diagram-panel {
+	margin-top: 8px;
+}
+
+.file-list-item-file-name {
+	font-weight: initial;
+}
+
+.file-list-item-summary {
+	opacity: 1;
+}
+
+.file-list-item {
+	color: #777;
+}
+
+.file-list-item.active {
+	background-color: inherit;
+	color: black;
+}
+
+.ty-side-sort-btn.active {
+	background-color: inherit;
+}
+
+.file-list-item.active .file-list-item-file-name  {
+	font-weight: bold;
+}
+
+.file-list-item{
+    opacity:1 !important;
+}
+
+.file-library-node.active>.file-node-background{
+	background-color: rgba(32, 43, 51, 0.63);
+	background-color: var(--active-file-bg-color);
+}
+
+.file-tree-node.active>.file-node-content{
+	color: white;
+	color: var(--active-file-text-color);
+}
+
+.md-task-list-item>input {
+	margin-left: -1.7em;
+	margin-top: calc(1rem - 12px);
+	-webkit-appearance: button;
+}
+
+input {
+	border: 1px solid #aaa;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title,
+.megamenu-menu-header:hover, 
+.megamenu-menu-header:focus {
+	color: inherit;
+}
+
+.dropdown-menu .divider {
+	border-color: #e5e5e5;
+	opacity: 1;
+}
+
+/* https://github.com/typora/typora-issues/issues/2046 */
+.os-windows-7 strong,
+.os-windows-7 strong  {
+	font-weight: 760;
+}
+
+.ty-preferences .btn-default {
+	background: transparent;
+}
+
+.ty-preferences .window-header {
+	border-bottom: 1px dashed #202B33;
+	box-shadow: none;
+}
+
+#sidebar-loading-template, #sidebar-loading-template.file-list-item {
+	color: #777;
+}
+
+.searchpanel-search-option-btn.active {
+	background: #777;
+	color: white;
+}
+
+.export-detail, .light .export-detail, 
+.light .export-item.active, 
+.light .export-items-list-control {
+	background: #e0e0e0;
+	border-radius: 2px;
+	font-weight: 700;
+	color: inherit
+}
+
+ @media print { @page {margin: 0 0 0 0;} body.typora-export {padding-left: 0; padding-right: 0;} #write {padding:0;}}
+</style><title>publish-lessons</title>
+</head>
+<body class='typora-export typora-export-show-outline typora-export-no-collapse-outline'><div class='typora-export-content'>
+<div class="typora-export-sidebar"><div class="outline-content"><li class="outline-item-wrapper outline-h1"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#桌游出版课">桌游出版课</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#第1节-设计的灵感">第1节 设计的灵感</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#11-为什么做桌游">1.1 为什么做桌游</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#12-设计的灵感">1.2 设计的灵感</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#第2节-灵感的落地">第2节 灵感的落地</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#第3节-测试的原则">第3节 测试的原则</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#31-目标与方向">3.1 目标与方向</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#32-测试哪些东西">3.2 测试哪些东西</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#33-重写规则">3.3 重写规则</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#34-说明书">3.4 说明书</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#35-吸收和舍弃测试建议">3.5 吸收和舍弃测试建议</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#第4节-打样的准备">第4节 打样的准备</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#41-概念">4.1 概念</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#42-工厂介绍">4.2 工厂介绍</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#43-工厂对接">4.3 工厂对接</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#第5节-打样的叮嘱">第5节 打样的叮嘱</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#51-卡牌">5.1 卡牌</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#52-外盒">5.2 外盒</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#53-版图">5.3 版图</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#54-说明书">5.4 说明书</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#第6节-投稿的叮嘱">第6节 投稿的叮嘱</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#61-投稿的前言">6.1 投稿的前言</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#62-关于出版商">6.2 关于出版商</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#第7节-桌游版权">第7节 桌游版权</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#71-保护版权的时机">7.1 保护版权的时机</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#72-保护版权的方式">7.2 保护版权的方式</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#73-出版的叮嘱">7.3 出版的叮嘱</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#74-面对出版社的回复">7.4 面对出版社的回复</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#第8节-发起一次众筹">第8节 发起一次众筹</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#81-众筹平台">8.1 众筹平台</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#82-要素">8.2 要素</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#83-阶段">8.3 阶段</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#84-页面">8.4 页面</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#第9节-众筹宣发与运营">第9节 众筹宣发与运营</a></div><ul class="outline-children"></ul></li></ul></li></div></div><div id='write'  class=''><h1 id='桌游出版课'><span>桌游出版课</span></h1><p><a href='https://space.bilibili.com/35944556/channel/collectiondetail?sid=1742490' target='_blank' class='url'>https://space.bilibili.com/35944556/channel/collectiondetail?sid=1742490</a></p><h2 id='第1节-设计的灵感'><span>第1节 设计的灵感</span></h2><p><span>桌游的策划</span></p><h3 id='11-为什么做桌游'><span>1.1 为什么做桌游</span></h3><p><span>爱好，自我价值的实现，甲方需求，活动辅助</span></p><h3 id='12-设计的灵感'><span>1.2 设计的灵感</span></h3><p><span>up主1:</span></p><p><span>• 方式1: 机制先行，喜欢某个机制，再倒推哪个背景、主题。</span></p><p><span>• 方式2:主题先行，喜欢某个主题，再看适合哪些机制。</span></p><p><span>up主2:</span></p><p><span>• 方式1:抽象思考，创新，避免同质化。比如跳棋和象棋结合。算缝合，但要把它差异化足够到让人玩的时候联想不到源头。不断的抽离。</span></p><p><span>• 方式2:现实取材，来源于生活，甚至生活里一些网游、手游。</span></p><p><span>• 方式3:多种结合，机制和主题双向奔赴。</span></p><div class="md-alert md-alert-note note"><p><span class='md-alert-text md-alert-text-note'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</span><br></p><p><span>最终机制先行，还是主题先行，这是个玄学，不用给自己套枷锁，可以这个想累了，换那个。双向的。</span></p></div><p><span>机制先行典型：RK老师，他的很多游戏都是先有一个规整的数学模型来做嵌套。但也导致一些人觉得他的主题没有代入感。</span></p><p><span>主题先行典型：很多美式游戏。</span></p><h2 id='第2节-灵感的落地'><span>第2节 灵感的落地</span></h2><p><span>上百种机制没法用课程一一讲解。我们主要介绍几个原则：</span></p><p><span>• 简单：想法简单、配件简单、落地简单，没有成熟的团队不要一开始制作巨作，从小作品开始。</span></p><blockquote><p><span>先做gateway游戏，再做大作。</span></p></blockquote><p><span>• 经济：卡牌材质、多大，常规的尺寸、配件，比较好找到材料。</span></p><p><span>• 市场：规避政治、宗教主题。</span></p><p><span>• 单一爽点</span></p><p><span>• 测试：不断测试，双盲测试（不给别人讲规则，自己看规则书、提示卡，不让他们知道你是谁）</span></p><p><span>• 迭代：反复迭代，每次设计一版可能会进入一个甜蜜时刻，但是给人测试后又会被批得狗血淋头。</span></p><div class="md-alert md-alert-note note"><p><span class='md-alert-text md-alert-text-note'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</span><br></p><p><span>demo阶段：可以是黑白纸片，这一阶段不需要过多考虑美工。只要能表达清晰。配件可以从别的桌游里借，卡牌可以是白卡纸，棋子可以是普通棋子+贴纸。1688.com可以找到各种token/米宝/标记物/骰子，中国作为世界第一轻工业大国的自尊心都在这个网站。可以因地制宜找想近的配件。可以稍考虑合理性，米宝（可以站立）→人物，方块（平铺省体积）→资源，圆片（适合堆叠）→分数。</span></p></div><p>&nbsp;</p><h2 id='第3节-测试的原则'><span>第3节 测试的原则</span></h2><h3 id='31-目标与方向'><span>3.1 目标与方向</span></h3><p><span>期望什么结果：规划？策略？欢乐？爽点？</span></p><p><span>方式：初测 —&gt; 规则 —&gt; 盲测</span></p><p><span>国外桌游设计师会给一笔设计费，请玩家测试，并且写测试报告。过早写详细规则一般都要推倒重整。</span></p><h3 id='32-测试哪些东西'><span>3.2 测试哪些东西</span></h3><p><span>主题的代入感、参与感；UI（如文字排版、配件大小）；节奏（大家玩得爽不爽，长考？过快？过慢？混乱？行动步骤记不记得住，是否符合直觉？）；平衡性（静态，如数学模型，动态，如三国杀内奸身份）；</span></p><p><span>测试：易学，主题，重度，互动，时长，耐玩，策略，运气，美观。</span></p><h3 id='33-重写规则'><span>3.3 重写规则</span></h3><p><span>避免歧义、长句、失衡（可以允许玩家根据自己的聪明抓到一些小的失衡形成爽点，但不能崩坏）、出局、拥王、抄袭。</span></p><h3 id='34-说明书'><span>3.4 说明书</span></h3><p><span>说明书是一款桌游的灵魂，往往决定桌游的成败。</span></p><h3 id='35-吸收和舍弃测试建议'><span>3.5 吸收和舍弃测试建议</span></h3><p><span>回到目标与方向</span></p><h2 id='第4节-打样的准备'><span>第4节 打样的准备</span></h2><h3 id='41-概念'><span>4.1 概念</span></h3><p><font color="blue"><span>打样：</span></font><span>批量生产作品之前，先试作一～三份。确认生产出来的东西，和你心目中是一摸一样的。包括手感、内容、色差。</span></p><h3 id='42-工厂介绍'><span>4.2 工厂介绍</span></h3><p><span>世界各国各种桌游很多都是made in china。</span></p><p><span>知名工厂举例：</span></p><ol start='' ><li><p><span>panda：非常知名，工艺、专业度非常强。价格相对来说有一点高。</span></p></li><li><p><span>long pack（朗印）</span></p></li><li><p><span>wingo：来自惠州，接受一些印量比较小的桌游。500套就可以起订。价格相对实惠。</span></p></li><li><p><span>hopes（霍谱斯）：来自苏州，价格也实惠，服务态度非常好。</span></p></li></ol><h3 id='43-工厂对接'><span>4.3 工厂对接</span></h3><div class="md-alert md-alert-note note"><p><span class='md-alert-text md-alert-text-note'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</span><br></p><p><span>不过到这一步已经是非常少数的桌游设计师了，通常来说，桌游设计师其实只要把规则文本和游戏原型完成，剩下可以全交给出版商了。</span></p><p><span>但也可以选择自行出版，首先是桌游的收益全由你来掌控，话语权也会很高。</span></p></div><p><span>主要就是看会不会制作源文件。Ps、Ai、Id这三款adobe的软件可以编辑源文件，最后是pdf文件进行印刷。 所以是提供psd、ai、indd这几种格式的源文件给工厂，这样工厂可以做一些细微调整。</span></p><p><font color="blue"><span>源文件</span></font><span>包含：卡牌、版图、说明书、游戏天地外盒。</span></p><p><span>跟工厂沟通后，工厂会给你几种常见的尺寸，回头会给你一个pdf的刀模文件。我们可以根据刀模文件进行外观制作。</span></p><p><span>专业桌游工厂咨询的时候，会给到你建议，还会给你一个报价。到时候你可以根据每件东西的报价，灵活地取舍。</span></p><h2 id='第5节-打样的叮嘱'><span>第5节 打样的叮嘱</span></h2><h3 id='51-卡牌'><span>5.1 卡牌</span></h3><p><span>常见尺寸：63x88，美式桥牌、万智牌、宝可梦、三国杀都是这个尺寸。59x86，游戏王的尺寸。</span></p><p><span>质感：压纹，也不会增加多少成本。</span></p><p><span>克数：300克、350克，三国杀就是350克的铜版纸。挺多众筹项目的解锁项就有300g到350g。</span></p><h3 id='52-外盒'><span>5.2 外盒</span></h3><p><span>格式：天地盒（常见）、折盒（扑克牌的盒子就属于折盒，非常便宜）</span></p><p><span>尺寸：大盒30x30、28x28，小盒14x10，一般只要能放下两个63x88的盒就行了，稍微再大一点就牌套也能放下。</span></p><h3 id='53-版图'><span>5.3 版图</span></h3><p><span>版图没什么特殊的工艺了，听工厂的就行。</span></p><h3 id='54-说明书'><span>5.4 说明书</span></h3><p><span>说明书很重要，可以单拎出来说一期。</span></p><h2 id='第6节-投稿的叮嘱'><span>第6节 投稿的叮嘱</span></h2><h3 id='61-投稿的前言'><span>6.1 投稿的前言</span></h3><p><span>挺多设计师到了打样这一步，其实就选择说尝试把游戏投给出版社，后边的流程交给更专业的人去做，风险更低。</span></p><p><span>一些设计师直接交给出版社是比较浅显的稿件，比如一份说明书、手作的样品、手写的卡牌。</span></p><p><span>但如果你有一份打样，还算相对精美，配件比较完整，有一个辨识度，会比手写更加礼貌一些。 出版商看到了以后，会更愿意把你的作品读完，甚至是玩一盘。所以你去找工厂打印一份样品还是划算的。尤其是很多工厂，为招揽生意，可以免费为设计师打印一份样品。</span></p><blockquote><p><span>一般来说，打样的费用相对来说比较高的，一个小盒是500～800元，中盒游戏可能1000多元，复杂的大盒游戏可能大概是几千块钱。</span></p></blockquote><p><span>投稿的同时，也可参加一些比赛，比如游卡举办的世界原创桌游大赛（WODC, World Original Design Contest of Board Game）。</span></p><h3 id='62-关于出版商'><span>6.2 关于出版商</span></h3><p><span>国内其实有30多家出版商，这个数字可能现在还在增长。他们在看原创作品的时候，就像是你是一个编剧，你写好故事去投稿一样。他们会收到大量的投稿，我们如果能避免一些大家都犯的坑，就会让审美疲劳的出版商们眼前一亮。成功出版的概率也很高。</span></p><p><span>出版商审稿的三个级别：</span></p><p><code>Lv.1 欢乐、互动、易学、策略</code></p><p><code>Lv.2 主题、代入感、机制、规则</code></p><p><code>Lv.3 创新、成本、名称、市场</code></p><p><span>不同出版社接受投稿，侧重方向有点区别，比如地核偏欢乐，战鼓偏策略。创新包括配件的创新。比如流画溢彩，半透明卡牌，叠放呈现画作，就挺创新。</span></p><figure class='table-figure'><table><thead><tr><th style='text-align:left;' ><span>出版商</span></th><th style='text-align:left;' ><span>特点</span></th></tr></thead><tbody><tr><td style='text-align:left;' ><span>地核</span></td><td style='text-align:left;' ><span>主要做原创，很多桌游群能找到他们的工作人员。</span></td></tr><tr><td style='text-align:left;' ><span>游刻</span></td><td style='text-align:left;' ><span>新进的出版商，之前在抖音带火了很多游戏，所以游刻负责人特别的踌躇满志，想把原创桌游这块做好。</span></td></tr><tr><td style='text-align:left;' ><span>一刻馆</span></td><td style='text-align:left;' ><span>主要是代理业务。但现在也会接一些偏向亲子向、儿童向的游戏设计。自己有亲子向桌游设计团队。</span></td></tr><tr><td style='text-align:left;' ><span>智研家</span></td><td style='text-align:left;' ><span>正在把桌游设计带到中小学生，也有全职设计师。</span></td></tr><tr><td style='text-align:left;' ><span>柏龙</span></td><td style='text-align:left;' ><span>香港桌游圈子的龙头，除了出版一些海外产品，也在做一些原创的作品。</span></td></tr><tr><td style='text-align:left;' ><span>桌一派</span></td><td style='text-align:left;' ><span>聚会游戏、红色的桌游，跟一些IP作品合作。</span></td></tr><tr><td style='text-align:left;' ><span>益盒</span></td><td style='text-align:left;' ><span>北京的出版社，设计师是水水，这个出版社是有一个设计师成立的。</span></td></tr><tr><td style='text-align:left;' ><span>早米</span></td><td style='text-align:left;' ><span>成都的一家，专门做儿童游戏。</span></td></tr><tr><td style='text-align:left;' ><span>九张牌</span></td><td style='text-align:left;' ><span>游戏教师up主vivi自己的一个品牌，目前是接受9卡游戏。</span></td></tr><tr><td style='text-align:left;' >&nbsp;</td><td style='text-align:left;' >&nbsp;</td></tr><tr><td style='text-align:left;' >&nbsp;</td><td style='text-align:left;' >&nbsp;</td></tr></tbody></table></figure><p><span>除了出版商之外，我们也可以去积极参加桌游设计比赛，比如WODC世界原创桌游大赛。是由游卡核心工作室创办的比赛。目前比赛已经成功开办四届了。</span></p><p>&nbsp;</p><h2 id='第7节-桌游版权'><span>第7节 桌游版权</span></h2><p><span>这一节介绍如何保护自己的桌游版权</span></p><p><span>孩之宝一年接收到一千多个稿件，所以其实大部分点子是不值钱的，更难的是出版。点子的成功与否，靠后续所有工序的造化。另外如果点子足够棒，哪怕现在没被盗版，之后也会出现盗版。</span></p><blockquote><p><span>盗版商看游戏的其中一个标准，就是它有足够的销量。如果你认为你这个游戏的销量不到2000套，没人会盗版你的游戏。盗版商只是无情的赚钱机器，不讲情怀。</span></p></blockquote><p><span>有些游戏可能就是众筹热一次就结束了，众筹时购买玩家就饱和了，没有后面的大卖阶段。但我们设计师都在致力于出一款不断会加印的游戏。这样你就可以一辈子去吃它的版税。但还是可以有基本的信任，尤其是大出版社，他们轻易不会做出让自己丢失信誉的行为。</span></p><h3 id='71-保护版权的时机'><span>7.1 保护版权的时机</span></h3><p><span>可以等到你的游戏已经在工厂印刷完毕1000、2000套的时候，再去考虑保护版权，也是来得及的。只要它还没卖到2000套，在此之前做任何保护都是来得及的。</span></p><h3 id='72-保护版权的方式'><span>7.2 保护版权的方式</span></h3><p><span>一般我们会用以下两个东西来保护版权：</span></p><ul><li><p><span>注册商标：可以花几百块钱去注册，能保护十年。先提交申请，然后有一个漫长的审核，整个流程大概8个月的时间。</span></p><p><span>ps：只有公司才能注册商标。</span></p></li><li><p><span>产权：可以去当地产权局注册。你只要把你的文字规则和所有配件，完整地递交给他们，是能得到一个版权证书的。</span></p></li><li><p><span>美术著作权：也是几百块钱。保护的是你的美术，不会保护游戏规则。</span></p></li></ul><div class="md-alert md-alert-note note"><p><span class='md-alert-text md-alert-text-note'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</span><br></p><p><span>由于国情，不是说有了商标、著作权、版权，就没有人盗版了。如果被盗版了还是需要联系相关的法务工作者去帮你维权。不过市面上99.99%的桌游没有被盗版的机会，甚至没有被你看见的机会。</span></p></div><h3 id='73-出版的叮嘱'><span>7.3 出版的叮嘱</span></h3><p><span>最好还是找正规出版社来出，首先准备一个游戏的原型，分为功能性和观赏性的。我们今天还是主要谈功能性、游戏性的，如何吸引到出版社：</span></p><ol start='' ><li><p><span>如实告知信息：比如你写的3～8人，但实际没有做过8人局的测试。出版商会非常排斥这些显得很业余的设计师。所以你尽量要充分了解你的游戏，并且如实告知你所知道的所有东西。</span></p></li><li><p><span>充分测试：不要将没有被测试过的点子抛过去。不要说框架搭好了，全靠出版商测试，这个出版商会很头疼。</span></p></li><li><p><span>千万不要提前做美工：如果你不是科班美术出身，就不要做这件事。最好能勇敢的承认，你的审美其实是业余的。</span></p><div class="md-alert md-alert-tip tip"><p><span class='md-alert-text md-alert-text-tip'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</span><br></p><p><span>出版商他会根据市场的接受程度，还有你的作品的匹配程度，它可能会重新给你的游戏赋予新的主题和新的美术。</span></p><p><span>所以前期有一套自己的美术的话，大概率会被换掉的。比如杨治学的宋金战争，他有一套第一版美术，非常好。但出版商战鼓社，他们找了第二套更好的美术。这第一套美术只能算是钱也白花了。并没有把这笔钱补给杨设计师。</span></p></div></li><li><p><span>虽说不要美工，但不代表我们就要用手写。表达你的诚意最好的方式，至少是把它打印出来。不要有任何手写和涂改的东西。虽然这部分不属于美工，但至少会让卡牌看起来干净整洁。出版商看到一个合格的原型，会觉得这个设计师很善解人意，至少让我们接受的时候会轻松一些。</span></p></li><li><p><span>谦逊的心态：不要去责怪出版商没有理解你的意图，也不要质疑出版商他们的游戏水平。他们见过太多游戏了。桌游对你来说可能是短期的一个梦想，但对于出版商是天天要面对的职业，每天都在看，每天都在对比。</span></p></li></ol><h3 id='74-面对出版社的回复'><span>7.4 面对出版社的回复</span></h3><p><span>如果投稿的作品石沉大海，或者被拒绝。这种情况一定不要放弃，没有出版肯定是游戏存在一些问题，而能在这个阶段发现不足之处，其实是一件值得庆幸的事情。</span></p><p><span>任何一名著名的作家，他年轻的时候都有被退稿的经历。</span></p><div class="md-alert md-alert-important important"><p><span class='md-alert-text md-alert-text-important'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</span><br></p><p><span>如果你是一名投稿类型的桌游设计师，后面众筹的步骤已经不需要你去做了。到这里，第7节课已经算结课了。</span></p></div><h2 id='第8节-发起一次众筹'><span>第8节 发起一次众筹</span></h2><div class="md-alert md-alert-note note"><p><span class='md-alert-text md-alert-text-note'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</span><br></p><p><span>这节课面向自己想完全独立地去运作一次桌游众筹项目的设计师们。</span></p></div><p><span>众筹这个词，在桌游圈里是极度的常见。大家在这个时代，可以把它理解为桌游的预售。</span></p><div class="md-alert md-alert-note note"><p><span class='md-alert-text md-alert-text-note'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</span><br></p><p><span>众筹阶段能够让设计师获得一定的启动资金，将这个游戏去投产。其实也是设计师和玩家共同创造游戏的过程。</span></p><p><span>只不过这些年头，已经很少有人真正这么做了，大家多是把众筹作为一种宣发、预售手段。</span></p></div><h3 id='81-众筹平台'><span>8.1 众筹平台</span></h3><ul><li><p><span>摩点：抽成6%，包括潮玩、二次元、文创。</span></p></li><li><p><span>新物集：抽成1～3%，由游卡推出的聚焦桌游的垂直平台。</span></p></li><li><p><span>淘宝众筹、京东众筹</span></p></li></ul><h3 id='82-要素'><span>8.2 要素</span></h3><ul><li><p><span>资质：后台会要上传一些合同（比如证明是你的游戏设计，美术、IP的授权），会有3个工作日的审核期。</span></p></li><li><p><span>页面：非常清晰美观的页面。</span></p></li><li><p><span>宣发：线上找自媒体、up主，线下参加展会、做试玩活动。</span></p></li><li><p><span>运营：定期更新，做评论的回复，发货的通知，售后的处理。</span></p></li></ul><h3 id='83-阶段'><span>8.3 阶段</span></h3><p><span>摩点可以发起创意（雏形）或众筹（已有样品），创意可以转为众筹。众筹分为预热阶段，和开筹阶段。</span></p><p><span>创意（可选，10～15天）→ 众筹预热（7~15天）→  开筹（预热时的关注数，和开筹后的购买数，一般转化率差不多是25~50%）</span></p><h3 id='84-页面'><span>8.4 页面</span></h3><ul><li><p><span>信息，游戏是什么。</span></p><ol start='' ><li><p><span>标题（长短标题）</span></p></li><li><p><span>导语（占手机半屏，背景，motivation或名人名言如“天下大势，分久必合合久必分”、设计师介绍）</span></p></li><li><p><span>游戏背景+配件+游戏特色+游戏设置和流程（不是要教会怎么玩，而是进行吸引）+圈内评价</span></p></li><li><p><span>小礼品（如解锁项、众筹独占也叫原石礼物）</span></p></li></ol></li><li><p><span>档位，游戏大概卖多少钱，有哪些配套套餐的优惠折扣，比如早鸟价（限时或限量）</span></p></li><li><p><span>设计师笔记、出版信息</span></p></li></ul><div class="md-alert md-alert-tip tip"><p><span class='md-alert-text md-alert-text-tip'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</span><br></p><ol start='' ><li><p><span>字体大小可以在手机上截图看看效果。</span></p></li><li><p><span>众筹冲刺阶段，可以把已完成的解锁项放在开头醒目的位置。</span></p></li><li><p><span>封面可以传技术图、GIF的动画。标题和封面都很重要。</span></p></li></ol></div><h2 id='第9节-众筹宣发与运营'><span>第9节 众筹宣发与运营</span></h2><p><span>众筹开始和结束的三天是最热的，要抓准时机运营。</span></p><p><span>宣发与运营：</span></p><ul><li><p><span>up主试玩、教学；</span></p></li><li><p><span>群、论坛（集石、贴吧、千岛、新物集）；</span></p></li><li><p><span>更新（包括评论区回复或帖子集中回复。遇到喷子保持好心态，不要删评论，而是用正面评论盖过它）；</span></p></li><li><p><span>抽奖工具（摩点自带的功能，可以聚集人气，能带来非常大的裂变）；也可以找up主在评论区进行抽奖，一盒赠品就能得到很多很大的收益。</span></p></li><li><p><span>短信轰炸工具（对关注项目的人可以发一轮短信，第一次使用是免费。经验是项目快结束，还有24h时，来一轮轰炸，告诉大家解锁了多少东西、生产进度进行到了非常好的局面）</span></p></li><li><p><span>群运营</span></p></li><li><p><span>线下展会：恰好有展会的话，可以众筹期间报一个摊位。推荐做一个易拉宝，直接告诉大家觉得好玩可以现场扫码购买了。</span></p><div class="md-alert md-alert-note note"><p><span class='md-alert-text md-alert-text-note'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</span><br></p><p><span>另外展会会遇到很多出版商，直接就谈合作了。</span></p></div></li><li><p><span>线下试玩会：可以拉支持者进群。觉得好玩的，欢迎进群。《电影百年》就到好多城市，组织了很多场的试玩会。</span></p></li></ul></div></div>
+
+<script>(function(){var e=document.body.parentElement,t=[],n=null,i=document.body.classList.contains("typora-export-collapse-outline"),r=function(e,t,n){document.addEventListener(e,function(e){if(!e.defaultPrevented)for(var i=e.target;i&&i!=this;i=i.parentNode)if(i.matches(t)){!1===n.call(i,e)&&(e.preventDefault(),e.stopPropagation());break}},!1)};function o(){return e.scrollTop}r("click",".outline-expander",function(e){var t=this.closest(".outline-item-wrapper").classList;return t.contains("outline-item-open")?t.remove("outline-item-open"):t.add("outline-item-open"),d(),!1}),r("click",".outline-item",function(e){var t=this.querySelector(".outline-label");if(location.hash="#"+t.getAttribute("href"),i){var n=this.closest(".outline-item-wrapper").classList;n.contains("outline-item-open")||n.add("outline-item-open"),c(),n.add("outline-item-active")}});var a,s,l=function(){var e=o();n=null;for(var i=0;i<t.length&&t[i][1]-e<60;i++)n=t[i]},c=function(){document.querySelectorAll(".outline-item-active").forEach(e=>e.classList.remove("outline-item-active")),document.querySelectorAll(".outline-item-single.outline-item-open").forEach(e=>e.classList.remove("outline-item-open"))},d=function(){if(n){c();var e=document.querySelector('.outline-label[href="#'+(CSS.escape?CSS.escape(n[0]):n[0])+'"]');if(e)if(i){var t=e.closest(".outline-item-open>ul>.outline-item-wrapper");if(t)t.classList.add("outline-item-active");else{for(var r=(e=e.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper");r;)r=(e=r).parentElement.closest(".outline-item-wrapper");e.classList.add("outline-item-active")}}else e.closest(".outline-item-wrapper").classList.add("outline-item-active")}};window.addEventListener("scroll",function(e){a&&clearTimeout(a),a=setTimeout(function(){l(),d()},300)});var u=function(){s=setTimeout(function(){!function(){t=[];var e=o();document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(n=>{var i=n.getAttribute("id");t.push([i,e+n.getBoundingClientRect().y])})}(),l(),d()},300)};window.addEventListener("resize",function(e){s&&clearTimeout(s),u()}),u()})();</script></body>
+</html>

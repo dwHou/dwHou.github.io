@@ -95,12 +95,36 @@
     a:hover {
         text-decoration: underline;
     }
+
+    .link-section {
+            display: flex;
+            justify-content: flex-start; /* 左对齐 */
+            align-items: center; /* 中间对齐 */
+            margin-top: auto; /* 把链接区推到底部 */
+            padding: 20px; /* 添加内边距 */
+        }
+    .separator {
+            color: #007BFF; /* 符号颜色 */
+            margin: 0 10px; /* 符号左右间距 */
+        }
+    .rainbow-text {
+        background: linear-gradient(90deg, blue, indigo, violet);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: block; /* 确保链接换行 */
+        margin: 10px 0; /* 添加间距 */
+        text-align: left;
+        }
+    .rainbow-text:hover {
+        text-decoration: underline;
+    }
     /* 为不同的中文名设置不同的颜色 */
     .class1 { color: #ff6347; }
     .class2 { color: #b132cd; }
     .class3 { color: #ffa500; }
     .class4 { color: #4169e1; }
     .class5 { color: #7ec39f; }
+
 </style>
 </head>
 <body>
@@ -222,7 +246,7 @@ var gameData = [
     { name: '卡斯卡迪亚之旅', englishName: 'Cascadia', link: 'https://boardgamegeek.com/boardgame/295947/cascadia', devonn: 7.7, yoyo: 8, colorClass: 'class1' },
     { name: '七大奇迹：对决', englishName: '7 Wonders Duel', link: 'https://boardgamegeek.com/boardgame/173346/7-wonders-duel', devonn: 8.8, yoyo: 8.5, colorClass: 'class1' },
     { name: '银河竞逐', englishName: 'Race For The Galaxy', link: 'https://boardgamegeek.com/boardgame/28143/race-for-the-galaxy', devonn: 7.9, yoyo: '', colorClass: 'class1' },
-    { name: '三国：棋定江山', englishName: 'Three Kingdoms: Decisive Moves', link: '../2024-8-boardgame-diy/v1.0.3.html', devonn: '', yoyo: '', colorClass: 'class1' },
+    { name: '三国：石头剪刀布', englishName: 'Three Kingdoms: Rock-Paper-Scissors', link: '', devonn: '', yoyo: '', colorClass: 'class1' },
     // http://www.lsyweb.top/index.html
 
     // 语言
@@ -280,6 +304,13 @@ window.onload = function() {
             Explaining the rules to others can help you better remember them. Moreover, those explaining the rules should carefully review the rulebook, as house rules（村规）can greatly influence the game experience in some games, like Codenames.
         </li>
     </ul>
+</div>
+
+
+<div class="link-section">
+    <a class="rainbow-text" href="../2024-8-boardgame-diy/design-lessons.html" target="_blank">About Game Design</a>
+    <span class="separator">|</span>
+    <a class="rainbow-text" href="../2024-8-boardgame-diy/publish-lessons.html" target="_blank">About Game Publishing</a>
 </div>
 
 </body>
