@@ -882,9 +882,42 @@ CVPR 2021
 
 CVPR 2021
 
+现有方法：
 
+一类方法是依赖挖掘人脸特定先验，比如脸部关键点、脸部解析、脸部热力图，等等。但这些通常从输入图像中预测，因此不可避免的因为输入图像的低质量，导致预测失准。另外这些先验也缺少纹理信息。
 
+另一类方法是依赖参考图像，包括高质量的guided faces（如GWAINet, GFRNet, ASFFNet），或者facial component dictionaries（如DFDNet）。但是高分辨率参考图像的不可获得性，限制了前者的实际应用，而dictionaries的容量也限制了后者的多样性和脸部细节的丰富性。
 
+其实还有一类利用GAN invertion的方法（如PULSE, mGANprior, Deep Generative Prior），他们首先将低质量图像“逆向”回预训练 GAN 的latent code，然后进行昂贵的图像特定优化来重建图像。尽管结果在视觉上很逼真，但通常保真度较低，因为低维latent code不足以指导准确的复原。
+
+本文方法：核心idea，利用Generative Facial Prior (GFP)。
+
+> 先验隐含在预训练的人脸生成对抗网络 (GAN)模型中，例如 StyleGAN。这些人脸 GAN 能够生成多样的逼真的面孔，从而提供丰富多样的先验
+
+过程：也是先接入pretrained GAN as prior，作为decoder，然后利用SFT模块和degradation removal模块一训练，loss用到了：
+
+- global的对抗损失
+- local的五官（eye, mouth）对抗损失
+- 人脸识别特征提取器的id保持损失
+- degradation removal模块专门有多尺度的restoration loss
+
+然后训练一个degradation removal module。
+
+> 所以我认为GPEN和GFP-GAN这两同一时期的论文，之间差异没有很大。都是建立的 预训练人脸生成网络（先验） 和 降质复原网络 的连接。分别作为decoder和encoder。
+
+## 有参考的人脸复原
+
+#### :page_with_curl:GFRNet
+
+ECCV2018
+
+#### :page_with_curl:GWAINet
+
+CVPRW2019
+
+#### :page_with_curl:ASFFNet
+
+CVPR2020
 
 ## 视频传输
 
