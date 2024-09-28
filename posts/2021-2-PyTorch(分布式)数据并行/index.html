@@ -46,7 +46,32 @@
         .post h3{margin:5px;font-size:75%;text-align:center}
         .post h4{margin:0px;font-size:50%;text-align:center}
         .post img{margin:0px;padding:2px;margin-bottom:10px;width:100%;height:155px}
+
+        .link-section {
+            display: flex;
+            justify-content: flex-start; /* 左对齐 */
+            align-items: center; /* 中间对齐 */
+            margin-top: auto; /* 把链接区推到底部 */
+            padding: 20px; /* 添加内边距 */
+        }
+        .separator {
+            color: #007BFF; /* 符号颜色 */
+            margin: 0 10px; /* 符号左右间距 */
+        }
+        .rainbow-text {
+            background: linear-gradient(90deg, blue, indigo, violet);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block; /* 确保链接换行 */
+            margin: 10px 0; /* 添加间距 */
+            text-align: left;
+            }
+        .rainbow-text:hover {
+            text-decoration: underline;
+        }
+
         </style>
+
 
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -117,8 +142,10 @@
     }
   </style>
 
-
-
+  <div class="link-section">
+    <a class="rainbow-text" href="https://github.com/pytorch/examples/blob/main/imagenet/main.py" target="_blank">DDP Best Practice</a>
+  </div>
+  <pre>DDP最佳实践的模版，感觉DDP效果出问题就和这份找不同，大概率就能找到原因。</pre>
 
   <h2>数据并行基础</h2>
   <a href="https://www.cnblogs.com/yh-blog/p/12877922.html">*</a>
@@ -303,7 +330,6 @@ torch.backends.cudnn.deterministic = True
 （5）While disabling CUDA convolution benchmarking (discussed above) ensures that CUDA selects the same algorithm each time an application is run, that algorithm itself may be nondeterministic, unless either torch.set_deterministic(True) or torch.backends.cudnn.deterministic = True is set.
 </pre>
 </ul>
-
 
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
