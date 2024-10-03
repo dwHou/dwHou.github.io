@@ -1377,7 +1377,9 @@ ComfyUI整合：https://www.youtube.com/watch?v=HGB0Toul2Yw
 
 https://liveportrait.github.io/
 
-快手的工作，效果很精细
+快手的工作，效果很精细。沿用了FOMM、face-vid2vid的基于隐式关键点的框架（implicit-keypoint-based framework），可达到计算复杂度和可控性的平衡。4090显卡上可以跑到12.8ms每帧。
+
+
 
 #### :page_with_curl:GAIA
 
