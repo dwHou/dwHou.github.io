@@ -1,0 +1,1694 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+
+<style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+.mac-os-11 { --title-bar-height: 28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5 { white-space: pre-wrap; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.428571; overflow-x: hidden; background: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; font-size-adjust: inherit; font-kerning: inherit; font-variant-alternates: inherit; font-variant-ligatures: inherit; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-variant-position: inherit; font-variant-emoji: inherit; font-feature-settings: inherit; font-optical-sizing: inherit; font-variation-settings: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+thead, tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right-width: 0px; border-right-style: none; border-right-color: currentcolor; background-color: inherit; }
+.CodeMirror-linenumber { -webkit-user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+svg { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; border-color: transparent !important; padding-top: 0px !important; padding-bottom: 0px !important; }
+  .typora-export * { print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  #write > p:nth-child(1) { margin-top: 0px; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+  figure { overflow-x: visible; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: medium; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.reversefootnote { font-family: ui-monospace, sans-serif; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom-width: 0px; border-bottom-style: none; border-bottom-color: currentcolor; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: medium; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background: inherit; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex: 2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; overflow-wrap: anywhere; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.428571rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left-width: 28px; border-left-style: solid; border-left-color: transparent; border-right-width: 28px; border-right-style: solid; border-right-color: transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right-width: 8px; border-right-style: solid; border-right-color: transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+mjx-container { break-inside: avoid; }
+.md-alert.md-alert-note { border-left-color: rgb(9, 105, 218); }
+.md-alert.md-alert-important { border-left-color: rgb(130, 80, 223); }
+.md-alert.md-alert-warning { border-left-color: rgb(154, 103, 0); }
+.md-alert.md-alert-tip { border-left-color: rgb(31, 136, 61); }
+.md-alert.md-alert-caution { border-left-color: rgb(207, 34, 46); }
+.md-alert { padding: 0px 1em; margin-bottom: 16px; color: inherit; border-left-width: 0.25em; border-left-style: solid; border-left-color: rgb(0, 0, 0); }
+.md-alert-text-note { color: rgb(9, 105, 218); }
+.md-alert-text-important { color: rgb(130, 80, 223); }
+.md-alert-text-warning { color: rgb(154, 103, 0); }
+.md-alert-text-tip { color: rgb(31, 136, 61); }
+.md-alert-text-caution { color: rgb(207, 34, 46); }
+.md-alert-text { font-size: 0.9rem; font-weight: 700; }
+.md-alert-text svg { fill: currentcolor; position: relative; top: 0.125em; margin-right: 1ch; overflow: visible; }
+.md-alert-text-container::after { content: attr(data-text); text-transform: capitalize; pointer-events: none; margin-right: 1ch; }
+
+
+:root {
+  --mermaid-theme: night;
+}
+
+[lang='mermaid'] .label {
+  color: #333;
+}
+
+/* CSS Document */
+
+/** code highlight */
+
+.cm-s-inner .cm-variable,
+.cm-s-inner .cm-operator,
+.cm-s-inner .cm-property {
+    color: #b8bfc6;
+}
+
+.cm-s-inner .cm-keyword {
+    color: #C88FD0;
+}
+
+.cm-s-inner .cm-tag {
+    color: #7DF46A;
+}
+
+.cm-s-inner .cm-attribute {
+    color: #7575E4;
+}
+
+.CodeMirror div.CodeMirror-cursor {
+    border-left: 1px solid #b8bfc6;
+    z-index: 3;
+}
+
+.cm-s-inner .cm-string {
+    color: #D26B6B;
+}
+
+.cm-s-inner .cm-comment,
+.cm-s-inner.cm-comment {
+    color: #DA924A;
+}
+
+.cm-s-inner .cm-header,
+.cm-s-inner .cm-def,
+.cm-s-inner.cm-header,
+.cm-s-inner.cm-def {
+    color: #8d8df0;
+}
+
+.cm-s-inner .cm-quote,
+.cm-s-inner.cm-quote {
+    color: #57ac57;
+}
+
+.cm-s-inner .cm-hr {
+    color: #d8d5d5;
+}
+
+.cm-s-inner .cm-link {
+    color: #d3d3ef;
+}
+
+.cm-s-inner .cm-negative {
+    color: #d95050;
+}
+
+.cm-s-inner .cm-positive {
+    color: #50e650;
+}
+
+.cm-s-inner .cm-string-2 {
+    color: #f50;
+}
+
+.cm-s-inner .cm-meta,
+.cm-s-inner .cm-qualifier {
+    color: #b7b3b3;
+}
+
+.cm-s-inner .cm-builtin {
+    color: #f3b3f8;
+}
+
+.cm-s-inner .cm-bracket {
+    color: #997;
+}
+
+.cm-s-inner .cm-atom,
+.cm-s-inner.cm-atom {
+    color: #84B6CB;
+}
+
+.cm-s-inner .cm-number {
+    color: #64AB8F;
+}
+
+.cm-s-inner .cm-variable {
+    color: #b8bfc6;
+}
+
+.cm-s-inner .cm-variable-2 {
+    color: #9FBAD5;
+}
+
+.cm-s-inner .cm-variable-3 {
+    color: #1cc685;
+}
+
+.CodeMirror-selectedtext,
+.CodeMirror-selected {
+    background: #4a89dc;
+    color: #fff !important;
+    text-shadow: none;
+}
+
+.CodeMirror-gutters {
+    border-right: none;
+}
+
+/* CSS Document */
+
+/** markdown source **/
+.cm-s-typora-default .cm-header, 
+.cm-s-typora-default .cm-property
+{
+    color: #cebcca;
+}
+
+.CodeMirror.cm-s-typora-default div.CodeMirror-cursor{
+    border-left: 3px solid #b8bfc6;
+}
+
+.cm-s-typora-default .cm-comment {
+    color: #9FB1FF;
+}
+
+.cm-s-typora-default .cm-string {
+    color: #A7A7D9
+}
+
+.cm-s-typora-default .cm-atom, .cm-s-typora-default .cm-number {
+    color: #848695;
+    font-style: italic;
+}
+
+.cm-s-typora-default .cm-link {
+    color: #95B94B;
+}
+
+.cm-s-typora-default .CodeMirror-activeline-background {
+    background: rgba(51, 51, 51, 0.72);
+}
+
+.cm-s-typora-default .cm-comment, .cm-s-typora-default .cm-code {
+	color: #8aa1e1;
+}@import "";
+@import "";
+@import "";
+
+:root {
+    --bg-color:  #363B40;
+    --side-bar-bg-color: #2E3033;
+    --text-color: #b8bfc6;
+
+    --select-text-bg-color:#4a89dc;
+
+    --item-hover-bg-color: #0a0d16;
+    --control-text-color: #b7b7b7;
+    --control-text-hover-color: #eee;
+    --window-border: 1px solid #555;
+
+    --active-file-bg-color: rgb(34, 34, 34);
+    --active-file-border-color: #8d8df0;
+
+    --primary-color: #a3d5fe;
+
+    --active-file-text-color: white;
+    --item-hover-bg-color: #70717d;
+    --item-hover-text-color: white;
+    --primary-color: #6dc1e7;
+
+    --rawblock-edit-panel-bd: #333;
+
+    --search-select-bg-color: #428bca;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+html,
+body {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    background: #363B40;
+    background: var(--bg-color);
+    fill: currentColor;
+    line-height: 1.625rem;
+}
+
+#write {
+    max-width: 914px;
+}
+
+
+@media only screen and (min-width: 1400px) {
+	#write {
+		max-width: 1024px;
+	}
+}
+
+@media only screen and (min-width: 1800px) {
+	#write {
+		max-width: 1200px;
+	}
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea,
+div.code-tooltip-content {
+    color: #b8bfc6;
+    border-color: transparent;
+}
+
+div.code-tooltip,
+.md-hover-tip .md-arrow:after {
+    background: #333;
+}
+
+.native-window #md-notification {
+    border: 1px solid #70717d;
+}
+
+.popover.bottom > .arrow:after {
+    border-bottom-color: #333;
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea {
+    font-family: "Helvetica Neue", Helvetica, Arial, 'Segoe UI Emoji', sans-serif;
+}
+
+hr {
+    height: 2px;
+    border: 0;
+    margin: 24px 0 !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Lucida Grande", "Corbel", sans-serif;
+    font-weight: normal;
+    clear: both;
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+    margin: 0;
+    padding: 0;
+    color: #DEDEDE
+}
+
+h1 {
+    font-size: 2.5rem;
+    /* 36px */
+    line-height: 2.75rem;
+    /* 40px */
+    margin-bottom: 1.5rem;
+    /* 24px */
+    letter-spacing: -1.5px;
+}
+
+h2 {
+    font-size: 1.63rem;
+    /* 24px */
+    line-height: 1.875rem;
+    /* 30px */
+    margin-bottom: 1.5rem;
+    /* 24px */
+    letter-spacing: -1px;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 1.17rem;
+    /* 18px */
+    line-height: 1.5rem;
+    /* 24px */
+    margin-bottom: 1.5rem;
+    /* 24px */
+    letter-spacing: -1px;
+    font-weight: bold;
+}
+
+h4 {
+    font-size: 1.12rem;
+    /* 16px */
+    line-height: 1.375rem;
+    /* 22px */
+    margin-bottom: 1.5rem;
+    /* 24px */
+    color: white;
+}
+
+h5 {
+    font-size: 0.97rem;
+    /* 16px */
+    line-height: 1.25rem;
+    /* 22px */
+    margin-bottom: 1.5rem;
+    /* 24px */
+    font-weight: bold;
+}
+
+h6 {
+    font-size: 0.93rem;
+    /* 16px */
+    line-height: 1rem;
+    /* 16px */
+    margin-bottom: 0.75rem;
+    color: white;
+}
+
+@media (min-width: 980px) {
+    h3.md-focus:before,
+    h4.md-focus:before,
+    h5.md-focus:before,
+    h6.md-focus:before {
+        color: #ddd;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        position: absolute;
+        left: -1.642857143rem;
+        top: .357142857rem;
+        float: left;
+        font-size: 9px;
+        padding-left: 2px;
+        padding-right: 2px;
+        vertical-align: bottom;
+        font-weight: normal;
+        line-height: normal;
+    }
+
+    h3.md-focus:before {
+        content: 'h3';
+    }
+
+    h4.md-focus:before {
+        content: 'h4';
+    }
+
+    h5.md-focus:before {
+        content: 'h5';
+        top: 0px;
+    }
+
+    h6.md-focus:before {
+        content: 'h6';
+        top: 0px;
+    }
+}
+
+a {
+    text-decoration: none;
+    outline: 0;
+}
+
+a:hover {
+    outline: 0;
+}
+
+a:focus {
+    outline: thin dotted;
+}
+
+sup.md-footnote {
+    background-color: #555;
+    color: #ddd;
+}
+
+p {
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+}
+
+p,
+ul,
+dd,
+ol,
+hr,
+address,
+pre,
+table,
+iframe,
+.wp-caption,
+.wp-audio-shortcode,
+.wp-video-shortcode {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    /* 24px */
+}
+
+audio:not([controls]) {
+    display: none;
+}
+
+[hidden] {
+    display: none;
+}
+
+::-moz-selection {
+    background: #4a89dc;
+    color: #fff;
+    text-shadow: none;
+}
+
+*.in-text-selection,
+::selection {
+    background: #4a89dc;
+    color: #fff;
+    text-shadow: none;
+}
+
+ul,
+ol {
+    padding: 0 0 0 1.875rem;
+    /* 30px */
+}
+
+ul {
+    list-style: square;
+}
+
+ol {
+    list-style: decimal;
+}
+
+ul ul,
+ol ol,
+ul ol,
+ol ul {
+    margin: 0;
+}
+
+b,
+th,
+dt,
+strong {
+    font-weight: bold;
+}
+
+i,
+em,
+dfn,
+cite {
+    font-style: italic;
+}
+
+blockquote {
+    padding-left: 1.875rem;
+    margin: 0 0 1.875rem 1.875rem;
+    border-left: solid 2px #474d54;
+    padding-left: 30px;
+    margin-top: 35px;
+}
+
+pre,
+code,
+kbd,
+tt,
+var {
+    font-size: 0.875em;
+    font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+}
+
+code,
+tt,
+var {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+kbd {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #fff;
+    background-color: #333;
+    border-radius: 3px;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.25);
+}
+
+pre.md-fences {
+    padding: 10px 10px 10px 30px;
+    margin-bottom: 20px;
+    background: #333;
+}
+
+.CodeMirror-gutters {
+    background: #333;
+    border-right: 1px solid transparent;
+}
+
+.enable-diagrams pre.md-fences[lang="sequence"] .code-tooltip,
+.enable-diagrams pre.md-fences[lang="flow"] .code-tooltip,
+.enable-diagrams pre.md-fences[lang="mermaid"] .code-tooltip {
+    bottom: -2.2em;
+    right: 4px;
+}
+
+code,
+kbd,
+tt,
+var {
+    padding: 2px 5px;
+}
+
+table {
+    max-width: 100%;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+th,
+td {
+    padding: 5px 10px;
+    vertical-align: top;
+}
+
+a {
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+hr {
+    background: #474d54;
+    /* variable */
+}
+
+h1 {
+    margin-top: 2em;
+}
+
+a {
+    color: #e0e0e0;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #fff;
+}
+
+.md-inline-math script {
+    color: #81b1db;
+}
+
+b,
+th,
+dt,
+strong {
+    color: #DEDEDE;
+    /* variable */
+}
+
+mark {
+    background: #D3D40E;
+}
+
+blockquote {
+    color: #9DA2A6;
+}
+
+table a {
+    color: #DEDEDE;
+    /* variable */
+}
+
+th,
+td {
+    border: solid 1px #474d54;
+    /* variable */
+}
+
+.task-list {
+    padding-left: 0;
+}
+
+.md-task-list-item {
+    padding-left: 1.25rem;
+}
+
+.md-task-list-item > input {
+    top: auto;
+}
+
+.md-task-list-item > input:before {
+    content: "";
+    display: inline-block;
+    width: 0.875rem;
+    height: 0.875rem;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px solid #b8bfc6;
+    background-color: #363B40;
+    margin-top: -0.4rem;
+}
+
+.md-task-list-item > input:checked:before,
+.md-task-list-item > input[checked]:before {
+    content: '\221A';
+    /*◘*/
+    font-size: 0.625rem;
+    line-height: 0.625rem;
+    color: #DEDEDE;
+}
+
+/** quick open **/
+.auto-suggest-container {
+    border: 0px;
+    background-color: #525C65;
+}
+
+#typora-quick-open {
+    background-color: #525C65;
+}
+
+#typora-quick-open input{
+    background-color: #525C65;
+    border: 0;
+    border-bottom: 1px solid grey;
+}
+
+.typora-quick-open-item {
+    background-color: inherit;
+    color: inherit;
+}
+
+.typora-quick-open-item.active,
+.typora-quick-open-item:hover {
+    background-color: #4D8BDB;
+    color: white;
+}
+
+.typora-quick-open-item:hover {
+    background-color: rgba(77, 139, 219, 0.8);
+}
+
+.typora-search-spinner > div {
+  background-color: #fff;
+}
+
+#write pre.md-meta-block {
+    border-bottom: 1px dashed #ccc;
+    background: transparent;
+    padding-bottom: 0.6em;
+    line-height: 1.6em;
+}
+
+.btn,
+.btn .btn-default {
+    background: transparent;
+    color: #b8bfc6;
+}
+
+.ty-table-edit {
+    border-top: 1px solid gray;
+    background-color: #363B40;
+}
+
+.popover-title {
+    background: transparent;
+}
+
+.md-image>.md-meta {
+    color: #BBBBBB;
+    background: transparent;
+}
+
+.md-expand.md-image>.md-meta {
+    color: #DDD;
+}
+
+#write>h3:before,
+#write>h4:before,
+#write>h5:before,
+#write>h6:before {
+    border: none;
+    border-radius: 0px;
+    color: #888;
+    text-decoration: underline;
+    left: -1.4rem;
+    top: 0.2rem;
+}
+
+#write>h3.md-focus:before {
+    top: 2px;
+}
+
+#write>h4.md-focus:before {
+    top: 2px;
+}
+
+.md-toc-item {
+    color: #A8C2DC;
+}
+
+#write div.md-toc-tooltip {
+    background-color: #363B40;
+}
+
+.dropdown-menu .btn:hover,
+.dropdown-menu .btn:focus,
+.md-toc .btn:hover,
+.md-toc .btn:focus {
+    color: white;
+    background: black;
+}
+
+#toc-dropmenu {
+    background: rgba(50, 54, 59, 0.93);
+    border: 1px solid rgba(253, 253, 253, 0.15);
+}
+
+#toc-dropmenu .divider {
+    background-color: #9b9b9b;
+}
+
+.outline-expander:before {
+    top: 2px;
+}
+
+#typora-sidebar {
+    box-shadow: none;
+    border-right: 1px dashed;
+    border-right: none;
+}
+
+.sidebar-tabs {
+    border-bottom:0;
+}
+
+#typora-sidebar:hover .outline-title-wrapper {
+    border-left: 1px dashed;
+}
+
+.outline-title-wrapper .btn {
+    color: inherit;
+}
+
+.outline-item:hover {
+    border-color: #363B40;
+    background-color: #363B40;
+    color: white;
+}
+
+h1.md-focus .md-attr,
+h2.md-focus .md-attr,
+h3.md-focus .md-attr,
+h4.md-focus .md-attr,
+h5.md-focus .md-attr,
+h6.md-focus .md-attr,
+.md-header-span .md-attr {
+    color: #8C8E92;
+    display: inline;
+}
+
+.md-comment {
+    color: #5a95e3;
+    opacity: 0.8;
+}
+
+.md-inline-math svg {
+    color: #b8bfc6;
+}
+
+#math-inline-preview .md-arrow:after {
+    background: black;
+}
+
+.modal-content {
+    background: var(--bg-color);
+    border: 0;
+}
+
+.modal-title {
+    font-size: 1.5em;
+}
+
+.modal-content input {
+    background-color: rgba(26, 21, 21, 0.51);
+    color: white;
+}
+
+.modal-content .input-group-addon {
+    color: white;
+}
+
+.modal-backdrop {
+    background-color: rgba(174, 174, 174, 0.7);
+}
+
+.modal-content .btn-primary {
+    border-color: var(--primary-color);
+}
+
+.md-table-resize-popover {
+    background-color: #333;
+}
+
+.form-inline .input-group .input-group-addon {
+    color: white;
+}
+
+#md-searchpanel {
+    border-bottom: 1px dashed grey;
+}
+
+/** UI for electron */
+
+.context-menu,
+#spell-check-panel,
+#footer-word-count-info {
+    background-color: #42464A;
+}
+
+.context-menu.dropdown-menu .divider,
+.dropdown-menu .divider {
+    background-color: #777777;
+    opacity: 1;
+}
+
+footer {
+    color: inherit;
+}
+
+@media (max-width: 1000px) {
+    footer {
+        border-top: none;
+    }
+    footer:hover {
+        color: inherit;
+    }
+}
+
+#file-info-file-path .file-info-field-value:hover {
+    background-color: #555;
+    color: #dedede;
+}
+
+.megamenu-content,
+.megamenu-opened header {
+    background: var(--bg-color);
+}
+
+.megamenu-menu-panel h2,
+.megamenu-menu-panel h1,
+.long-btn {
+    color: inherit;
+}
+
+.megamenu-menu-panel input[type='text'] {
+    background: inherit;
+    border: 0;
+    border-bottom: 1px solid;
+}
+
+#recent-file-panel-action-btn {
+    background: inherit;
+    border: 1px grey solid;
+}
+
+.megamenu-menu-panel .dropdown-menu > li > a {
+    color: inherit;
+    background-color: #2F353A;
+    text-decoration: none;
+}
+
+.megamenu-menu-panel table td:nth-child(1) {
+    color: inherit;
+    font-weight: bold;
+}
+
+.megamenu-menu-panel tbody tr:hover td:nth-child(1) {
+    color: white;
+}
+
+.modal-footer .btn-default, 
+.modal-footer .btn-primary,
+.modal-footer .btn-default:not(:hover) {
+    border: 1px solid;
+    border-color: transparent;
+}
+
+.btn-primary {
+    color: white;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default.focus, .btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default {
+    color: white;
+    border: 1px solid #ddd;
+    background-color: inherit;
+}
+
+.modal-header {
+    border-bottom: 0;
+}
+
+.modal-footer {
+    border-top: 0;
+}
+
+#recent-file-panel tbody tr:nth-child(2n-1) {
+    background-color: transparent !important;
+}
+
+.megamenu-menu-panel tbody tr:hover td:nth-child(2) {
+    color: inherit;
+}
+
+.megamenu-menu-panel .btn {
+    border: 1px solid #eee;
+    background: transparent;
+}
+
+.mouse-hover .toolbar-icon.btn:hover,
+#w-full.mouse-hover,
+#w-pin.mouse-hover {
+    background-color: inherit;
+}
+
+.typora-node::-webkit-scrollbar {
+    width: 5px;
+}
+
+.typora-node::-webkit-scrollbar-thumb:vertical {
+    background: rgba(250, 250, 250, 0.3);
+}
+
+.typora-node::-webkit-scrollbar-thumb:vertical:active {
+    background: rgba(250, 250, 250, 0.5);
+}
+
+#w-unpin {
+    background-color: #4182c4;
+}
+
+#top-titlebar, #top-titlebar * {
+    color: var(--item-hover-text-color);
+}
+
+.typora-sourceview-on #toggle-sourceview-btn,
+#footer-word-count:hover,
+.ty-show-word-count #footer-word-count {
+    background: #333333;
+}
+
+#toggle-sourceview-btn:hover {
+    color: #eee;
+    background: #333333;
+}
+
+/** focus mode */
+.on-focus-mode .md-end-block:not(.md-focus):not(.md-focus-container) * {
+    color: #686868 !important;
+}
+
+.on-focus-mode .md-end-block:not(.md-focus) img,
+.on-focus-mode .md-task-list-item:not(.md-focus-container)>input {
+    opacity: #686868 !important;
+}
+
+.on-focus-mode li[cid]:not(.md-focus-container){
+    color: #686868;
+}
+
+.on-focus-mode .md-fences.md-focus .CodeMirror-code>*:not(.CodeMirror-activeline) *,
+.on-focus-mode .CodeMirror.cm-s-inner:not(.CodeMirror-focused) * {
+    color: #686868 !important;
+}
+
+.on-focus-mode .md-focus,
+.on-focus-mode .md-focus-container {
+    color: #fff;
+}
+
+.on-focus-mode #typora-source .CodeMirror-code>*:not(.CodeMirror-activeline) * {
+    color: #686868 !important;
+}
+
+
+/*diagrams*/
+#write .md-focus .md-diagram-panel {
+    border: 1px solid #ddd;
+    margin-left: -1px;
+    width: calc(100% + 2px);
+}
+
+/*diagrams*/
+#write .md-focus.md-fences-with-lineno .md-diagram-panel {
+    margin-left: auto;
+}
+
+.md-diagram-panel-error {
+    color: #f1908e;
+}
+
+.active-tab-files #info-panel-tab-file,
+.active-tab-files #info-panel-tab-file:hover,
+.active-tab-outline #info-panel-tab-outline,
+.active-tab-outline #info-panel-tab-outline:hover {
+    color: #eee;
+}
+
+.sidebar-footer-item:hover,
+.footer-item:hover {
+    background: inherit;
+    color: white;
+}
+
+.ty-side-sort-btn.active,
+.ty-side-sort-btn:hover,
+.selected-folder-menu-item a:after {
+    color: white;
+}
+
+#sidebar-files-menu {
+    border:solid 1px;
+    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.79);
+    background-color: var(--bg-color);
+}
+
+.file-list-item {
+    border-bottom:none;
+}
+
+.file-list-item-summary {
+    opacity: 1;
+}
+
+.file-list-item.active:first-child {
+    border-top: none;
+}
+
+.file-node-background {
+    height: 32px;
+}
+
+.file-library-node.active>.file-node-content,
+.file-list-item.active {
+    color: white;
+    color: var(--active-file-text-color);
+}
+
+.file-library-node.active>.file-node-background{
+    background-color: rgb(34, 34, 34);
+    background-color: var(--active-file-bg-color);
+}
+.file-list-item.active {
+    background-color: rgb(34, 34, 34);
+    background-color: var(--active-file-bg-color);
+}
+
+#ty-tooltip {
+    background-color: black;
+    color: #eee;
+}
+
+.md-task-list-item>input {
+    margin-left: -1.3em;
+    margin-top: 0.3rem;
+    -webkit-appearance: none;
+}
+
+.md-mathjax-midline {
+    background-color: #57616b;
+    border-bottom: none;
+}
+
+footer.ty-footer {
+    border-color: #656565;
+}
+
+.ty-preferences .btn-default {
+    background: transparent;
+}
+.ty-preferences .btn-default:hover {
+    background: #57616b;
+}
+
+.ty-preferences select {
+    border: 1px solid #989698;
+    height: 21px;
+}
+
+.ty-preferences .nav-group-item.active,
+.export-item.active,
+.export-items-list-control,
+.export-detail {
+    background: var(--item-hover-bg-color);
+}
+
+.ty-preferences input[type="search"] {
+    border-color: #333;
+    background: #333;
+    line-height: 22px;
+    border-radius: 6px;
+    color: white;
+}
+
+.ty-preferences input[type="search"]:focus {
+    box-shadow: none;
+}
+
+[data-is-directory="true"] .file-node-content {
+    margin-bottom: 0;
+}
+
+.file-node-title {
+    line-height: 22px;
+}
+
+.html-for-mac .file-node-open-state, .html-for-mac .file-node-icon {
+    line-height: 26px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(230, 230, 230, 0.30);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: rgba(230, 230, 230, 0.50);
+}
+
+#typora-sidebar:hover div.sidebar-content-content::-webkit-scrollbar-thumb:horizontal {
+    background: rgba(230, 230, 230, 0.30);
+}
+
+.nav-group-item:active {
+    background-color: #474d54 !important;
+}
+
+.md-search-hit {
+    background: rgba(199, 140, 60, 0.81);
+    color: #eee;
+}
+
+.md-search-hit * {
+    color: #eee;
+}
+
+#md-searchpanel input {
+    color: white;
+}
+
+.modal-backdrop.in {
+    opacity: 1;
+    backdrop-filter: blur(1px);
+}
+
+.clear-btn-icon {
+    top: 8px;
+}
+
+/* try fix https://github.com/typora/typora-issues/issues/5253 */
+.file-node-expanded>.file-node-children {
+    display: grid;
+  }
+
+.md-alert-text-note {
+    color: rgb(47, 129, 247);
+}
+.md-alert-text-important {
+    color: rgb(163, 113, 247);
+}
+.md-alert-text-warning {
+    color:  rgb(210, 153, 34);
+}
+
+ @media print { @page {margin: 0 0 0 0;} body.typora-export {padding-left: 0; padding-right: 0;} #write {padding:0;}}
+</style><title>2021书单春夏</title>
+</head>
+<body class='typora-export typora-export-show-outline typora-export-no-collapse-outline'><div class='typora-export-content'>
+<div class="typora-export-sidebar"><div class="outline-content"><li class="outline-item-wrapper outline-h1 outline-item-open"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#2021年">2021年</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#1李光耀观天下李光耀">1.《李光耀观天下》李光耀</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#2写给大家的简明艺术启蒙丰子恺">2.《写给大家的简明艺术启蒙》丰子恺</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#3金融怪杰访谈">3.《金融怪杰》访谈</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#3-大投机家安德烈科斯托拉尼">3'. 《大投机家》安德烈・科斯托拉尼</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#4活着本来单纯丰子恺">4.《活着本来单纯》丰子恺</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#5星云志星云奖组委会">5.《星云志》星云奖组委会</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#6一个叫欧维的男人决定去死弗雷德里克巴克曼">6.《一个叫欧维的男人决定去死》弗雷德里克·巴克曼</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#7习得性无助马丁塞利格曼">7.《习得性无助》马丁·塞利格曼</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#8小家越住越大逯薇">8.《小家，越住越大》逯薇</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#9why-we-sleep马修沃克">9.《Why We Sleep》马修·沃克</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#10dk汽车">10.《DK汽车》</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#11人类简史尤瓦尔赫拉利">11.《人类简史》尤瓦尔·赫拉利</a></div><ul class="outline-children"></ul></li></ul></li></div></div><div id='write'  class=''><h1 id='2021年'><span>2021年</span></h1><blockquote><p><span>往年书单 2021 </span><a href='2020书单.html'><span>2020</span></a></p></blockquote><p>&nbsp;</p><h4 id='1李光耀观天下李光耀'><span>1.《李光耀观天下》李光耀</span></h4><p><span>评价：相当不错</span></p><p><span>收获：叙述了李光耀治理国家的观念，和当今中国从韬光养晦到有所作为的时代背景。</span></p><details>
+  <summary>摘录</summary>
+  <pre>
+  在中国的历史上，一个强大的中央政府意味着和平繁荣的国家。一个软弱的中央意味着紊乱，国家将无宁日。<br>
+	中国的社会流动性是存在的，还不是一个高度分化(基因和教育机会)的国家，比如英国。在新加坡，由于迅速发展教育，正处于比预想要超前地达到这种危险的境地。<br>
+	中国毕竟不是一个新的强国，而是一个已睡醒的巨人，一个正在复兴的古老强国。我相信中国的愿望，是要成为世界上最强大的国家。问题在于，是否相信中国再三的承诺，即它只寻求和平崛起，绝不称霸。但这并不意味着中国与别国发生争端时都只是让步，随着力量对比的变化，中国将有更多表达喜恶的自由。如前外长杨洁篪所说，凡是关系到中国的核心利益，中国必须坚持其主张。<br>
+	李光耀看出了美国的霸权主义。美国靠近中国的海岸，在东海所进行的间谍活动，如果是中国对美国做，美国将无法忍受。因此你可以想象中国人的感受。当他们能做到时，中国人会说“我不会到你的太平洋海岸，谁给你到这里来的权利？”美国人会说不吗？最终，强权即公理。<br>
+	为什么苹果手机不是在中国发明的？中国的知识产权法和企业制度目前还不能提供足够的奖励，去解放我们从历史上明确了解到的中国人民拥有的创造力。但是我乐观地认为，目前的中国领导层有足够的意志和能力，理智地处理这些国内的挑战。<br>
+	但李光耀的文章会单纯化、掩饰美国行径的目的，这也可能是小国生存的智慧，作为美国的安全合作伙伴得到军购方面的好处也必须支持它。但他也认同中国的外交政策更明智：他们不认为改变别人的制度关他们的事。制度怎么样，他们就怎么样去面对，并尽量从中获取好处，而不把自己套牢。<br>
+	新加坡是一个弹丸小国，资源很少，所以需要一个超凡的领导团队。所以李光耀不希望实行两党制，这样政府会平庸。并且希望高薪养廉，招揽顶尖的从政人才。现在的年轻一代的内阁部长顺应民意，进行部长减薪，李光耀觉得是不妥的。<br>
+	这样顶尖人才只愿意当半个任期的部长，就当是国民服役。政府形同旋转门，既缺乏对事物课题的深入了解，又找不到从长远的角度思考问题的动力。
+	</pre>
+</details><p>&nbsp;</p><h4 id='2写给大家的简明艺术启蒙丰子恺'><span>2.《写给大家的简明艺术启蒙》丰子恺</span></h4><p><span>评价：尚未读完</span></p><details>
+  <summary>分章节</summary>
+  <b>慈悲的滋味</b><br>
+	<b>美的情绪</b><br>
+	<b>认识绘画</b><br>
+	<b>认识建筑</b><br>
+	<b>音乐入门</b><br>
+</details><p>&nbsp;</p><p>&nbsp;</p><h4 id='3金融怪杰访谈'><span>3.《金融怪杰》访谈</span></h4><p><span>评价：不错</span></p><p><span>收获：交易之道，知易行难，阅读好书仅是良好的开头。</span></p><details>
+  <summary>前言，暨第一部分：期货和外汇方面的交易者</summary>
+  <pre>
+  	只要人心亘古不变，华尔街就不会有新鲜的事。<br>
+	市场参与者的情绪对价格变动的影响巨大。并且这种影响几乎完全无法精确估量，更难以准确确定(乐观)泡沫或(悲观)恐慌会持续多久，正因为如此，战胜市场才有如此之难。<br>
+	“有效市场假说”理论的谬误是严重的（该假说认为投资者不可能通过分析以往价格获得高于市场平均水平的超额利润)。作者通过采访和分析，得出市场交易与国际象棋比赛更相似，都会有技能出众和技能匮乏、平平的参与者。<br>
+	只是市场上的交易是比国际象棋更为繁复的博弈。高手对市场动向能得出与众不同、更胜一筹的解读。<br>
+	风险控制绝对是交易制胜的关键，无论对自己的观点和研判多么深信不疑、自信满满。也坚决不在单笔交易中孤注一掷。<br>
+<b>迈克尔・马库斯</b>（期货）<br>
+ⅰ 止损持盈<br>
+	最重要的交易法则也许就是持盈和止损。这两者同样重要。如果你不能坚定持有盈利的头寸，那么你总的盈利将无法弥补止损形成的总亏损。
+	你也必须按照自己的方式行事，只要所用方法是符合交易基本原理的，而且有自己的风格和方法(适合自身特点)，那么利会大于弊，得会大于失。
+	截至访谈时的过去两年里，马库斯也开始交易股票，交易股票时，他会更耐心。<br>
+ⅱ 交易态度<br>
+	追随趋势必须具有耐心。
+	交易是绝对私人的事，你必须做好自己的功课，必须独立分析和判断。<br>
+ⅲ 分析<br>
+  最好的交易应该是以下三方面都对你有利，也就是基本面、技术面以及市场的情况、基调。<br>
+<b>布鲁斯・科夫纳</b>（外汇、期货）<br>
+i 交易态度<br>
+	预见世界发生的变化，洞察有别于当前的格局和形势；在压力下能保持理性，并且恪守交易纪律。<br>
+	交易是少数赢家通吃的“零和游戏”，需要后天的刻苦努力。<br>
+	降低交易规模、降低头寸规模、降低持仓规模，牢记风险管理。对于任何一个级别的交易者，“冲动交易”都是致命伤。<br>
+ii 分析<br>
+	有上千种难以理解、不为人知的市场机制、因素在主导市场，在新闻、消息正式公布之前，在小交易员收到消息前，这些机制、因素已对市场发挥了作用，产生了影响。所以科夫纳也常在价格发生突破后才作跟进，但要识别假突破，他的经验是：<br>
+	<font color="red">价格在突破前，盘整时间越久，盘整区域越稳固，当价格突破时，就越没人能够理解其中缘由，此时跟进交易通常风险报酬比良好。</font><br>
+	(他认为，市场中对价格运动的解释越少，价格运动的有效性，可信度越高。反之，越被投机客关注，信号越可能是虚假。)<br>
+iii 经验
+	大熊市的特性和牛市的特性截然不同，总在急速猛烈的下跌后出现快速的反弹。总之很难玩，反应速度不够就亏。<br>
+<b>理查德・丹尼斯</b>（期货）<br>
+i 交易态度<br>
+	对交易的印象、认知不要和鸭子一样。鸭子只有足够年幼，你就可以教会它们把军舰当成自己的妈妈。许多交易者也有如此情结，关注让自己大赚的第一笔交易是做多还是做空。这些交易者可能因此成为长期的“死多头”或者“死空头”。<br>
+	你必须把风险降到最小，要把<font color="red"><b>资金保留</b></font>到为数不多的、能短期赚大钱的时候再用。把资金投入次优的交易，你是承担不起的。如果你这么做，等到短期赚大钱的时机到来，你早已筋疲力尽，资金耗尽了。好钢一定要用在刀刃上。<br>
+	个人注：能冷静地保留子弹。<br>
+ii 分析<br>
+	股票vs期货：与商品期货市场上的价格波动相比，个股价格的波动更近乎随机。我认为，每只股票的基本面信息是不够多的，不足以使股价形成充分、显著的趋势性运动，不足以使股价运动摆脱随机特性。商品期货品种的数量哪有股票数量那么多。<br>
+<b>保罗・都铎・琼斯</b>（期货）<br>
+i 交易态度<br>
+	琼斯在交易上极具灵活性，在观点上保持充分的弹性，这点也是琼斯交易成功的基础和关键。他转变观点，改变看法的时点恰到好处，非常及时。<br>
+	供参考：在某种程度上，要想成为一名优秀的交易者，你必须做个逆向交易者，与大多数人的观点保持相反。（个人注：就是寻找市场的顶部和底部，琼斯认为某个市场长期趋势和短期趋势不符，就会进场试错。）但这是琼斯的技能，也有交易者认为“吃鱼要吃中段”，寻顶抄底比较难。<br>
+	永远不要过度交易，不要仓位过重。<font color="red">交易制胜的关键在于第一流的出色防守，而非第一流的出色进攻。</font><br>
+ii 分析<br>
+iii 关于华尔街<br>
+	错觉：因为我们作为交易公司具有某些特别的知识，所以我们能交易得好，而我们交易得好，其他人就要受到伤害。<br>
+	实际：我们交易得成功不是因为我们拥有别人所不具有的某些知识，而是因为我们能做好自己的交易功课。任何人都能通过自身的努力从芸芸众生中脱颖而出。<br>
+<b>盖瑞・贝弗德</b>（期货）<br>
+i 交易态度<br>
+	不要过度交易。那意味着交易者必须做对许多次，才能弥补高昂的交易成本。<font color="red">交易者要伺机而动，耐心等待交易良机的到来。</font><br>
+	要学会耐心、坚定持有赚钱的好品种，也乐于认错止损亏损的品种。<br>
+<b>艾迪・塞柯塔</b>（期货）<br>
+i 人物<br>
+	他编制了许多电脑程序来进行交易和分析，在心理学方面也高度敏锐和深刻洞察，能见微知著。比如他发现施瓦格的手表拨快了几分钟，从而察觉、捕捉到他的一项基本性格特征。<br>
+	塞柯塔在毗邻Lake Tahoe的家中的办公室交易、工作，这儿有着田园诗般的景致。<br>
+ii 经验<br>
+	利多出尽（也叫兑现）是利空，利空出尽是利多。在市场还只有朦胧信息的时候,主力资金已经根据政策动向将这个消息带来的上涨或者下跌动力消化掉了。“市场透支新闻消息，提取做出反应，令消息效应大打折扣”。<br>
+	这是塞柯塔第一次败绩的经验，从此也对运行规律越来越着迷。<br>
+	他的交易原则：
+	• 截断亏损（止损）
+	• 让利润奔跑（持盈）
+	• 不下重注
+	• 坚定不移地遵循交易法则
+	• 知道何时该打破交易法则，形成新的法则<br>
+iii 交易态度<br>
+	看重：长期趋势 > 当前技术图表上的价格形态 > 挑选好的价位做多或沽空<br>
+	直觉是重要的，但要区别“直觉”（潜意识的分析）和“空想”（情绪刺激和欲望），后者是危险、有害的。<br>
+iv 持盈止损<br>
+	看涨就会做多，而不是等到价格回撤。当做多时，设置的止损点如被击穿，塞柯塔立马就会了结多头头寸，进行止损，否则就将一路持有，直到价格突破我的止盈点，才了结出场。<font color="red">注：</font>止损点一般是根据单笔交易的亏损不超过交易账户净资产的比如5%。<br>
+<b>拉里・海特</b>（期货）<br>
+i 交易态度<br>
+	重视风险。<br>
+	用于生活开支的钱永远不可投入交易。<br>
+	</pre>
+</details>
+<details>
+  <summary>第二部分：以股票为主的交易者</summary>
+  <pre>
+  股票市场中做中长久期配置的交易者一般只看基本面，即是否在估值偏低的时候买到。并不关心短期走势，也就是不去判断趋势，做“左侧交易“。<br>
+  中长久期一般做好公司、大公司————”船大抗风险“。运作良好的大型公司，产业周期越长，理论上越稳定。股价大起大落，但放到3、5年来看，其实很多公司的基本面没有发生任何变化。所谓的：<br>
+  <font color="red">公司没动，动的是人心。</font> 一语道明价值投资和投机性交易之间的组合关系<br>  <b>迈克尔・斯坦哈特</b>（股票）<br>
+  i 交易态度<br>
+  他不用技术图表，但对基本面十分看重，充分全面地了解所交易的股票。<br>
+  ii 操作<br>
+  斯坦哈特的买卖也可以用“投资”形容，因为他大量的操作是，更长期地持有以及买卖的理由更为复杂。他会深刻分析基本面，希望形成他确信的，并且与市场普遍看法有所不同的观点，即与众不同的观点。<br>
+  <font color="red">注：</font>比如，大家都觉得国产车没影响力的时候，伯克希尔·哈撒维投资比亚迪。<br>
+  iii 对冲基金<br>
+  初始的”对冲“概念是完全着重、强调选股能力的。比如你看好福特，看空通用，那么你可以做多福特，并同时做空通用，多空头寸的规模相等。<br>
+  现在”对冲基金“一词已有些名不符实了。现在的对冲基金都是有限合伙制的，一般合伙人通常根据基金的业绩得到回报，在交易操作上比传统的基金管理者更具弹性和灵活性。<br>
+  进入对冲基金领域的人，不是对冲理论的实践者，他们更感兴趣的是可以自己当老板，自己替自己打工。因为徒有其名，所以他们对”对冲“这个名字感到尴尬。而且”对冲“一词含有做空的意思，但进行做空交易会被扣上”反美“的帽子，好像你全力支持灾祸，可以从中做空获利。<br>
+  斯坦哈特嘲讽道，所以这些对冲基金用”私人合伙公司“一词自称。<br>
+  现在纯粹对冲交易的实践者较少的原因是，需要动用大量资金，需要对冲操作和研判，且其中很大部分的资金投入是无效、抵消的。<br>
+  iv 对冲基金 VS 共同基金<br>
+  绝大多数共同基金所采用的交易策略都是<font color="red">买入并持有</font>。买进低估值的公司，减少交易次数。<br>
+  上世纪中叶最常见的操作建议就是买入股票，然后藏进地下室，忘记买进这回事，长期持有下去。<br>
+  v 访谈评价<br>
+  施瓦格发现许多杰出的交易者都具有这样一个特点：<font color="red">当他们察觉到胜算很大的交易机会时，他们愿意并且能够下重注，敢于重仓出击。</font><br>
+<b>威廉・欧奈尔</b><br>
+	i 选股<br>
+  </pre>
+</details>
+<details>
+  <summary>21世纪的金融知识</summary>
+  <pre>
+  1. 关于基金（公募：普通基金和ETF）
+  https://www.youtube.com/watch?v=d_kJgwxhOJM
+  │   基金
+  │ 
+  └───私募基金
+  │   |
+  │   |  概念：私底下募集，比如对冲基金，私募股权基金(PE)，风投基金(VC)；
+  │   |  特点：比较玩得起，监管不用那么严格；我们一般也买不了
+  │
+  └───公募基金
+  │   |  特点：监管更严格，因为其中有普通人的毕生储蓄甚至养老
+  │   |   
+  │   └───普通基金（共同基金/LOF）
+  │   |   ｜ 费率：贵；主动型基金
+  │   |
+  │   |
+      └───ETF（非常推荐）
+          ｜ 费率：便宜；被动型基金
+          ｜
+          ｜ 追踪一个指数，相当于买了一个大盘；但玩法也多，比如加个杠杆、反向(做空)
+          ｜ 有趣：肥胖型型ETF，弄了一堆和健康生活相关的股票
+  <br>
+  巴菲特在07年做过一个十年赌约，认为对冲基金跑不赢大盘指数。（思想很明确，主动型是拼不过被动型的）。
+  结果十年后，果然应约的对手没有一支能跑赢大盘。学术界一直在探讨，一个专业人士管理真的是比随便扔骰子挑出来的好么？更何况它有那么高昂的手续费。
+  但这个实验放在大A适用么？经济型里面有一个概念叫有效市场假说。
+  有效市场假说：如果证券市场是有效的，那么价格就会反映到这个市面上所有的信息，不存在任何的不合理的定价或者套利空间。
+  当然这只是一个假说，现实生活当中是不存在这种完美市场的。只是说看现在发展的这个经济体到底有多接近完美市场，越接近，主动型基金越没用。现在信息这么发达，数据挖掘、量化交易呀，靠主动选择股票来挖掘当中的价格不合理，是越来越难的。不过A股散户特别多，也不看年报财报，追涨杀跌的被割韭菜，市场不完善。市场没那么有效的时候，专业的投资者是可以通过信息差和专业性跑赢大盘的。
+  </pre>
+  <pre>
+  比较好用的选股方式：
+  1.中长线：查看研报，观察对未来两年市盈率的预期。
+  2.短线：观察当天开盘的特大单、大单买入，如果实际价格反馈不一致，小单流出较大，可以入场。
+  3.关于分单：比如卖单分单，是由机构将大单拆分为中小单卖出，掩人耳目。而买单分单，则是逐步建仓，也是机构防止大家看出来，降低买入的成本和风险。
+  4.关于股情大势：要理性冷静，交易股票也是修身。是人与猴子的区别。要耐心等到盘整期，像猎人一样精准选股，有把握地进场。不要在看不清形势时，盲目跟着市场情绪。为什么要等到盘整，“刚出ICU就去跑百米不现实”。不要随便买入、抄底，但也用不着清仓。投资的第一要素<font color="red">“不能离开这个牌桌”</font>，中国长期还是看好的，牛长熊短，有工程师红利。
+  5.关于价值投资：① 资金属性，时间长短。资产端和负债端要匹配。② 标普500过去一百年减去涨幅最高的十天，收益率会大幅下降（年化9%→年化4.5%）。长持才能把波动率抹掉，获得确定的收益。③ 长期变量，比如可乐的上瘾、苹果的复购率高 ④ 产生现金流的回报满足要求，比如房屋的租金、股票的分红。而不是它们上涨的部分。
+  </pre>
+  <pre>
+  巴菲特语录：
+  1.过去两年股市难以捉摸，就像赌场一样，完全不具备做价值投资的基础。
+    芒格：从来没有像现在这么疯狂，疯狂地赌博，很快地买、很快地卖
+  2.我非常相信现金，现金就像氧气。
+  3.我们并不善长把握市场时机，只好在股价便宜时买入。
+  4.高通胀下最好的投资就是投资自己。
+    抵御通胀的最佳保护措施是投资于自己的技能。
+  5.我们偶尔抓住些机会，不是因为我们更聪明，而是我们更理智。
+  6.芒格：Robinhood的经营模式充斥着“短期赌博、大笔佣金、隐藏回扣等问题”，并表示这家公司的瓦解是“天降正义”。我们从来没有像现在这么疯狂的一个情况，疯狂地赌博，很快地买、很快地卖，看起来真的不美好。我也不会觉得这是资本主义的荣耀，就是一堆人在那儿掷色子而已，掷完色子，闭着眼睛看会发生什么。当然变富不是一件什么坏事，但是你也需要在里面找到自我，看怎么把自己放进到这样的一个系统当中。
+在答问环节上，芒格称，我们现在看到的几乎是某种投机狂潮。一些带算法的计算机与其他同样使用算法的计算机进行交易。随后那些没有经验的市场参与者也在接受经纪商建议（入场）。这些“赌场活动”合法地与长期投资混在一起很奇怪。
+芒格说人们正在接受“知识更匮乏的股票经纪人”建议，并表示“这太卑鄙了”。巴菲特也在旁边插嘴说，那些经纪人其实很了解佣金。
+随后在午餐前，芒格更是按耐不住点名批评“散户大本营”Robinhood，称该公司现在正在“解体”。</details><p>&nbsp;</p><h4 id='3-大投机家安德烈科斯托拉尼'><span>3&#39;. 《大投机家》安德烈・科斯托拉尼</span></h4><p><span>遛狗理论：主人走路时，小狗会在前面跑来跑去，也有可能会跑得太远，但迟早会跑回主人身边。</span></p><blockquote><p><span>象征：</span></p><ul><li><p><span>主人 —— 股票价值、经济基本面</span></p></li><li><p><span>狗的兴趣 —— 消息、情绪</span></p></li><li><p><span>狗的性格 —— 活跃度、成交量等技术指标</span></p></li><li><p><span>狗的轨迹 —— 技术分析图</span></p></li><li><p><span>狗绳的长度、弹性 —— 短期政策</span></p><p><span>不过现在非常强壮的狗，也可能拖着主人跑。比如对英伟达的超高预期，引发一系列连锁反应，和美国经济互相成全。</span></p></li></ul></blockquote><p>&nbsp;</p><p><strong><span>术语</span></strong>
+<span>①基本面分析：采样经济数据来预测价格走势。</span></p><p><span>②技术分析：采样市场本身的各类数据来分析价格走势。</span></p><p><span>③股票(Stock)：现买现卖；期权(Option)：买卖“购买权”，有行权日和行权价；期货(Future)：交定金，未来买。</span></p><p>&nbsp;</p><h4 id='4活着本来单纯丰子恺'><span>4.《活着本来单纯》丰子恺</span></h4><details>
+  <summary>Click to expand</summary>
+  whatever
+</details><p>&nbsp;</p><h4 id='5星云志星云奖组委会'><span>5.《星云志》星云奖组委会</span></h4><p><span>评价：看过“何慈康松”的许多经典作品，但总体来说，唯有《三体》达到了令人难忘的高度。我对科幻作品的评价标准便是记忆的刻度，即文中的设定能否令人印象深刻。只有那些想象瑰丽又逻辑严密的作品能构筑金色梦乡。所以评价相对苛刻，尤其是大多数科幻作家只是兼职写作，实属不易。</span></p><p><span>收获：</span></p><details>
+  <summary>Click to expand</summary>
+  whatever
+</details><p>&nbsp;</p><h4 id='6一个叫欧维的男人决定去死弗雷德里克巴克曼'><span>6.《一个叫欧维的男人决定去死》弗雷德里克·巴克曼</span></h4><p><span>评价：搁置</span></p><p><span>收获：主要是保持英文阅读习惯，温习日常词汇。基调温情的一部小说。</span></p><details>
+  <summary>Click to expand</summary>
+  whatever
+</details><p>&nbsp;</p><h4 id='7习得性无助马丁塞利格曼'><span>7.《习得性无助》马丁·塞利格曼</span></h4><p><span>评价：不错，经典而专业。</span></p><p><span>收获：习得性无助，&quot;明知道要改变现状、明知道这样下去死路一条，但仍旧无法做出一点改变&quot;，被解读为loser的思维模式。坏的习惯令人乐观时变茫然，无助时变绝望，保持不了健康积极的心理状态。</span></p><details>
+  <summary>理解</summary>
+  <pre>
+  <b>习得性无助理论</b><br>
+  三个必要的成分组成：关联性、认知以及行为。<br>
+  <b>来源：</b>习得性无助是由于后天所受到的非预期内的挫折太多，且没有磨练出解决问题的恰当方法，而慢慢对现实丧失抵抗。<br>
+  <b>关联性：</b>指人的行为和他之后经历结果之间的客观关系。分为不可控性和可控性<br>
+  <b>认知：</b>指人感知、解释和推测关联性的方式。感知可能正确也可能与事实不符。推测是使用感知和解释去形成一种对未来的预期。<br>
+  例：如果他经历了一次他认为是由自己的愚蠢所导致的失败，那么当他遇到需要智慧的情境时，他会预期自己再次失败。<br>
+  <b>行为：</b>指是由关联性以及此人对它的认知所致的可观察的结果。如主动或被动。无助理论认为，个体对未来无助的预期会带来其他结果：认知迟滞、低自尊、沮丧、失去进取心，免疫系统的改变，以及生理疾病。
+	</pre>
+</details>
+<details>
+  <summary>其他</summary>
+  <pre>
+  <b>损失厌恶</b>
+  做法：做选择时，不要去想好处，专门想坏处。
+  做选择时，多思考这件事对你的<b>坏处</b>是什么呢？
+  比如，学习除了枯燥一点全是好处。游戏的坏处就太多了。
+  只要想到这些你的大脑就会重新恢复理智。
+  这个方法可以普适地应用于很多坏习惯。<br>
+  <b>对于好习惯</b>
+  1. 放大影响和感受
+  2. 线下见面同好，比如跑步、读书。一个人走得快，两个人走得远。
+	</pre>
+</details><p>&nbsp;</p><h4 id='8小家越住越大逯薇'><span>8.《小家，越住越大》逯薇</span></h4><p><span>评价：搁置</span></p><p><span>收获：</span></p><details>
+  <summary>笔记</summary>
+  <pre>
+  <b>逯薇</b> 万科广深地区副总建筑师 <br>
+  你如何对待家，家便如何对待你
+  </pre>
+</details><p>&nbsp;</p><h4 id='9why-we-sleep马修沃克'><span>9.《Why We Sleep》马修·沃克</span></h4><p><span>评价：搁置</span></p><p><span>收获：阅读英文版，副标题是Unlocking the Power of Sleep and Dreams，我对梦和养生都挺感兴趣的。</span></p><details>
+  <summary>Click to expand</summary>
+  whatever
+</details><p>&nbsp;</p><h4 id='10dk汽车'><span>10.《DK汽车》</span></h4><p><span>评价：</span></p><p><span>收获：对最重要的消费级制造业产品感兴趣。</span></p><details>
+  <summary>编年</summary>
+  <pre>
+  <b>1920年以前的第一批汽车</b><br>
+  <font color='red'>梅赛德斯（Mercedes）</font>的故事
+  戴姆勒、梅赛德斯、奔驰都是源于人名。Benz是历史上最重要的汽车革新者，Daimler也是汽车工程师，他们开创了各自的汽车品牌。拥有市场占有权的某位经销商以小女儿的名字来命名戴姆勒旗下某款车型，诞生一个新的品牌名称——Mercedes。
+  20世纪20年代的经济萧条重创德国，两家公司合并，成立戴姆勒-奔驰股份公司，生产的汽车冠以梅赛德斯-奔驰品牌。<br>
+  <font color='red'>福特（Ford）</font>Model T通过高效生产线生产出来，使数百万计美国人变成有车族。<br>
+  <font color='red'>凯迪拉克（Cadillac）</font>在底特律成立，源于18世纪底特律的法国创建者的名字。创始人亨利·利兰，他创造了凯迪拉克和林肯两种车型，被誉为美国汽车工业的“精密生产大师”。<br>
+  劳斯莱斯银魅（Rolls-Royce Silver Ghost）这款车帮助劳斯莱斯获得了“世界上最好的汽车”称号，是“手工工艺对工业设计的全面胜利”。<br>
+  <b>20世纪20年代</b><br>
+  <font color='red'>布加迪（Bugatti）</font>的Type 35B是法国赛车的标志，赛场上的优胜者，它很美，兼顾技术与艺术。<br>
+  <font color='red'>劳斯莱斯（Rolls-Royce）</font>银魅连同幻影系列一起增强了劳斯莱斯的美誉。
+  70年代后经历了国家所有、被英国机械集团买下、被大众买下大部分资产（但忽视了名字使用权）、被宝马买下使用劳斯莱斯名字的权利。<br>
+  <font color='red'>雷诺（Renault）</font>源于创始人在家里一间小工厂的捣鼓。起初只为自己做了一辆。其设计方面的才能都被竞技场上的光辉成就所印证。<br>
+  <font color='red'>阿尔法罗密欧（Alfa Romeo）</font>，6C 1750（旅行车）是它生产的最好的汽车之一。<br>
+  <b>20世纪30年代</b><br>
+  大萧条后的经济车型。<br>
+  20世纪30年代意大利汽车品牌（阿尔法罗密欧、玛莎拉蒂）在欧洲汽车比赛中独占鳌头，此时英、法的势头正在消退。然而，不久以后德国政府的投资使德国赛车的速度和性能得到大幅提升，让其他国家的赛车只能望之兴叹。<br>
+  <font color='red'>雪佛兰（Chevrolet）</font>，源于人名。Chevrolet是汽车公司的机械师，他也爱好参与汽车比赛。在创造纪录后，他的名字为大家所熟知，进入顶级赛车手行列。通用汽车的创始人被股东逐出公司后，他选中Chevrolet作为合作伙伴，成立了雪佛兰汽车公司。该公司快速发展并且最终被通用汽车买下。1936年~1976年，雪佛兰都是销售量最好的汽车品牌。就在大家都认为雪佛兰永远不会犯错时，他的一款车型发生了很多事故，消费者们抱怨其明知缺陷还生产该车，投诉接踵而至。
+  雪佛兰克尔维特发布于1953年，它是美国首款产品跑车，也是美国历史上最早的迄今为止仍然在生产的跑车。<br>
+  跑车：既能在公路上驾驶又能在赛场上驰骋的车型。<br>
+  <font color='red'>大众（Volkswagen）</font>的对置式发动机。希特勒命令生产平民汽车（Volks Wagen）。汽车工程师设计了一款发动机，用空气冷却代替了水冷却。当汽车生产在二战后恢复时，这款简单实用的发动机继续在世界范围内热卖。直到2003年停产。<br>
+  流线型汽车：欧美的车型设计师和工程师们把注意力转移到了空气动力学及其在最高车速和稳定加速方面的潜能上。林肯（Lincoln）的Zephyr成为了美国空气动力学车身的领导者。<br>
+  <font color='red'>宝马（BMW）</font>的故事<br>
+  宝马开始是飞机发动机的制造商，后来转做摩托车，在后来做汽车。"他们有令人惊讶的能力生产...强动力可靠的发动机"。而其他很多汽车品牌起初是不制造发动机的。<br>
+  <b>20世纪40年代</b><br>
+  Jeep是由福特和威利斯生产出来的，用于美军战场上的人员运输。没有预料到Jeep将会在和平时期当做运动汽车使用。诸如此类，战时的运输车、越野车因为简单、耐用，在战后也大有市场。其中福特的F系列是小卡车中的佼佼者。<br>
+  1946年，国际汽车大奖赛恢复。（后改名Formula One，方程式指一组所有参赛车辆都必须遵守的规则。F1与勒芒、WRC并称为全球三大汽车赛事）<br>
+  到1949年，美国人对车的需求基本满足，生产商开始在外形上改进以求得竞争优势。<br>
+  捷豹（Jaguar）的故事<br>
+  捷豹XK直列六缸发动机是汽车史上标志性发动机之一。创始人是摩托车爱好者，起初是创建公司，设计优美外观的摩托车车斗。被看中后，为汽车公司制作车身，设计的车身触感更好更个性化，受汽车爱好者的追捧。水到渠成，进入汽车行业。福特投资捷豹，2008年将其与路虎一起卖给印度的Tata集团。<br>
+  <font color='red'>大众甲壳虫（Volkswagen Beetle）</font>，甲壳虫是汽车历史上最让人感叹的成功案例，它源于希特勒的一个小项目。他命令杰出的机械工程师为德国人设计一款造价低廉的汽车。<br>
+  <font color='red'>雪铁龙（Citroen）的故事</font><br>
+  创始人Citroen是汽车工业先驱者之一。他很懂经商，一战时变成军火制造商，成为富翁。战后，从底盘生产商购和车身生产商那里购进底盘和车身，然后做“组装”，再加些昂贵汽车才有的项目。在埃菲尔铁塔打广告。意识到市场的巨大潜力，他不停地改进底盘和发动机，做出了许多创新。有次某个新技术却出现问题，虽然大部分问题很快修复了，但公司的名誉却受到了损失。Citroen慢慢陷入一个怪圈：不停发布新产品来打压竞争对手雷诺的声音，可最终带来却是1934年的破产。之后遭遇债权人米其林接管、创始人去世、法国政府施救、失去品牌独立性（竞争对手标致买下股票并增持至90%）等经历。<br>
+  <b>20世纪50年代</b><br>
+  战后的美国汽车设计呈现大胆与浮华之势，直到1960年温和派设计才到来。<br>
+  <font color='red'>福特（Ford）的故事</font><br>
+  第一个发明了批量生产技术的汽车生产商。从那以后，成长为全球汽车巨人。该品牌的优势是其明智的产品路线。设计主管领导创意车身设计，技术主管领导等级操控。新千年经济大萧条时期，它是唯一没有经过政府救助而生存下来的大型美国汽车生产商（不过卖了一些资产，比如卖给Tata集团的捷豹路虎）。2010年，福特是美国三大汽车生产商日子最好过的一个，并且此时它已经进入了新领域：电动汽车、混合动力汽车和替代燃料领域。<br>
+  折篷式车身：二战以前，折篷车价格很低廉。然而50年代，折篷车成了高端汽车并且需求量很大。随着价格提升，折篷车也变得更加豪华和成熟。<br>
+  <b>20世纪60年代</b><br>
+  <b>20世纪70年代</b><br>
+  <b>20世纪80年代</b><br>
+  <b>20世纪90年代</b><br>
+  <b>2000年以后</b><br>
+  </pre>
+</details>
+<details>
+  <summary>当下的汽车</summary>
+  <pre>
+  汽车之家的参数配置对比，十分详细有用，比如工信部综合油耗、行李箱容积。<br>
+  <b>bba入门级</b><br>
+  轿车好开，suv空间大方便搬家，得取舍。x2、gla、q3作为入门级，有点两边不靠，x1倒挺大。34c作为轿车，操控性比suv好点。注：34c，即宝马3系、奥迪A4L、奔驰C级。
+  IIHS（美国公路安全保险协会）统计SUV死亡率比轿车低了大约50%。
+  个人认为，如果不是经常跑高速，市内使用SUV更好，被动安全性更高。<br>
+  <b>热销的SUV</b><br>
+  X1/GLB/Q3/XT4/冒险家，就是5款最热门的豪华紧凑SUV。
+  收藏了这篇中肯的<a href="https://zhuanlan.zhihu.com/p/258990612">文章</a>
+  </pre>
+</details><p>&nbsp;</p><p>&nbsp;</p><h4 id='11人类简史尤瓦尔赫拉利'><span>11.《人类简史》尤瓦尔·赫拉利</span></h4><p><span>评价：搁置</span></p><p><span>收获：之前看过《未来简史》觉得不错，。</span></p><details>
+  <summary>Click to expand</summary>
+  whatever
+</details><p>&nbsp;</p></div></div>
+
+<script>(function(){var e=document.body.parentElement,t=[],n=null,i=document.body.classList.contains("typora-export-collapse-outline"),r=function(e,t,n){document.addEventListener(e,function(e){if(!e.defaultPrevented)for(var i=e.target;i&&i!=this;i=i.parentNode)if(i.matches(t)){!1===n.call(i,e)&&(e.preventDefault(),e.stopPropagation());break}},!1)};function o(){return e.scrollTop}r("click",".outline-expander",function(e){var t=this.closest(".outline-item-wrapper").classList;return t.contains("outline-item-open")?t.remove("outline-item-open"):t.add("outline-item-open"),d(),!1}),r("click",".outline-item",function(e){var t=this.querySelector(".outline-label");if(location.hash="#"+t.getAttribute("href"),i){var n=this.closest(".outline-item-wrapper").classList;n.contains("outline-item-open")||n.add("outline-item-open"),c(),n.add("outline-item-active")}});var a,s,l=function(){var e=o();n=null;for(var i=0;i<t.length&&t[i][1]-e<60;i++)n=t[i]},c=function(){document.querySelectorAll(".outline-item-active").forEach(e=>e.classList.remove("outline-item-active")),document.querySelectorAll(".outline-item-single.outline-item-open").forEach(e=>e.classList.remove("outline-item-open"))},d=function(){if(n){c();var e=document.querySelector('.outline-label[href="#'+(CSS.escape?CSS.escape(n[0]):n[0])+'"]');if(e)if(i){var t=e.closest(".outline-item-open>ul>.outline-item-wrapper");if(t)t.classList.add("outline-item-active");else{for(var r=(e=e.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper");r;)r=(e=r).parentElement.closest(".outline-item-wrapper");e.classList.add("outline-item-active")}}else e.closest(".outline-item-wrapper").classList.add("outline-item-active")}};window.addEventListener("scroll",function(e){a&&clearTimeout(a),a=setTimeout(function(){l(),d()},300)});var u=function(){s=setTimeout(function(){!function(){t=[];var e=o();document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(n=>{var i=n.getAttribute("id");t.push([i,e+n.getBoundingClientRect().y])})}(),l(),d()},300)};window.addEventListener("resize",function(e){s&&clearTimeout(s),u()}),u()})();</script></body>
+</html>
