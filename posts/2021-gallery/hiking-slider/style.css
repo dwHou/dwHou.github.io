@@ -7,6 +7,15 @@
     justify-content: center;
 }
 
+.otherplace
+{
+    /* display: flex;  */
+    /* or inline-flex */
+    display: none; /* 默认隐藏 */
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 img{
     width: auto;
     height: 260px;
@@ -31,6 +40,25 @@ img:hover{
   border-radius: 5px;
   font-size: 14px;
   font-family: 'Dancing Script', cursive; /* 使用引入的字体 */
+}
+
+
+.text-wrapper {
+  margin-top: 10px;
+  background: linear-gradient(90deg, rgba(0, 0, 255, 0.3), rgba(75, 0, 130, 0.3), rgba(238, 130, 238, 0.3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block; /* 确保链接换行 */
+  margin: 10px 0; /* 添加间距 */
+  text-align: center;
+  font-family: 'Dancing Script', cursive; /* 可根据需要调整字体 */
+  color: white; /* 确保文字颜色为白色 */
+  border-radius: 5px;
+}
+
+.separator {
+  color: #007BFF; /* 符号颜色 */
+  margin: 0 2px; /* 符号左右间距 */
 }
 
 h1{
