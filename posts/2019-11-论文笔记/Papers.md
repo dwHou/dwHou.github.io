@@ -1418,6 +1418,8 @@ AV offset: the offset between Audio and Video, -1 means the audio is faster than
 Min dist: Min dist is the mean feature-wise distance between the audio and video at `AV offset`.
 Confidence: Confidence is a score of how much closer the mean feature-wise distance is at the `AV offset` compared to other wrong offsets. Higher the confidence, more likely the sync offset is to be correct.
 
+嘴部面积（多边形面积）：计算起来很快，比如利用[鞋带公式](https://blog.csdn.net/xza13155/article/details/112118676)。
+
 
 
 ### 2. PhotoAnimate
