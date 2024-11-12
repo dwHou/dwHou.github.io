@@ -1422,9 +1422,15 @@ Confidence: Confidence is a score of how much closer the mean feature-wise dista
 
 
 
+#### :page_with_curl:PersonaTalk
+
+
+
+
+
 ### 2. PhotoAnimate
 
-#### **:page_with_curl:LivePortrait**
+#### :page_with_curl:LivePortrait
 
 https://liveportrait.github.io/
 
