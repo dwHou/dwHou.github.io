@@ -1436,7 +1436,43 @@ https://liveportrait.github.io/
 
 快手的工作，效果很精细。沿用了FOMM、face-vid2vid的基于隐式关键点的框架（implicit-keypoint-based framework），可达到计算复杂度和可控性的平衡。4090显卡上可以跑到12.8ms每帧。LivePortrait在视频驱动照片的领域里，确实是一个很坚实的框架。其他相似任务里，可看下是否有可借鉴之处。
 
-现有方法：
+回顾face vid2vid：
+
+implicit-keypoint-based framework主要就是在source提取canonical keypoints。然后假定driving图像复用该canonical keypoints（同一个id就可以复用），便无监督地学习获得提取canonical keypoints的能力。
+
+然后$x_s=x_{c,s}R_s(旋转)+δ_s(表情)+t_s(平移)$ 和 $x_d=x_{c,d}R_d+δ_d+t_d$。
+
+face vid2vid也没有像FOMM那样预测每个关键点的雅可比矩阵（Jacobian），因为它认为人头的运动是比较刚性的，每个关键点局部patch的旋转与整个人头的旋转是一致的，即$J_s = R_s$。而且这样也剩下不少带宽。
+
+> 1. 因为face vid2vid研究的应用场景是视频会议，所以不传输$J_s$可以节省带宽。
+> 2. 也正因为face vid2vid的应用场景是视频会议，所以source和driving是相同id。canonical keypoints可以复用，driving不需要再提取canonical keypoints。
+> 3. 相当于最后就是传输一张source图，和drving帧的紧凑表征$R_d$、$δ_d$、$t_d$（码率极低）。
+
+
+
+创新点：
+
+1. Landmark-guided implicit keypoints optimization.
+
+   我们之前看FOMM的隐式关键点完全是无监督学习出来的，位置非常地不定，看不大出来语义。但LivePortrait还是给<font color="brown">一部分（10个）keypoints加上了监督</font>，用2D landmark（eye、mouth）来做监督。认为这样对驱动微表情更有利。
+
+   另外作者在issue里也表达出全用2D landmark也可以，只是现实中2D landmark的提取会有歧义以及不稳定。这也是隐式关键点存在的价值。
+
+   最后，用多少个隐式关键点最佳（K=?），作者也无法给出答案。
+
+2. 图像视频数据混合训练
+
+   因为style视频数据比较稀缺，但style图像比较丰富。所以采用了将style图像视作静态视频的训练方式，扩充了这部分数据。
+
+3. 表情拼接与重定向（Stitching and Retargeting）
+
+   a stitching module
+
+   an eyes retargeting module
+
+   a lip retargeting module
+
+4. 
 
 
 #### :page_with_curl:GAIA

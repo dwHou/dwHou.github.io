@@ -221,6 +221,18 @@ https://zhuanlan.zhihu.com/p/23599229
       -v 把宿主机上的目录映射到容器内
       这样进去的用户名默认都是root，如果为了方便主环境管理员，可以把起容器的命令改进，加一组参数-v /etc/passwd:/etc/passwd -u $(id -u):$(id -g)，使得容器内外的用户名一致。
   </pre>
+
+  <pre>
+    相关：新账户的创建
+    sudo useradd -m eric -s /bin/bash
+    sudo passwd eric
+    sudo gpasswd -a eric docker # gpasswd的设计初衷是与组相关的密码管理。早期某些组可以设置密码以限制访问。但现代Linux系统中的组通常不使用密码。所以现在gpasswd仅用于添加和删除组成员。尽管它的名字中包含“passwd”，但它并不用于设置或修改用户的登录密码。这里我们组名就叫docker，sudo groupadd mygroup可以创建组。
+    newgrp docker # 启动一个新的shell会话，并将当前会话的有效组更改为指定的组。
+    cd /data
+    sudo mkdir eric
+    sudo chown -R eric eric
+  </pre>
+
   <pre>
       退出容器并结束容器运行 exit
       返回容器 先start,再attach

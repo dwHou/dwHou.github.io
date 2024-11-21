@@ -522,6 +522,15 @@ env | grep -i proxy 可以查看代理的情况。</pre>
 </pre>
   </ul>
 
+  <h2>py-spy性能调试工具</h2>
+  <pre>
+    step 1. 运行起程序
+    step 2. pgrep -f xxx.py 查看python程序的PID。
+    step 3. 实时观测或离线统计cpu时间火焰图
+    sudo env "PATH=$PATH" py-spy top --pid PID 实时
+    sudo env "PATH=$PATH" py-spy record -o profile.svg --pid PID 火焰图
+  </pre>
+
   <h2>crontab</h2>
   <ul>
 
