@@ -29,3 +29,9 @@ AIGC即AI Generated Content，*是*指利用人工智能技术来生成内容，
 推荐视频：[youtube video](https://www.youtube.com/watch?v=IpK9PNq15ao)
 
 推荐文章：[what-is-chatgpt](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/)
+
+
+
+
+
+视频生成：T2V，I2V，TI2V

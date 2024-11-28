@@ -410,6 +410,12 @@ Terminal <--[<output]--- |       |                \ \
       也可以看看last -F 宕机当天的用户登录情况
   </pre>
 
+  <h2>编程程序CPU过高</h2>
+  <pre>
+    <a href="https://piaohua.github.io/post/linux/20240524-top9-cases-behind-100-cpu-usage/">内存不足、忙等待、并发、...</a>
+    其它原因：程序本身在循环执行CPU密集型的操作，瞬时CPU占用会极高。假设此操作耗时很短，很快会释放CPU，但如果程序没有任何间隔，紧接着循环进行该操作，CPU将持续处于高负载状态，这不仅会导致CPU温度升高，还可能影响其他进程的性能。
+  </pre>
+
   <h2>Linux crontab 定期执行程序</h2>
   <pre>
       crontab [ -u user ] { -l | -r | -e }

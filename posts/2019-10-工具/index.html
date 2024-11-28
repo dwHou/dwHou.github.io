@@ -171,6 +171,12 @@ printf("%"d"s","|")}print "---"$NF}' FS='/'</pre>
   <li>支持<b>ftp、sftp</b>的非常顺手的工具，可以记住众多的站点，并且支持默认的打开目录</li>
   <li>站点管理器 > 高级 > 默认远程目录</li>
 
+  <li><b>ftp</b></li>
+  <pre>
+    http://linux.51yip.com/search/lftp
+    是ftp的扩展和增强，比如支持mirror指令来传输文件夹。
+  </pre>
+
   <li><b>sftp</b></li>
   <pre>
     批量上传多个文件：
@@ -529,6 +535,17 @@ env | grep -i proxy 可以查看代理的情况。</pre>
     step 3. 实时观测或离线统计cpu时间火焰图
     sudo env "PATH=$PATH" py-spy top --pid PID 实时
     sudo env "PATH=$PATH" py-spy record -o profile.svg --pid PID 火焰图
+  </pre>
+
+  <h2><a href="https://pypi.org/project/scalene/">scalene</a>性能调试工具</h2>
+  <pre>
+    会比py-spy更强大一点:
+    1. 能分析Python code vs. native code
+    "native": non-Python code (e.g., libraries written in C/C++).
+    2. 行级别的CPU分析，相较大多数分析器只支持的功能级别的CPU分析，可能会更有用。
+    使用方式：
+    nohup python3 -u -m scalene --html --no-browser --- test.py --arg1 para1 --arg2 para2 --argN paraN >test.log 2>&1 &
+    最后html script会写入test.log。
   </pre>
 
   <h2>crontab</h2>
