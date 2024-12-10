@@ -806,8 +806,9 @@ git pull
 详细参考<a href="https://www.liaoxuefeng.com/wiki/896043488029600/900004111093344">廖雪峰的文章</a>
 具体是git status查看哪些文件冲突，然后打开文件后将看到Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容。一些IDE或其插件，会有快捷的选择不同分支内容的点击项，方便快速解决冲突。
 
-
 <font color="red">git pull = git fetch + git merge</font>
+
+git pull遇到远程有其他协作者的commit，和本地的commit不是fast-forward了。这时可以合并（merge）或者变基（rebase），前者历史记录更完整，后者的提交历史更直线。无论是合并还是变基，都可能遇到冲突，解决冲突的过程类似。
 
 3、使用场景
 通常情况下，远程操作的第一步，是使用git clone从远程主机克隆一个版本库到本地。
