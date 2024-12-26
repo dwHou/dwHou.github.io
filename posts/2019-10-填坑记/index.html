@@ -252,6 +252,29 @@
       <li>若出现动态库缺失或者版本不够，参见<a href="https://blog.csdn.net/qq_35374722/article/details/105841079">libstdc++.so.6*</a> </li>
   </ul>
 
+  <h2>关于并发读取权重</h2>
+  <pre>
+    有些比较huge的权重（数百兆～吉），并发torch.load是可能出问题的。
+    但是目前我也没想到最佳方案，下面的方案能有所缓解：
+    try solution 1:
+    with tempfile.NamedTemporaryFile(delete=True) as temp_file:
+        temp_model_path = temp_file.name
+        shutil.copy(model_path, temp_model_path)
+        statedict = torch.load(temp_model_path, map_location=args_device)
+        model.load_state_dict(statedict)
+
+    try solution 2:
+    from filelock import FileLock
+    lock_path = model_path + ".lock"
+    with FileLock(lock_path):
+        statedict = torch.load(model_path, map_location=args_device)
+        model.load_state_dict(statedict)
+
+    try solution 3:
+    甚至自己手写文件锁，主要利用os.path.exists(lockpath)来判断。也没有用。
+    总之这个并发问题还比较棘手。或许大模型的应用还是一开始加载到内存，要稳定一点。
+  </pre>
+
   <h2>关于OpenCV</h2>
   <ul>
       <li>PIP3依赖有：opencv-python-headless, opencv-python, opencv-contrib-python</li>
