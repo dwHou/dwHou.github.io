@@ -30,7 +30,120 @@ Godot官方英文文档：https://docs.godotengine.org/en/stable/
 
 # 官方教程
 
+## 关于
 
+### 前言
+
+本文档分为几个部分：
+
+- **关于** 包含了此简介以及有关引擎，历史，许可，作者等的信息。它还包含 [常见问题](https://docs.godotengine.org/zh-cn/4.x/about/faq.html#doc-faq)。
+- **入门** 包含了有关使用引擎制作游戏的所有必要信息。它从 [渐进式](https://docs.godotengine.org/zh-cn/4.x/getting_started/step_by_step/index.html#toc-learn-step-by-step) 教程开始，这应该是所有新用户的切入点。**如果你是新手，这是最好的起点！**
+- **手册** 可根据需要以任何顺序阅读或参考。它包含特定功能的教程和文档。
+- **贡献** 提供了向Godot贡献相关的信息 ，无论是核心引擎、文档、 demo 还是其他部分。 它描述了如何报告 bug ，如何组织贡献者工作流等。 它还包含面向高级用户和贡献者的部分， 提供有关编译引擎的信息，为编辑器做出贡献， 或开发C++模块。
+- **社区** 致力于 Godot 社区的生态。它指向各种社区渠道，如 [Godot 贡献者聊天](https://chat.godotengine.org/) 和 [Discord](https://discord.gg/4JBkykG)，并包含本文档之外推荐的第三方教程和资料。
+- 最后，**类参考**记录的是完整的 Godot API，另外也可以直接在引擎的脚本编辑器中查看。你可以在这里找到关于所有类、函数、信号等相关的信息。
+
+除本文档外，你可能还会对各种 [Godot 示例项目](https://github.com/godotengine/godot-demo-projects)感兴趣。
+
+### 特性列表
+
+1. 平台：Godot 的目标是尽可能地独立于平台，并且可以相对轻松地 [移植到新平台](https://docs.godotengine.org/zh-cn/4.x/contributing/development/core_and_modules/custom_platform_ports.html#doc-custom-platform-ports) 。
+
+2. 编辑器：
+
+   - 场景树编辑器。
+   - 内置脚本编辑器。
+   - 支持 Visual Studio Code、VIM 等[外部文本编辑器](https://docs.godotengine.org/zh-cn/4.x/tutorials/editor/external_editor.html#doc-external-editor)。
+   - GDScript [调试器](https://docs.godotengine.org/zh-cn/4.x/tutorials/scripting/debug/debugger_panel.html#doc-debugger-panel)。
+   - 可视化（性能）分析器能指出在渲染管线中 CPU 与 GPU 在每个步骤花费的时间。
+   - 性能监视工具，包括[自定义性能监视器](https://docs.godotengine.org/zh-cn/4.x/tutorials/scripting/debug/custom_performance_monitors.html#doc-custom-performance-monitors)。
+
+   等等
+
+3. 渲染：
+
+   桌面平台默认Forward+，移动平台默认Forward Mobile，Web平台默认Compatibility。
+
+4. 2D 图形
+
+5. 2D 工具
+
+6. 2D 物理
+
+7. 3D 图形
+
+8. 3D 工具
+
+9. 3D 物理
+
+10. 着色器（Shaders）
+
+11. 编写脚本（Scripting）
+
+    - General
+    - GDScript
+    - C#
+    - GDExtension（C、C++、Rust、D……）
+
+12. 音频
+
+13. 导入（import）
+
+14. 输入（input）
+
+15. 导航
+
+16. 网络
+
+17. 国际化
+
+18. 窗口 和 操作系统整合
+
+19. 移动端
+
+20. XR支持（AR和VR）
+
+21. GUI系统
+
+22. 动画
+
+23. 文件格式
+
+24. 杂项
+
+### 系统需求
+
+Godot编辑器的推荐配置，最低配置。导出Godot项目的推荐配置，最低配置。
+
+**编辑器：**
+
+- Windows、macOS、Linux、*BSD、Android（实验性）、[网页版](https://editor.godotengine.org/)（实验性）
+
+**导出游戏：**
+
+- Windows、macOS、Linux、*BSD、Android、iOS、Web
+
+### 常见问题
+
+<font color="blue">Q：</font>Godot 支持哪些编程语言？
+
+<font color="Red">A：</font>Godot 官方支持的语言是 GDScript、C# 和 C++。如果你刚开始接触 Godot 或一般的游戏开发，推荐学习并使用 <font color="brown">GDScript</font> 语言，它是 Godot 的原生语言。虽从长远来看，脚本语言的性能往往不如低级语言，但对于原型设计、开发最小可行产品（Minimum Viable Products）以及关注上市时间（Time-To-Market）而言，GDScript 可提供一种快速、友好、能力强的游戏开发方式。
+
+对于新语言，可以通过第三方使用 GDExtension 获得支持。
+
+<font color="blue">Q：</font>GDScript是什么？ 为什么要使用这门语言？
+
+
+
+## 入门
+
+## 手册
+
+## 贡献
+
+## 社区
+
+## 类参考
 
 # 视频教程
 
