@@ -23,3 +23,14 @@ Godot官方英文文档：https://docs.godotengine.org/en/stable/
 对于没有经验的开发者，使用Godot游戏引擎+GD脚本来入门，是现阶段最好的学习途径。
 
 唯一值得考虑的缺点是，作为开源免费的游戏引擎，Godot在商业化方面做的不好，在资源和工具上提供的就比较少。对于很多不会写代码或者没有制作素材能力的开发者，如果使用Unity、Unreal，我直接就做一个插件战士，直接在资产库（asset store）里买买买，攒一个游戏就完事了。但在Godot，甚至在可预见的未来，都达不到Unity那样资产商店的规模。
+
+其他参考资料：
+
+[1] [Godot vs. Unity](https://blog.csdn.net/lengyoumo/article/details/132112450)
+
+# 官方教程
+
+
+
+# 视频教程
+
