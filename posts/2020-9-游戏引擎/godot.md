@@ -373,7 +373,75 @@ Godot 提供了专门的 2D 和 3D 渲染引擎。因此，**2D 场景的基础�
 
 #### 1. 节点与场景
 
+在 [Godot 关键概念概述](https://docs.godotengine.org/zh-cn/4.x/getting_started/introduction/key_concepts_overview.html#doc-key-concepts-overview) 中，我们看到 Godot 游戏就是由场景构成的树状结构，而每一个场景又是一个由节点构成的树状结构。在这一节中，我们将更详细地解释这些概念，你还将创建你的第一个场景。
+
+##### 1.1 节点
+
+**节点是你的游戏的基本构件**。它们就像食谱里的食材。Godot 引擎包含很多种节点，可以用来显示图像、播放声音、表示摄像机等等。
+
+所有节点都具备以下<font color="brown">特性</font>：
+
+- 名称。
+- 可编辑的属性。
+- 每帧都可以接收回调以进行更新。
+- 你可以使用新的属性和函数来进行扩展。
+- 你可以将它们添加为其他节点的子节点。
+
+最后一个特征很重要。**节点会组成一棵树**，这个功能组织起项目来非常强大。因为不同的节点有不同的功能，将它们组合起来可以产生更复杂的行为。
+
+正如我们之前看到的，你可以用一个 [CharacterBody2D](https://docs.godotengine.org/zh-cn/4.x/classes/class_characterbody2d.html#class-characterbody2d) 节点、一个 [Sprite2D](https://docs.godotengine.org/zh-cn/4.x/classes/class_sprite2d.html#class-sprite2d) 节点、一个 [Camera2D](https://docs.godotengine.org/zh-cn/4.x/classes/class_camera2d.html#class-camera2d) 节点以及一个 [CollisionShape2D](https://docs.godotengine.org/zh-cn/4.x/classes/class_collisionshape2d.html#class-collisionshape2d) 节点来建立一个摄像机跟随的可玩角色。
+
+<img src="./imgs/nodes_and_scenes_character_nodes.webp" alt="nodes_and_scenes_character_nodes" style="zoom:80%;" />
+
+##### 1.2 场景
+
+当你在树中组织节点时，就像我们的角色一样，我们称之为场景构造。保存后，场景的工作方式类似于编辑器中的新节点类型，你可以在其中将它们添加为现有节点的子节点。在这种情况下，场景实例显示为隐藏其内部结构的单个节点。
+
+> 场景可以视作我们用 基础节点 构造出的 新节点类型。
+
+场景允许你以你想要的方式来构造你的游戏代码。你可以**组合节点**来创建自定义和复杂的节点类型，比如能跑能跳的游戏角色、生命条、可以互动的箱子等等。
+
+> [!TIP]
+>
+> 本质上，<font color="brown">Godot 编辑器就是一个 **场景编辑器**</font>。它有很多用于编辑 2D 和 3D 场景以及用户界面的工具。Godot 项目中可以包含任意数量你所需要的场景。引擎只要求将其中之一设为程序的**主场景**。这是你或者玩家运行游戏时，Godot 最初加载的场景。
+
+除了像节点一样工作之外，场景还具有以下特点：
+
+1. 它们始终有一个根节点，就像我们示例中的“Player”一样。
+2. 你可以把它们保存到你的硬盘上，以后再加载。
+3. 你可以根据需要创建任意数量的场景实例。你的游戏中可以有五个或十个角色，这些角色是从角色场景中创建的。
+
+**1.3 创建第一个场景**
+
+**1.4 修改节点的属性**
+
+**1.5 运行场景**
+
+**1.6 设置主场景**
+
 #### 2. 创建实例
+
+上一部分中，我们了解到场景是一系列组织成树状结构的节点，其中只有一个节点是根节点。你可以将项目拆分成任意数量的场景。这一特性可以帮你将游戏拆解成不同的组件，并进行组织。
+
+你可以创建任意数量的场景并将他们保存成扩展名为<font color="brown"> `.tscn` </font>（“text scene” 文本场景）的文件。上节课的 `label.tscn` 文件就是一个例子。我们把这些文件叫作<font color="brown">“打包的场景”（Packed Scene）</font>，因为它们将场景的内容信息进行了打包。
+
+保存场景过后，这个场景就可以作为蓝图使用：你可以在其他场景中进行任意次数的重用。像这样从模板中复制对象被称为**实例化**。
+
+<img src="./imgs/instancing_ball_instances_example.webp" alt="instancing_ball_instances_example" style="zoom:50%;" />
+
+我们在上一部分提到过，实例化场景的行为与节点类似：编辑器默认会隐藏其中的内容。实例化 Ball 之后，你只会看到 Ball 节点。请注意制作出的副本，名字是唯一的。
+
+Ball 场景的实例最开始都和 `ball.tscn` 有相同的结构和属性。不过你也可以单独修改各个实例，比如修改反弹的方式、重量等源场景所暴露的属性。
+
+<font color="darkgreen">**作为设计语言的场景实例**</font>
+
+我们建议在使用 Godot 制作游戏时忽略架构代码模式，例如模型-视图-控制器 （MVC） 或实体关系图。相反，你可以从想象玩家将在游戏中看到的元素开始，并围绕它们构建代码。
+
+例如，你可以这样拆解一个射击游戏：
+
+<img src="./imgs/instancing_diagram_shooter.webp" alt="instancing_diagram_shooter" style="zoom:88%;" />
+
+对于几乎任何类型的游戏，都可以想出这样的图表。矩形表示的是从玩家角度可以在游戏中看到的实体，箭头表示的是场景之间的从属关系。
 
 #### 3. 脚本语言
 
