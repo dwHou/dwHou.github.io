@@ -18,6 +18,8 @@ Godot官方中文文档：https://docs.godotengine.org/zh-cn/4.x/
 
 Godot官方英文文档：https://docs.godotengine.org/en/stable/
 
+Card Game资料：youtube 搜 Godot 4.3 CARD GAME Tutorial 
+
 # 特点
 
 对于没有经验的开发者，使用Godot游戏引擎+GD脚本来入门，是现阶段最好的学习途径。
@@ -286,7 +288,7 @@ Godot 自带内置的类参考手册。
 - 在编辑器中的任何位置按下 F1（macOS 上则是 option  + Space）。
 - 点击 Script 主屏幕右上角的“搜索帮助”按钮。
 - 点击“Help”菜单的“搜索帮助”。
-- 选中标识符，按 Ctrl + Click (Cmd + Click on macOS) 
+- 选中标识符，按 Ctrl + Click (<font color="brown">Cmd + Click</font> on macOS) 
 - 手册的 [Class Reference](https://docs.godotengine.org/zh-cn/4.x/classes/index.html#doc-class-reference) 里在线浏览
 
 <img src="./imgs/Screenshot2024_12_29_130530.jpg" alt="Screenshot2024_12_29_130530" style="zoom:50%;" />
@@ -441,15 +443,167 @@ Ball 场景的实例最开始都和 `ball.tscn` 有相同的结构和属性。�
 
 <img src="./imgs/instancing_diagram_shooter.webp" alt="instancing_diagram_shooter" style="zoom:88%;" />
 
+另一个更复杂的开放世界类游戏的示例，这个示例包括有很多资产和嵌套元素：
+
+<img src="./imgs/instancing_diagram_open_world.webp" alt="instancing_diagram_open_world" style="zoom:88%;" />
+
 对于几乎任何类型的游戏，都可以想出这样的图表。矩形表示的是从玩家角度可以在游戏中看到的实体，箭头表示的是场景之间的从属关系。
+
+在得到这样的图之后，建议你为其中的每一个元素都创建一个场景。你可以通过代码或者直接在编辑器里将其实例化来构建你的场景树。
+
+程序员们乐于花费大量时间来设计抽象的架构，尽力使得组件能够适用于这个架构。基于场景的设计取代了这种方法，使得开发更快、更直接，能够让你去专注于游戏逻辑本身。因为大多数游戏的组件都是直接映射成一个场景，所以使用基于场景实例化的设计意味着需要很少的其他架构代码。
+
+<font color="brown">我们将编辑器设计成了易于程序员、设计师、艺术家使用的形式</font>。一个典型的团队开发过程会涉及 2D 或 3D 美术、关卡设计师、游戏设计师、动画师等，他们都可以用 Godot 编辑器工作。
+
+##### **总结**
+
+实例化（Instancing），从蓝图生成对象的过程，有许多方便的用途。通过场景，它为你提供：
+
+- 能将你的游戏分离成可以重复利用的组件。
+- 一个构建和封装复杂系统的工具。
+- 一种以自然方式思考游戏项目结构的语言。
 
 #### 3. 脚本语言
 
+<font color="darkgreen">**脚本附加到节点并扩展其行为**</font>。这意味着脚本继承所附加节点的全部函数和属性。
+
+> **Scripts attach to a node and extend its behavior**. This means that scripts inherit all functions and properties of the node they attach to.
+
+例如，当玩家受到伤害时，你希望相机震动。由于此功能未内置在 Godot 中，因此你可以在该 Camera2D 节点上附加脚本并对抖动进行编程。
+
+**可用的脚本语言**
+
+Godot 提供了**四种游戏编程语言**：GDScript、C# 以及通过 GDExtension 技术提供的 C 和 C++。还有更多社区支持的语言，但这四个是官方所支持的语言。
+
+你可以在一个项目中使用多种语言。例如，在团队中，你可以在 GDScript 中编写游戏逻辑，编写起来很快，然后使用 C# 或 C++ 来实现复杂的算法，最大限度地提高其性能。你也可以使用 GDScript 或 C# 来编写所有内容。这些都由你自己决定。
+
+🔗 查看各个语言的特性以及其优缺点。
+
+- [GDScript](https://docs.godotengine.org/zh-cn/4.x/getting_started/step_by_step/scripting_languages.html#gdscript)
+- [.NET / C#](https://docs.godotengine.org/zh-cn/4.x/getting_started/step_by_step/scripting_languages.html#net-c)
+- [通过 GDExtension 使用 C++](https://docs.godotengine.org/zh-cn/4.x/getting_started/step_by_step/scripting_languages.html#c-via-gdextension)
+
+##### **总结**
+
+脚本可附加到节点，是扩展该节点功能的代码文件。
+
+Godot 支持四种官方脚本语言，在性能和易用性之间为你提供灵活的选择。
+
+你可以混合使用语言，例如，用 C 或 C++ 来实现高要求算法，用 GDScript 或 C# 来编写大部分游戏逻辑。
+
 #### 4. 创建第一个脚本
+
+```GDScript
+extends Sprite2D
+```
+
+每个 GDScript 文件都是一个隐含的类。`extends` 关键字定义了这个脚本所继承或扩展的类。本例中为``Sprite2D``，意味着我们的脚本将获得 Sprite2D 节点的所有属性和方法，包括它继承的 `Node2D`、`CanvasItem`、`Node` 等类
+
+> [!NOTE]
+>
+>  GDScript 中，如果你略写了带有 `extends` 关键字的一行，那么你的类将隐式扩展自 [RefCounted](https://docs.godotengine.org/zh-cn/4.x/classes/class_refcounted.html#class-refcounted)，Godot 使用这个类来管理你的应用程序的内存。
+>
+> **RefCounted：**所有保持引用计数的对象的基类。[Resource](https://docs.godotengine.org/zh-cn/4.x/classes/class_resource.html#class-resource) 和许多其他辅助对象继承该类。
+>
+> (引擎会默认进行引用计数，在大多数情况下为你管理内存，但你也可以在需要时自行控制内存)
+>
+> 与其他 [Object](https://docs.godotengine.org/zh-cn/4.x/classes/class_object.html#class-object) 类型不同，**RefCounted** 保留一个内部引用计数器，以便它们在不再使用时自动释放，并且仅在那时才会如此。因此，**RefCounted** 不需要使用 [Object.free](https://docs.godotengine.org/zh-cn/4.x/classes/class_object.html#class-object-method-free) 手动释放。
+
+```python
+extends Sprite2D
+
+# 成员变量位于脚本的顶部，在“extends”之后、函数之前。
+var speed = 400
+var angular_speed = PI
+
+func _process(delta):
+	rotation += angular_speed * delta
+  '''
+  我们定义一个名为 velocity 的局部变量，是用于表示方向和速度的2D向   量。
+  Vector2.UP 指向图标上方。调用 Vector2 的 rotated()方法可以将   其进行旋转。
+  Vector2.UP.rotated(rotation) 表示的是恒指向图标前方的向量。
+  再与我们的 speed 属性相乘后，得到的就是用来移动节点的速度。
+  '''
+  var velocity = Vector2.UP.rotated(rotation) * speed
+  
+  # 节点的 position 里加上 velocity * delta 来实现移动。位置本   身是 Vector2 类型的，是 Godot 用于表示 2D 向量的内置类型。
+	position +=  velocity * delta
+
+```
+
+为了移动我们的图标，我们需要在游戏循环中每一帧更新其位置和旋转。我们可以使用 `Node` 类中的虚函数 `_process()` 。如果你在任何扩展自 Node 类的类中定义它，如 Sprite2D，Godot将在每一帧调用该函数，并传递给它一个名为 `delta` 的参数，即从上一帧开始经过的时间。
+
+> [!NOTE] 
+>
+> <font color="brown">**delta 时间 = 1 / 实际帧率**</font>
+>
+> 游戏的工作方式是每秒钟渲染许多图像，每幅图像称为一帧，而且是循环进行的。我们用每秒帧数（FPS）来衡量一个游戏产生图像的速度。大多数游戏的目标是60FPS，尽管你可能会发现在较慢的移动设备上的数字是30FPS，或者是虚拟现实游戏的90至240。
+>
+> 引擎和游戏开发者尽最大努力以恒定的时间间隔更新游戏世界和渲染图像，但在帧的渲染时间上总是存在着微小的变化。这就是为什么引擎为我们提供了这个delta时间值，使我们的运动与我们的帧速率无关。
+
+> [!NOTE]
+>
+> 请注意 `_process()` 和 `_init()` 一样都是以下划线开头的。按照约定，这是 Godot 的虚函数，也就是你可以覆盖的与引擎通信的内置函数。
 
 #### 5. 监听玩家的输入
 
+在 Godot 中，你有两个主要工具来处理玩家的输入：
+
+1. 内置的输入回调，主要是 `_unhandled_input()`。和 `_process()`一样 ，它是一个内置的虚函数，Godot 每次在玩家按下一个键时都会调用。它是你想用来对那些不是每一帧都发生的事件做出反应的工具，比如按 Space 来跳跃。要了解更多关于输入回调的信息，请参阅 [使用 InputEvent](https://docs.godotengine.org/zh-cn/4.x/tutorials/inputs/inputevent.html#doc-inputevent) 。
+2. `Input` 单例。单例是一个全局可访问的对象。Godot 在脚本中提供对几个对象的访问。它是每一帧检查输入的有效工具。
+
+我们这里将使用 `Input` 单例，因为我们需要知道在每一帧中玩家是否想转身或者移动。
+
+```python
+extends Sprite2D
+
+var speed = 400
+var angular_speed = PI
+
+'''
+如果你运行这个场景，你现在应该能够用左右方向键进行旋转，并通过按 Up 向前移动。
+'''
+func _process(delta):
+	var direction = 0
+	if Input.is_action_pressed("ui_left"):
+		direction = -1
+	if Input.is_action_pressed("ui_right"):
+		direction = 1
+
+	rotation += angular_speed * direction * delta
+
+	var velocity = Vector2.ZERO
+	if Input.is_action_pressed("ui_up"):
+		velocity = Vector2.UP.rotated(rotation) * speed
+
+	position += velocity * delta
+```
+
+##### 总结
+
+总之，Godot中的每个脚本都代表一个类，并扩展了（extends）引擎的一个内置类。你的类所继承的节点类型可以让你访问一些属性，例如 `rotation` 和 `position`。还继承了许多函数，但我们在上面的例子中没有使用这些函数。。
+
+在 GDScript 中，放在文件顶部的变量是类的属性，也称为成员变量。除了变量之外，你还可以定义函数，在大多数情况下，这些函数将是类的方法。
+
+Godot 提供了几个虚函数，你可以定义这些函数来将类与引擎连接起来。其中包括 `_process()` ，用于每帧将更改应用于节点，以及 `_unhandled_input()` ，用于接收用户的输入事件，如按键和按钮。还有很多。
+
+`Input` 单例允许你在代码中的任何位置对玩家的输入做出反应。 尤其是，你在 `_process()` 循环中使用它。
+
+> [!NOTE]
+>
+> 虚函数是实现多态性和动态绑定的关键工具，使得面向对象编程更加强大与灵活。
+>
+> - 实现多态性：虚函数允许子类<font color="brown">重写</font>父类中的方法，从而在运行时根据对象的实际类型调用相应的方法。这意味着你可以通过基类指针或引用来调用派生类中的实现。
+>
+> - 动态绑定：通过将函数声明为虚函数，编译器在运行时决定调用哪个函数，而不是在编译时。这种动态绑定特性使得程序更加灵活和可扩展。
+>
+>   注：通常通过使用 **虚函数** 和 **override** 关键字来实现。
+
 #### 6. 使用信号
+
+在本课中，我们将介绍<font color="brown">信号</font>。它们是节点在发生特定事件时发出的消息，例如按下按钮。其他节点可以连接到该信号，并在事件发生时调用函数。
+
+信号是 Godot 内置的委派机制，允许一个游戏对象对另一个游戏对象的变化做出反应，而无需相互引用。使用信号可以限制[耦合](https://zh.wikipedia.org/zh-cn/耦合性_(計算機科學))，并保持代码的灵活性。
 
 ### 你的第一个2D游戏
 
