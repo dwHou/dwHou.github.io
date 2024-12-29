@@ -605,6 +605,30 @@ Godot 提供了几个虚函数，你可以定义这些函数来将类与引擎�
 
 信号是 Godot 内置的委派机制，允许一个游戏对象对另一个游戏对象的变化做出反应，而无需相互引用。使用信号可以限制[耦合](https://zh.wikipedia.org/zh-cn/耦合性_(計算機科學))，并保持代码的灵活性。
 
+> [!NOTE]
+>
+> 在计算机科学中，**delegation**（委托）是一种设计模式和机制，它允许一个对象将某些功能或任务委托给另一个对象来处理。这种方式有助于实现代码的复用、解耦和灵活性。
+
+> [!IMPORTANT]
+>
+> **GDScript**：类（节点）使用 PascalCase（大驼峰命名法），变量和函数使用 snake_case（蛇形命名法），常量使用 ALL_CAPS（全大写）（请参阅 [GDScript 编写风格指南](https://docs.godotengine.org/zh-cn/4.x/tutorials/scripting/gdscript/gdscript_styleguide.html#doc-gdscript-styleguide)）。
+
+<img src="./imgs/image-20241229210404472.png" alt="image-20241229210404472" style="zoom:80%;" />
+
+通过编辑器的节点面板连接信号，会在脚本上面自动创建一个新的回调函数。即自动代码生成。
+
+按照规范，我们将这些回调方法命名为 "on_node_name_signal_name"。在这里，它被命名为 "on_button_pressed"。
+
+> [!NOTE]
+>
+> 如果你在使用一个外部代码编辑器（例如VS Code），可能会没有自动代码生成。在这种情况下，你需要按照下一部分阐述的方法使用信号连接代码。
+
+单击“连接”按钮以完成信号连接并跳转到脚本工作区。你会看到新方法，并在左边距中带有<font color="green">连接图标</font>。
+
+<img src="./imgs/image-20241229211025688.png" alt="image-20241229211025688" style="zoom:50%;" />
+
+
+
 ### 你的第一个2D游戏
 
 
