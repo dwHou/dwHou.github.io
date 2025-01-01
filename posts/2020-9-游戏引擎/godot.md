@@ -4,7 +4,7 @@
 
 <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=1556446603&bvid=BV151421t7yw&cid=1648154624&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
 
-# 资料
+# 资源
 
 Godot视频教程（Unity教程大神Brackeys➡️回归但是Godot）
 
@@ -601,6 +601,8 @@ Godot 提供了几个虚函数，你可以定义这些函数来将类与引擎�
 
 #### 6. 使用信号
 
+##### 6.1 在编辑器中连接信号
+
 在本课中，我们将介绍<font color="brown">信号</font>。它们是节点在发生特定事件时发出的消息，例如按下按钮。其他节点可以连接到该信号，并在事件发生时调用函数。
 
 信号是 Godot 内置的委派机制，允许一个游戏对象对另一个游戏对象的变化做出反应，而无需相互引用。使用信号可以限制[耦合](https://zh.wikipedia.org/zh-cn/耦合性_(計算機科學))，并保持代码的灵活性。
@@ -626,6 +628,8 @@ Godot 提供了几个虚函数，你可以定义这些函数来将类与引擎�
 单击“连接”按钮以完成信号连接并跳转到脚本工作区。你会看到新方法，并在左边距中带有<font color="green">连接图标</font>。
 
 <img src="./imgs/image-20241229211025688.png" alt="image-20241229211025688" style="zoom:50%;" />
+
+##### 6.2 用代码连接信号
 
 
 
