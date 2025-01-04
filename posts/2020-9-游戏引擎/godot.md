@@ -631,9 +631,90 @@ Godot 提供了几个虚函数，你可以定义这些函数来将类与引擎�
 
 ##### 6.2 用代码连接信号
 
+> [!NOTE]
+>
+> 要使用代码来连接信号，你需要调用所需监听节点信号的 `connect()` 方法。
 
+我们想要在场景实例化时连接信号，我们可以使用 [Node._ready()](https://docs.godotengine.org/zh-cn/4.x/classes/class_node.html#class-node-private-method-ready) 内置函数来实现这一点，当节点完全实例化时，引擎会自动调用该函数。
+
+为了获取相对于当前节点的引用，我们使用方法 [Node.get_node()](https://docs.godotengine.org/zh-cn/4.x/classes/class_node.html#class-node-method-get-node)。我们可以将引用存储在变量中。
+
+> [!TIP]
+>
+> `$` 是 `get_node()` 的简写。
+
+```python
+func _ready(): 
+	var timer = get_node("Timer") # get_node() 函数会查看 Sprite2D 的子节点，并按节点的名称获取节点。
+	timer.timeout.connect(_on_timer_timeout)
+
+
+```
+
+>  [!IMPORTANT]
+>
+> 该行读起来是这样的：我们将计时器的“timeout”信号连接到脚本附加到的节点上。当计时器发出timeout时，去调用我们需要定义的函数_on_timer_timeout()。按照惯例，我们将这些回调方法在 GDScript 中命名为“on_node_name_signal_name”。
+
+> [!TIP]
+>
+> `_ready()`和`_init()`有所不同，`_init()`类似于构造函数。
+>
+> **1.使用 _init():**
+>    实例化对象的脚本时调用，通常是在对象在内存中初始化之后（通过 GDScript 中的 Object.new() 或 C# 中的 new GodotObject）。也可以将其定义为接受参数的形式。该方法类似于大多数编程语言中的构造函数。
+>
+> **2.使用 _ready():**
+>    当节点“就绪”时被调用，即当节点及其子节点都已经进入场景树时。如果该节点有子节点，将首先触发子节点的 _ready() 回调，稍后父节点将收到就绪通知。
+
+##### 6.3 自定义信号
+
+```python
+extends Node2D
+
+signal health_depleted
+# 信号还可以选择声明一个或多个参数。在括号之间指定参数的名称
+signal health_changed(old_value, new_value)
+
+var health = 10
+
+func take_damage(amount):
+	var old_health = health
+	health -= amount
+  # 要在发出信号的同时传值，请将它们添加为 emit() 函数的额外参数
+	health_changed.emit(old_health, health)
+  if health <= 0:
+    # 要通过代码发出信号，请调用信号的 emit() 方法
+		health_depleted.emit()
+```
+
+> [!NOTE]
+>
+> 由于信号表示刚刚发生的事件，我们通常在其名称中使用过去时态的动作动词。
 
 ### 你的第一个2D游戏
+
+#### 1.设置项目
+
+设置窗口：项目 → 项目设置 → 常规 → 显示 → 窗口
+
+##### 1.1 组织项目
+
+在这个项目中，我们将制作 3 个独立的场景：`Player`、`Mob` 以及 `HUD`，我们将把这些场景合并成游戏的 `Main` 场景。
+
+##### 1.2 创建玩家场景
+
+单独创建`Player`场景的好处之一是, 在游戏的其他部分做出来之前, 我们就可以对其进行单独测试.
+
+###### 1.2.1 节点结构
+
+一般而言，场景的根节点应该反映对象所需的功能——对象 <font color="brown">是什么</font>。
+
+###### 1.2.2 精灵动画
+
+子节点 `AnimatedSprite2D` 来处理我们玩家的外观和动画。
+
+子节点 `CollisionShape2D ` 以确定玩家的“攻击框”，或者说碰撞范围。
+
+##### 1.3 编写玩家代码
 
 
 
