@@ -749,6 +749,142 @@ func take_damage(amount):
 
 ## 手册
 
+#### 1. 最佳实践
+
+##### 1.1 前言
+
+本系列是最佳实践的合集，可让你在使用 Godot 时更加高效。
+
+在 Godot 中，你在项目代码结构和拆分场景方面有很大的自由度。不同的做法有不同的优缺点，如果使用引擎的时间不够长，是很难进行权衡的。
+
+##### 1.2 在 Godot 中应用面向对象原则
+
+Godot 引擎主要提供了两种创建可复用对象的方式：<font color="brown">脚本和场景</font>。严格来说，这两种方式都没有真的在底层定义类。
+
+尽管如此，在许多使用 Godot 的最佳方法中，依然涉及将面向对象的编程原则应用到游戏的脚本和场景中。这就是为什么我们需要了解如何将它们<font color="brown">视为类</font>。
+
+###### 1.2.1 脚本在引擎中的工作原理
+
+引擎提供了内置的类，如 [Node](https://docs.godotengine.org/zh-cn/4.x/classes/class_node.html#class-node) 。你可以使用脚本扩展这些类来创建派生类型。
+
+这些脚本严格来说并不是类，而是一种资源，用来告知引擎在某一内置类的基础上执行一系列初始化。
+
+Godot 的内部类可以将一个类的数据注册进一个名为 [ClassDB](https://docs.godotengine.org/zh-cn/4.x/classes/class_classdb.html#class-classdb) 的数据库，该数据库让我们可以在运行时访问类的信息。 `ClassDB` 包含有关类的信息，例如：
+
+- 属性。
+- 方法。
+- 常量。
+- 信号。
+
+当对象在执行访问属性或调用方法等操作时，它就会检查 `ClassDB` 中对象和对象基类的记录，以确定对象是否支持该操作。
+
+将脚本（script）附加到你的对象上，可以扩展 `ClassDB` 中该对象的方法、属性和信号。
+
+###### 1.2.2 场景
+
+场景的行为与类有很多相似之处，所以把场景看成一个类也是合理的。场景是可复用、可实例化、可继承的节点组。创建场景就类似于，有一个脚本去创建一些节点，并使用 `add_child()` 将它们添加为子节点。
+
+我们经常为场景搭配一个带有脚本的根节点，并在脚本中使用这个场景下的节点。在这种情况下，脚本是通过使用命令式代码为场景添加行为来扩展场景的。
+
+场景的内容有助于定义：
+
+- 脚本可使用哪些节点。
+- 它们是如何组织的。
+- 它们是如何初始化的。
+- 它们彼此之间有什么信号连接。
+
+为什么这些对组织场景很重要？因为场景的实例*都是*对象。因此，许多适用于书面代码的面向对象原则也适用于场景：单一职责、封装等。
+
+场景*就是对附着在根节点上的脚本的扩展*，所以你可以将其解释为类的一部分。
+
+此系列最佳实践中所解释的大部分技术都建立在这一点上。
+
+##### 1.3 场景组织
+
+本文讨论与场景内容的有效组织相关的主题。应该使用哪些节点？应该把它们放在哪里？它们应该如何互动？
+
+###### 1.3.1 如何有效地建立关系
+
+当 Godot 用户开始制作自己的场景时，他们经常遇到以下问题：
+
+他们创建了自己的第一个场景并填满内容，但随着应该把事情分解的烦人感觉开始积累，他们最终把场景的分支保存为单独的场景。可他们接着就注意到之前能够依赖的硬引用不能用了。在多个地方重用场景会出现问题，因为节点路径找不到目标，在编辑器中建立的信号连接也失效了。
+
+要解决这些问题，必须实例化子场景，而子场景不能依赖所处环境中的详细信息。子场景应该能够保证自身创建的时候对别人如何用它没有过分的要求。
+
+在 OOP 中需要考虑的最大的事情之一是维护目标明确、单一的类，与代码库的其他部分进行[松散的耦合](https://en.wikipedia.org/wiki/Loose_coupling)。这样可以使对象的大小保持在较小的范围内（便于维护），提高可重用性。
+
+这些 OOP 最佳实践对场景结构和脚本使用的有*很多*意义。
+
+<font color="brown">**应该尽可能设计没有依赖项的场景。**</font>也就是说，创建的场景应该将所需的一切保留在其内部。
+
+如果场景必须与外部环境交互，经验丰富的开发人员会建议使用[依赖注入](https://zh.wikipedia.org/wiki/依赖注入)。该技术涉及使高级 API 提供低级 API 的依赖关系。为什么要这样呢？因为依赖于其外部环境的类可能会无意中触发 Bug 和意外行为。
+
+要做到这一点，就必须暴露数据，依靠父级上下文对其进行初始化：
+
+1. 连接信号。这样做极其安全，但只能用于“响应”行为，而不是启动行为。按照惯例，信号名称通常是过去式动词，如“entered”“skill_activated”“item_collected”（已进入、已激活技能、已收集道具）。
+
+   ```python
+   # Parent
+   $Child.signal_name.connect(method_on_the_object)
+   
+   # Child
+   signal_name.emit() # Triggers parent-defined behavior.
+   ```
+
+2. 调用方法。用于启动行为。
+
+   ```python
+   # Parent
+   $Child.method_name = "do"
+   
+   # Child, assuming it has String property 'method_name' and method 'do'.
+   call(method_name) # Call parent-defined method (which child must own).
+   ```
+
+3. 初始化 [Callable](https://docs.godotengine.org/zh-cn/4.x/classes/class_callable.html#class-callable) 属性。比调用方法更安全，因为不需要拥有这个方法的所有权。用于启动行为。
+
+   ```python
+   # Parent
+   $Child.func_property = object_with_method.method_on_the_object
+   
+   # Child
+   func_property.call() # Call parent-defined method (can come from anywhere).
+   ```
+
+4. 初始化 Node 或其他 Object 的引用。
+
+   ```python
+   # Parent
+   $Child.target = self
+   
+   # Child
+   print(target) # Use parent-defined node.
+   ```
+
+5. 初始化 NodePath。
+
+   ```python
+   # Parent
+   $Child.target_path = ".."
+   
+   # Child
+   get_node(target_path) # Use parent-defined NodePath.
+   ```
+
+这些选项隐藏了子节点的访问点。这反过来又使子节点与环境保持 **松耦合** （loosely coupled）。人们可以在另外一个上下文中重新使用它，而不需要对API做任何额外的改变。
+
+> [!WARNING]
+>
+> 人们应该倾向于将数据保存在内部(场景内部), 尽管它对外部上下文有一个依赖, 即使是一个松散耦合的依赖, 仍然意味着节点会期望其环境中有某些条件为真。项目的设计理念应防止这种情况的发生。 如果不是这样, 代码内在的劣势将迫使开发人员使用文档, 以在微观尺度上跟踪对象关系；这就是所谓的开发地狱。依赖于开发人员查看外部文档的代码, 是很容易出问题的。
+>
+> 为了避免创建和维护此类文档，可以将依赖节点（上面的子级）转换为工具脚本，该脚本实现 `_get_configuration_warnings()` 。从中返回的一个非空字符串紧缩数组（PackedStringArray）将使场景停靠面板生成警告图标，其中包含上述字符串作为节点的工具提示。这个警告图标和没有定义 [CollisionShape2D](https://docs.godotengine.org/zh-cn/4.x/classes/class_collisionshape2d.html#class-collisionshape2d) 子节点时 [Area2D](https://docs.godotengine.org/zh-cn/4.x/classes/class_area2d.html#class-area2d) 节点旁出现的图标是一样的。这样，编辑器通过脚本代码自记录（self-document）场景，也就不需要在文档里记录一些与之重复的内容了。
+>
+> 这样的GUI可以更好地通知项目用户有关节点的关键信息. 它具有外部依赖性吗？这些依赖性是否得到满足？其他程序员, 尤其是设计师和作家, 将需要消息中的明确指示, 告诉他们如何进行配置。
+
+###### 1.3.2 选择节点树结构
+
+
+
 ## 贡献
 
 ## 社区
