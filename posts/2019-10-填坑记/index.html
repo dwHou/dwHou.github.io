@@ -254,8 +254,9 @@
 
   <h2>关于并发读取权重</h2>
   <pre>
-    有些比较huge的权重（数百兆～吉），并发torch.load是可能出问题的。
-    但是目前我也没想到最佳方案，下面的方案能有所缓解：
+    有一次乌龙，同事交付的代码有bug，每次运行会把权重覆盖一遍。导致我还以为并发torch.load大模型会出问题。
+    虽然是乌龙事件，root cause是并发覆盖权重。
+    还是顺便记录下当时尝试的方案：
     try solution 1:
     with tempfile.NamedTemporaryFile(delete=True) as temp_file:
         temp_model_path = temp_file.name
@@ -272,7 +273,8 @@
 
     try solution 3:
     甚至自己手写文件锁，主要利用os.path.exists(lockpath)来判断。也没有用。
-    总之这个并发问题还比较棘手。或许大模型的应用还是一开始加载到内存，要稳定一点。
+
+    所以 1. 对同事交接的代码要有严格要求 2. 分析问题先全面看一看，不要过早做预设，找准root cause很重要。
   </pre>
 
   <h2>关于OpenCV</h2>
@@ -578,6 +580,12 @@ def download(ytb_id, args, proxy=None):
 --merge-output-format [合并输出格式] #例子中选择mp4作为输出格式
 --external-downloader [下载器名称] #下载器选择 例子中选择aria2c
 --downloader-args [下载器名称]:"[下载器配置]" #下载器配置语句 例子中 x 16 代表16线程下载 -k 1M 代表块大小为1M 但youtube不支持分块故此句可忽略
+</pre>
+
+<h2>关于git文件夹重命名仅更改大小写</h2>
+<pre>
+  git的设置是大小写不敏感。如果希望能识别仅更改大小写的重命名，可以如下操作：
+  git rm -r --cached folder 先取消folder的跟踪 重命名folder 然后git add folder
 </pre>
 
 
