@@ -21,21 +21,21 @@ Score-bade Model核心就是score，怎样预测score，怎样利用score做生�
 
 score-based model不是直接学习概率分布，而是学习score。
 
-<img src="/Users/devonn.hou/Library/Application Support/typora-user-images/image-20250212144611460.png" alt="image-20250212144611460" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20250212144611460.png" alt="image-20250212144611460" style="zoom:50%;" />
 
-<img src="/Users/devonn.hou/Library/Application Support/typora-user-images/image-20250212144817644.png" alt="image-20250212144817644" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20250212144817644.png" alt="image-20250212144817644" style="zoom:50%;" />
 
-<img src="/Users/devonn.hou/Library/Application Support/typora-user-images/image-20250212145049840.png" alt="image-20250212145049840" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20250212145049840.png" alt="image-20250212145049840" style="zoom:50%;" />
 
-<img src="/Users/devonn.hou/Library/Application Support/typora-user-images/image-20250212145218961.png" alt="image-20250212145218961" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20250212145218961.png" alt="image-20250212145218961" style="zoom:50%;" />
 
-<img src="/Users/devonn.hou/Library/Application Support/typora-user-images/image-20250212145319649.png" alt="image-20250212145319649" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20250212145319649.png" alt="image-20250212145319649" style="zoom:50%;" />
 
 它这个算法是一共L*T步，L代表级别，每个级别内步长和噪声强度是固定的。
 
 其实T=1时，它就和DDPM完全一样了。
 
-<img src="/Users/devonn.hou/Library/Application Support/typora-user-images/image-20250212150149295.png" alt="image-20250212150149295" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20250212150149295.png" alt="image-20250212150149295" style="zoom:50%;" />
 
 > [!TIP] 
 >

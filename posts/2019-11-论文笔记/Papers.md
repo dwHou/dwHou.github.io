@@ -966,7 +966,11 @@ posterior sampling 和 posterior mean 是两个极端，一个posterior sampling
 
 我测了下，效果确实挺惊艳。
 
+#### :page_with_curl:HDTR-Net
 
+A Real-Time High-Definition Teeth Restoration
+
+对于说话人任务，许多时候口腔的生成效果是最差的。
 
 ## 有参考的人脸复原
 
@@ -1155,6 +1159,10 @@ INN的损失，得用全。而且对于Cropout的攻击，损失记得调整有�
 [2016~2022](./CLIC.html)
 
 ## 数字化身 / 说话人
+
+Valse Webinar: 20241127【数字人脸生成：二维方法与三维方法】
+
+<img src="../../images/typora-images/image-20250219162405847.png" alt="image-20250219162405847" style="zoom:50%;" />
 
 ### 1. LipSync
 
@@ -1706,6 +1714,14 @@ FOMM的缺陷：
 效果比较：
 
 FOMM vs. RegionMM vs. This paper
+
+#### :page_with_curl:OmniHuman-1
+
+基于DiT
+
+#### :page_with_curl:GAGAvatar
+
+基于3DGS
 
 #### :page_with_curl:DaGAN
 

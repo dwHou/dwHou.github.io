@@ -10,7 +10,7 @@ https://event.baai.ac.cn/activities/814
 
 《Ultra-Fast Stable Diffusion from Straight Probability Flows》
 
-<img src="/Users/devonn.hou/Library/Application Support/typora-user-images/image-20250212164506003.png" alt="image-20250212164506003" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20250212164506003.png" alt="image-20250212164506003" style="zoom:50%;" />
 
 ### 算法框架RF
 
