@@ -531,6 +531,8 @@ Terminal <--[<output]--- |       |                \ \
     sudo rm /lib/systemd/system-sleep/nvidia
     sudo systemctl stop sleep.target suspend.target hibernate.target hybrid-sleep.target
     sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+    其他和睡眠模式相关的：
+    可以查看/sys/power/mem_sleep，以前是s1、s2、s3，新系统可能是shallow、s2idle、deep
   </pre>
 
   <h2>关于显卡的温度监控</h2>
@@ -540,6 +542,12 @@ Terminal <--[<output]--- |       |                \ \
     如果没能正常重启，有可能是<a href="https://forums.developer.nvidia.com/t/nvidia-smi-showing-err-in-all-fields-for-one-of-the-gpus-a40/210862">烧坏</a>了。
     nvidia-smi窗口直接就有显示温度，下面的命令进行温度持续监控。
     nvidia-smi --query-gpu=temperature.gpu -i 7 --format=csv >> xxx.log
+  </pre>
+
+  <h2>ssh连接失败排查</h2>
+  <pre>
+    ・ 使用ssh -vvv命令，以debug模式查看ssh连接过程中的每一个步骤。
+    ・ 实在不行，在机房接上显示器、键盘，直接ctrl+alt+F3进入命令行模式，然后重启ssh服务。而无需物理重启机器。
   </pre>
 
   <h2>关于youtube视频下载器</h2>

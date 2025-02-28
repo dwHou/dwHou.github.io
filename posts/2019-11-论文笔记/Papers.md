@@ -1480,8 +1480,26 @@ face vid2vid也没有像FOMM那样预测每个关键点的雅可比矩阵（Jaco
 
    a lip retargeting module
 
-4. 
+郭建珠在Valse的报告：
 
+HeyGen是这个领域最成功的一家初创，它的方案也是2D。
+
+> 它可能用face swapping的方式，保人脸ID。
+
+贴回去这个操作的专业术语叫Stitching，无缝反贴。
+
+<img src="../../images/typora-images/image-20250223210350783.png" alt="image-20250223210350783" style="zoom:50%;" />
+
+FaceVid2Vid的不足：
+
+- 无监督学的点没法捕捉很local的细节 
+- 生成质量也较弱
+
+<img src="../../images/typora-images/image-20250223211710565.png" alt="image-20250223211710565" style="zoom:50%;" />
+
+这个stitching训练还是比较麻烦的，要有一个可反传的2d landmark model。
+
+二次开发，实时表情编辑：https://github.com/PowerHouseMan/ComfyUI-AdvancedLivePortrait；由于是MIT License，许多公司也拿去商用了，Poe/某映/某图/Cooraft等等，但需要将InsightFace用比如MediaPipe替换掉。
 
 #### :page_with_curl:GAIA
 

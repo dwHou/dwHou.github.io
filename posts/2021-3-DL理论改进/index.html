@@ -166,6 +166,12 @@
 weights 作为神经网络边的权重，这样在测试数据上效果更好。</pre>
   <pre><font color="red">注：</font>使用EMA可能对BN层有帮助。减少BN层对batchsize的敏感。<a href="https://www.zhihu.com/question/269576836"><i class="fa fa-external-link"></i></a>
 有好的预训练模型，可以将use_num_updates关掉，或者至少将其初始数值设大。不然会出现性能一开始骤降的情形。</pre>
+  <pre>EMA的实现可以参考<a href="https://medium.com/@heyamit10/exponential-moving-average-ema-in-pytorch-eb8b6f1718eb">blog</a>，非常清晰，包括一些更高阶的技巧：
+    • Synchronized EMA Across Multiple GPUs (DDP + EMA)
+    • Your Decay Rate Should Decay
+    • Adjust Update Frequency
+    • Toggle between EMA and non-EMA for validation (A/B testing)
+  </pre>
   </ul>
 
 
