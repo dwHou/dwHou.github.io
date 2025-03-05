@@ -1,0 +1,823 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+
+<link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+.mac-os-11 { --title-bar-height: 28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5 { white-space: pre-wrap; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.428571; overflow-x: hidden; background: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; font-size-adjust: inherit; font-kerning: inherit; font-variant-alternates: inherit; font-variant-ligatures: inherit; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-variant-position: inherit; font-variant-emoji: inherit; font-feature-settings: inherit; font-optical-sizing: inherit; font-variation-settings: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+thead, tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right-width: 0px; border-right-style: none; border-right-color: currentcolor; background-color: inherit; }
+.CodeMirror-linenumber { -webkit-user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+svg { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; border-color: transparent !important; padding-top: 0px !important; padding-bottom: 0px !important; }
+  .typora-export * { print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  #write > p:nth-child(1) { margin-top: 0px; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+  figure { overflow-x: visible; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: medium; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.reversefootnote { font-family: ui-monospace, sans-serif; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom-width: 0px; border-bottom-style: none; border-bottom-color: currentcolor; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: medium; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background: inherit; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex: 2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; overflow-wrap: anywhere; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.428571rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left-width: 28px; border-left-style: solid; border-left-color: transparent; border-right-width: 28px; border-right-style: solid; border-right-color: transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right-width: 8px; border-right-style: solid; border-right-color: transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+mjx-container { break-inside: avoid; }
+.md-alert.md-alert-note { border-left-color: rgb(9, 105, 218); }
+.md-alert.md-alert-important { border-left-color: rgb(130, 80, 223); }
+.md-alert.md-alert-warning { border-left-color: rgb(154, 103, 0); }
+.md-alert.md-alert-tip { border-left-color: rgb(31, 136, 61); }
+.md-alert.md-alert-caution { border-left-color: rgb(207, 34, 46); }
+.md-alert { padding: 0px 1em; margin-bottom: 16px; color: inherit; border-left-width: 0.25em; border-left-style: solid; border-left-color: rgb(0, 0, 0); }
+.md-alert-text-note { color: rgb(9, 105, 218); }
+.md-alert-text-important { color: rgb(130, 80, 223); }
+.md-alert-text-warning { color: rgb(154, 103, 0); }
+.md-alert-text-tip { color: rgb(31, 136, 61); }
+.md-alert-text-caution { color: rgb(207, 34, 46); }
+.md-alert-text { font-size: 0.9rem; font-weight: 700; }
+.md-alert-text svg { fill: currentcolor; position: relative; top: 0.125em; margin-right: 1ch; overflow: visible; }
+.md-alert-text-container::after { content: attr(data-text); text-transform: capitalize; pointer-events: none; margin-right: 1ch; }
+
+
+/* meyer reset -- http://meyerweb.com/eric/tools/css/reset/ , v2.0 | 20110126 | License: none (public domain) */
+
+@include-when-export url(https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext);
+
+/* =========== */
+
+/* pt-serif-regular - latin */
+/* pt-serif-italic - latin */
+/* pt-serif-700 - latin */
+/* pt-serif-700italic - latin */
+:root {
+	--active-file-bg-color: #dadada;
+	--active-file-bg-color: rgba(32, 43, 51, 0.63);
+	--active-file-text-color: white;
+	--bg-color: #f3f2ee;
+	--text-color: #1f0909;
+	--control-text-color: #444;
+	--rawblock-edit-panel-bd: #e5e5e5;
+
+	--select-text-bg-color: rgba(32, 43, 51, 0.63);
+  --select-text-font-color: white;
+}
+
+pre {
+	--select-text-bg-color: #36284e;
+	--select-text-font-color: #fff;
+}
+
+html {
+	font-size: 16px;
+	-webkit-font-smoothing: antialiased;
+}
+
+html, body {
+	background-color: #f3f2ee;
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+	color: #1f0909;
+	line-height: 1.5em;
+}
+
+/*#write {
+	overflow-x: auto;
+    max-width: initial;
+	padding-left: calc(50% - 17em);
+    padding-right: calc(50% - 17em);
+}
+
+@media (max-width: 36em) {
+ 	#write {
+ 		padding-left: 1em;
+    	padding-right: 1em;
+ 	}
+}*/
+
+#write {
+	max-width: 40em;
+}
+
+@media only screen and (min-width: 1400px) {
+	#write {
+			max-width: 914px;
+	}
+}
+
+ol li {
+	list-style-type: decimal;
+	list-style-position: outside;
+}
+ul li {
+	list-style-type: disc;
+	list-style-position: outside;
+}
+
+ol,
+ul {
+	list-style: none;
+}
+
+blockquote,
+q {
+	quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* styles */
+
+/* ====== */
+
+/* headings */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: bold;
+}
+h1 {
+	font-size: 1.875em;
+	/*30 / 16*/
+	line-height: 1.6em;
+	/* 48 / 30*/
+	margin-top: 2em;
+}
+h2,
+h3 {
+	font-size: 1.3125em;
+	/*21 / 16*/
+	line-height: 1.15;
+	/*24 / 21*/
+	margin-top: 2.285714em;
+	/*48 / 21*/
+	margin-bottom: 1.15em;
+	/*24 / 21*/
+}
+h3 {
+	font-weight: normal;
+}
+h4 {
+	font-size: 1.125em;
+	/*18 / 16*/
+	margin-top: 2.67em;
+	/*48 / 18*/
+}
+h5,
+h6 {
+	font-size: 1em;
+	/*16*/
+}
+h1 {
+	border-bottom: 1px solid;
+	margin-bottom: 1.875em;
+	padding-bottom: 0.8125em;
+}
+/* links */
+
+a {
+	text-decoration: none;
+	color: #065588;
+}
+a:hover,
+a:active {
+	text-decoration: underline;
+}
+/* block spacing */
+
+p,
+blockquote,
+.md-fences {
+	margin-bottom: 1.5em;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-bottom: 1.5em;
+}
+/* blockquote */
+
+blockquote {
+	font-style: italic;
+	border-left: 5px solid;
+	margin-left: 2em;
+	padding-left: 1em;
+}
+/* lists */
+
+ul,
+ol {
+	margin: 0 0 1.5em 1.5em;
+}
+/* tables */
+.md-meta,.md-before, .md-after {
+	color:#999;
+}
+
+table {
+	margin-bottom: 1.5em;
+	/*24 / 16*/
+	font-size: 1em;
+	/* width: 100%; */
+}
+thead th,
+tfoot th {
+	padding: .25em .25em .25em .4em;
+	text-transform: uppercase;
+}
+th {
+	text-align: left;
+}
+td {
+	vertical-align: top;
+	padding: .25em .25em .25em .4em;
+}
+
+code,
+.md-fences {
+	background-color: #dadada;
+}
+
+code {
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.md-fences {
+	margin-left: 2em;
+	margin-bottom: 3em;
+	padding-left: 1ch;
+	padding-right: 1ch;
+}
+
+pre,
+code,
+tt {
+	font-size: .875em;
+	line-height: 1.714285em;
+}
+/* some fixes */
+
+h1 {
+	line-height: 1.3em;
+	font-weight: normal;
+	margin-bottom: 0.5em;
+}
+
+p + ul,
+p + ol{
+	margin-top: .5em;
+}
+
+h3 + ul,
+h4 + ul,
+h5 + ul,
+h6 + ul,
+h3 + ol,
+h4 + ol,
+h5 + ol,
+h6 + ol {
+	margin-top: .5em;
+}
+
+li > ul,
+li > ol {
+	margin-top: inherit;
+	margin-bottom: 0;
+}
+
+li ol>li {
+	list-style-type: lower-alpha;
+}
+
+li li ol>li{
+	list-style-type: lower-roman;
+}
+
+h2,
+h3 {
+	margin-bottom: .75em;
+}
+hr {
+	border-top: none;
+	border-right: none;
+	border-bottom: 1px solid;
+	border-left: none;
+}
+h1 {
+	border-color: #c5c5c5;
+}
+blockquote {
+	border-color: #bababa;
+	color: #656565;
+}
+
+blockquote ul,
+blockquote ol {
+	margin-left:0;
+}
+
+.ty-table-edit {
+	background-color: transparent;
+}
+thead {
+	background-color: #dadada;
+}
+tr:nth-child(even) {
+	background: #e8e7e7;
+}
+hr {
+	border-color: #c5c5c5;
+}
+.task-list{
+	padding-left: 1rem;
+}
+
+.md-task-list-item {
+	padding-left: 1.5rem;
+	list-style-type: none;
+}
+
+.md-task-list-item > input:before {
+	content: '\221A';
+	display: inline-block;
+	width: 1.25rem;
+  	height: 1.6rem;
+	vertical-align: middle;
+	text-align: center;
+	color: #ddd;
+	background-color: #F3F2EE;
+}
+
+.md-task-list-item > input:checked:before,
+.md-task-list-item > input[checked]:before{
+	color: inherit;
+}
+
+#write pre.md-meta-block {
+	min-height: 1.875rem;
+	color: #555;
+	border: 0px;
+	background: transparent;
+	margin-top: -4px;
+	margin-left: 1em;
+	margin-top: 1em;
+}
+
+.md-image>.md-meta {
+	color: #9B5146;
+}
+
+.md-image>.md-meta{
+	font-family: Menlo, 'Ubuntu Mono', Consolas, 'Courier New', 'Microsoft Yahei', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', serif;
+}
+
+
+#write>h3.md-focus:before{
+	left: -1.5rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h4.md-focus:before{
+	left: -1.5rem;
+	top: .25rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h5.md-focus:before{
+	left: -1.5rem;
+	top: .0.3125rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h6.md-focus:before{
+	left: -1.5rem;
+	top: 0.3125rem;
+	color:#999;
+	border-color:#999;
+}
+
+.md-toc:focus .md-toc-content{
+	margin-top: 19px;
+}
+
+.md-toc-content:empty:before{
+	color: #065588;
+}
+.md-toc-item {
+	color: #065588;
+}
+#write div.md-toc-tooltip {
+	background-color: #f3f2ee;
+}
+
+#typora-sidebar {
+	background-color: #f3f2ee;
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+  	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+}
+
+.pin-outline #typora-sidebar {
+	background: inherit;
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+.pin-outline #typora-sidebar:hover .outline-title-wrapper {
+	border-left:1px dashed;
+}
+
+.outline-item:hover {
+  background-color: #dadada;
+  border-left: 28px solid #dadada;
+  border-right: 18px solid #dadada;
+}
+
+.typora-node .outline-item:hover {
+  	border-right: 28px solid #dadada;
+}
+
+.outline-expander:before {
+  content: "\f0da";
+  font-family: FontAwesome;
+  font-size:14px;
+  top: 1px;
+}
+
+.outline-expander:hover:before,
+.outline-item-open>.outline-item>.outline-expander:before {
+  content: "\f0d7";
+}
+
+.modal-content {
+	background-color: #f3f2ee;
+}
+
+.auto-suggest-container ul li {
+	list-style-type: none;
+}
+
+/** UI for electron */
+
+.megamenu-menu,
+#top-titlebar, #top-titlebar *,
+.megamenu-content {
+	background: #f3f2ee;
+	color: #1f0909;
+}
+
+.megamenu-menu-header {
+	border-bottom: 1px dashed #202B33;
+}
+
+.megamenu-menu {
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+header, .context-menu, .megamenu-content, footer {
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+    color: #1f0909;
+}
+
+#megamenu-back-btn {
+	color: #1f0909;
+	border-color: #1f0909;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title:before {
+	color: #1f0909;
+}
+
+.megamenu-menu-list li a:hover, .megamenu-menu-list li a.active {
+	color: inherit;
+	background-color: #e8e7df;
+}
+
+.long-btn:hover {
+	background-color: #e8e7df;
+}
+
+#recent-file-panel tbody tr:nth-child(2n-1) {
+    background-color: transparent !important;
+}
+
+.megamenu-menu-panel tbody tr:hover td:nth-child(2) {
+    color: inherit;
+}
+
+.megamenu-menu-panel .btn {
+	background-color: #D2D1D1;
+}
+
+.btn-default {
+	background-color: transparent;
+}
+
+.typora-sourceview-on #toggle-sourceview-btn,
+.ty-show-word-count #footer-word-count {
+	background: #c7c5c5;
+}
+
+#typora-quick-open {
+    background-color: inherit;
+}
+
+.md-diagram-panel {
+	margin-top: 8px;
+}
+
+.file-list-item-file-name {
+	font-weight: initial;
+}
+
+.file-list-item-summary {
+	opacity: 1;
+}
+
+.file-list-item {
+	color: #777;
+}
+
+.file-list-item.active {
+	background-color: inherit;
+	color: black;
+}
+
+.ty-side-sort-btn.active {
+	background-color: inherit;
+}
+
+.file-list-item.active .file-list-item-file-name  {
+	font-weight: bold;
+}
+
+.file-list-item{
+    opacity:1 !important;
+}
+
+.file-library-node.active>.file-node-background{
+	background-color: rgba(32, 43, 51, 0.63);
+	background-color: var(--active-file-bg-color);
+}
+
+.file-tree-node.active>.file-node-content{
+	color: white;
+	color: var(--active-file-text-color);
+}
+
+.md-task-list-item>input {
+	margin-left: -1.7em;
+	margin-top: calc(1rem - 12px);
+	-webkit-appearance: button;
+}
+
+input {
+	border: 1px solid #aaa;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title,
+.megamenu-menu-header:hover, 
+.megamenu-menu-header:focus {
+	color: inherit;
+}
+
+.dropdown-menu .divider {
+	border-color: #e5e5e5;
+	opacity: 1;
+}
+
+/* https://github.com/typora/typora-issues/issues/2046 */
+.os-windows-7 strong,
+.os-windows-7 strong  {
+	font-weight: 760;
+}
+
+.ty-preferences .btn-default {
+	background: transparent;
+}
+
+.ty-preferences .window-header {
+	border-bottom: 1px dashed #202B33;
+	box-shadow: none;
+}
+
+#sidebar-loading-template, #sidebar-loading-template.file-list-item {
+	color: #777;
+}
+
+.searchpanel-search-option-btn.active {
+	background: #777;
+	color: white;
+}
+
+.export-detail, .light .export-detail, 
+.light .export-item.active, 
+.light .export-items-list-control {
+	background: #e0e0e0;
+	border-radius: 2px;
+	font-weight: 700;
+	color: inherit
+}
+
+ @media print { @page {margin: 0 0 0 0;} body.typora-export {padding-left: 0; padding-right: 0;} #write {padding:0;}}
+</style><title>ComfyUI</title>
+</head>
+<body class='typora-export typora-export-show-outline typora-export-no-collapse-outline'><div class='typora-export-content'>
+<div class="typora-export-sidebar"><div class="outline-content"><li class="outline-item-wrapper outline-h1"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#介绍">介绍</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#为何要学习-comfyui">为何要学习 ComfyUI？</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h1"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#官方文档">官方文档</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#comfyui安装">ComfyUI安装</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#comfyui初试">ComfyUI初试</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#comfyui核心概念">ComfyUI核心概念</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#工作流">工作流</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#11-节点图">1.1 节点图</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#12-示例工作流">1.2 示例工作流</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#13-可视化程序">1.3 可视化程序</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#14-程序化框架">1.4 程序化框架</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#15-保存工作流">1.5 保存工作流</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#节点">节点</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#11-节点执行操作">1.1 节点执行操作</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#12-自定义节点">1.2 自定义节点</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#属性">属性</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#11-节点作为属性容器">1.1 节点作为属性容器</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#12-数据类型">1.2 数据类型</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#连接">连接</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#11-节点的连接">1.1 节点的连接</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#12-重新路由节点">1.2 重新路由节点</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#13-颜色编码">1.3 颜色编码</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#模型">模型</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#11-模型是必不可少的">1.1 模型是必不可少的</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h4"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#12-模型文件">1.2 模型文件</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#依赖">依赖</a></div><ul class="outline-children"></ul></li></ul></li></ul></li></div></div><div id='write'  class=''><p><a href='https://github.com/comfyanonymous/ComfyUI?tab=readme-ov-file' target='_blank' class='url'>https://github.com/comfyanonymous/ComfyUI?tab=readme-ov-file</a></p><p><a href='https://www.comflowy.com/zh-CN/introduction/why-learn-ComfyUI' target='_blank' class='url'>https://www.comflowy.com/zh-CN/introduction/why-learn-ComfyUI</a></p><p><a href='https://comfyui-wiki.com/zh/tutorial' target='_blank' class='url'>https://comfyui-wiki.com/zh/tutorial</a></p><p><a href='https://docs.comfy.org/zh-CN/get_started/introduction' target='_blank' class='url'>https://docs.comfy.org/zh-CN/get_started/introduction</a></p><h1 id='介绍'><span>介绍</span></h1><h2 id='为何要学习-comfyui'><span>为何要学习 ComfyUI？</span></h2><p><span>市面上的AIGC产品，从学习和使用上可以分为两类，融合产品 和 分离产品。</span></p><figure class='table-figure'><table><thead><tr><th>&nbsp;</th><th><span>融合产品，如Midjourney</span></th><th><span>分离产品，如ComfyUI</span></th></tr></thead><tbody><tr><td><span>学习成本</span></td><td><span>低，产品一般对 UX 进行优化，且会配套各种教程。</span></td><td><span>高，产品一般多为开源产品，涉及多个开发者。UX 可能没有优化，且缺少教程。</span></td></tr><tr><td><span>迁移成本</span></td><td><span>高，当你切换一个产品时，需要重新学习产品的使用方法，同时还需要重新学习与模型相关的知识。</span></td><td><span>低，只需要重新学习模型相关的知识。</span></td></tr><tr><td><span>自由度</span></td><td><span>低，产品一般都是封闭的，你只能使用产品提供的功能。</span></td><td><span>高，产品一般都是开源的，你可以自由地修改产品，甚至可以自己开发产品。</span></td></tr><tr><td><span>费用</span></td><td><span>高，一般没有本地运行版本，都需要付费。</span></td><td><span>中，一般都会提供本地版本，如果你使用的是本地版就不需要付费，但你可能需要购置 GPU。</span></td></tr></tbody></table></figure><p>&nbsp;</p><p><span>SD Web UI VS ComfyUI</span></p><p><span>那市面上也有很多分离型产品，为何选择 ComfyUI？</span></p><p><span>我们先来简单看看 SD Web UI 和 ComfyUI 的 UI 界面，你应该就能知道它们的区别了：</span></p><p><img src="https://www.comflowy.com/introduction/001.png" referrerpolicy="no-referrer" alt="img"></p><p><span>从上图中可以看到，SD WebUI 的 UI 更像是我们传统使用的产品，有很多输入框，还有多个按钮。而 ComfyUI 的 UI 界面则非常复杂，除了输入框，还有很多一块块的东西，并且还有很多复杂的连线。</span></p><p><span>的确，从学习成本来看，ComfyUI 的学习成本会比 SD WebUI 高。但是这种连线其实并不复杂，你可以这么理解：</span></p><ul><li><p><span>这些小的方块跟 SD WebUI 的输入框和按钮是一样的，都是对参数进行配置。</span></p></li><li><p><span>连线有点像在搭建一个自动化的工作流，从左到右依次运行。</span></p></li><li><p><span>从功能的角度看，其实两个产品截图所提供的功能是一样的，只是 ComfyUI 变成了这种连线的方式。</span></p></li></ul><p><span>所以，</span><font color="brown"><span>选择 ComfyUI 最核心的原因就在于它的自由和拓展</span></font><span>。那这就意味着你可以自己调整 ComfyUI 从而让它切合你的工作流，甚至改造你的工作流。</span></p><p><span>在现在这种 AI 发展如此迅猛的时代，我认为保持灵活才是最重要的。</span></p><p>&nbsp;</p><h1 id='官方文档'><span>官方文档</span></h1><p><a href='https://github.com/comfyanonymous/ComfyUI'><span> ComfyUI</span></a></p><p><span>最强大和模块化的Stable Diffusion GUI 和后端。</span></p><ul><li><p><strong><span>ComfyUI</span></strong><span> 是一个基于</span><strong><span>节点</span></strong><span>的生成式人工智能的界面和推理引擎</span></p></li><li><p><span>用户可以通过节点组合各种AI模型和操作，实现更高的定制化和可控的内容生成</span></p></li><li><p><span>ComfyUI 完全开源，并可以在你的本地设备上运行</span></p></li></ul><p>&nbsp;</p><h2 id='comfyui安装'><span>ComfyUI安装</span></h2><p><a href='https://docs.comfy.org/zh-CN/installation/manual_install' target='_blank' class='url'>https://docs.comfy.org/zh-CN/installation/manual_install</a></p><p><span>可以看到它Git上显示为99.6%的python开发</span></p><h2 id='comfyui初试'><span>ComfyUI初试</span></h2><p><span>本部分教程将会带你完成首次 ComfyUI 的图片生成，了解并熟悉 ComfyUI 中的一些界面基础操作，如工作流加载、模型安装、图片生成等</span></p><p><span>本篇的主要目的是带你初步了解 ComfyUI 熟悉 ComfyUI 的一些基础操作，并引导你首次的图片生成</span></p><ol><li><p><span>加载工作流</span></p><ul><li><p><span>默认会加载文生图工作流</span></p></li><li><p><span>从示例模版中加载</span></p></li><li><p><span>从带有</span><code>metadata</code><span> 的图片中加载</span></p><blockquote><p><span>所有用 ComfyUI 生成的图片，都会带有 metadata 信息</span></p></blockquote></li><li><p><span>从导出的工作流</span><code>json</code><span>中加载</span></p></li></ul></li><li><p><span>指导你完成模型</span></p><ul><li><p><span>自动安装模型（加载工作流时会提示）</span></p></li><li><p><span>手动安装模型（自行从huggingface下载，存放于</span><code>ComfyUI/models/checkpoints</code><span>）</span></p></li><li><p><span>使用 </span><a href='https://github.com/ltdrdata/ComfyUI-Manager'><span>ComfyUI Manager</span></a><span> ，它是ComfyUI的扩展、插件，在</span><code>ComfyUI/custom_nodes</code><span> clone该项目就可以。</span></p></li></ul></li><li><p><span>进行一次文本到图片的生成</span></p></li></ol><h2 id='comfyui核心概念'><span>ComfyUI核心概念</span></h2><h3 id='工作流'><span>工作流</span></h3><h4 id='11-节点图'><span>1.1 节点图</span></h4><p><span>ComfyUI 是一个用于构建和运行生成内容</span><font color="lighblue"><span>工作流</span></font><span>的环境。在这个语境中，工作流被定义为一组称为</span><font color="lighblue"><span>节点</span></font><span>的程序对象，这些节点相互连接，形成一个网络。这个网络也被称为</span><font color="lighblue"><span>图</span></font><span>。</span></p><p><span>ComfyUI 工作流程可以生成任何类型的媒体：图像、视频、音频、AI模型、AI代理等等。</span></p><h4 id='12-示例工作流'><span>1.2 示例工作流</span></h4><ol><li><p><span> </span><a href='https://comfyanonymous.github.io/ComfyUI_examples'><span>官方工作流</span></a></p></li></ol><ol start='2' ><li><p><span>ComfyUI有一个繁荣的社区，创建了丰富的</span><a href='https://registry.comfy.org/'><span>生态系统</span></a></p></li></ol><h4 id='13-可视化程序'><span>1.3 可视化程序</span></h4><p><span>像 ComfyUI 这样的基于节点的计算机程序提供了一种传统菜单和按钮驱动型应用程序无法实现的强大功能和灵活性。它是一个</span><font color="lighblue"><span>高级可视化编程环境</span></font><span>，允许用户无需编写程序代码或理解高级数学即可设计复杂系统。</span></p><p><span>许多其他计算机应用程序也采用了这种相同的节点图范式。例如包括合成应用程序 Nuke、3D 程序 Maya 和 Blender、虚幻（Unreal）引擎以及交互式媒体创作程序 Max。</span></p><h4 id='14-程序化框架'><span>1.4 程序化框架</span></h4><p><span>用于描述基于节点的应用程序的另一个术语是程序化框架。程序化意味着生成式的：采用某种程序或算法来生成诸如 3D 模型或音乐作品之类的内容。</span></p><p><span>ComfyUI 就是所有这些东西：一个节点图、一个可视化编程环境，以及一个程序化框架。让 ComfyUI 与众不同（且令人惊叹！）的是，其极其开放的结构使我们能够生成任何类型的媒体资产，比如图片、电影、声音、3D 模型、AI 模型等。</span></p><p><span>在 ComfyUI 的语境中，“</span><font color="lighblue"><span>工作流</span></font><span>” 这一术语是节点网络或节点图的同义词。它相当于 3D 或多媒体程序中的</span><font color="lighblue"><span>场景图</span></font><span>：某个特定磁盘文件中所有节点的网络。3D 程序将这种文件称为</span><font color="lighblue"><span>场景文件</span></font><span>。</span></p><blockquote><p><span>类似godot的tscn文件。</span></p></blockquote><h4 id='15-保存工作流'><span>1.5 保存工作流</span></h4><p><span>工作流会自动保存在生成图片的metadata里，用户无需逆向工程就能获得工作流。工作流也可保存在json文件。</span></p><p>&nbsp;</p><h3 id='节点'><span>节点</span></h3><h4 id='11-节点执行操作'><span>1.1 节点执行操作</span></h4><p><span>在计算机科学中，节点是存储信息的容器，通常包含用于执行特定任务的程序化指令。节点几乎不会孤立存在，它们总是以网络图的形式与其他节点连接。在ComfyUI中，节点以相互连接的方框形式进行可视化呈现。</span></p><p><span>ComfyUI的节点通常是功能操作单元。这意味着它们通过对数据进行操作来实现特定功能。所谓功能（function），即是一个接收输入数据、执行处理操作并产生输出数据的过程。简而言之，节点通过执行具体工作来推动任务的完成（例如图像生成）。因此，ComfyUI的节点几乎都至少具备一个输入或输出接口，且通常具有多个输入和输出端口。</span></p><h4 id='12-自定义节点'><span>1.2 自定义节点</span></h4><p><span> ComfyUI在基础安装包中已内置众多功能强大的官方核心节点（Comfy Core nodes）。更值得一提的是，社区开发者还创建了丰富多样的</span><a href='https://registry.comfy.org/nodes'><span>自定义节点</span></a><span>，能够实现各种扩展功能。</span></p><p><span>自定义节点的管理可以使用ComfyUI Manager工具。</span></p><h3 id='属性'><span>属性</span></h3><h4 id='11-节点作为属性容器'><span>1.1 节点作为属性容器</span></h4><p><span> 节点通常包含可配置属性（</span><font color="lighblue"><span>properties</span></font><span>）（也被称作parameters or attributes），这些属性本质上是可供修改的变量。用户可通过控件组件（</span><font color="lighblue"><span>widget</span></font><span>）手动调整部分属性，也可通过连接其他节点到属性输入端口（</span><font color="lighblue"><span>input slot</span></font><span> or port）实现自动控制。大多数属性支持在控件与输入端口之间自由切换，从而为用户提供手动或自动控制属性的灵活性。</span></p><p><span>节点属性具有多元化的表现形式，可承载各类信息。例如：</span></p><ul><li><p><strong><span>模型加载节点</span></strong><span> (Load Checkpoint) 包含核心属性：生成模型检查点文件路径</span></p></li><li><p><strong><span>采样器节点</span></strong><span> (KSampler) 则具备多重控制参数：采样步数、CFG强度值、采样器类型等</span></p></li></ul><h4 id='12-数据类型'><span>1.2 数据类型</span></h4><p><span>虽然底层采用弱类型的Python脚本语言开发，但ComfyUI运行环境具有</span><font color="lighblue"><span>严格的数据类型约束</span></font><span>。这意味着不同数据类型不可混用，例如：禁止将图像输出连接到整数输入端口。这种强类型设计显著提升了用户体验，既能引导用户建立规范的工作流，又能有效预防程序错误。</span></p><h3 id='连接'><span>连接</span></h3><h4 id='11-节点的连接'><span>1.1 节点的连接</span></h4><p><span> 在ComfyUI中，节点间的连接线（</span><font color="lighblue"><span>Links</span></font><span>/Connections/Wires）具有多种可视化形态：直线模式（默认）、贝塞尔曲线模式或完全隐藏模式。用户可通过ComfyUI设置窗口或界面右下角的切换（Toggle）连接线可见性按钮进行显示控制。</span></p><p><span>连接线的可视化呈现具有重要实践意义：</span></p><ul><li><p><strong><span>开发调试场景</span></strong><span>：完整显示连接线有助于理解数据流向，特别适合学习研究、工作流共享与架构分析</span></p></li><li><p><strong><span>生产部署场景</span></strong><span>：对已固化的封装工作流，隐藏连接线可显著提升界面整洁度</span></p></li></ul><p><span>这种智能化的显示策略既保证了系统透明度，又适应了不同使用场景的交互需求。</span></p><h4 id='12-重新路由节点'><span>1.2 重新路由节点</span></h4><p><span>如果图结构的可读性很重要，那么连接线可以在图的二维空间中通过一个称为“</span><font color="lighblue"><span>重新路由</span></font><span>”的小节点进行手动路由。其目的是定位连接线的起始点和/或终止点，以确保其可见性。我们可以设计一个工作流程，使得连接线不会经过节点下面、不会交叉其他连接线等等。</span></p><h4 id='13-颜色编码'><span>1.3 颜色编码</span></h4><p><span>节点属性的数据类型通过输入/输出端口和链接连接线的颜色编码来表示。我们可以通过颜色轻松识别哪些输入和输出可以相互连接。端口只能连接到相同颜色的其他端口。</span></p><p><span>常见数据类型：</span></p><figure class='table-figure'><table><thead><tr><th><span>数据类型</span></th><th><span>颜色</span></th></tr></thead><tbody><tr><td><span>扩散模型</span></td><td><span>淡紫色</span></td></tr><tr><td><span>CLIP 模型</span></td><td><span>黄色</span></td></tr><tr><td><span>VAE 模型</span></td><td><span>玫瑰色</span></td></tr><tr><td><span>条件</span></td><td><span>橙色</span></td></tr><tr><td><span>潜在图像</span></td><td><span>粉色</span></td></tr><tr><td><span>像素图像</span></td><td><span>蓝色</span></td></tr><tr><td><span>掩膜</span></td><td><span>绿色</span></td></tr><tr><td><span>数字（整数或浮点数）</span></td><td><span>浅绿色</span></td></tr></tbody></table></figure><h3 id='模型'><span>模型</span></h3><h4 id='11-模型是必不可少的'><span>1.1 模型是必不可少的</span></h4><p><span>模型是媒体生成工作流的重要构件。它们可以组合和混合，以实现不同的创意效果。</span></p><p><span>“模型”这个词有多种不同的含义。在这里，它指的是一个数据文件，包含节点图执行其工作的所需信息。具体来说，它是一个模拟某种功能的数据结构。作为动词，&quot;建模&quot;意味着表示某物或提供一个示例。</span></p><p><span>在 ComfyUI 中，</span><font color="lighblue"><span>模型数据文件</span></font><span>的主要示例是 AI 扩散模型。这是一组大型数据，表示文本字符串和图像之间的复杂关系，使得将文字转换为图像或反之成为可能。其他常用的图像生成模型示例包括语言模型，如 CLIP，以及图像放大模型，如 RealESRGAN。</span></p><h4 id='12-模型文件'><span>1.2 模型文件</span></h4><p><span>模型文件对于生成媒体制作是绝对必要的。如果找不到模型文件，工作流程将无法进行。模型不包含在 ComfyUI 的安装中，但 ComfyUI 通常可以自动下载和安装缺失的模型文件。许多模型可以从 ComfyUI 管理窗口下载和安装。模型也可以在诸如 huggingface.co、civitai.green 和 github.com 等网站上找到。</span></p><h3 id='依赖'><span>依赖</span></h3></div></div>
+
+<script>(function(){var e=document.body.parentElement,t=[],n=null,i=document.body.classList.contains("typora-export-collapse-outline"),r=function(e,t,n){document.addEventListener(e,function(e){if(!e.defaultPrevented)for(var i=e.target;i&&i!=this;i=i.parentNode)if(i.matches(t)){!1===n.call(i,e)&&(e.preventDefault(),e.stopPropagation());break}},!1)};function o(){return e.scrollTop}r("click",".outline-expander",function(e){var t=this.closest(".outline-item-wrapper").classList;return t.contains("outline-item-open")?t.remove("outline-item-open"):t.add("outline-item-open"),d(),!1}),r("click",".outline-item",function(e){var t=this.querySelector(".outline-label");if(location.hash="#"+t.getAttribute("href"),i){var n=this.closest(".outline-item-wrapper").classList;n.contains("outline-item-open")||n.add("outline-item-open"),c(),n.add("outline-item-active")}});var a,s,l=function(){var e=o();n=null;for(var i=0;i<t.length&&t[i][1]-e<60;i++)n=t[i]},c=function(){document.querySelectorAll(".outline-item-active").forEach(e=>e.classList.remove("outline-item-active")),document.querySelectorAll(".outline-item-single.outline-item-open").forEach(e=>e.classList.remove("outline-item-open"))},d=function(){if(n){c();var e=document.querySelector('.outline-label[href="#'+(CSS.escape?CSS.escape(n[0]):n[0])+'"]');if(e)if(i){var t=e.closest(".outline-item-open>ul>.outline-item-wrapper");if(t)t.classList.add("outline-item-active");else{for(var r=(e=e.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper");r;)r=(e=r).parentElement.closest(".outline-item-wrapper");e.classList.add("outline-item-active")}}else e.closest(".outline-item-wrapper").classList.add("outline-item-active")}};window.addEventListener("scroll",function(e){a&&clearTimeout(a),a=setTimeout(function(){l(),d()},300)});var u=function(){s=setTimeout(function(){!function(){t=[];var e=o();document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(n=>{var i=n.getAttribute("id");t.push([i,e+n.getBoundingClientRect().y])})}(),l(),d()},300)};window.addEventListener("resize",function(e){s&&clearTimeout(s),u()}),u()})();</script></body>
+</html>
