@@ -1741,6 +1741,16 @@ FOMM vs. RegionMM vs. This paper
 
 基于3DGS
 
+#### :page_with_curl:FLOAT
+
+ 属于flow matching generative model，可以回顾下刘星超的Rectified Flow的介绍。
+
+基于LIA这个工作。其中附录的A.2. Improving Fidelity of Facial Components值得研究下。因为它牙齿生成效果确实不错。
+
+评价EMO虽然效果好，但是有几大缺陷：无法支持时域一致的长视频；采样速度慢；需要依赖多种辅助的人脸先验，限制了它的多样性和运动保真度。
+
+相关工作里Diffusion Models and Flow Matching这节写得不错。
+
 #### :page_with_curl:DaGAN
 
 CVPR2022
