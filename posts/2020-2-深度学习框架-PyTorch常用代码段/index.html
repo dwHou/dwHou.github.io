@@ -434,17 +434,38 @@ https://github.com/pytorch/pytorch/issues/48915
       <pre>
           梯度累加
           for i,(features,target) in enumerate(train_loader):
-            outputs = model(images)  # 前向传播
-            loss = criterion(outputs,target)  # 计算损失
-            loss = loss/accumulation_steps   # 可选，如果损失要在训练样本上取平均
+              outputs = model(images)  # 前向传播
+              loss = criterion(outputs,target)  # 计算损失
+              loss = loss/accumulation_steps   # 可选，如果损失要在训练样本上取平均
 
-            loss.backward()  # 计算梯度
-            if((i+1)%accumulation_steps)==0:
-                optimizer.step()        # 反向传播，更新网络参数
-                optimizer.zero_grad()   # 清空梯度
+              loss.backward()  # 计算梯度
+              if((i+1)%accumulation_steps)==0:
+                  optimizer.step()        # 反向传播，更新网络参数
+                  optimizer.zero_grad()   # 清空梯度
 
           不过bn层会受到点影响，可通过调小momentum参数解决。
           https://www.zhihu.com/question/303070254
+      </pre>
+
+      <pre>
+          DDP框架下的梯度累加
+          from contextlib import nullcontext
+
+          if local_rank != -1:
+              model = DDP(model)
+
+          optimizer.zero_grad()
+          for i, (data, label) in enumerate(dataloader):
+              my_context = model.no_sync if local_rank != -1 and i % accumulation_steps != 0 else nullcontext
+              with my_context():
+                  prediction = model(data)
+                  loss = loss_fn(prediction, label) / accumulation_steps
+                  loss.backward()
+              if i % accumulation_steps == 0:
+                  optimizer.step()
+                  optimizer.zero_grad()
+          参考：
+          https://zhuanlan.zhihu.com/p/250471767
       </pre>
 
       <li>GAN训练注意事项</li>
