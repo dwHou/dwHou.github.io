@@ -6,6 +6,8 @@ https://comfyui-wiki.com/zh/tutorial
 
 https://docs.comfy.org/zh-CN/get_started/introduction
 
+https://space.bilibili.com/219572544/channel/collectiondetail?sid=3225210
+
 # 介绍
 
 ## 为何要学习 ComfyUI？
@@ -250,3 +252,43 @@ ComfyUI 的原理与此相同。工作流只有在所有必需资产均已正确
 - 更底层而言，Python 编程环境 是 ComfyUI 的基本依赖，特定版本的 ComfyUI 需要对应版本的 Python 支持。
 
 通过  <font color="lighblue">ComfyUI 管理器（ComfyUI Manager）</font>窗口，可统一处理 Python 版本更新、ComfyUI 更新以及自定义节点的管理。
+
+# B站教程
+
+## 零基础
+
+### 第一节：ComfyUI背景介绍
+
+ComfyUI是一个在生成式AI和深度学习领域中广泛使用的用户界面框架。
+
+ComfyUI优势：
+
+- 模块化和可定制性
+- 本地运行与数据隐私
+- 广泛的模型支持
+
+相关网站分享：
+
+- [C站](https://civitai.com/)
+- open art、[liblib art](https://www.liblib.art/)
+
+### 第二节：部署ComfyUI
+
+源码安装，然后`python main.py`
+
+### 第三节：概念扫盲
+
+### 第四节：ComfyUI界面介绍
+
+Queue：异步队列
+
+Queue(Instant)：异步队列，且自动不断生成
+
+Queue(On Change)：异步队列，在改动参数时自动生成
+
+### 第五节：搭建工作流前大准备工作
+
+### 第六节：搭建自己第一个工作流
+
+### 第七节：核心节点详解
+

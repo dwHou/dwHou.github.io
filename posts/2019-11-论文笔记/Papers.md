@@ -1346,6 +1346,18 @@ ICCV 2023
 
 认为通过3D转一道可能反而有误差累积。启发咱们直接使用audio。
 
+StyleSync的mask比较有实用价值，防止模型从肌肉运动推理出口型。
+
+#### :page_with_curl:LatentSync
+
+<img src="https://storage.googleapis.com/mediapipe-assets/documentation/mediapipe_face_landmark_fullsize.png" alt="mediapipe" style="zoom:15%;" />
+
+mask好像推理时是根据landmark来制作更精准的。 而训练时，只是将这张固定的mask.png做仿射变换。
+
+<img src="/Users/devonn.hou/Library/Application Support/typora-user-images/image-20250325215255954.png" alt="image-20250325215255954" style="zoom:35%;" />
+
+
+
 #### :page_with_curl:StyleLipSync
 
 ICCV2023
