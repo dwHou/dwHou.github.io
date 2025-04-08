@@ -1012,5 +1012,170 @@ async def main():
 
 Agents SDK 支持 MCP。这使您能够使用广泛的 MCP 服务器为您的智能体提供工具。
 
+##### 6.1 MCP 服务器
 
+目前，MCP 规范定义了两种类型的服务器，基于它们使用的传输机制：
+
+- **标准输入输出 (stdio) 服务器**：作为应用程序的子进程运行，可以视为“本地”运行。
+- **HTTP over SSE 服务器**：远程运行，通过 URL 连接。
+
+您可以使用 `MCPServerStdio` 和 `MCPServerSse` 类来连接这些服务器。
+
+以下是一个简单的示例，演示如何使用官方 MCP 文件系统服务器：
+
+```python
+# async，在等待 server.list_tools() 完成时，不会阻塞程序的其他部分。
+async with MCPServerStdio(
+    params={
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-filesystem", samples_dir],
+    }
+) as server:
+    tools = await server.list_tools()
+```
+
+##### 6.2 使用 MCP 服务器
+
+MCP 服务器可以添加到智能体中。每次运行智能体时，Agents SDK 将调用 MCP 服务器上的 `list_tools()`。这使得 LLM 了解 MCP 服务器的工具。当 LLM 调用 MCP 服务器上的工具时，SDK 会在该服务器上调用 `call_tool()`。
+
+```python
+agent=Agent(
+    name="Assistant",
+    instructions="Use the tools to achieve the task",
+    mcp_servers=[mcp_server_1, mcp_server_2]
+)
+```
+
+##### 6.3 缓存
+
+每次智能体运行时，它都会在 MCP 服务器上调用 `list_tools()`。这可能会导致延迟，尤其是当服务器是远程服务器时。为了自动缓存工具列表，可以将 `cache_tools_list=True` 传递给 `MCPServerStdio` 和 `MCPServerSse`。您只有在确定工具列表不会更改时才应这样做。
+
+如果您想使缓存失效，可以在服务器上调用 `invalidate_tools_cache()`。
+
+可在 [example/mcp](https://github.com/openai/openai-agents-python/blob/main/examples/mcp/) 查看完整的工作示例。
+
+##### 6.4 跟踪
+
+跟踪功能会自动捕获 MCP 操作，包括：
+
+- MCP 服务器的`list_tools()` 的调用
+
+- 与 MCP 相关的函数调用信息
+
+#### 7. 交接
+
+交接允许一个智能体将任务委托给另一个智能体。这在不同智能体专注于不同领域的场景中尤其有用。例如，一个客户支持的app可能有专门处理订单状态、退款、FAQ等任务的智能体。
+
+交接被表示为 LLM 的工具。因此，如果有一个交接给名为“Refund（退款） Agent”的智能体，则该工具将被称为 `transfer_to_refund_agent`。
+
+##### 7.1 创建交接
+
+所有智能体都有一个 `handoffs` 参数，该参数可以直接接受一个智能体，或接受一个自定义的 Handoff 对象。
+
+您可以使用 Agents SDK 提供的 `handoff()` 函数创建任务移交。这个函数允许您指定要移交的智能体，并提供可选的覆盖和输入过滤器。
+
+```python
+from agents import Agent, handoff
+
+billing_agent = Agent(name="Billing agent")
+refund_agent = Agent(name="Refund agent")
+
+# 您可以直接使用智能体（例如 billing_agent），或者使用 handoff() 函数进行任务移交。
+triage_agent = Agent(name="Triage agent", handoffs=[billing_agent, handoff(refund_agent)])
+```
+
+##### 7.2 通过 `handoff()` 函数自定义交接
+
+`handoff()` 函数允许您自定义以下内容：
+
+- **agent**: 这是将要移交任务的智能体。
+- **tool_name_override**: 默认情况下，使用 `Handoff.default_tool_name()` 函数，它解析为 `transfer_to_<agent_name>`。您可以对此进行覆盖。
+- **tool_description_override**: 覆盖 `Handoff.default_tool_description()` 的默认工具描述。
+- **on_handoff**: 在移交被调用时执行的回调函数。这对于在知道移交被触发时立即开始数据获取等操作非常有用。此函数接收智能体上下文，并可以选择性地接收 LLM 生成的输入。输入数据由 `input_type` 参数控制。
+- **input_type**: 移交所期望的输入类型（可选）。
+- **input_filter**: 允许您过滤下一个智能体接收到的输入。有关更多信息，请参见下文。
+
+```python
+from agents import Agent, handoff, RunContextWrapper
+
+def on_handoff(ctx: RunContextWrapper[None]):
+    print("Handoff called")
+
+agent = Agent(name="My agent")
+
+handoff_obj = handoff(
+    agent=agent,
+    on_handoff=on_handoff,
+    tool_name_override="custom_handoff_tool",
+    tool_description_override="Custom description",
+)
+```
+
+##### 7.3 交接输入
+
+在某些情况下，您希望 LLM 在调用移交时提供一些数据。例如，想象一下移交给“向上反映（Escalation）智能体”。您可能希望提供一个原因，以便进行记录。
+
+通过在 `handoff()` 函数中使用适当的参数，您可以指定所需的输入数据，从而确保在移交时传递必要的信息。
+
+```python
+from pydantic import BaseModel
+
+from agents import Agent, handoff, RunContextWrapper
+
+class EscalationData(BaseModel):
+    reason: str
+
+async def on_handoff(ctx: RunContextWrapper[None], input_data: EscalationData):
+    print(f"Escalation agent called with reason: {input_data.reason}")
+
+agent = Agent(name="Escalation agent")
+
+handoff_obj = handoff(
+    agent=agent,
+    on_handoff=on_handoff,
+    input_type=EscalationData,
+)
+```
+
+##### 7.4 输入过滤器
+
+当发生移交时，新的智能体会接管对话，并能够看到整个之前的对话历史。如果您想更改这一点，可以设置一个输入过滤器。
+
+**输入过滤器**是一个接收现有输入的函数，通过 `HandoffInputData` 传递，并必须返回一个新的 `HandoffInputData`。
+
+一些常见的模式（例如从历史记录中移除所有工具调用）已经在 `agents.extensions.handoff_filters` 中为您实现。这样，您可以轻松地应用这些标准过滤器，或根据需要自定义自己的过滤器。
+
+```python
+from agents import Agent, handoff
+from agents.extensions import handoff_filters
+
+agent = Agent(name="FAQ agent")
+
+handoff_obj = handoff(
+    agent=agent,
+    input_filter=handoff_filters.remove_all_tools, 
+)
+```
+
+##### 7.5 推荐提示词
+
+为了确保 LLM 正确理解任务移交，我们建议在您的智能体中包含有关移交的信息。我们提供了一个建议的前缀，您可以在 `agents.extensions.handoff_prompt.RECOMMENDED_PROMPT_PREFIX` 中找到，或者可以调用 `agents.extensions.handoff_prompt.prompt_with_handoff_instructions` 来自动将推荐数据添加到您的提示中。
+
+通过这些方法，您可以增强智能体对移交的理解，确保更顺畅的任务转移。
+
+```python
+from agents import Agent
+from agents.extensions.handoff_prompt import RECOMMENDED_PROMPT_PREFIX
+
+# 在 Python 中，使用三重引号（""" 或 '''）可以定义多行字符串
+billing_agent = Agent(
+    name="Billing agent",
+    instructions=f"""{RECOMMENDED_PROMPT_PREFIX}
+    <Fill in the rest of your prompt here>.""",
+)
+```
+
+#### 8. 追踪
+
+Agents SDK 包含内置追踪功能，可以全面记录智能体运行期间的事件，包括：LLM 生成、工具调用、任务移交、保护措施，以及发生的自定义事件。使用 [**Traces dashboard**](https://platform.openai.com/traces)，您可以在开发和生产过程中调试、可视化和监控您的工作流程。
 
