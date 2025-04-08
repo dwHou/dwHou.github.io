@@ -375,7 +375,7 @@ async def homework_guardrail(ctx, agent, input_data):
     )
 
 
-# 预诊交接
+# 分诊交接
 triage_agent = Agent(
     name="Triage Agent",
     instructions="You determine which agent to use based on the user's homework question",
@@ -502,11 +502,11 @@ class Agent(Generic[TContext]):
 
 ### 文档
 
-#### 智能体
+#### 1. 智能体
 
 智能体是你应用中的核心构件。智能体是一个大型语言模型（LLM），经过配置，包含指令和工具。
 
-##### 1.泛型
+##### 1.1 泛型
 
  `Agent` 类，使用了泛型。下面是对这段代码的逐部分解读：
 
@@ -539,7 +539,7 @@ agent = Agent[UserContext](
 
 > Agents are generic on their `context` type. Context is a dependency-injection tool: it's an object you create and pass to `Runner.run()`, that is passed to every agent, tool, handoff etc, and it serves as a grab bag of dependencies and state for the agent run. You can provide any Python object as the context.
 
-##### 2.输出类型
+##### 1.2 输出类型
 
 默认情况下，智能体生成纯文本（即字符串）输出。如果你希望智能体生成特定类型的输出，可以使用 `output_type` 参数。常见的选择是使用 Pydantic 对象。
 
@@ -565,11 +565,11 @@ agent = Agent(
 >
 > 当你传递 `output_type` 时，这告诉模型使用 [结构化输出](https://platform.openai.com/docs/guides/structured-outputs) 而不是常规的纯文本响应。
 
-##### 3.交接
+##### 1.3 交接
 
 交接（Handoffs）是智能体可以委托的子智能体。你可以提供一个交接列表，智能体可以在相关时选择委托给它们。这是一种强大的模式，可以协调模块化的、专门化的智能体，使其在单一任务上表现出色。
 
-##### 4.动态指令
+##### 1.4 动态指令
 
  在大多数情况下，你可以在创建智能体时提供指令。不过，你也可以通过函数提供动态指令。该函数将接收智能体和上下文，并必须返回提示。使用常规函数和异步函数都被允许。
 
@@ -586,15 +586,15 @@ agent = Agent[UserContext](
 )
 ```
 
-##### 5.生命周期事件（钩子）
+##### 1.5 生命周期事件（钩子）
 
  有时，你可能想观察智能体的生命周期。例如，你可能希望在某些事件发生时记录事件或预取数据。你可以通过 `hooks` 属性挂钩到智能体生命周期。通过子类化 `AgentHooks` 类，并重写你感兴趣的方法。
 
-##### 6.护栏
+##### 1.6 护栏
 
  护栏（Guardrails）允许你在智能体运行的同时，对用户输入进行检查和验证。例如，你可以筛选用户的输入以判断其相关性。
 
-##### 7.复制智能体
+##### 1.7 复制智能体
 
  通过在智能体上使用 `clone()` 方法，你可以复制一个智能体，并可以选择更改任何属性。
 
@@ -612,7 +612,7 @@ robot_agent = pirate_agent.clone(
 )
 ```
 
-##### 8.强制使用工具
+##### 1.8 强制使用工具
 
  提供工具列表并不总意味着 LLM 会使用某个工具。你可以通过设置 `ModelSettings.tool_choice` 来强制使用工具。有效值包括：
 
@@ -629,7 +629,7 @@ robot_agent = pirate_agent.clone(
 
 
 
-#### 运行智能体
+#### 2. 运行智能体
 
 你可以通过 `Runner` 类运行智能体，有三种选项：
 
@@ -637,7 +637,7 @@ robot_agent = pirate_agent.clone(
 2. **`Runner.run_sync()`**：同步方法，实质上运行 `run()`。
 3. **`Runner.run_streamed()`**：异步运行并返回 `RunResultStreaming`。它以流式模式调用 LLM，并在接收事件时将其流式传输给你。
 
-##### 1.智能体循环
+##### 2.1 智能体循环
 
 当你在 `Runner` 中使用 `run` 方法时，你需要传入一个起始智能体和输入。输入可以是一个字符串（视为用户消息），也可以是一个输入项的列表。
 
@@ -654,9 +654,9 @@ robot_agent = pirate_agent.clone(
 >
 > 判断 LLM 输出是否被视为`final_output`的规则是：它生成了符合所需类型的文本输出，且没有工具调用。
 
-##### 2.流式
+##### 2.2 流式
 
-##### 3.运行配置
+##### 2.3 运行配置
 
 `run_config` 参数让你可以配置一些全局设置以供智能体运行使用：
 
@@ -679,4 +679,338 @@ robot_agent = pirate_agent.clone(
   组 ID 是一个可选字段，允许你在多个运行之间链接追踪。
 
 - **trace_metadata**：要包含在所有追踪中的元数据。
+
+##### 2.4 对话/聊天线程
+
+调用任何 `run` 方法可能会导致一个或多个智能体运行（因此会有一个或多个 LLM 调用），但这代表了聊天对话中的一个逻辑轮次。例如：
+
+- **用户轮次**：用户输入文本。
+- **Runner 运行**：第一个智能体调用 LLM，运行工具，移交给第二个智能体，第二个智能体运行更多工具，然后生成输出。
+
+在智能体运行结束时，你可以选择向用户展示什么内容。例如，你可以展示智能体生成的每个新项，或者仅展示最终输出。无论哪种情况，用户可能会问后续问题，此时你可以再次调用 `run` 方法。
+
+你可以使用 `RunResultBase.to_input_list()` 方法获取下一个轮次的输入。
+
+```python
+async def main():
+    agent = Agent(name="Assistant", instructions="Reply very concisely.")
+
+    with trace(workflow_name="Conversation", group_id=thread_id):
+        # First turn
+        result = await Runner.run(agent, "What city is the Golden Gate Bridge in?")
+        print(result.final_output)
+        # San Francisco
+
+        # Second turn
+        new_input = result.to_input_list() + [{"role": "user", "content": "What state is it in?"}]
+        result = await Runner.run(agent, new_input)
+        print(result.final_output)
+        # California
+```
+
+##### 2.5 异常
+
+SDK 在某些情况下会引发异常。完整列表见 `agents.exceptions`。以下是概述：
+
+- **AgentsException**：SDK 中所有异常的基类。
+- **MaxTurnsExceeded**：当运行超过传入的 `max_turns` 时引发。
+- **ModelBehaviorError**：当模型生成无效输出时引发，例如格式错误的 JSON 或使用不存在的工具。
+- **UserError**：当你（使用 SDK 编写代码的人）在使用 SDK 时发生错误时引发。
+- **InputGuardrailTripwireTriggered** 和 **OutputGuardrailTripwireTriggered**：当保护措施被触发时引发。
+
+#### 3. 结果
+
+当你调用 `Runner.run` 方法时，你会获得以下其中之一：
+
+- **RunResult**：如果你调用 `run` 或 `run_sync`。
+- **RunResultStreaming**：如果你调用 `run_streamed`。
+
+这两者都继承自 `RunResultBase`，其中包含大多数有用的信息。
+
+##### 3.1 最终输出
+
+[`final_output`](https://openai.github.io/openai-agents-python/ref/result/#agents.result.RunResultBase.final_output) 属性包含最后运行的智能体的最终输出。为以下两种情况之一：
+
+- 如果最后的智能体没有定义 `output_type`，则为 `str`。
+- 如果智能体定义了输出类型，则为类型 `last_agent.output_type` 的对象。
+
+> [!NOTE]
+>
+> `final_output` 的类型为 `Any`。我们无法静态类型化它，因为在移交时，最后的智能体可能是任何一个，因此我们无法静态确定可能的输出类型集合。
+
+##### 3.2 下一轮次的输入
+
+你可以使用 `result.to_input_list()` 方法将结果转换为输入列表，该列表将你提供的原始输入与智能体运行期间生成的项连接起来。这使得将一个智能体运行的输出传递到另一个运行中变得方便，或者在循环中运行并每次附加新的用户输入。
+
+##### 3.3 最后智能体
+
+`last_agent` 属性包含最后运行的智能体。根据你的应用情况，这通常在用户下次输入时很有用。例如，如果你有一个分诊智能体，它会移交给特定语言的智能体，你可以存储最后的智能体，并在用户下次消息时重用它。
+
+##### 3.4 新项
+
+`new_items` 属性包含在运行期间生成的新项。这些项是 `RunItems`，每个项<font color="brown">封装</font>了 LLM 生成的原始项。
+
+1. **MessageOutputItem**：表示 LLM 生成的消息。原始项是具体的消息内容。
+2. **HandoffCallItem**：表示 LLM 调用了移交工具。原始项是发起的工具调用信息。
+3. **HandoffOutputItem**：表示发生了移交，原始项是移交工具的响应。此项也可以访问交接的源/目标智能体的信息。
+4. **ToolCallItem**：表示 LLM 调用了一个工具，记录了调用的动作。
+5. **ToolCallOutputItem**：表示工具被调用后的响应，包含工具的输出。
+6. **ReasoningItem**：表示 LLM 生成的推理结果，记录了其推理过程。
+
+##### 3.5 其他信息
+
+1. **Guardrail 结果**：
+   - `input_guardrail_results` 和 `output_guardrail_results` 包含 guardrails 的结果，可能包含有用的信息，开发者可以选择记录或存储。
+2. **原始响应**：
+   - `raw_responses` 包含 LLM 生成的具体输出`ModelResponses`。
+3. **原始输入**：
+   - `input` 属性包含你提供的原始输入，通常不需要，但可以在特定情况下使用。
+
+#### 4. 流式
+
+流式处理允许你在智能体运行过程中订阅更新。这对于向最终用户显示进度更新和部分响应非常有用。
+
+##### 4.1 原始响应事件
+
+`RawResponsesStreamEvent` 是直接从 LLM 传递的原始事件，采用 OpenAI Responses API 格式。每个事件都有一个类型（如 `response.created`、`response.output_text.delta` 等）和数据。
+
+这些事件在你希望实时向用户传输生成的响应消息时非常有用。
+
+```python
+'''
+示例：逐个 Token 输出 LLM 生成的文本，实时反馈用户所需的信息。
+'''
+import asyncio
+from openai.types.responses import ResponseTextDeltaEvent
+from agents import Agent, Runner
+
+async def main():
+    agent = Agent(
+        name="Joker",
+        instructions="You are a helpful assistant.",
+    )
+
+    result = Runner.run_streamed(agent, input="Please tell me 5 jokes.")
+    async for event in result.stream_events():
+        if event.type == "raw_response_event" and isinstance(event.data, ResponseTextDeltaEvent):
+            print(event.data.delta, end="", flush=True)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+##### 4.2 运行项事件和智能体事件
+
+`RunItemStreamEvents` 是更高级的事件，通知你某个项目已完全生成。这使你能够在“消息生成”、“工具运行”等级别推送进度更新，而不是逐个 Token。同样，`AgentUpdatedStreamEvent` 在当前代理发生变化时提供更新（例如，因交接而变化）。
+
+```python
+'''
+示例：通过使用这些事件，可以忽略原始事件，向用户流式传输更新。
+'''
+import asyncio
+import random
+from agents import Agent, ItemHelpers, Runner, function_tool
+
+@function_tool
+def how_many_jokes() -> int:
+    return random.randint(1, 10)
+
+
+async def main():
+    agent = Agent(
+        name="Joker",
+        instructions="First call the `how_many_jokes` tool, then tell that many jokes.",
+        tools=[how_many_jokes],
+    )
+
+    result = Runner.run_streamed(
+        agent,
+        input="Hello",
+    )
+    print("=== Run starting ===")
+
+    async for event in result.stream_events():
+        # We'll ignore the raw responses event deltas
+        if event.type == "raw_response_event":
+            continue
+        # When the agent updates, print that
+        elif event.type == "agent_updated_stream_event":
+            print(f"Agent updated: {event.new_agent.name}")
+            continue
+        # When items are generated, print them
+        elif event.type == "run_item_stream_event":
+            if event.item.type == "tool_call_item":
+                print("-- Tool was called")
+            elif event.item.type == "tool_call_output_item":
+                print(f"-- Tool output: {event.item.output}")
+            elif event.item.type == "message_output_item":
+                print(f"-- Message output:\n {ItemHelpers.text_message_output(event.item)}")
+            else:
+                pass  # Ignore other event types
+
+    print("=== Run complete ===")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+#### 5. 工具
+
+工具使智能体能够执行各种操作，例如获取数据、运行代码、调用外部 API，甚至使用计算机。在 Agent SDK 中有三类工具：
+
+1. **托管工具**：这些工具在 LLM 服务器上与 AI 模型一起运行。OpenAI 提供检索、网页搜索和计算机使用作为托管工具。
+2. **函数调用**：允许你将任何 Python 函数用作工具。
+3. **智能体作为工具**：这允许你将代理作为工具使用，使智能体能够调用其他智能体，而无需进行交接。
+
+##### 5.1 托管工具
+
+OpenAI 在使用 `OpenAIResponsesModel` 时提供了一些内置工具：
+
+- **WebSearchTool**：允许代理在网上搜索信息。
+- **FileSearchTool**：允许从你的 OpenAI 向量存储中检索信息。
+- **ComputerTool**：允许自动化计算机使用任务。
+
+```python
+from agents import Agent, FileSearchTool, Runner, WebSearchTool
+
+agent = Agent(
+    name="Assistant",
+    tools=[
+        WebSearchTool(),
+        FileSearchTool(
+            max_num_results=3,
+            vector_store_ids=["VECTOR_STORE_ID"],
+        ),
+    ],
+)
+
+async def main():
+    result = await Runner.run(agent, "Which coffee shop should I go to, taking into account my preferences and the weather today in SF?")
+    print(result.final_output)
+```
+
+##### 5.2 函数工具
+
+你可以将任何 Python 函数用作工具。Agents SDK 会自动设置工具：
+
+- 工具名称将是 Python 函数的名称（或你可以提供一个名称）。
+- 工具描述将来自函数的文档字符串（或你可以提供描述）。
+- 函数输入的 schema 会根据函数的参数自动创建。
+- 每个输入的描述来自函数的文档字符串，除非被禁用。
+
+我们使用 Python 的 `inspect` 模块提取函数签名，并使用 `griffe` 解析文档字符串，使用 `pydantic` 进行 schema 创建。
+
+```python
+import json
+
+from typing_extensions import TypedDict, Any
+
+from agents import Agent, FunctionTool, RunContextWrapper, function_tool
+
+
+class Location(TypedDict):
+    lat: float # 纬度
+    long: float # 经度
+
+@function_tool  
+async def fetch_weather(location: Location) -> str:
+    
+    """Fetch the weather for a given location.
+
+    Args:
+        location: The location to fetch the weather for.
+    """
+    # In real life, we'd fetch the weather from a weather API
+    return "sunny"
+
+
+@function_tool(name_override="fetch_data")  
+def read_file(ctx: RunContextWrapper[Any], path: str, directory: str | None = None) -> str:
+    """Read the contents of a file.
+
+    Args:
+        path: The path to the file to read.
+        directory: The directory to read the file from.
+    """
+    # In real life, we'd read the file from the file system
+    return "<file contents>"
+
+
+agent = Agent(
+    name="Assistant",
+    tools=[fetch_weather, read_file],  
+)
+
+for tool in agent.tools:
+    if isinstance(tool, FunctionTool):
+        print(tool.name)
+        print(tool.description)
+        print(json.dumps(tool.params_json_schema, indent=2))
+        print()
+```
+
+##### 5.3 智能体作为工具
+
+在某些工作流中，您可能希望有一个中央智能体来协调一组专业智能体，而不是进行控制交接。您可以通过将智能体建模为工具来实现这一点。
+
+```python
+from agents import Agent, Runner
+import asyncio
+
+spanish_agent = Agent(
+    name="Spanish agent",
+    instructions="You translate the user's message to Spanish",
+)
+
+french_agent = Agent(
+    name="French agent",
+    instructions="You translate the user's message to French",
+)
+
+orchestrator_agent = Agent(
+    name="orchestrator_agent",
+    instructions=(
+        "You are a translation agent. You use the tools given to you to translate."
+        "If asked for multiple translations, you call the relevant tools."
+    ),
+    tools=[
+        spanish_agent.as_tool(
+            tool_name="translate_to_spanish",
+            tool_description="Translate the user's message to Spanish",
+        ),
+        french_agent.as_tool(
+            tool_name="translate_to_french",
+            tool_description="Translate the user's message to French",
+        ),
+    ],
+)
+
+async def main():
+    result = await Runner.run(orchestrator_agent, input="Say 'Hello, how are you?' in Spanish.")
+    print(result.final_output)
+```
+
+##### 5.4 在函数工具中处理错误
+
+当您通过 `@function_tool` 创建一个函数工具时，可以传递 `failure_error_function`。这是一个在工具调用崩溃时向 LLM 提供错误响应的函数。
+
+- **默认行为**：如果您不传递任何内容，它会运行 `default_tool_error_function`，通知 LLM 发生了错误。
+- **自定义错误函数**：如果您传递自己的错误函数，它将运行该函数，并将响应发送给 LLM。
+- **显式传递 None**：如果您显式传递 `None`，则任何工具调用错误将被重新引发，供您处理。这可能是 `ModelBehaviorError`（如果模型生成了无效的 JSON），或 `UserError`（如果您的代码崩溃）等。
+
+如果您手动创建 `FunctionTool` 对象，则必须在 `on_invoke_tool` 函数内处理错误。
+
+#### 6. 模型上下文协议 (MCP)
+
+模型上下文协议（MCP）是一种为 LLM 提供工具和上下文的方法。根据 MCP 文档：
+
+> [!NOTE]
+>
+> MCP 是一个开放协议，标准化了应用程序向 LLM 提供上下文的方式。可以将 MCP 类比于 AI 应用的 USB-C 接口。正如 USB-C 为设备连接各种外设和配件提供了标准化的方式，MCP 也为 AI 模型连接不同的数据源和工具提供了标准化的方式。
+
+Agents SDK 支持 MCP。这使您能够使用广泛的 MCP 服务器为您的智能体提供工具。
+
+
 
