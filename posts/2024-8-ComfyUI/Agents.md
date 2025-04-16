@@ -1575,6 +1575,22 @@ BadRequestError: Error code: 400 - {'error': {'message': "'response_format.type'
 
 这是某些模型提供商的一个局限性——它们支持 JSON 输出，但不允许您指定用于输出的 `json_schema`。我们正在努力解决此问题，但建议依赖那些确实支持 JSON schema 输出的提供商，因为否则您的应用程序可能会因格式错误的 JSON 而频繁崩溃。
 
+##### 12.4 OpenRouter配置
+
+```shell
+export EXAMPLE_BASE_URL=https://openrouter.ai/api/v1
+export EXAMPLE_API_KEY=<OPENROUTER_API_KEY>
+export EXAMPLE_MODEL_NAME=deepseek/deepseek-r1:free
+export OPENAI_API_KEY=<OPENROUTER_API_KEY>
+printenv
+```
+
+`EXAMPLE_API_KEY` 从 https://openrouter.ai/settings/keys 创建。
+
+`EXAMPLE_MODEL_NAME` 从各个模型的API里查看，如 https://openrouter.ai/deepseek/deepseek-r1:free/api
+
+`OPENAI_API_KEY` 从 https://platform.openai.com/api-keys 创建，以支持[追踪器](https://platform.openai.com/traces)。
+
 ### 13. 配置 SDK
 
 ### 14. 可视化智能体

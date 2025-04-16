@@ -1352,11 +1352,27 @@ StyleSync的mask比较有实用价值，防止模型从肌肉运动推理出口�
 
 <img src="https://storage.googleapis.com/mediapipe-assets/documentation/mediapipe_face_landmark_fullsize.png" alt="mediapipe" style="zoom:15%;" />
 
-mask好像推理时是根据landmark来制作更精准的。 而训练时，只是将这张固定的mask.png做仿射变换。
+mask好像推理时是根据landmark来制作更精准的。 
 
-<img src="/Users/devonn.hou/Library/Application Support/typora-user-images/image-20250325215255954.png" alt="image-20250325215255954" style="zoom:35%;" />
+而训练时，只是将输入做仿射变换，然后使用这张固定的mask.png。
 
+> [!CAUTION]
+>
+> 因为作者认为用landmark来获取mask，也会提供嘴唇移动的线索。
 
+<img src="../../images/typora-images/image-20250325215255954.png" alt="image-20250325215255954" style="zoom:35%;" />
+
+<img src="../../images/typora-images/image-20250416155429245.png" alt="image-20250416155429245" style="zoom:50%;" />
+
+由于SyncNet的效果对于lipsync模型的训练很重要，本文细致的研究了影响SyncNet收敛的核心因素。
+
+分析了在口型同步中的捷径学习（Shortcut Learning）问题：
+
+因为口型同步任务经常基于嘴部重绘（inpainting）的框架。意外的是，音频条件的模型倾向于基于嘴唇周围的视觉信息（如面部肌肉、眼睛和脸颊）来预测嘴唇运动，而忽略音频信息。
+
+<img src="../../images/typora-images/image-20250416154232320.png" alt="image-20250416154232320" style="zoom:50%;" />
+
+本文还提出TREPA（Temporal Representation Alignment）的方法，和我想到的temporal (gram) perceptual loss很像，只是用了更强大的预训练模型VideoMAE-v2。
 
 #### :page_with_curl:StyleLipSync
 
