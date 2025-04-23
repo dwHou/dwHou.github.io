@@ -1599,10 +1599,71 @@ printenv
 
 我们添加了 LiteLLM 集成，以便您在 Agents SDK 中通过单一接口使用任何 AI 模型。
 
-
-
 ### 13. 配置 SDK
+
+**1. API 密钥和客户端**
+
+ 默认情况下，SDK 在导入时会查找 `OPENAI_API_KEY` 环境变量以进行 LLM 请求和跟踪。如果您无法在应用启动之前设置该环境变量，可以使用 set_default_openai_key() 函数来设置密钥。
+
+```python
+from agents import set_default_openai_key
+set_default_openai_key("sk-...")
+```
+
+**2. 追踪器**
+
+跟踪默认是启用的。它默认使用上述部分中的 OpenAI API 密钥（即环境变量或您设置的默认密钥）。您可以通过使用 `set_tracing_export_api_key` 函数来专门设置用于跟踪的 API 密钥。您也可以通过使用 `set_tracing_disabled()` 函数完全禁用跟踪。
+
+**3. 调试日志**
+ SDK 有两个 Python 日志记录器，但没有设置任何处理器。默认情况下，这意味着警告和错误会发送到`stdout`，而其他日志则被抑制。
+
+要启用详细日志记录，请使用 `enable_verbose_stdout_logging()` 函数。
+
+您也可以通过添加处理器、过滤器、格式化器等来自定义日志。您可以在 Python 日志[指南](https://docs.python.org/3/howto/logging.html)中了解更多信息。
+
+**4. 日志中的敏感数据**
+
+某些日志可能包含敏感数据（例如用户数据）。如果您希望禁用这些数据的记录，请设置以下环境变量。
+
+要禁用 LLM 输入和输出的日志记录：
+
+```shell
+export OPENAI_AGENTS_DONT_LOG_MODEL_DATA=1
+```
+
+要禁用工具输入和输出的日志记录：
+
+```shell
+export OPENAI_AGENTS_DONT_LOG_TOOL_DATA=1
+```
 
 ### 14. 可视化智能体
 
+智能体可视化允许您使用 <font color="brown">Graphviz</font> 生成智能体及其关系的结构化图形表示。这对于理解智能体、工具和交接在应用程序中的交互非常有用。
+
+**1. 安装**
+
+安装可选的 viz 依赖组：`pip install "openai-agents[viz]"`
+
+**2. 生成图形**
+
+您可以使用 `draw_graph` 函数生成智能体可视图。此函数创建一个有向图，其中：
+
+- 智能体表示为黄色框。
+- 工具表示为绿色椭圆。
+- 交接表示为从一个智能体到另一个智能体的有向边。
+
+```python
+from agents.extensions.visualization import draw_graph
+...
+draw_graph(triage_agent) # 默认内嵌显示
+draw_graph(triage_agent).view() # 在单独的窗口中显示
+draw_graph(triage_agent, filename="agent_graph") # 生成 agent_graph.png 文件，保存在当前工作目录
+```
+
 ### 15. 语音智能体
+
+**1. 安装**
+
+从 SDK 中安装可选的语音依赖项：`pip install 'openai-agents[voice]'`
+
