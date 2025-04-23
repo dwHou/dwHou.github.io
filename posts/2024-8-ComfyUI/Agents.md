@@ -85,7 +85,7 @@ ChatGPT无法完成处理图片，但是通过外接工具，这项任务可以�
 
 **低代码框架**：<font color="brown">无需代码</font>即可完成Agent开发
 
-Coze（零代码）、Dify（低代码）、LangFlow（低代码，LangChain家族的）
+Coze（零代码，编排系统基于[FlowGram](https://github.com/bytedance/flowgram.ai)）、Dify（低代码，编排系统基于[React Flow](https://reactflow.dev/)）、LangFlow（低代码，LangChain家族的）、FastGPT（[开源](https://tryfastgpt.ai/)）
 
 **基础框架**：借助大模型<font color="brown">原生能力</font>进行Agent开发
 
@@ -1590,6 +1590,16 @@ printenv
 `EXAMPLE_MODEL_NAME` 从各个模型的API里查看，如 https://openrouter.ai/deepseek/deepseek-r1:free/api
 
 `OPENAI_API_KEY` 从 https://platform.openai.com/api-keys 创建，以支持[追踪器](https://platform.openai.com/traces)。
+
+##### 12.5 通过 LiteLLM 使用任何模型
+
+`pip install "openai-agents[litellm]"`
+
+> LiteLLM 集成目前处于测试阶段。如果发现任何问题，请通过 GitHub 提交问题，我们会尽快修复。
+
+我们添加了 LiteLLM 集成，以便您在 Agents SDK 中通过单一接口使用任何 AI 模型。
+
+
 
 ### 13. 配置 SDK
 
