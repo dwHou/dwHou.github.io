@@ -612,6 +612,16 @@ def download(ytb_id, args, proxy=None):
   git rm -r --cached folder 先取消folder的跟踪 重命名folder 然后git add folder
 </pre>
 
+<h2>远程主机不满足运行 VS Code 服务器的先决条件</h2>
+<pre>
+  从 VS Code 版本 1.99（2025 年 3 月）开始，由 VS Code 分发的预构建服务器仅与基于 glibc 2.28 或更高版本的 Linux 发行版兼容。例如，这些包括 Debian 10、RHEL 8 或 Ubuntu 20.04。
+
+  临时解决方案：
+  1. 覆盖安装前先到<a href="vscode://settings/update.mode ">设置</a>中 关闭 VS Code 的自动更新，否则重装后仍会自动更新。
+  2. 下载 VS Code 最后可用的版本 1.98.2 重装即可正常连接远程服务器。旧版本下载页 <a href="https://code.visualstudio.com/docs/supporting/faq#_previous-release-versions">link</a>
+
+</pre>
+
 
 <!-- 加载出评论，是使用Disqus的论坛短名（shortname）
 A shortname is the unique identifier assigned to a Disqus site.
