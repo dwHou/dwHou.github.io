@@ -277,9 +277,109 @@ GRU为降低LSTM的计算成本，GRU将遗忘门与输入门进行合并。
 
   Top-P设定阈值p来对候选集进行选取。
 
-Top-K采样和Top-P采样的随机性由语言模型输出的概率决定。
+**Temperature机制**
+
+Top-K采样和Top-P采样的随机性由语言模型输出的概率决定，不可自由调整。但在<font color="brwon">不同场景</font>中，我们<font color="brwon">对于随机性的要求可能不同</font>。引入Temperature机制可以对解码随机性进行调节。
+
+<img src="../../images/typora-images/image-20250509113132427.png" alt="image-20250509113132427" style="zoom:50%;" />
+
+Temperature越高随机性越高。可以看到T无穷大时，会变成概率为$\frac{1}{K} $或$\frac{1}{|S_p|} $的均匀分布。反之，T趋近于0时，也会将概率值大的输出通过指数放缩得更大，再归一化。
+
+###### 4.2 语言模型评测
+
+（1）内在评测：测试文本通常由与预训练中所用的文本独立同分布的文本构成，不依赖于具体任务。
+
+<font color="brwon">困惑度（Perplexity）</font>，$PPL(s_{test})=P(w_{1:N})^{-\frac{1}{N}}=\sqrt[N]{\prod_{i=1}^{N}\frac{1}{P(w_i|w_{<i})} } $
+
+困惑度减小也意味着熵减，意味着模型“胡言乱语”的可能性降低。
+
+（2）外在评测：测试文本通常包括该任务上的问题和对应的标准答案，其依赖于具体任务。
+
+- 基于统计指标的评测
+
+  <font color="brwon">BLEU </font>(BiLingual Evaluation Understudy)：计算n-gram匹配精度的一种指标
+
+  
+
+  示例：“大语言模型”翻译成英文，生成的翻译为“big  language models”，而参考文本为“large language models”。
+
+  当n=1时，$Pr(g_1)=\frac{2}{3}$。
+
+  当n=2时，$Pr(g_2)=\frac{1}{2}$。
+
+  当N=2时，$BLEU = \sqrt{\frac{1}{2}\cdot\frac{2}{3}}=\sqrt{\frac{1}{3}}$ 
+
+  
+
+- 基于语言模型的评测
+
+  从语义理解的层面进行评测
+
+  1. 基于上下文词嵌入：上下文词嵌入（Contextual Embeddings）向量的相似度。
+
+  2. 基于生成模型：直接利用提示词工程引导LLM输出评测分数。属于无参评价。
+
+     <img src="../../images/typora-images/image-20250511203742088.png" alt="image-20250511203742088" style="zoom:50%;" />
+
+###### 4.3 语言模型的应用
+
+- 直接应用
+
+  语言模型输出的概率值可以直接应用于输入法、机器翻译、对话等任务。
+
+- 间接应用
+
+  语言模型中间产出的文本嵌入可以应用于实体识别、实体检测、文本检索等任务。
 
 ## 第二章 大语言模型架构
+
+#### 10 模型架构概览
+
+**涌现能力**：实验发现<font color="brwon">新能力</font>随着<font color="brwon">模型规模</font>提升<font color="brwon">凭空自然涌现</font>出来，因此将其称为<font color="brwon">涌现能力</font>（Emergent Abilities），例如上下文学习、逻辑推理和常识推理等能力。
+
+**扩展法则**：GPT系列模型的性能提升，有着一系列关于<font color="brwon">模型能力与参数/数据规模之间的定量关系</font>作为理论支撑，即<font color="brwon">扩展法则</font>（Scaling Law）。其中以OpenAI提出的Kaplan-McCandlish法则以及DeepMind提出的Chinchilla法则最为著名。
+
+**模型基础**：Transformer灵活的并行架构为<font color="brwon">训练数据和参数的扩展</font>提供了<font color="brwon">模型基础</font>，推动了本轮大语言模型的法则。
+
+> [!NOTE]
+>
+> 如上一章所述Transformer是模块化的模型
+
+###### 1.1 基于Transformer的三种架构
+
+在<font color="brwon">Transformer</font>的基础上衍生出了<font color="brwon">三种主流模型架构</font>。
+
+- Encoder-only架构
+
+  只选用Transformer中的<font color="brwon">Encoder部分</font>，代表模型为BERT系列。
+
+  <img src="../../images/typora-images/image-20250511212256145.png" alt="image-20250511212256145" style="zoom:50%;" />
+
+- Encoder-Decoder架构
+
+  同时选用Transformer中的<font color="brwon">Encoder和Decoder部分</font>，代表模型为T5、BART等。
+
+  <img src="../../images/typora-images/image-20250511212430573.png" alt="image-20250511212430573" style="zoom:50%;" />
+
+- Decoder-only架构
+
+  只选用Transformer中的<font color="brwon">Decoder部分</font>，代表模型为GPT和LLaMA系列。
+
+  <img src="../../images/typora-images/image-20250511212313060.png" alt="image-20250511212313060" style="zoom:50%;" />
+
+###### 1.2 三种架构对比
+
+<img src="../../images/typora-images/image-20250511212904788.png" alt="image-20250511212904788" style="zoom:50%;" />
+
+
+
+#### 11 基于Encoder-only架构的大语言模型
+
+#### 12 基于Encoder-Decoder架构的大语言模型
+
+#### 13 基于Decoder-only架构的大语言模型
+
+#### 14 Mamba原理
 
 ## 第三章 Prompt工程
 
