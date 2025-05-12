@@ -442,6 +442,8 @@ Encoder-Decoder 模型可以使用 Encoder 或 Decoder 模型的目标来完成�
 
 ###### 1.1 （加餐-实践）
 
+###### Scaled Dot-product Attention
+
 ```python
 '''
 手工实现 Scaled Dot-product Attention
@@ -524,6 +526,10 @@ def scaled_dot_product_attention(query, key, value, query_mask=None, key_mask=No
 注意！上面的做法会带来一个问题：当 Q 和 K 序列相同时，注意力机制会为上下文中的<font color="brwon">相同单词分配非常大的分数（点积为 1）</font>，而在实践中，<font color="brwon">相关词往往比相同词更重要</font>。例如对于上面的例子，只有关注“eating”才能够确认“McDonald”的含义。
 
 因此，多头注意力 (Multi-head Attention) 出现了！
+
+###### Multi-head Attention
+
+多头注意力首先通过线性映射将 $Q,K,V$ 序列映射到特征空间，每一组线性投影后的向量表示称为一个头，然后在每组映射后的序列上再应用 Scaled Dot-product Attention：
 
 
 
