@@ -743,7 +743,38 @@ class TransformerEncoder(nn.Module):
 
 Transformer Decoder 与 Encoder 最大的不同在于 Decoder 有<font color="brwon">两个注意力子层</font>。
 
+**Masked multi-head self-attention layer**：确保在每个时间步生成的词语仅基于过去的输出和当前预测的词，否则 Decoder 相当于作弊了；
 
+**Encoder-decoder attention layer**：以解码器的中间表示作为 queries，对 encoder stack 的输出 key 和 value 向量执行 Multi-head Attention。通过这种方式，Encoder-Decoder Attention Layer 就可以学习到如何关联来自两个不同序列的词语，例如两种不同的语言。 解码器可以访问每个 block 中 Encoder 的 keys 和 values。
+
+与 Encoder 中的 Mask 不同，Decoder 的 Mask 是一个下三角矩阵：
+
+```python
+seq_len = inputs.input_ids.size(-1)
+mask = torch.tril(torch.ones(seq_len, seq_len)).unsqueeze(0)
+print(mask[0])
+```
+
+```shell
+tensor([[1., 0., 0., 0., 0.],
+        [1., 1., 0., 0., 0.],
+        [1., 1., 1., 0., 0.],
+        [1., 1., 1., 1., 0.],
+        [1., 1., 1., 1., 1.]])
+```
+
+这里使用 PyTorch 自带的 `tril()` 函数来创建下三角矩阵，然后同样地，通过 `Tensor.masked_fill()` 将所有零替换为负无穷大来防止注意力头看到未来的词语而造成信息泄露：
+
+```python
+scores.masked_fill(mask == 0, -float("inf"))
+```
+
+本章对 Decoder 只做简单的介绍，如果你想更深入的了解可以参考 Andrej Karpathy 实现的 [minGPT](https://github.com/karpathy/minGPT)。
+
+> [!TIP]
+>
+> 本章的所有代码已经整理于 Github：
+> https://gist.github.com/jsksxs360/3ae3b176352fa78a4fca39fff0ffe648
 
 #### 11 基于Encoder-only架构的大语言模型
 
