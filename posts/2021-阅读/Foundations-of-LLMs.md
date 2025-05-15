@@ -743,9 +743,9 @@ class TransformerEncoder(nn.Module):
 
 Transformer Decoder 与 Encoder 最大的不同在于 Decoder 有<font color="brwon">两个注意力子层</font>。
 
-**Masked multi-head self-attention layer**：确保在每个时间步生成的词语仅基于过去的输出和当前预测的词，否则 Decoder 相当于作弊了；
+**Masked multi-head self-attention layer**（<font color="brwon">自注意力模块</font>）：确保在每个时间步生成的词语仅基于过去的输出和当前预测的词，否则 Decoder 相当于作弊了；
 
-**Encoder-decoder attention layer**：以解码器的中间表示作为 queries，对 encoder stack 的输出 key 和 value 向量执行 Multi-head Attention。通过这种方式，Encoder-Decoder Attention Layer 就可以学习到如何关联来自两个不同序列的词语，例如两种不同的语言。 解码器可以访问每个 block 中 Encoder 的 keys 和 values。
+**Encoder-decoder attention layer**（<font color="brwon">交叉注意力模块</font>）：以解码器的中间表示作为 queries，对 encoder stack 的输出 key 和 value 向量执行 Multi-head Attention。通过这种方式，Encoder-Decoder Attention Layer 就可以学习到如何关联来自两个不同序列的词语，例如两种不同的语言。 解码器可以访问每个 block 中 Encoder 的 keys 和 values。
 
 与 Encoder 中的 Mask 不同，Decoder 的 Mask 是一个下三角矩阵：
 
@@ -776,13 +776,75 @@ scores.masked_fill(mask == 0, -float("inf"))
 > 本章的所有代码已经整理于 Github：
 > https://gist.github.com/jsksxs360/3ae3b176352fa78a4fca39fff0ffe648
 
+<img src="../../images/typora-images/image-20250511212904788.png" alt="image-20250511212904788" style="zoom:50%;" />
+
+由于各自<font color="brwon">独特的模型设计</font>以及<font color="brwon">注意力矩阵</font>上的差异，在同等参数规模下，这三种架构的模型在<font color="brwon">适用任务</font>上也都各有倾向。
+
 #### 11 基于Encoder-only架构的大语言模型
+
+Encoder-only架构中的<font color="brwon">双向注意力机制</font>允许模型充分考虑序列中的<font color="brwon">前后文信息</font>，捕捉<font color="brwon">丰富的语义和依赖关系</font>。但由于<font color="brwon">缺少解码器组件</font>，无法直接输出序列。
+
+适合：判别任务，如情感识别。
 
 #### 12 基于Encoder-Decoder架构的大语言模型
 
+Encoder-Decoder架构通过添加解码器来基于<font color="brwon">编码器输出的上下文表示</font>逐步生成输出序列。但解码器的加入也造成的训练和推理成本的增加。
+
+适合：既适合判别任务，也适合生成任务。但计算量大幅提升，不利于参数扩展。
+
+Encoder-Decoder架构主要包含<font color="brwon">编码器</font>和<font color="brwon">解码器</font>两部分：
+
+<img src="../../images/typora-images/image-20250514195804522.png" alt="image-20250514195804522" style="zoom:35%;" />
+
+<img src="../../images/typora-images/image-20250514200347108.png" alt="image-20250514200347108" style="zoom:50%;" />
+
 #### 13 基于Decoder-only架构的大语言模型
 
+大规模预训练数据的加持使得Decoder-only架构的模型能够<font color="brwon">生成高质量、连贯的文本</font>。但是缺乏编码器提供的双向上下文信息，这一架构在<font color="brwon">理解复杂输入</font>数据时存在一定局限性。
+
+适合：生成任务，如对话问答。
+
+<img src="../../images/typora-images/image-20250514202100763.png" alt="image-20250514202100763" style="zoom:50%;" />
+
+Decoder-only架构去除了Transformer中的编码器部分，其<font color="brwon">简单的架构设计</font>和<font color="brwon">强大的可扩展性</font>，使得Decoder-only架构被广泛应用于大规模语言模型。
+
+> 不仅去除了编码器，由此解码器中也不需要交叉注意力模块了。
+
+CloseAI的GPT闭源，Meta的LLaMA开源。
+
+**<font color="brwon">GPT系列：</font>**
+
+GPT-1：《Improving Language Understanding by Generative Pre-Training》
+
+GPT-2：《Language Models are Unsupervised Multitask Learners》
+
+GPT-3：《Language Models are Few-Shot Learners》，GPT-3涌现出良好的上下文学习（In-Context Learning, ICL）能力。
+
+GPT-3的一系列衍生模型，其中最具启发意义的是有良好指令跟随能力的InstructGPT模型：《Training language models to follow instructions with human feedback》
+
+往后就闭源了。
+
+ChatGPT（GPT-3.5）：标志着一种新的服务模式LLMaaS（LLM as a Service）的出现。GPT模型也开始走向闭源。
+
+GPT-4：更好理解复杂语境、生成连贯文本。还引入对图文双模态的支持。
+
+GPT-4o：继续提升模型性能和用户体验。比GPT4便宜很多，但成本、响应速度、延迟、多模态处理和多语言支持能力都比较好。
+
+<img src="../../images/typora-images/image-20250515163122108.png" alt="image-20250515163122108" style="zoom:50%;" />
+
+
+
+**<font color="brwon">LLaMA系列：</font>**
+
+推动力大语言模型的“共创”。
+
+GPT系列的升级主线聚焦于模型规模与预训练预料的同步提升（KM法则），而LLaMA则在模型规模上保持相对稳定，更专注于提升预训练数据的规模与质量（Chinchilla法则）。
+
+<img src="../../images/typora-images/image-20250514113045152.png" alt="image-20250514113045152" style="zoom:50%;" />
+
 #### 14 Mamba原理
+
+###### Tranformer并非完美
 
 ## 第三章 Prompt工程
 
