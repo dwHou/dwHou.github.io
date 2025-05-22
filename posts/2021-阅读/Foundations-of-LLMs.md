@@ -846,7 +846,118 @@ GPT系列的升级主线聚焦于模型规模与预训练预料的同步提升�
 
 ###### Tranformer并非完美
 
+<img src="../../images/typora-images/image-20250517192955981.png" alt="image-20250517192955981" style="zoom:50%;" />
+
+**Mamba的原理**
+
+<img src="../../images/typora-images/image-20250518150533014.png" alt="image-20250518150533014" style="zoom:50%;" />
+
+<font color="brwon">选择状态空间模型（Selective State Space Model）</font> 所用的是控制论里面的知识。
+
+**第一部分：状态空间模型（State Space Model，SSM）**
+
+> n阶系统用n个1阶系统进行矩阵表达。
+
+阅读[1]：https://blog.csdn.net/v_JULY_v/article/details/134923301
+
+阅读[2]：https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-mamba-and-state
+
+状态方程：$h(t) = Ah(t-1) + Bx(t)$
+
+输出方程：$y(t) = Ch(t) + Dx(t)$ 
+
+> [!NOTE]
+>
+> $Dx(t)$ 可以视为跳跃连接，可被简化掉。
+
+![img](https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0ca1d511-7d31-42a0-9220-2fb85b256efd_1956x864.png)
+
+**第二部分：从SSM到S4、S4D的升级之路**
+
+零阶保持 能够令连续SSM转变为离散SSM，使得不再是函数$x(t)$到$y(t)$，而是序列到序列$x_k$到$y_k$。
+
+![img](https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc29cfbbb-ae41-4dc2-b899-9e0a81cba34d_1980x1012.png)
+
+**循环结构表示：方便快速推理**
+
+$y2 = Ch2 = C(\bar{A}h_1+\bar{B}x2) = ... = C\bar{A}^2\bar{B}x_0 + C\bar{A}\bar{B}x_1 + C\bar{B}x_2$
+
+有没有眼前一亮？如此，便可以RNN的结构来处理。
+
+<img src="https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd1084e8a-a70d-450b-beb0-f18117ade5ed_2184x876.png" alt="img" style="zoom:50%;" />
+
+**卷积结构表示：方便并行训练**
+
+$y2 = C\bar{A}^2\bar{B}x_0 + C\bar{A}\bar{B}x_1 + C\bar{B}x_2$
+
+可以视为：
+
+<img src="https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F05049821-2352-4c04-8fb2-07fe15c20a9c_2620x824.png" alt="img" style="zoom:50%;" />
+
+由于其中三个离散参数A、B、C都是常数，因此我们可以预先计算左侧向量并将其保存为卷积核，这为我们提供了一种使用卷积超高速计算$y$的简单方法：
+
+> 这儿A、B、C都是 时不变。但这样
+
+<img src="https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F682187d6-f402-44aa-8097-8a2e5b6179a7_2072x744.png" alt="img" style="zoom:50%;" />
+
+所以两全其美的办法是，**推理用RNN结构，训练用CNN结构**：
+
+<img src="https://substackcdn.com/image/fetch/w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9c43c82d-9735-4d55-97bb-8ad6f504909e_1960x1008.png" alt="img" style="zoom:50%;" />
+
+总之，这类模型可以非常高效地计算为递归或卷积，在序列长度上具有线性或近线性缩放。
+
+
+
 ## 第三章 Prompt工程
+
+#### 20 Prompt工程简介
+
+任务大一统：LLM处理下游任务时，从“<font color="brwon">预训练-微调-预测</font>”范式，转向灵活的“<font color="brwon">预训练-提示（prompt）预测</font>”范式。
+
+Prompt：用于<font color="brwon">指导</font>生成式AI模型<font color="brwon">执行特定任务</font>的输入<font color="brwon">指令</font>。
+
+Prompt的基本元素：
+
+<img src="../../images/typora-images/image-20250518213332071.png" alt="image-20250518213332071" style="zoom:50%;" />
+
+Prompt工程：<font color="brwon">设计和优化</font>prompt。常见的Prompt工程技术包括 <font color="brwon">上下文学习</font>、<font color="brwon">思维链</font>等。
+
+#### 21 上下文学习
+
+上下文学习（In-Context Learning，ICL）是大语言模型一种新的学习范式，它通过<font color="brwon">构造特定的Prompt</font>，来使得语言模型理解并学习下游任务。相比于传统的监督微调，其<font color="brwon">不需要更新模型参数</font>，可以快速适应下游任务。
+
+> [!NOTE]
+>
+> 上下文学习 通过<font color="brwon">任务说明，演示示例</font>等信息<font color="brwon">引导模型输出</font>，快速适应新任务，使语言模型即服务成为可能。
+
+按照示例数量的不同，上下文学习可以分为三类：<font color="brwon">零样本（Zero-shot）</font>、<font color="brwon">单样本（One-shot）</font>和<font color="brwon">少样本（Few-shot）</font>
+
+<img src="../../images/typora-images/image-20250519140732631.png" alt="image-20250519140732631" style="zoom:50%;" />
+
+通常情况下，<font color="brwon">少样本性能>单样本性能>零样本性能</font>；模型越大，差异越明显。
+
+演示示例选择的两个主要依据是<font color="brwon">相似性</font>和<font color="brwon">多样性</font>。
+
+#### 22 思维链
+
+> [!TIP]
+>
+> 在心理学中，System-1任务和System-2任务分别代表两种不同的思维方式所处理的任务类型。
+>
+> System-1（Intuition & instinct）：快速、自动且无意识。
+>
+> System-2（Rational thinking）：缓慢，需要集中注意力和耗费精力。
+
+在<font color="brwon">标准提示</font>下的现象：
+
+- 面对System-1问题，如常识问答、情感分类、意图识别等，随规模变大，大模型性能显著提升。
+- 面对System-1问题，如<font color="brwon">复杂数学计算</font>、<font color="brwon">逻辑推理</font>等，大模型性能提升缓慢甚至停滞不前。出现"<font color="brwon">Flat Scaling Curves</font>"现象。
+
+<font color="brwon">思维链</font> (Chain-of-Thought, CoT) 通过在提示中<font color="brwon">嵌入一系列中间推理步骤</font>，引导大语言模型模拟人类解决问题时的思考过程，以提升模型处理System2任务的能力。
+
+CoT可以归纳为三种模式：按部就班、三思后行和集思广益
+
+<img src="../../images/typora-images/image-20250522100629198.png" alt="image-20250522100629198" style="zoom:50%;" />
 
 ## 第四章 参数高效微调
 
