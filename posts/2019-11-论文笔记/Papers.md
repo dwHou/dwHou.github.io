@@ -1458,6 +1458,14 @@ Confidence: Confidence is a score of how much closer the mean feature-wise dista
 
 
 
+#### :page_with_curl:KeySync
+
+解决清晰度、表情泄漏、嘴部遮挡等实际挑战。还提出一个LipLeak的指标，来衡量嘴形受表情的影响。
+
+> KeySync文章的作者认为，目前驱动照片的工作发展更快，而看似更简单的视频lip-sync相对进展较慢，也是由于这些实际挑战没被攻克。
+
+
+
 #### :page_with_curl:PersonaTalk
 
 
@@ -1798,3 +1806,7 @@ encoder类方法
 ### T2I
 
 这一波生成模型，对text-to-image任务的完成度相当高。
+
+#### :page_with_curl:Visual Autoregressive Modeling
+
+自回归(autoregressive, AR) 的大语言模型取得了很大的成功，其扩展性（scaling laws）和泛化性（zero-shot）是关键。但DALL-E

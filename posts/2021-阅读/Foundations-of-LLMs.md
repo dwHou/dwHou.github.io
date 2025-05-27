@@ -959,6 +959,54 @@ CoT可以归纳为三种模式：按部就班、三思后行和集思广益
 
 <img src="../../images/typora-images/image-20250522100629198.png" alt="image-20250522100629198" style="zoom:50%;" />
 
+**<font color="darkgreen">按部就班模式</font>**
+
+强调逻辑的<font color="brown">连贯性</font>和步骤的<font color="brown">顺序性</font>。该模式下，模型像是遵循一条预设的路径，每一步都紧密依赖于前一步的结论。
+
+代表性方法：
+
+- CoT：人工编写大量CoT示例，费时费力。
+- Zero-Shot CoT：通过简单的提示，如“Let's think step by step”. 展现与原始少样本CoT相媲美的性能。简单实用。
+- Auto CoT：在Zero-Shot CoT的基础上，仍然用K-Means在问题库里筛选相关的样本作为示例。
+
+**<font color="darkgreen">三思后行模式</font>**
+
+为了解决按部就班模式的不足，三思后行模式在决策过程中融入<font color="brown">审慎</font>和<font color="brown">灵活性</font>。该模式下，模型在每一步会停下来评估当前的情况，判断是否需要调整方向。
+
+- Tree of Thoughts：ToT从拆解、衍生、评估、搜索四个角度构造思维树。比如算24点，用提示衍生“可能的下一步”、评估“评估一下给出的数字能否凑到24点（可以、可能、不可能）”
+
+**<font color="darkgreen">集思广益模式</font>**
+
+通过<font color="brown">汇集</font>多种不同的观点和方法来优化决策过程。
+
+- Self-Consistency：引入<font color="brown">多样性的推理路径</font>并从中选择<font color="brown">最一致的答案</font>。可以与其他CoT方法<font color="brown">兼容</font>，共同作用于模型的推理过程。简单好用。
+- Universal Self-Consistency：利用大语言模型本身来选择最一致答案，显著拓宽了Self-Consistency的使用场景。
+
+> [!TIP]
+>
+> 三种思维链模式都是作用于<font color="brown">模型推理侧</font>，OpenAI尝试在<font color="brown">训练</font>和推理时深度融合思维链技术，并提出了GPT-o1。它在回答问题前会<font color="brown">花费更多时间来思考</font>，擅长处理<font color="brown">科学</font>、<font color="brown">编程</font>、<font color="brown">数学</font>等领域的复杂问题。
+>
+> GPT-o1相比GPT-4o，常识（System-1）能力持平，但推理（System-2）能力更胜一筹。但是GPT-o1的<font color="brown">推理运行开销</font>显著高于GPT-4o。
+
+GPT-o1没有公开技术细节。我们猜测GPT-o1训练的关键在于从<font color="brown">“结果监督”</font>转为<font color="brown">“过程监督”</font>。训练时，利用大规模强化学习增强模型生成优质思维片段能力；测试时，利用大规模搜索采样可能的思维片段，并利用奖励模型指导生成。
+
+#### 23 Prompt技巧
+
+结合Prompt<font color="brown">技术</font>（上面两节所介绍） 和 Prompt<font color="brown">技巧</font>，能够引导模型生成更加精准、符合预期的内容，进一步提升大语言模型在实际应用中的表现。
+
+1. 编写规范的Prompt是与大语言模型进行有效沟通的基础。
+
+   一个标准规范的Prompt通常由任务说明，上下文，问题，输出格式这几个部分中的一个或几个组成。
+
+   1. 任务说明：明确的动词（判断、分类），具体的名词（积极/消极、Yes/No），简洁明了。
+   2. 上下文：丰富且清晰，如背景信息、演示示例或对话历史，避免冗余或不必要的信息。
+   3. 输出格式：对于确保模型输出的可用性至关重要。
+   4. 排版要清晰
+
+   <img src="../../images/typora-images/image-20250527091911165.png" alt="image-20250527091911165" style="zoom:50%;" />
+
+2. 
+
 ## 第四章 参数高效微调
 
 ## 第五章 模型编辑
