@@ -2,6 +2,8 @@
 
 （余济闻师弟  研究领域AIGC-related Applications & Generation Models）
 
+推荐阅读：[扩散模型是如何工作的：从零开始的数学原理](https://shao.fun/blog/w/how-diffusion-models-work.html#%E9%80%9A%E8%BF%87%E9%9A%8F%E6%9C%BA%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B-sde-%E8%BF%9B%E8%A1%8C%E5%9F%BA%E4%BA%8E%E8%AF%84%E5%88%86%E7%9A%84%E7%94%9F%E6%88%90%E6%80%A7%E5%BB%BA%E6%A8%A1)
+
 #### 1-0 前置知识
 
 1. Markov：当前位置的概率只会受前一时刻概率影响

@@ -1531,9 +1531,40 @@ FaceVid2Vid的不足：
 - 无监督学的点没法捕捉很local的细节 
 - 生成质量也较弱
 
+训练和推理：
+
+- 除了训stitching和retargeting module，主框架训练是同id内进行的。然后推理时，如果用了其他id的驱动视频，使用相对变化进行建模。即$S_d = S_s * \frac{S_{d,i}}{S_{d,0}}$，$t_d = t_s + t_{d,i} - t_{d,0}$，$R_d = R_{d,i}R_{d,0}^{-1}R_s$
+
 <img src="../../images/typora-images/image-20250223211710565.png" alt="image-20250223211710565" style="zoom:50%;" />
 
 这个stitching训练还是比较麻烦的，要有一个可反传的2d landmark model。
+
+> 我认为这里可能有口误，应该是retargeting module才是必须要可反传的2d landmark model。 因为$Condition_{eyes}, Condition_{lip}$就是眼睛、嘴唇之间的距离。
+
+- 首先stitching、retargeting module都是只操作驱动关键点的，也就是$x_d$ 到 $x_d^{'}$。 不涉及生成器的改动。可以看到warping module和decoder都是冻结的。
+
+  都是经过mlp处理：
+
+  ```yaml
+  stitching:
+        input_size: 126 # (21*3)*2 两份隐式关键点
+        hidden_sizes: [128, 128, 64]
+        output_size: 65 # (21*3)+2(tx,ty)
+      lip:
+        input_size: 65 # (21*3)+2 源隐式关键点+源上下嘴唇间距+随机的嘴唇间距
+        hidden_sizes: [128, 128, 64]
+        output_size: 63 # (21*3)
+      eye:
+        input_size: 66 # (21*3)+3 源隐式关键点+源双眼间距元组+随机的眼部间距
+        hidden_sizes: [256, 256, 128, 128, 64]
+        output_size: 63 # (21*3)
+  ```
+
+- stitching module为了造出肩膀移动比较大的情形，是用了cross-id的源图像和驱动图像。与同id重建的图像做loss，且mask掉脸部区域，只对肩膀等区域做loss。
+
+  这是当贴回效果不好时可以做的二阶段弥补训练。
+
+- eyes/lip-retargeting modules是mask掉eyes或lip区域，对其他区域做loss保持一致。保证对眼部、嘴部参数控制$Condition_{eyes}, Condition_{lip}$时不影响其他区域。
 
 二次开发，实时表情编辑：https://github.com/PowerHouseMan/ComfyUI-AdvancedLivePortrait；由于是MIT License，许多公司也拿去商用了，Poe/某映/某图/Cooraft等等，但需要将InsightFace用比如MediaPipe替换掉。
 

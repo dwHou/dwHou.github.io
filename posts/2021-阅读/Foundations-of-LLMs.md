@@ -2,6 +2,8 @@ https://github.com/ZJU-LLMs/Foundations-of-LLMs
 
 [浙江大学-大模型原理与技术](https://www.bilibili.com/video/BV1PB6XYFET2/)
 
+[3Blue1Brown - Transformers (how LLMs work) explained visually | DL5](https://youtu.be/wjZofJX0v4M?si=YwW-fv3x2w6n5iQQ)
+
 毛玉仁
 
 ## 第一章 语言模型基础
