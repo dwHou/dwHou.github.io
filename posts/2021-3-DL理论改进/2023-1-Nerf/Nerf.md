@@ -122,6 +122,8 @@ $PE_t = [sin(\frac{1}{2^0}t),sin(\frac{1}{2^1}t),...,sin(\frac{1}{2^{i-1}}t),...
 
 $PE_t = [sin(ω_0t),sin(ω_1t),...,sin(ω_{i-1}t),...,sin(ω_{d_{model}-1}t)]$，其中$ω_i=\frac{1}{10000^{i/(d_{model}-1)}}$，频率被调到非常小（只用看最右边的，最小频率足够小了，周期=10000，而机器翻译一般最大输入文本词量也不超过5000）。
 
+> 这儿也能看出位置编码是冗余的，实际上只需要找到周期最大的sin、cos，就能找到对应的x、y。
+
 > Attention is all you need文章里表示，他们也尝试了sequence2sequence里基于学习的位置编码，但最终发现几乎是等价的。
 >
 > **从方法的可理解性上**，Learned Positional Embedding更加易于理解。**从参数维度上**，使用Sinusoidal Position Encoding不会引入额外的参数。
@@ -175,7 +177,7 @@ $PE_{t+\bigtriangleup t}=T_{\bigtriangleup t}*PE_t$
 
    PE沿着position滑动，就变成了矢量沿着单位圆匀速转动而已。
 
-   这个精巧的设计满足了transfomer里对Positional Encoding的几项要求：
+   这个精巧的设计满足了transfomer里对Positional Encoding的<font color="brown">几项要求</font>：
 
    1. dimension的范围可以自由改变，向右追加或者减少频率更慢的轮子
    2. position的范围可以自由改变，增大或者减小轮子的半径

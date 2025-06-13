@@ -40,17 +40,17 @@ step 1.使用DECA（a 3DMM face tracker）获得每一帧的表情参数
 
 step 2.稀疏的3D face landmarks
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230830225520580.png" alt="image-20230830225520580" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230830225520580.png" alt="image-20230830225520580" style="zoom:50%;" />
 
 step 3.局部变形场由一定半径内的非线性函数表示，并由的step1 tracked 表情参数调节。（Attention Mask Based on 3DMM Bases：表情参数会有<font color="brown">注意力</font>掩模加权，来过滤对landmark不影响的冗余参数）
 
 $A_l$:
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230830224505199.png" alt="image-20230830224505199" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230830224505199.png" alt="image-20230830224505199" style="zoom:50%;" />
 
 $t$ （合） and $t_l$ （分）
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230830230458466.png" alt="image-20230830230458466" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230830230458466.png" alt="image-20230830230458466" style="zoom:50%;" />
 
 $\gamma$是位置编码(PE)
 
@@ -80,7 +80,7 @@ step 4. 最后，局部变形将基于距离的权重相加 $\sum_{l}{W(x_{obs}-
 
 ——————————————————————————————————————
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230830225132467.png" alt="image-20230830225132467" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230830225132467.png" alt="image-20230830225132467" style="zoom:50%;" />
 
 方法概述：给定输入视频序列，我们运行DECA来获取每帧线性 3DMM的以下参数：表情 $e_i$、姿势 $pose_i$ 和稀疏 3D landmarks $c_l$。step3中具有局部空间支持的注意力掩膜也是从 3DMM 预先计算的。 
 
@@ -114,7 +114,7 @@ step 4. 最后，局部变形将基于距离的权重相加 $\sum_{l}{W(x_{obs}-
 
 相比之下，我们提出了 PointAvatar，一种可变形的基于点的表示（<font color="blue">点云</font>），它将源颜色分解（**disentangles**）为固有反照率（albedo）和法线相关的阴影。 我们证明 PointAvatar （**bridges the gap**）<font color="brown">弥合了现有网格表示和隐式表示之间的差距</font>，将高质量的几何和外观与拓扑灵活性、易于变形和渲染效率相结合。
 
-<img src="/Users/DevonnHou/Library/Application Support/typora-user-images/image-20230831102921464.png" alt="image-20230831102921464" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20230831102921464.png" alt="image-20230831102921464" style="zoom:50%;" />
 
 > 总结：An oriented point cloud representation bridges the gap between existing mesh- and implicit representations.
 
