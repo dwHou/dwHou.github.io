@@ -1052,7 +1052,56 @@ GPT-o1没有公开技术细节。我们猜测GPT-o1训练的关键在于从<font
 
 ## 第叁章 参数高效微调
 
+#### 30 参数高效微调简介
 
+**下游任务适配：预训练模型难以直接适配到下游任务。**
+
+比如，经过续写任务预训练的 Qwen2.5-1.5B 倾向于续写或复读一句话。
+
+虽然，利用上下文学习可以让Qwen2.5-1.5B回答得更好，但是上下文学习也存在几点不足：性能有限、人力成本高、推理效率低。
+
+**指令微调：为了保证下有任务性能，语言模型需要定制化调整以完成下游任务适配。**
+
+比如，经过指令微调的Qwen2.5-1.5B-<font color="brown">Instruct</font>就能够听从人类指令并回答问题。
+
+###### 指令微调
+
+<img src="../../images/typora-images/image-20250620104205909.png" alt="image-20250620104205909" style="zoom:50%;" />
+
+<img src="../../images/typora-images/image-20250620104317518.png" alt="image-20250620104317518" style="zoom:50%;" />
+
+> 回顾上一章节的Self-Instruct、Evol-Instruct
+
+监督微调（SFT）：基于构造的指令数据集，对大模型进行监督微调。对于现有大语言模型，通常以自回归（+Teacher Forcing）方式进行训练。
+
+###### 全量监督微调的挑战
+
+全量微调需要更新所有模型参数。面临：
+
+- GPU内存不足
+- 全量微调效率低
+
+###### 参数高效微调
+
+为了解决全量微调的问题，参数高效微调（Parameter-Efficient Fine-Tuning，PEFT）避免更新全部参数，在保证微调性能的同时，<font color="brown">减少更新的参数数量</font>和<font color="brown">计算开销</font>。
+
+PEFT技术主要有三方面优势：<font color="brown">计算效率</font>、<font color="brown">存储效率</font>以及<font color="brown">适应性强</font>
+
+> 适应性强，是指在大部分任务上性能匹配或超过全量微调基线。这是由于全量微调可能有过拟合的，而PEFT对假设空间做了一定限制，泛化好一点。
+
+主流PEFT方法可分为三类：<font color="brown">参数附加方法</font>、<font color="brown">参数选择方法</font>、<font color="brown">低秩适配方法</font>。
+
+<img src="../../images/typora-images/image-20250620110753295.png" alt="image-20250620110753295" style="zoom:50%;" />
+
+
+
+#### 31 参数附加方法
+
+#### 32 参数选择方法
+
+#### 33 低秩适配方法
+
+#### 34 参数高效微调的应用
 
 ## 第肆章 模型编辑
 

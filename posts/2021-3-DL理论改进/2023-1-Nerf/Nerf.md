@@ -14,7 +14,7 @@
 
 NeRF是视角生成算法，从少数相片（real camera）中学习生成新视角（virtual camera）。
 
-可以实现5D的神经辐射场（照射野），其中3维用来表示我们在哪，2维表示我们看向哪。
+可以实现5D的神经辐射场（照射野），其中3维用来表示采样点在哪，2维表示从哪看向采样点（光路可逆）。
 
 > 3 dimensions for location and 2 for view direction.  
 
