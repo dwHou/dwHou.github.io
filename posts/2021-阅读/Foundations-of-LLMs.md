@@ -1093,9 +1093,17 @@ PEFT技术主要有三方面优势：<font color="brown">计算效率</font>、<
 
 <img src="../../images/typora-images/image-20250620110753295.png" alt="image-20250620110753295" style="zoom:50%;" />
 
-
-
 #### 31 参数附加方法
+
+<font color="brown">参数附加方法</font>通过增加并训练<font color="brown">新的附加参数或模块</font>对大语言模型进行微调。参数附加方法按照附加位置可以分为三类：<font color="brown">加在输入</font>、<font color="brown">加在模型</font> 以及 <font color="brown">加在输出</font>。
+
+###### 加在输入
+
+
+
+###### 加在模型
+
+###### 加在输出
 
 #### 32 参数选择方法
 

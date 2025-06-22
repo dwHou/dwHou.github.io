@@ -8,26 +8,6 @@ ppt: https://3dgstutorial.github.io/
 
 https://github.com/MrNeRF/awesome-3D-gaussian-splatting
 
-Blog Posts
-
-- [3DGS Introduction](https://huggingface.co/blog/gaussian-splatting) - HuggingFace guide
-- [Implementation Details](https://github.com/kwea123/gaussian_splatting_notes) - Technical deep dive
-- [Mathematical Foundation](https://github.com/chiehwangs/3d-gaussian-theory) - Theory explanation
-- [Capture Guide](https://medium.com/@heyulei/capture-images-for-gaussian-splatting-81d081bbc826) - Image capture tutorial
-
-Talks
-
-- [Gaussian Splats: Ready for Standardization?](https://www.youtube.com/watch?v=0xdPpKSkO3I) - Metaverse Standards Forum 1/28/2025
-- [Unity Integration Guide](https://www.youtube.com/watch?v=pM_HV2TU4rU&t=5298s) - Metaverse Standards Forum 5/6/2025
-
-Video Tutorials
-
-- [Getting Started (Windows)](https://youtu.be/UXtuigy_wYc)
-- [Gaussian Splats Town Hall - Part 2](https://youtu.be/5_GaPYBHqOo)
-- [Two-Minute Explanation](https://youtu.be/HVv_IQKlafQ)
-- [Jupyter Tutorial](https://www.youtube.com/watch?v=OcvA7fmiZYM)
-- [MIT教程](https://www.scenerepresentations.org/courses/2023/fall/inverse-graphics/)
-
 ## 3D GS原理理解
 
 ### NeRF到3D GS的演变
@@ -89,3 +69,6 @@ Video Tutorials
 3D GS基于图像块（Tile）的光栅化图像渲染
 
 ### NeRF 与 3D GS的对比
+
+
+
