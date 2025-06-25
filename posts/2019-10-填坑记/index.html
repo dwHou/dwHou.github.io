@@ -310,12 +310,15 @@
             pip3 install opencv-python
           '''
           再就是opencv如果不是在ffmpeg之后构建的，可能会有视频数据I/O方面的问题。
+          值得小心的是，这类问题存在时并不会报错。但是会视作读取的视频为空视频（帧数为0）。
           '''
           apt update
           apt install -y ffmpeg
           pip uninstall -y opencv
           pip install opencv-python-headless (or apt install -y python3-opencv)
           '''
+          排查时可以打印python3 -c "import cv2; print(cv2.__file__)" 看预装在哪儿的cv2
+          然后将这个路径删掉，彻底清除cv2。如 <a href="https://github.com/NVIDIA/DALI/issues/5052">这个issue里的做法</a>。
           最后可以打印python3 -c "import cv2; print(cv2.getBuildInformation())"|grep FFMPEG看是不是yes
       </pre>
   </ul>

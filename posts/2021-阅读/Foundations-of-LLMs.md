@@ -1099,13 +1099,95 @@ PEFT技术主要有三方面优势：<font color="brown">计算效率</font>、<
 
 ###### 加在输入
 
+加在输入的方法将<font color="brown">额外参数</font>附加到模型的<font color="brown">输入嵌入</font>（Embedding）中，其中最经典的方法是Prompt-tuning。
 
+<img src="../../images/typora-images/image-20250623161903596.png" alt="image-20250623161903596" style="zoom:50%;" />
+
+这些额外参数通常称之为<font color="brown">软提示</font>（Soft Prompt）。 不同于<font color="brown">手工编写</font>的硬提示（Hard Prompt），软提示会在训练过程中被动态调整，其本质是<font color="brown">可训练的、连续的嵌入</font>。
+
+<img src="../../images/typora-images/image-20250623162252240.png" alt="image-20250623162252240" style="zoom:50%;" />
+
+<font color="blue">Prompt-tuning</font>：
+
+- 引入软提示作为模型输入的一部分，与实际的文本数据一起被送入模型。在微调过程中，<font color="brown">仅软提示的参数会被更新</font>。
+- 设置合适的软提示长度和<font color="brown">合理初始化</font>软提示对Prompt-tuning至关重要。
+
+**加在输入的优势：内存效率高、多任务能力、缩放特性**
 
 ###### 加在模型
 
+加在模型的方法将额外的参数或模型添加到预训练模型的<font color="brown">隐藏层</font>中，其中经典的方法有Prefix-tuning、Adapter-tuning等。
+
+<img src="../../images/typora-images/image-20250623163254765.png" alt="image-20250623163254765" style="zoom:50%;" />
+
+<font color="blue">Prefix-tuning</font>（发表于ACL 2021）和Prompt-tuning（发表于EMNLP 2021）十分类似，但对软提示的处理有所不同：
+
+- Prompt-tuning仅将软提示添加到输入嵌入中。
+
+- Prefix-tuning将可训练前缀插入到输入嵌入以及注意力模块中。
+
+  > 加在注意力的KV上。
+
+> [!TIP]
+>
+> Prompt-tuning可以理解为改善该怎么描述这个问题、提示。
+>
+> Prefix-tuning可以理解为也改善该怎么理解这个问题。
+
+但Prefix-tuning从结构上是不美的，因为有点违反transformer模块化的思想，它要拆开KV把参数加到其中。本身是搭积木的过程，成了在积木上雕花。而Adapter-tuning 很好地沿用了堆积木的思想。
+
+<font color="blue">Adapter-tuning</font> 通过在预训练语音模型的每个多头注意力层和全连接层后<font color="brown">插入新的可学习神经网络模块（称为适配器，Adapter）</font>来实现扩展。
+
+<img src="assets/image-20250625172400544.png" alt="image-20250625172400544" style="zoom:50%;" />
+
+<img src="assets/image-20250625172621336.png" alt="image-20250625172621336" style="zoom:50%;" />
+
+最后仅对适配器、层正则化以及最后的分类层参数进行微调。可以逼近甚至超过全量微调的效果。
+
+**加在模型的优势：参数效率高、任务适应性强、保持预训练知识**
+
 ###### 加在输出
 
+在微调LLM时，仍会面临以下问题：
+
+1. 大规模模型微调困难：大规模的模型（如Llama70B）即使使用PEFT技术也无法在普通的消费级GPU上进行微调。
+2. 黑盒模型：用户可能无法直接访问大语言模型的权重，为微调设置了障碍。
+
+<font color="blue">Proxy-tuning</font> ：为了应对上述问题，代理微调（Proxy-tuning）提供了一种轻量级的解码时（Decoding-time）算法，让我们只需要<font color="brown">微调较小的专家模型</font>，且<font color="brown">只需要访问大规模语言模型的输出词汇表预测分布</font>，来实现对大规模语言模型的定制化调整。
+
+<img src="assets/image-20250625200441512.png" alt="image-20250625200441512" style="zoom:50%;" />
+
+代理模型$M$：大规模模型或黑箱模型
+
+专家模型$M+$：（微调后的专家模型）和代理模型共词表，如果是同系列更好，比如代理模型是Llama70B，专家模型用Llama1B。
+
+反专家模型$M-$：（微调前的专家模型）和专家模型来比较微调前后的logits差异。用该差异来纠正代理模型的输出。
+
+- 针对每一个时间步$t$的输入序列$x_{\lt t}$，从代理模型$M$、专家模型$M+$ 和反专家模型$M-$中获取相应的输出分数$S_M$、$S_{M+}$ 、$S_{M-}$。通过下式<font color="brown">调整目标模型的输出分数</font>$\tilde{S}$：
+
+  $\tilde{S} =  S_M + S_{M+} - S_{M-}$
+
+- 使用<font color="brown">$softmax(\cdot)$</font>对其进行归一化，得到输出概率分布。最后，在该分布中采样得到下一个词的预测分布。
+
+  $p_{\tilde{M}}(X_t|x_{\lt t}) = softmax(\tilde{s})$
+
+  
+
+> [!TIP]
+>
+> 核心idea：小模型和大模型之间存在知识的迁移性。所以小模型微调训练前后输出的改变，在大模型很多也是需要对应改变的。
+
+**加在输出的优势：非常适合用于微调不动，但推理得动的大规模模型（代理模型）、可用于云边端协同、可用于黑盒模型**
+
+<img src="assets/image-20250625204130738.png" alt="image-20250625204130738" style="zoom:60%;" />
+
 #### 32 参数选择方法
+
+参数选择的方法选择模型中的部分参数进行微调。参数选择方法分为两类：<font color="brown">基于规则的方法</font> 和 <font color="brown">基于学习的方法</font>。
+
+<img src="assets/image-20250625204403585.png" alt="image-20250625204403585" style="zoom:60%;" />
+
+
 
 #### 33 低秩适配方法
 

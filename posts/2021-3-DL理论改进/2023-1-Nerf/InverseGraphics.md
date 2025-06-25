@@ -41,13 +41,13 @@ Video Tutorials
 
 在过去，我们总是使用手工制作的3D表示。但深度学习的教训是，我们真的想使用从先验数据中学习的算法，来构建我们与之交互的任何表示形式，3D也不例外。
 
-<img src="/Users/devonn.hou/Library/Application Support/typora-user-images/image-20250620140430458.png" alt="image-20250620140430458" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20250620140430458.png" alt="image-20250620140430458" style="zoom:50%;" />
 
 人脑会将视网膜的图像形成（image formation，这正是计算机图形学通常研究的内容），在经过一定处理后以3D表示在脑海呈现。
 
 但从视网膜上的图像到你周围世界的3D表示的过程，是个黑匣子，我们称之为推理（inference）。
 
-<img src="/Users/devonn.hou/Library/Application Support/typora-user-images/image-20250620141114396.png" alt="image-20250620141114396" style="zoom:50%;" />
+<img src="../../../images/typora-images/image-20250620141114396.png" alt="image-20250620141114396" style="zoom:50%;" />
 
 这个inference过程也是这门课名称的由来——<font color="brown">逆图形（Inverse Graphics）</font>机器学习。
 
