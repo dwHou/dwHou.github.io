@@ -912,6 +912,8 @@ $y2 = C\bar{A}^2\bar{B}x_0 + C\bar{A}\bar{B}x_1 + C\bar{B}x_2$
 
 ## 第贰章 Prompt工程
 
+***code is cheap, show me the prompt***
+
 #### 20 Prompt工程简介
 
 任务大一统：LLM处理下游任务时，从“<font color="brwon">预训练-微调-预测</font>”范式，转向灵活的“<font color="brwon">预训练-提示（prompt）预测</font>”范式。
@@ -1187,11 +1189,125 @@ PEFT技术主要有三方面优势：<font color="brown">计算效率</font>、<
 
 <img src="assets/image-20250625204403585.png" alt="image-20250625204403585" style="zoom:60%;" />
 
+<font color="blue">BitFit方法</font>（基于规则）：仅优化神经网络中的每一层的<font color="brown">偏置项</font>（Biases）以及<font color="brown">任务特定的分类头</font>来实现参数高效微调。
 
+BitFit有参数效率、性能表现和过程稳定（相比全量微调允许使用更大学习率）几方面的优势。但该方法仅在小规模模型上进行验证性能，在更大规模模型上的性能表现如何尚且未知。
+
+> 其他基于规则的方法：微调最后四分之一层、微调具有最小绝对值的模型参数（当前没有发挥重要作用的参数），等等
+
+<font color="blue">Child-tuning</font>（基于学习）：在模型训练过程中<font color="brown">自动地选择</font>可训练的<font color="brown">参数子集</font>。其中，最为典型的方法是Child-tuning。该方法通过梯度掩码矩阵策略实现仅对选中的子网络进行梯度更新。
+
+假设$\omega_t$是第$t$轮迭代的参数矩阵，我们引入一个与$\omega_t$同维度的0-1掩码矩阵$M_t$。用于选择第$t$轮迭代的子网络$C_t$，仅更新该子网络的参数。
+
+总结：其实参数选择方法目前用得不多。尤其是在大规模模型上。
+
+优缺点：微调成本低、适应性较好，但选多少、怎么选难抉择。
 
 #### 33 低秩适配方法
 
+这是现在应用最为广泛的PEFT方法。
+
+###### 低秩适配方法
+
+<font color="brown">低秩适配方法</font>（Low-rank Adaptation Methods）通过<font color="brown">低秩矩阵近似原始权重更新矩阵</font>，并<font color="brown">仅微调低秩矩阵</font>，以大幅降低模型参数量。
+
+###### 本征维度假设
+
+<font color="brown">本征维度假设</font>：在预训练语言模型微调时，仅在一个低维子空间中进行参数更新，也能实现与完整参数更新类似的性能。
+
+<font color="blue">本征维度</font>（intrinsic dimension）：可以使模型达到预期效果的最小参数子空间的维度。因为数据或任务通常位于一个<font color="blue">低维的流形</font>上，模型只需关注与任务相关的特征，而不是整个高维空间。
+
+###### LoRA
+
+<font color="brown">低秩适配</font>（Low-rank Adaptation，LoRA）将$d \times k$参数更新矩阵<font color="brown">低秩分解</font>为<font color="brown">一个$r \times k$的矩阵</font> 和 <font color="brown">一个$d \times r$的矩阵</font>（<font color="brown">$r \ll min(d,k)$</font>）,冻结原模型参数，仅微调这两个小矩阵。
+
+> $r$ 称为秩
+
+<img src="assets/image-20250630204148758.png" alt="image-20250630204148758" style="zoom:60%;" />
+
+不仅微调的参数量大大降低，而且我们发现微调的投影矩阵本身和我们的模型是解耦的，有很好的参数隔离的效果。
+
+效果展示：LoRA使用更少的参数量达到匹配甚至超过全量微调的性能。
+
+###### LoRA的性能影响因素
+
+权重初始化方式、LoRA的秩、施加位置。
+
+<img src="assets/image-20250630205200954.png" alt="image-20250630205200954" style="zoom:50%;" />
+
+<img src="assets/image-20250630205338494.png" alt="image-20250630205338494" style="zoom:50%;" />
+
+<img src="assets/image-20250630205541375.png" alt="image-20250630205541375" style="zoom:50%;" />
+
+<img src="assets/image-20250630205753369.png" alt="image-20250630205753369" style="zoom:50%;" />
+
+###### LoRA微调时内存占用
+
+<img src="assets/image-20250630210118063.png" alt="image-20250630210118063" style="zoom:50%;" />
+
+<img src="assets/image-20250630210308303.png" alt="image-20250630210308303" style="zoom:50%;" />
+
+后面提到的QLoRA在权重内存和激活内存上下了功夫，很实用。
+
+###### LoRA优势
+
+<img src="assets/image-20250630210800157.png" alt="image-20250630210800157" style="zoom:50%;" />
+
+插件化，甚至插件组合（DNI）。
+
+###### LoRA相关变体
+
+许多LoRA变体被提出，从以下几个角度对LoRA进行改进：
+
+（1）性能改进：
+
+- 代表——AdaLoRA
+
+  将参数更新矩阵参数化为奇异值分解（SVD）的形式，再通过奇异值剪枝来调整不同模块中LoRA的秩。
+
+（2）任务泛化
+
+- 代表——LoRAHub
+
+  可以通过组合在不同任务上训练的LoRA模块来提高模型对未见任务的适应性。
+
+  LoRAHub提供了一个可用的多LoRA组合的方法框架。
+
+  $A=w_1A_1+w_2A_2+...+w_NA_N$，$B=w_1B_1+w_2B_2+...+w_NB_N$
+
+（3）训练改进
+
+- 代表——QLoRA
+
+  将原始模型权重从16-bit量化为4-bit来存储，只将LoRA参数保持为16-bit。
+
+（4）推理改进
+
+- 代表——S-LoRA
+
+  将输入与LLM和LoRA参数的运算分离，两者分别计算完成之后再求和得到最终结果。使得不同LoRA的请求可以放在同一个batch中，从而增加了请求执行的并行度，提升了GPU的利用率。
+
+  原先 $h = xW' = x(W+AB)$
+
+  S-LoRA是 $h = xW' = x(W+AB) = xW + xAB$
+
+  但要求运算是线性的，所以只支持在attention里用，没法在FFN里使用。
+
 #### 34 参数高效微调的应用
+
+###### PEFT在预训练中的应用
+
+继续预训练（continue pre-training）。比如有个ReLoRA技术，通过<font color="brown">多次重启</font>，每隔一定训练步数将低秩矩阵与模型权重<font color="brown">合并</font>，并重新初始化生成<font color="brown">新的低秩矩阵</font>。
+
+###### PEFT在连续学习中的应用
+
+也叫life-long learning。LoRA权重可以以插件形式管理与使用，天然具备连续学习的优势，<font color="brown">插件化</font>、<font color="brown">任务特定</font>、<font color="brown">参数隔离</font>的特点。 因而不用担心连续学习出现灾难性遗忘的问题。
+
+###### PEFT应用于垂域模型的训练
+
+- PEFT应用于医疗领域：“神农”大模型
+- PEFT应用于金融领域：FinGPT
+- PEFT应用于法律领域：ChatLaw（袁粒老师组的工作）
 
 ## 第肆章 模型编辑
 
