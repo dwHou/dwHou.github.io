@@ -1845,4 +1845,109 @@ encoder类方法
 
 #### :page_with_curl:Visual Autoregressive Modeling
 
-自回归(autoregressive, AR) 的大语言模型取得了很大的成功，其扩展性（scaling laws）和泛化性（zero-shot）是关键。但DALL-E
+论文表示VAR在多方面超过DiT。
+
+自回归(autoregressive, AR) 的大语言模型取得了很大的成功，其扩展性（scaling laws）和泛化性（zero-shot）是关键。
+
+DALL-E和VQGAN使用视觉分词器（visual tokenizer）将连续图像离散化为二维词元网格，然后将其展平为一维序列以进行自回归学习，这一过程类似于语言模型中的序列建模。然而，这些模型的扩展法则尚未被充分研究，更令人沮丧的是，它们的性能明显落后于扩散模型。与大型语言模型（LLMs）取得的显著成果相比，自回归模型在计算机视觉中的潜力似乎尚未被充分释放。
+
+自回归建模需要预先定义数据的生成顺序。这篇工作便是重新思考了图像应如何“排序”：人类通常以一种层次化的方式感知或创作图像，先把握整体结构，再逐步补充局部细节。这种多尺度、由粗到细的特性为图像提供了一种自然的“顺序”。
+
+VAR将图像的自回归学习定义为“下一尺度预测”，与传统的“下一个词元预测”相区别。自回归过程从 1×1 的低分辨率词元图起步，并逐步向更高分辨率扩展。
+
+VQGAN背景知识：
+
+> [!NOTE]
+>
+> 📌  VQGAN 背景知识： VQGAN = VQ-VAE + GAN  
+> 将图像编码为离散 latent（token），借助 GAN 增强重建质量，兼顾压缩与生成能力。
+>
+> ---
+>
+> 🔧 模型结构
+>
+> - **Encoder**：编码图像 $$x$$ 得到连续 latent 表征 $$z_e(x) \in \mathbb{R}^{H \times W \times D}$$
+> - **Vector Quantizer**：将 $$z_e(x)$$ 映射为离散 codebook 向量 $$z_q(x)$$
+> - **Decoder**：将 $$z_q(x)$$ 解码为重建图像 $$\hat{x}$$
+> - **Discriminator**：判别 $$\hat{x}$$ 是否真实，提高重建质量（GAN 结构）
+>
+> ---
+>
+> 🧩 向量量化（Codebook Lookup）
+>
+> ✅ Codebook 表示：
+> $$
+> e = \{ \mathbf{e}_k \}_{k=1}^K, \quad \mathbf{e}_k \in \mathbb{R}^D
+> $$
+>
+> ✅ 查找最近邻向量（L2 距离）：
+> $$
+> k^* = \arg\min_k \| \mathbf{z}_i - \mathbf{e}_k \|^2
+> $$
+> $$
+> z_q(x)_i = \mathbf{e}_{k^*}
+> $$
+>
+> ✅ 高效距离计算 trick：
+> $$
+> \| \mathbf{z} - \mathbf{e} \|^2 = \| \mathbf{z} \|^2 + \| \mathbf{e} \|^2 - 2 \cdot \mathbf{z}^\top \mathbf{e}
+> $$
+>
+> ---
+>
+> 🧮 损失函数组合
+> $$
+> \mathcal{L} = \mathcal{L}_{\text{rec}} + \mathcal{L}_{\text{VQ}} + \mathcal{L}_{\text{GAN}}
+> $$
+>
+> 1. **重建损失**（感知/像素）：
+>    $$
+>    \mathcal{L}_{\text{rec}} = \| x - \hat{x} \| + \text{Perceptual / PatchGAN Loss}
+>    $$
+>
+> 2. **Codebook 损失**（只更新 codebook 向量，stop-gradient是指梯度截断）：
+>    $$
+>    \mathcal{L}_{\text{VQ}} = \| \text{sg}[z_e(x)] - e \|^2
+>    $$
+>
+> 3. **Commitment 损失**（让 encoder 靠近 codebook）：
+>    $$
+>    \mathcal{L}_{\text{commit}} = \beta \cdot \| z_e(x) - \text{sg}[e] \|^2
+>    $$
+>
+> 4. **对抗损失（GAN）**：
+>    
+>    - PatchGAN 判别器对 decoder 输出打分；
+>    - 仅优化 decoder（非 codebook）。
+>
+> 注： $\mathcal{L}_{\text{VQ}}$ 与 $\mathcal{L}_{\text{commit}}$ 这两个损失的目标一致，只是作用的对象不一样，一个是影响编码器一个影响向量码本。这两个损失是 VQ 量化机制的**双向约束**，互相配合保证训练稳定，编码器和 codebook 共同适应数据分布。
+>
+> ---
+>
+> 📈 技术特点
+>
+> | 特点             | 说明                                                  |
+> | ---------------- | ----------------------------------------------------- |
+> | 离散 latent 表征 | 支持 token 化、适配 Transformer                       |
+> | 高压缩能力       | encoder 输出空间维度降低，训练更高效                  |
+> | 感知细节丰富     | GAN 提供对纹理与结构的额外监督                        |
+> | 可组合性强       | 可作为图像 tokenizer 用于 DALL·E、VQ-Diffusion 等模型 |
+>
+> ---
+>
+> 🔁 与 VQ-VAE 区别
+>
+> | 模型   | 是否使用 GAN | 重建质量 | 纹理保真 | 应用方向        |
+> | ------ | ------------ | -------- | -------- | --------------- |
+> | VQ-VAE | ✘            | 模糊     | 差       | 表征学习 / 压缩 |
+> | VQGAN  | ✔            | 细节丰富 | 高       | 图像生成 / 合成 |
+>
+> ---
+>
+> ✅ 总结关键词
+>
+> `离散编码` ｜ `Codebook Lookup` ｜ `L2 距离计算 Trick` ｜ `重建 + VQ + GAN Loss` ｜ `高保真图像生成
+
+具体分析当前next-token AR模型的缺陷：
+
+- 
