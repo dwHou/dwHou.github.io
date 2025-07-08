@@ -1875,10 +1875,14 @@ VQGAN背景知识：
 >
 > 🧩 向量量化（Codebook Lookup）
 >
+> > 这整个过程就叫做<font color="blue">向量量化</font>。 所以这儿量化可不是我们平日理解的模型压缩里的比特量化 或 视频编码里的量化。
+>
 > ✅ Codebook 表示：
 > $$
 > e = \{ \mathbf{e}_k \}_{k=1}^K, \quad \mathbf{e}_k \in \mathbb{R}^D
 > $$
+>
+> > 视觉模型里，可以看作与语言模型中的 Tokenizer对应
 >
 > ✅ 查找最近邻向量（L2 距离）：
 > $$
@@ -1950,4 +1954,34 @@ VQGAN背景知识：
 
 具体分析当前next-token AR模型的缺陷：
 
-- 
+1）**数学前提的违背。** 在量化自编码器（VQVAE）中，编码器通常会生成一个图像特征图 $f$，其中每个位置 $f(i, j)$ 的特征向量彼此存在依赖关系。因此，在经过量化和展平之后，得到的词元序列$(x_1, x_2, ..., x_{h \times w})$ 仍然保留着**双向相关性**。这与**自回归模型的单向依赖假设**相矛盾——自回归模型要求每个词元 $x_t$ 只能依赖于其前缀 $(x_1, x_2, ..., x_{t-1})$。
+
+2）**在某些零样本泛化任务中无法执行**。类似于问题1），图像自回归建模的单向性限制了其在需要双向推理的任务中的泛化能力。例如，它无法在给定图像底部的情况下预测图像的顶部部分。
+
+3）**结构性退化**。展平操作破坏了图像特征图中固有的空间局部性。例如，令 $q(i,j)$ 表示一个 token，它与其四个相邻的邻居 $q(i±1,j)$、$q(i,j±1)$ 由于位置接近而具有较强相关性。但在被线性展开为序列 $x$ 后，这种空间关系被削弱，而单向约束进一步降低了这些相关性。
+
+4）**低效**。使用传统的自注意力 Transformer 生成图像的 token 序列 $x = (x₁, x₂, ..., xₙ×ₙ)$ 需要 $O(n²)$ 个自回归步骤，并带来 $O(n⁶)$ 的计算开销。
+
+提出next-scale预测的视觉自回归模型：
+
+> token是VQVAE里量化的离散的潜在表示。
+
+在这里，自回归单元是整个 token 映射图，而不是单个 token。其建模公式如下：
+
+
+​                            $p(r_1, r_2, \ldots, r_K) = \prod_{k=1}^{K} p(r_k \mid r_1, r_2, \ldots, r_{k-1})$
+
+其中，$r_k$ 表示第 $k$ 个尺度上的 token 映射图，包含 $h_k \times w_k$ 个 token。
+
+> VAR里训练Multi-scale的VQVAE，我在想这儿codebook应该可以共用一个吧，如果不是，可作为一个改进点？ 
+>
+> 看了论文后面，就是共用的codebook。Note that a shared codebook Zis utilized across all scales, ensuring that each rk’s tokens belong to the same vocabulary [V]. 
+
+请注意，VAR在训练时使用了**块状因果注意力掩码**（block-wise causal attention mask），以确保每个 $r_k$ 只能关注其前缀 $r_{\leq k}$。
+
+> 就是decoder-only架构里的“下三角”注意力。
+
+而在推理阶段，则可以使用 **kv-caching**（键值缓存）机制，此时无需使用注意力掩码。
+
+Tokenization就是用的类似VQGAN里的结构，但是改成了多尺度，以及用了残差设计。
+
