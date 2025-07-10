@@ -1384,7 +1384,22 @@ BitFit有参数效率、性能表现和过程稳定（相比全量微调允许�
 
 #### 41 模型编辑方法概览
 
+模型编辑——类比游戏
 
+冒险游戏中的主角需要升级时，可以从<font color="brown">内</font>和<font color="brown">外</font>两个方面进行改造。
+
+将LLM比作游戏中的主角，那么<font color="brown">模型编辑</font>可被看作一种满足“<font color="brown">升级</font>”需求的方法，可分为<font color="brown">外部拓展法</font> 和 <font color="brown">内部修改法</font>。
+
+- 外部拓展法：通过设计特定的<font color="brown">外置知识体</font>，通过知识体中的知识控制模型作答。
+- 内部修改法：通过调整模型<font color="brown">内部特定层或神经元</font>，来实现对模型输出的精确控制。
+
+<img src="assets/image-20250708162337632.png" alt="image-20250708162337632" style="zoom:60%;" />
+
+###### 外部拓展法
+
+核心思想是将新知识存储在附加的外部参数或外部知识库中，将其和原始模型一起作为编辑后模型。
+
+###### 内部修改法
 
 #### 42 附加参数法 T-Patcher
 
