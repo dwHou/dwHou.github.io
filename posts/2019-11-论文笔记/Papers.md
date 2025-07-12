@@ -1810,6 +1810,8 @@ FOMM vs. RegionMM vs. This paper
 
 #### :page_with_curl:FLOAT
 
+& LIA (Latent Image Animator)：提供motion latent space，被本文认为比pixel-based latent spaces合适。
+
  属于flow matching generative model，可以回顾下刘星超的Rectified Flow的介绍。
 
 基于LIA这个工作。其中附录的A.2. Improving Fidelity of Facial Components值得研究下。因为它牙齿生成效果确实不错。
