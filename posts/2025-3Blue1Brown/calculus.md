@@ -1146,3 +1146,257 @@ $\frac{d^2s}{dt^2}(t) ⟺加速度$
 > “对很多人来说，数学是一组定理。对我来说，数学是一组例子；定理是关于这些例子的陈述，而证明定理的目的，是为了对这些例子进行分类和解释。”—— 约翰·B·康威（John B. Conway）
 
 ###### 引言
+
+当我第一次学习泰勒级数时，我并没有真正意识到它有多重要。但一次又一次地，它在数学、物理以及许多工程领域中出现，因为它是数学中最强大的函数近似工具之一。
+
+<img src="https://www.3blue1brown.com/content/lessons/2017/taylor-series/figures/cosine-and-second-order-approximation.svg" alt="img" style="zoom:50%;" />
+
+对泰勒级数的研究，主要就是将非多项式函数转化为在某个输入点附近可以近似它们的<font color="green">多项式函数</font>。这样做的动机是：多项式函数通常比其他类型的函数<font color="green">更容易处理</font>。它们更容易计算、更容易求导、更容易积分……总之，在各方面都更“友好”。
+
+###### 近似 $\cos(x)$
+
+我们来看看函数 $\cos(x)$，思考一下如何在$x = 0$ 附近找到一个二次近似函数。也就是说，在所有形如 $c_0 + c_1 x + c_2 x^2$ 的多项式中，找到一个在 $x = 0$ 附近最接近 $\cos(x)$ 的。
+
+$\cos(x) = c_0 + c_1 x + c_2 x^2$
+
+方法：$x = 0$ 处，
+
+- 数值相同：$\cos(0) = c_0 + c_1 0 + c_2 0^2 \quad \Rightarrow \quad c_0 = 0$
+
+- 切线斜率相同：
+
+​		$\frac{d}{dx}\cos(x) = \frac{d}{dx}(c_0 + c_1x + c_2x^2)$
+
+​		$-\sin(x) = c_1 + 2c_2x$
+
+​		$-sin(0) = c_1 + 2c_20 \quad \Rightarrow \quad c_1 = 0$
+
+- 二阶导数相同：
+
+​		$\frac{d^2}{dx^2}\cos(x) = \frac{d^2}{dx^2}(c_0 + c_1x + c_2x^2)$
+
+​		$-cos(x) = 2c_2$
+
+​		$-cos(0) = 2c_2 \quad \Rightarrow \quad c_2 = -\frac{1}{2}$
+
+最终得到 $\cos(x) \approx 1 - \frac{1}{2}x^2$
+
+这真的很不错！
+
+花点时间思考一下刚才发生了什么：你在构造一个二次近似时有三个自由度，也就是表达式中的三个系数：
+
+$c_0 + c_1 x + c_2 x^2$
+
+- $c_0$ 负责确保近似函数在 $x = 0$ 处的输出与 $\cos(x)$ 一致；
+- $c_1$ 负责确保在这一点处，两者的导数（斜率）相同；
+- $c_2$ 则是为了让两者的二阶导数（即曲率）一致。
+
+这确保了，在你能够控制的范围内，你的近似函数在从 $x = 0$ 开始变化时，无论是值、变化率，还是变化率的变化方式，都会尽可能地模仿 $cos(x)$ 的行为。
+
+###### **更好的近似**
+
+你可以通过在多项式中加入更多项，来获得更高的控制能力，从而匹配 $\cos(x)$ 的更高阶导数。
+例如，假设我们添加一项 $c_3 x^3$，其中 $c_3$ 是某个常数：
+
+$\cos(x) \approx 1 - \frac{1}{2}x^2 + c_3x^3$
+
+三阶导：$sin(x) = 6c_3$ 
+
+$sin(0) = 6c_3 \quad \Rightarrow \quad c_3 = 0$
+
+换句话说，$1 - \frac{1}{2}x^2$不仅是 $\cos(x)$ 在 $x = 0$ 附近最好的二次近似，它同时也是最好的三次近似。
+
+你实际上可以通过添加一个四阶项 $c_4 x^4$ 来改进这个近似。
+
+不断应用幂法则（power rule），指数依次乘到前面，你会得到：
+
+$\frac{d^4}{dx^4}(c_4 x^4) = 1 \cdot 2 \cdot 3 \cdot 4 \cdot c_4 = 24c_4$
+
+所以，为了使多项式的四阶导数在 $x = 0$ 处与 $\cos(x)$ 的四阶导数相等，我们只需令：
+
+$\frac{d^4}{dx^4}\cos(x) = cos(x)$
+
+$24c_4 = 1 \quad \Rightarrow \quad c_4 = \frac{1}{24}$
+
+多项式$ 1 - \frac{1}{2}x^2 + \frac{1}{24}x^4$ 在 $x = 0$ 附近是对 $\cos(x)$ 的一个非常精确的近似。
+
+对于任何涉及小角度余弦的物理问题来说，比如使用这个多项式代替 $\cos(x)$来进行计算，预测结果几乎不会有明显差别。
+
+###### 推广
+
+首先，<font color="brown">阶乘项（factorial）在这个过程中自然而然地出现</font>。当你对 $x^n$ 连续求 $n$ 次导数时，幂次每次都会按照<font color="brown">幂函数求导</font>规则往下递减，最终你会得到：
+
+$1 \cdot 2 \cdot 3 \cdots n = n!$
+
+也就是说，阶乘 $n!$ 是从 $x^n$ 一次次导数中“坍缩”出来的常数因子。这种阶乘结构在泰勒级数的构造中非常关键。
+
+$\frac{d^8}{dx^8}(c_8x^8) = 8! \cdot c_8$
+
+###### 在其他点附近进行近似
+
+如果你是要在某个输入值不是 0 的点附近进行近似，比如 $x = \pi$，为了达到同样的效果，你需要把你的多项式写成关于 $(x - \pi)$ 的幂的形式。更一般地说，是写成关于某个常数 $a$ 的 $(x - a)$ 的幂次形式。
+
+<img src="https://www.3blue1brown.com/content/lessons/2017/taylor-series/figures/cosine-approximation-at-pi-general.svg" alt="img" style="zoom:50%;" />
+
+这看起来确实更复杂了一些，但这么做是为了确保在代入 $x = \pi$ 时能带来大量的巧妙抵消效果，从而使得每一个高阶导数的值都只由唯一的一个系数来控制。
+
+<img src="https://www.3blue1brown.com/content/lessons/2017/taylor-series/figures/cosine-approximation-at-pi-math-2.svg" alt="img" style="zoom:50%;" />
+
+<img src="https://www.3blue1brown.com/content/lessons/2017/taylor-series/figures/cosine-approximation-at-pi-2.svg" alt="img" style="zoom:50%;" />
+
+这就是泰勒级数的核心要点：<font color="brown">一个函数在某个点的微分信息，可以帮助我们了解它在这一点附近**的一些行为特征**</font>。
+
+<img src="https://www.3blue1brown.com/content/lessons/2017/taylor-series/figures/cosine-approximation-cyclic-pattern.svg" alt="img" style="zoom:50%;" />
+
+
+
+按照这种方式在任意阶段停止所得到的多项式，就被称为 **$\cos(x)$** 的“泰勒多项式”。
+
+###### 其他函数
+
+更一般地说，如果我们处理的不是余弦函数，而是其他某个函数，你就需要计算它的一阶导数、二阶导数，依此类推，根据你想要的项数来进行计算，并将每一阶导数都在 $x = a$ 处进行取值。
+
+$P(x) = f(a) + \frac{f'(a)}{1!}(x - a) + \frac{f''(a)}{2!}(x - a)^2 + \frac{f^{(3)}(a)}{3!}(x - a)^3 + \cdots$
+
+或更一般地写法：
+
+<font color="brown">$P(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!}(x - a)^n$</font>
+
+这就是泰勒级数最一般形式的样子。改变 $a$ 的取值，就改变了近似函数贴合原函数的位置。
+
+###### 一个有意义的例子
+
+一个最简单但有意义的例子是：近似函数 $f(x) = e^x$在输入 $x = 0$ 附近的值。
+
+这个函数的导数非常好处理，因为 $e^x$ 的导数仍然是 $e^x$，所以它的二阶导数也是 $e^x$，三阶导数也是如此，依此类推。
+
+$e^x \approx 1 + \frac{x^1}{1!} + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots$
+
+###### 无限与收敛
+
+我们本可以在这里结束，这样你就拥有了一个非常有用的工具——用这些 Taylor 多项式进行近似。但如果你像数学家那样思考，你可能会问一个问题：是否有意义永不停下，去累加无限多项的和？
+
+在数学中，无限求和叫做“级数”，所以尽管有限项的近似叫做函数的“<font color="blue">Taylor 多项式</font>”，将所有无限多项相加则称为“<font color="blue">Taylor 级数</font>”。
+
+<img src="https://www.3blue1brown.com/content/lessons/2017/taylor-series/figures/infinity-and-convergence-taylor-series-vs-polynomial.svg" alt="img" style="zoom:50%;" />
+
+随着你添加越来越多的多项式项，总和会越来越接近数值 $e$。更准确但较啰嗦的说法是“右边级数的部分和收敛到 $e$”。更简洁的说法，大多数人会直接说“这个级数等于 $e$”。
+
+事实上，如果你代入任何其他的 $x$ 值，比如 $x=2$，并观察该点处越来越高阶的泰勒多项式的值，它们也会收敛到 $e^x$，在这个例子中就是 $e^2$。
+
+<img src="https://www.3blue1brown.com/content/lessons/2017/taylor-series/figures/infinity-and-convergence-exp-of-2.svg" alt="img" style="zoom:50%;" />
+
+这对于任何输入都成立，无论它距离 $0$ 有多远，尽管这些泰勒多项式仅仅是从输入点 $0$ 处的导数信息构造出来的。在这种情况下，我们说 $e^x$ 在所有输入 $x$ 处都等于它的泰勒级数。这是一个颇具魔力的事实！它意味着函数的全部信息某种程度上都被单一点（即 $x=0$）处的高阶导数所捕捉。
+
+###### 不收敛的例子$\:\ln(x)$
+
+但有时候这些级数只能在以你使用的导数信息所在的输入点为中心的一定范围内收敛。如果你围绕输入点 $x = 1$ 展开 $\ln(x)$ 的泰勒级数，也就是利用在 $x = 1$ 处计算的 $\ln(x)$ 的高阶导数来构建，这个级数看起来就是这样的。
+
+<img src="https://www.3blue1brown.com/content/lessons/2017/taylor-series/figures/natural-logarithm-taylor-series.svg" alt="img" style="zoom:50%;" />
+
+当你输入的值在0和2之间时，随着你不断加入更多项，这个级数确实会越来越接近该输入值的自然对数。但是，稍微超出这个范围，级数就无法收敛了。随着项数的增加，部分和会在数值间剧烈震荡，无法趋近于该值的自然对数，尽管对于 $x > 2$ 来说，$\ln(x)$ 本身是完全有定义的。
+
+<img src="https://www.3blue1brown.com/content/lessons/2017/taylor-series/figures/natural-logarithm-erratic-behavior.svg" alt="img" style="zoom:50%;" />
+
+在某种意义上，$\ln(x)$ 在 $x=1$ 处的导数信息并不能传播得很远。在这种情况下，随着加入更多项，级数的部分和并不趋近于任何值，我们称这样的级数为<font color="brown">发散</font>的。
+
+你所近似的输入点与那些多项式输出确实收敛的点之间的最大距离，称为该泰勒级数的“收敛半径”。
+
+<img src="https://www.3blue1brown.com/content/lessons/2017/taylor-series/figures/natural-logarithm-radius-of-convergence.svg" alt="img" style="zoom:50%;" />
+
+###### 总结
+
+关于泰勒级数，还有许多内容值得学习，包括它们的多种应用场景、估计近似误差的各种方法，以及判断级数收敛或发散的测试方法。更广泛地说，微积分本身还有许多知识点未被涉及，这只是冰山一角。
+
+制作这些视频的目标是帮助你建立起基础的直观理解，让你在自主学习时更有信心和效率，甚至可能激发你自己重新发现更多相关知识。对于泰勒级数来说，探索时要牢记的核心直觉是：它们将某一点的导数信息转化为该点附近的函数近似信息。
+
+### 第十五章 泰勒级数（几何视角）
+
+我们换一种完全不同的方式来理解泰勒展开中的**二阶项**，即 $\frac{1}{2}f''(a)(x - a)^2$，这种方式与**微积分基本定理**有关（在第1章和第8章中提到过）。
+
+---
+
+🌟 几何的出发点
+
+设有一个函数图像，我们不直接研究这个函数本身，而是定义一个“面积函数”：
+
+$$
+F(x) = \int_a^x f(t)\, dt
+$$
+
+这个函数 $F(x)$ 表示从某个固定点 $ a $ 到变量右端 $ x $ 之间图像下方的面积。
+
+---
+
+🧩 几何视角下的泰勒展开（到二阶）
+
+我们可以用图形的方式近似面积函数 \( F(x) \)：
+
+$$
+F(x) \approx F(a) + F'(a)(x - a) + \frac{1}{2}F''(a)(x - a)^2
+$$
+
+这就是泰勒多项式到二阶的形式：
+
+- $ F(a) $：原有面积
+- $ F'(a)(x - a) $：新增的矩形面积
+- $ \frac{1}{2}F''(a)(x - a)^2 $：新增的三角形面积（由弯曲带来的变化，正切值为$F''(a)$。 三角形高$F''(a)(x - a)$，底$(x-a)$）
+
+---
+
+✅ 总结
+
+- 从面积的角度来看，每一项都有清晰的**几何意义**。
+- 一阶项：代表线性增加的面积 —— 矩形
+- 二阶项：代表由于斜率变化而产生的非线性面积 —— 三角形
+- 这个几何解释帮助我们**更直观理解泰勒展开的结构**。
+
+### 第十六章 另一种可视化导数的方法
+
+<img src="https://3b1b-posts.us-east-1.linodeobjects.com/content/lessons/2018/derivatives-and-transforms/partial_2.png" alt="img" style="zoom:50%;" />
+
+###### 引言
+
+几乎所有一年级微积分的视觉直觉都是基于图形的。导数是图形的斜率，积分是图形下的面积，等等。
+
+<img src="https://3b1b-posts.us-east-1.linodeobjects.com/content/lessons/2018/derivatives-and-transforms/intro_1.png" alt="img" style="zoom:50%;" />
+
+但当你将微积分推广到输入和输出不仅仅是数字的函数时，你就不总是能够画出你正在分析的函数的图像。
+
+<img src="https://3b1b-posts.us-east-1.linodeobjects.com/content/lessons/2018/derivatives-and-transforms/intro_2.png" alt="img" style="zoom:50%;" />
+
+如果你对诸如导数这类基本概念的直觉过于死板地依赖于图像，那么在你与更“高级”的主题之间，比如多变量微积分、复分析、微分几何等，就会横亘着一道既高又本不必要的概念障碍。
+
+我想与你分享一种看待导数的思维方式，我称之为“变换视角”（transformational view）。这种视角在微积分出现的一些更广泛的语境中能够更自然地推广。然后，我们将用它来分析一个有趣的关于连分数的谜题。
+
+###### 变换视角
+
+首先，让我们确认一下大家对标准图像的理解是一致的（on the same page）。如果你绘制一个输入和输出都是实数的函数图像，那么在微积分课程中你最先学到的事情之一就是：导数给出了这个图像在某点的斜率。
+
+<img src="https://3b1b-posts.us-east-1.linodeobjects.com/content/lessons/2018/derivatives-and-transforms/transform_1.png" alt="img" style="zoom:50%;" />
+
+现在，我鼓励你不要把“导数是斜率”这个观念当作导数的定义；更好的方式是，把导数理解为：<font color="brown">函数在某个输入点附近对微小扰动的敏感程度</font>。图像的斜率只是理解这种敏感性的一个方式，而且只适用于这种特定的函数可视化方式。
+
+另一种导数可视化方式背后的基本思路是：将函数看作是把<font color="brown">数轴上的所有可能输入，映射到另一条数轴上的对应输出</font>。
+
+<img src="https://3b1b-posts.us-east-1.linodeobjects.com/content/lessons/2018/derivatives-and-transforms/transform_2.png" alt="img" style="zoom:50%;" />
+
+在这种情况下，导数衡量的是输入空间在不同区域被拉伸或压缩的程度。也就是说，如果你放大观察某个特定输入点周围，并查看该点附近一些等间距的点，函数在该点的导数就会告诉你，这些点在经过函数映射后是变得更加分散，还是更加紧密。
+
+$dy = f'(x) \cdot dx$
+
+###### 这种导数视角的一个应用：连分数
+
+这听起来都很好，但让我们看看它在解决一个问题时有什么用处。
+
+我有个朋友最近问了我一个挺有趣的问题，关于这个无限连分数：
+
+$1 + \cfrac{1}{1 + \cfrac{1}{1 + \cfrac{1}{1 + \cfrac{1}{\ddots}}}}$
+
+相当于反复应用 $f(x) = 1 + \frac{1}{x}$
+
+<img src="https://3b1b-posts.us-east-1.linodeobjects.com/content/lessons/2018/derivatives-and-transforms/inf_12.png" alt="img" style="zoom:50%;" />
+
+现在，我们知道$1.618$ （黄金比例）和它的小兄弟$−0.618$（黄金比例）在这个过程的每次迭代中保持在原地不动。
+
+<img src="https://3b1b-posts.us-east-1.linodeobjects.com/content/lessons/2018/derivatives-and-transforms/inf_14.png" alt="img" style="zoom:50%;" />
