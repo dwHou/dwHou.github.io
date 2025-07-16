@@ -684,3 +684,142 @@ $ \Rightarrow X_t \sim p_t \quad (0 \le t \le 1) \Rightarrow X_1 \sim p_{data}$
 
 ## 第三章 训练流模型和扩散模型
 
+回顾：
+
+<img src="assets/image-20250715133905048.png" alt="image-20250715133905048" style="zoom:50%;" />
+
+<img src="assets/image-20250715151929759.png" alt="image-20250715151929759" style="zoom:50%;" />
+
+<img src="assets/image-20250715151949401.png" alt="image-20250715151949401" style="zoom:50%;" />
+
+#### 3.1 训练算法
+
+我们将 边际向量场、边际得分函数 转化为 两种算法：<font color="brown">流匹配</font> 与 <font color="brown">得分匹配</font>。
+
+这将是训练算法，用于学习这两个对象。
+
+<img src="assets/image-20250716120032690.png" alt="image-20250716120032690" style="zoom:50%;" />
+
+#### 3.2 流匹配
+
+$u_t^\theta$  ($\theta$: parameters)
+
+目标
+
+$u_t^\theta \approx u_t^{target}$
+
+###### 3.2.1 流匹配损失
+
+<font color="blue">$L_{fm} (\theta)= \mathbb{E}[\left \|  u_t^\theta(x) - u_t^{target}(x)\right \|^2 ]$，</font>
+
+> ✓ Minimizer ✗ Tractable
+>
+> 为什么不易处理呢？ 因为我们无法评估这一点，边际向量场是一个（边缘化）积分，批量进行计算很困难。
+
+$t \sim \mathcal{U}(0, 1)$，$t$ 在 $[0, 1]$ 区间均匀采样。
+
+$z \sim p_{data}$，$z$ 通过dataloader从数据集中随机采样。
+
+$x \sim p_t(\cdot \mid z)$，$x$ 从条件概率路径采样。
+
+> [!NOTE]
+>
+> 这里流匹配损失函数很直观，就是两个对象之间的均方误差。取期望值就是在所有采样样本$(x, t)$上做`torch.mean`，这是平时实现损失函数常用的。
+
+###### 3.2.2 条件流匹配损失
+
+<font color="blue">$L_{cfm} (\theta)= \mathbb{E}[\left \|  u_t^\theta(x) - u_t^{target}(x \mid z)\right \|^2 ]$，</font>
+
+> ? Minimizer ✓ Tractable
+>
+> 最小化这个对象是否有意义？因为条件向量场不是真的有用，我们不想生成单个数据点，而是想生成整个数据分布。
+>
+> 但接下来我们会证明，最小化条件流匹配损失，能够达到我们的目标。
+
+$t \sim \mathcal{U}(0, 1)$，$z \sim p_{data}$，$x \sim p_t(\cdot \mid z)$
+
+###### 3.2.3 定理
+
+<font color="blue"> $L_{fm}(\theta) = L_{cfm}(\theta) + C$ </font>，for $C \gt 0$ independent of $\theta$
+
+> [!TIP]
+>
+> $C$ 是与$\theta$无关的常数，不会影响梯度下降方向。从 **优化角度**来看，优化 $L_{cfm}(\theta)$ 与优化 $L_{fm}(\theta)$ 是等价的
+
+<img src="assets/image-20250716142449141.png" alt="image-20250716142449141" style="zoom:35%;" />
+
+$\theta$ 的值不重要，我们不关心神经网络具体参数值什么，重要的是最小化器（Minimizer），我们记为 $\theta^*$。
+
+$\Rightarrow$ ①  对于 $L_{cfm}$ 的最小化器 $\theta^*$：$u_t^{\theta^*} = u_t^{target}$
+
+$\Rightarrow$ ②  $\nabla_\theta L_{cfm}(\theta) = \nabla_\theta L_{fm}(\theta)$
+
+​	$\Rightarrow$  SGD（随机梯度下降）是相同的。
+
+
+
+###### 3.2.4 算法
+
+算法3：流匹配训练过程（通用）
+
+输入：一个样本 $z \sim p_{data}$ 数据集，神经网络 $u_t^{\theta}$
+
+对每个最小批次（mini-batch）的数据循环：
+
+​	采样$z \sim p_{data}$
+
+​	采样$t \sim \mathcal{Unif}_{[0, 1]}$
+
+​	采样 $x \sim p_t(\cdot \mid z)$
+
+​	计算损失 $L (\theta)= \left \|  u_t^\theta(x) - u_t^{target}(x \mid z)\right \|^2$
+
+​      （选择一种优化器）梯度下降更新模型参数
+
+循环结束
+
+> [!NOTE]
+>
+> - 流和扩散模型的强大之处就在于只需要最小化简单的均方误差。例如，GANs会有一个最小最大优化程序，比这复杂得多。
+> - 这儿条件概率路径 $p_t(\cdot \mid z)$、条件向量场$u_t^{target}(x \mid z)$ 如上节课讲的，是我们选择的一组，它可以完成我们想要的工作。这是一个设计选择，也有很多其他选择，接下来的课程我们实际上会看到一组新的选择。
+
+###### 3.2.5 例子——高斯概率路径的$L_{cfm}$
+
+回顾：
+
+$p_t(\cdot \mid z) = N(\alpha_t z, \beta_t^2 I_d)$，
+
+$u_t^{target}(x|z) = (\dot{\alpha_t} - \frac{\dot{\beta_t}}{\beta_t}\alpha_t)z+ \frac{\dot{\beta_t}}{\beta_t}x$
+
+继续推：
+
+$\varepsilon \sim N(0, I_d) \Rightarrow \alpha_tz + \beta_t\varepsilon \overset{\text{define}}{=} x \sim p_t(\cdot \mid z)$
+
+$\Rightarrow$
+
+$L_{cfm} (\theta)= \mathbb{E}[\left \|  u_t^\theta(x) - (\dot{\alpha_t} - \frac{\dot{\beta_t}}{\beta_t}\alpha_t)z - \frac{\dot{\beta_t}}{\beta_t}x \right \|^2 ]$
+
+> $t \sim \mathcal{U}(0, 1)$，$z \sim p_{data}$，$x \sim N(\alpha_t z, \beta_t^2 I_d)$
+>
+> 代入 $x = \alpha_tz + \beta_t\varepsilon$  再做些代数：
+
+$ = \mathbb{E}[\left \|  u_t^\theta(\alpha_tz + \beta_t\varepsilon) - (\dot{\alpha_t} - \frac{\dot{\beta_t}}{\beta_t}\alpha_t)z - \frac{\dot{\beta_t}}{\beta_t}(\alpha_tz + \beta_t\varepsilon) \right \|^2 ]$
+
+$ = \mathbb{E}[\left \|  u_t^\theta(\alpha_tz + \beta_t\varepsilon) - (\dot{\alpha_t}z + \dot{\beta_t}\varepsilon) \right \|^2 ]$
+
+对于指定的条件路径的实例： $\alpha_t = t, \quad \beta_t = 1-t$，
+
+> [!TIP]
+>
+> <font color="brown">Cond OT path</font>
+>
+> 选择的 $\alpha_t = t, \quad \beta_t = 1-t$ 这样一条路径有特定的名称，就是所谓的<font color="brown">条件最优传输路径</font>（ Conditional Optimal Transport path）。
+
+有：$\dot{\alpha_t} = 1, \dot{\beta_t} = -1$
+
+$\therefore L_{cfm} (\theta)= \mathbb{E}[\left \|  u_t^\theta(\alpha_tz + \beta_t\varepsilon) - (z -\varepsilon) \right \|^2 ] $
+
+> 非常简单吧，无法想象一个更简单的训练算法了。
+
+
+
