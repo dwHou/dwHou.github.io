@@ -803,7 +803,7 @@ $L_{cfm} (\theta)= \mathbb{E}[\left \|  u_t^\theta(x) - (\dot{\alpha_t} - \frac{
 >
 > 代入 $x = \alpha_tz + \beta_t\varepsilon$  再做些代数：
 
-$ = \mathbb{E}[\left \|  u_t^\theta(\alpha_tz + \beta_t\varepsilon) - (\dot{\alpha_t} - \frac{\dot{\beta_t}}{\beta_t}\alpha_t)z - \frac{\dot{\beta_t}}{\beta_t}(\alpha_tz + \beta_t\varepsilon) \right \|^2 ]$
+$= \mathbb{E}[\left \|  u_t^\theta(\alpha_tz + \beta_t\varepsilon) - (\dot{\alpha_t} - \frac{\dot{\beta_t}}{\beta_t}\alpha_t)z - \frac{\dot{\beta_t}}{\beta_t}(\alpha_tz + \beta_t\varepsilon) \right \|^2]$
 
 $ = \mathbb{E}[\left \|  u_t^\theta(\alpha_tz + \beta_t\varepsilon) - (\dot{\alpha_t}z + \dot{\beta_t}\varepsilon) \right \|^2 ]$
 
