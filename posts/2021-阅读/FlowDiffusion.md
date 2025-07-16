@@ -532,7 +532,7 @@ $\frac{p_t(x|z)p_{data}(z)}{p_t(x)}$ 这个比率，本质上是给定$x$，采�
 
 这样的边际向量场
 
-满足 
+<a name="theorem">满足</a>
 
 <font color="blue">$X_0 \sim p_{init}, \quad \frac{d}{dt}X_t = u_t^{target}(x_t) \Rightarrow X_t \sim p_t \quad (0 \le t \le 1)$</font>  $ \Rightarrow X_1 \sim p_{data}$
 
@@ -614,42 +614,73 @@ $= -div(p_t u_t^{target})(x)$
 
 #### 2.3 条件和边际得分函数（扩散模型）
 
-###### 2.3.1 条件得分
+###### 2.3.1 条件和边际得分
+
+条件得分：
+
+<font color="blue">$\nabla_x \log p_t(x|z)$</font>，即<font color="blue">条件概率路径的对数似然的梯度</font>
+
+边际得分：
+
+<font color="blue">$\nabla \log p_t(x)$</font>，即<font color="blue">边际概率路径的对数似然的梯度</font>
+
+公式：根据链式法则
+
+<font color="blue">$\nabla \log p_t(x) = \frac{\nabla p_t(x)}{p_t(x)} = \frac{\nabla \int p_t(x|z)p_{data}(z)dz}{p_t(x)}$</font>
+
+<font color="blue">$= \frac{ \int \nabla p_t(x|z)p_{data}(z)dz}{p_t(x)} = \int \nabla \log p_t(x|z) \frac{ p_t(x|z)p_{data}(z)}{p_t(x)}dz$</font>，发现又是构造出<font color="blue">后验概率加权积分</font>的形式。
+
+> $\because \nabla \log p_t(x|z) = \frac{\nabla p_t(x|z)}{p_t(x|z)}$
+
+###### 2.3.2 例子——高斯得分
+
+一个高斯概率路径对应的高斯得分：
+
+$\nabla_x \log p_t(x|z) = -\frac{x - \alpha_t z}{\beta_t^2}$
+
+> 由正太分布的概率密度函数
+>
+> $p(x) = \frac{1}{(2\pi)^{d/2} |\Sigma|^{1/2}} \exp\left( -\frac{1}{2}(x - \mu)^\top \Sigma^{-1} (x - \mu) \right)$
+>
+> 代入  $\boldsymbol{\Sigma} = \beta_t^2 \mathbf{I}$
+>
+> $p(\mathbf{x}) = \frac{1}{(2\pi \beta_t^2)^{d/2}} \exp\left( -\frac{1}{2\beta_t^2} \left\| \mathbf{x} - \alpha_t \mathbf{z} \right\|^2 \right)$
+>
+> 推导得到。
 
 
 
+###### 2.3.3 定理（SDE扩展的技巧）
 
+对于任意$\sigma_t \ge 0$，
 
+$X_0 \sim p_{init}, \quad dX_t = [u_t^{target}(X_t) + \frac{\sigma_t^2}{2}\textcolor{blue}{\nabla \log p_t(x_t)}]dt + \sigma_tdW_t$
 
+> [!NOTE]
+>
+> 得分函数 本质上就是 我们需要应用的<font color="blue">校正项</font>。
+>
+> **得分函数校正了“随机扩散轨迹”的方向**，让它向数据靠近。
 
+$ \Rightarrow X_t \sim p_t \quad (0 \le t \le 1) \Rightarrow X_1 \sim p_{data}$
 
+:mag: [流模型](#theorem) 其实就能达到这个目标，所以现在50%的模型都纯流模型。所以我们优先掌握流模型，扩散模型只是其扩展。
 
+> <font color="brown">流模型是基础。</font>  扩散模型更多像一种实践经验，在流模型基础上，通过实验发现加各种扩散系数的噪声，生成效果是否会改善。
 
+#### 2.4 总结
 
+后续课程会学习到：
 
+模型训练 就是 训练 $u_t^{target}$ 这个对象，或$\nabla \log p_t(x)$这个对象。
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<img src="assets/image-20250715141504078.png" alt="image-20250715141504078" style="zoom:50%;" />
 
 <img src="assets/image-20250715151929759.png" alt="image-20250715151929759" style="zoom:50%;" />
 
 <img src="assets/image-20250715151949401.png" alt="image-20250715151949401" style="zoom:50%;" />
+
+
+
+## 第三章 训练流模型和扩散模型
+
