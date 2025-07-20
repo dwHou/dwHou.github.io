@@ -149,7 +149,7 @@ $y$轴表示初始条件。轨迹呈指数级趋近于零。
 
 我们需要做的是模拟它。
 
-算法1：欧拉法模拟ODE
+<a name="algorithm1">算法1</a>：欧拉法模拟ODE
 
 输入：向量场$u_t$，初始条件$x_0$，步数$n$
 
@@ -237,7 +237,7 @@ $W_t$ 表示布朗运动，在数学中通常被建模为一个 Wiener 过程（
 随机过程：$W： (W_t)_{t \ge 0}$，$W_t \in \mathbb{R}^d$，可以是任何维度的
 
 1. 初始化为0：$W_0 = 0$
-2. 高斯增量：$W_t - W_s \sim N(0, (t-s)I_d), \;(0\le s\le t)$
+2. 高斯增量：$W_t - W_s\sim \mathcal{N}(0, (t-s)I_d), \;(0\le s\le t)$
 3. 独立的增量：$W_{t_1} - W_{t_0}, \cdots, W_{t_n} - W_{t_{n-1}}$，$0 \le t_0 \lt t_1 \lt \cdots \lt t_n$ 都是互相独立的，视为随机变量
 
 这个独特属性，使得它在任何地方都不可微。
@@ -297,7 +297,7 @@ $X_0 = x_0, \quad dX_t = u_t(X_t)dt + \sigma_tdW_t$
 
    > [!NOTE]
    >
-   > $\sqrt{h}\epsilon \sim N(0, hI_d)$，噪声的方差为$h$。
+   > $\sqrt{h}\epsilon\sim \mathcal{N}(0, hI_d)$，噪声的方差为$h$。
 
    ​	更新$t$为$t+h$
 
@@ -692,6 +692,17 @@ $ \Rightarrow X_t \sim p_t \quad (0 \le t \le 1) \Rightarrow X_1 \sim p_{data}$
 
 <img src="assets/image-20250715151949401.png" alt="image-20250715151949401" style="zoom:50%;" />
 
+>  [!NOTE]
+>
+> 知识小灶：
+>
+> - 归一化流：直接学映射函数
+>
+>   像修一条高速公路。你得明确规划每个路口（映射函数），并且每段必须符合标准设计（可逆、结构简单、Jacobian 可计算）。
+>
+> - 流匹配：学导数（vector field）
+>   像使用GPS。你不关心路具体长什么样，只要告诉我每个时刻往哪个方向走（向量场），然后用 ODE 把路径积分出来，就能从出发点走到终点。
+
 #### 3.1 训练算法
 
 我们将 边际向量场、边际得分函数 转化为 两种算法：<font color="brown">流匹配</font> 与 <font color="brown">得分匹配</font>。
@@ -738,9 +749,9 @@ $x \sim p_t(\cdot \mid z)$，$x$ 从条件概率路径采样。
 
 $t \sim \mathcal{U}(0, 1)$，$z \sim p_{data}$，$x \sim p_t(\cdot \mid z)$
 
-###### 3.2.3 定理
+###### <a name="Theorem4"> 3.2.3 定理</a>
 
-<font color="blue"> $L_{fm}(\theta) = L_{cfm}(\theta) + C$ </font>，for $C \gt 0$ independent of $\theta$
+<font color="blue"> $L_{fm}(\theta) = L_{cfm}(\theta) + C$ </font>，for $C \lt 0$ independent of $\theta$
 
 > [!TIP]
 >
@@ -758,7 +769,7 @@ $\Rightarrow$ ②  $\nabla_\theta L_{cfm}(\theta) = \nabla_\theta L_{fm}(\theta)
 
 
 
-###### 3.2.4 算法
+###### 3.2.4 算法（通用）
 
 算法3：流匹配训练过程（通用）
 
@@ -793,13 +804,13 @@ $u_t^{target}(x|z) = (\dot{\alpha_t} - \frac{\dot{\beta_t}}{\beta_t}\alpha_t)z+ 
 
 继续推：
 
-$\varepsilon \sim N(0, I_d) \Rightarrow \alpha_tz + \beta_t\varepsilon \overset{\text{define}}{=} x \sim p_t(\cdot \mid z)$
+$\varepsilon\sim \mathcal{N}(0, I_d) \Rightarrow \alpha_tz + \beta_t\varepsilon \overset{\text{define}}{=} x \sim p_t(\cdot \mid z)$
 
 $\Rightarrow$
 
 $L_{cfm} (\theta)= \mathbb{E}[\left \|  u_t^\theta(x) - (\dot{\alpha_t} - \frac{\dot{\beta_t}}{\beta_t}\alpha_t)z - \frac{\dot{\beta_t}}{\beta_t}x \right \|^2 ]$
 
-> $t \sim \mathcal{U}(0, 1)$，$z \sim p_{data}$，$x \sim N(\alpha_t z, \beta_t^2 I_d)$
+> $t \sim \mathcal{U}(0, 1)$，$z \sim p_{data}$，$x\sim \mathcal{N}(\alpha_t z, \beta_t^2 I_d)$
 >
 > 代入 $x = \alpha_tz + \beta_t\varepsilon$  再做些代数：
 
@@ -817,9 +828,186 @@ $ = \mathbb{E}[\left \|  u_t^\theta(\alpha_tz + \beta_t\varepsilon) - (\dot{\alp
 
 有：$\dot{\alpha_t} = 1, \dot{\beta_t} = -1$
 
-$\therefore L_{cfm} (\theta)= \mathbb{E}[\left \|  u_t^\theta(\alpha_tz + \beta_t\varepsilon) - (z -\varepsilon) \right \|^2 ] $
+$\therefore L_{cfm} (\theta)= \mathbb{E}[\left \|  u_t^\theta(tz + (1 - t)\varepsilon) - (z -\varepsilon) \right \|^2 ] $
 
 > 非常简单吧，无法想象一个更简单的训练算法了。
+
+<img src="assets/image-20250719225950090.png" alt="image-20250719225950090" style="zoom:35%;" />
+
+###### 3.2.6 算法（OT）
+
+**Flow Matching Training for CondOT path**
+
+<a name="algorithm4">算法4</a>：流匹配训练过程（最优传输路径）
+
+输入：一个样本 $z \sim p_{data}$ 数据集，神经网络 $u_t^{\theta}$
+
+对每个最小批次（mini-batch）的数据循环：
+
+​	采样$z \sim p_{data}$
+
+​	采样$t \sim \mathcal{Unif}_{[0, 1]}$
+
+​	采样噪声 $\varepsilon \sim \mathcal{N}(0, I_d)$
+
+​	设 $x = tz + (1-t)\varepsilon$
+
+​	计算损失 $L (\theta)= \left \|  u_t^\theta(x) - (z - \varepsilon)\right \|^2$
+
+​      （选择一种优化器）梯度下降更新模型参数
+
+循环结束
+
+> [!IMPORTANT]
+>
+> 让我们欣赏下该算法的简单：
+>
+> 我们在$z$ 和 $\varepsilon$ 之间的直线上取一个点，我们将其插入神经网络，然后神经网络本质上会学习预测数据和噪声两点之间的差异$z - \epsilon$。
+
+> [!TIP]
+>
+> 思考：为了训练更稳定，采样$t$可以随训练进度动态调整，从接近1 → 接近0 的分布。因为$t=0$时只能访问噪声的信息，$t=1$时可以访问完整的数据点。所以随着时间推移，你将需要预测同样的东西，但是拥有的信息是不同的。
+>
+> 物理直觉：
+>
+> 本质上是在预测给定噪声、数据点和路径，在这条路径上的某个地方，你需要预测当前的速度。但在直线路径（OT）中，速度只是一个差值，两点间的向量。
+>
+> 而扩散模型走的是非直线，就像一些所谓的方差保持路径或方差爆炸路径。 
+
+这可不是什么奇特的、太简单的算法，MovieGen（Meta）、Stable Diffusion 3（Stability AI）就是用的该[算法](#algorithm4)。
+
+###### 3.2.7 证明
+
+对[定理](#Theorem4)：$L_{fm}(\theta) = L_{cfm}(\theta) + C$ 的证明：
+
+$\left\| a -b   \right\|^2 = \left\| a \right\|^2 - 2a^Tb + \left\| b \right\|^2$,   $(a,b \in \mathbb{R}^d)$
+
+$L_{fm} (\theta)= \mathbb{E}[\left \|  u_t^\theta(x) - u_t^{target}(x)\right \|^2 ] =\mathbb{E}[\left \|  u_t^\theta(x) \right\|^2 -2u_t^\theta(x)^Tu_t^{target}(x) + \left \| u_t^{target}(x)\right \|^2 ]$
+
+$L_{cfm} (\theta)= \mathbb{E}[\left \|  u_t^\theta(x) - u_t^{target}(x \mid z)\right \|^2 ] =\mathbb{E}[\left \|  u_t^\theta(x) \right\|^2 -2u_t^\theta(x)^Tu_t^{target}(x \mid z) + \left \| u_t^{target}(x \mid z)\right \|^2 ]$
+
+> 然后  $\left \| u_t^{target}(x)\right \|^2$ 和 $\left \| u_t^{target}(x \mid z)\right \|^2$ 是和 $\theta$ 无关的常数，可以消掉，$\left \|  u_t^\theta(x) \right\|^2$ 项相同，也可以消掉。
+
+  转变成了证明  $2u_t^\theta(x)^Tu_t^{target}(x)$ 与 $2u_t^\theta(x)^Tu_t^{target}(x\mid z)$ 的期望相同。 在课堂笔记中，对此进行了详细证明，这儿的点积是线性的，这里就略过了。
+
+###### 3.2.8 采样算法
+
+我们如何从刚刚训练好的流模型中采样（生成对象）呢？
+
+参加[算法1 ](#algorithm1)ODE数值模拟——欧拉法
+
+> [!TIP]
+>
+>  问：人们是否使用欧拉法？
+>
+> 答：最初是的，但现在人们最想要最小化神经网络的预测次数，也就是数值模拟中有多少步。所以关心效率时，人们通常使用高阶ODE<font color="brown">求解器</font>。
+>
+> - Euler 方法（欧拉法）是最基本的 ODE 数值求解器之一，属于一阶（first-order）ODE solver。
+> - “higher-order” 指的是方法的收敛阶（order of accuracy），也就是它逼近真实解的速度。
+
+
+
+#### 3.3 得分匹配
+
+回顾：
+
+边际得分函数：
+
+<font color="blue">$\nabla \log p_t(x) = \int \nabla \log p_t(x|z) \frac{ p_t(x|z)p_{data}(z)}{p_t(x)}dz$</font>，是<font color="blue">后验概率加权积分</font>的形式。
+
+定理（SDE扩展的技巧）：
+
+对于任意$\sigma_t \ge 0$，
+
+$X_0 \sim p_{init}, \quad dX_t = [u_t^{target}(X_t) + \frac{\sigma_t^2}{2}\textcolor{blue}{\nabla \log p_t(x_t)}]dt + \sigma_tdW_t$
+
+>  [!NOTE]
+>
+> 得分函数 本质上就是 我们需要应用的<font color="blue">校正项</font>。
+>
+> **得分函数校正了“随机扩散轨迹”的方向**，让它向数据靠近。
+
+$ \Rightarrow X_t \sim p_t \quad (0 \le t \le 1) \Rightarrow X_1 \sim p_{data}$
+
+###### 3.3.1 得分匹配损失
+
+得分匹配网络：
+
+$s_t^\theta$  ($\theta$：parameters )
+
+目标： 
+
+$s_t^\theta \approx \nabla \log p_t$
+
+由于边际得分函数和边际向量场的（边缘化）公式非常类似，这儿的推导也是类似的，即将证明：$\mathcal{L}_{sm}(\theta) = \mathcal{L}_{dsm}(\theta) + C$
+
+> [!TIP]
+>
+> 人们习惯将条件得分匹配损失，称作<font color="blue">去噪得分匹配损失</font>。实则是一回事。
+
+###### 3.3.2 去噪得分匹配损失
+
+<font color="blue">$L_{sm} (\theta)= \mathbb{E}_{t,z,x}[\left \|  s_t^\theta(x) - \nabla \log p_t(x) \right \|^2 ]$，</font>
+
+> ✓ Minimizer ✗ Tractable
+
+<font color="blue">$L_{dsm} (\theta)= \mathbb{E}_{t,z,x}[\left \|  s_t^\theta(x) - \nabla \log p_t(x \mid z) \right \|^2 ]$，</font>
+
+> ? Minimizer ✓ Tractable
+
+###### 3.3.3 定理
+
+$\mathcal{L}_{sm}(\theta) = \mathcal{L}_{dsm}(\theta) + C$，for $C \lt 0$ independent of $\theta$
+
+$\Rightarrow$ ①  对于 $\mathcal{L}_{dsm}$ 的最小化器 $\theta^*$：$s_t^{\theta^*} = \nabla \log p_t(x)$
+
+$\Rightarrow$ ②  $\nabla_\theta \mathcal{L}_{dsm}(\theta) = \nabla_\theta L_{sm}(\theta)$
+
+​	$\Rightarrow$  SGD（随机梯度下降）是相同的。
+
+###### 3.3.4 算法（通用）
+
+算法3：得分匹配训练过程（通用）
+
+输入：一个样本 $z \sim p_{data}$ 数据集，得分网络 $s_t^{\theta}$
+
+对每个最小批次（mini-batch）的数据循环：
+
+​	采样$z \sim p_{data}$
+
+​	采样$t \sim \mathcal{U}_{[0, 1]}$
+
+​	采样 $x \sim p_t(\cdot \mid z)$
+
+​	计算损失 $\mathcal{L} (\theta)= \left \|  s_t^\theta(x) - \nabla \log p_t(x \mid z)\right \|^2$
+
+​      （选择一种优化器）梯度下降更新模型参数
+
+循环结束
+
+###### 3.3.5 例子——高斯概率路径的$\mathcal{L}_{dsm}$
+
+回顾：
+
+$\nabla_x \log p_t(x|z) = -\frac{x - \alpha_t z}{\beta_t^2}$
+
+$\varepsilon \sim \mathcal{N}(0, I_d) \Rightarrow x = \alpha_t z + \beta_t \varepsilon \sim \mathcal{N}(\alpha_t z, \beta_t^2 I_d)$
+
+继续推：
+
+$\mathcal{L}_{dsm}(\theta) = \mathbb{E}_{t \sim Unif,z \sim p_{data},x \sim p_t(\cdot \mid z)}[\left \|  s_t^\theta(x) + \frac{x - \alpha_t z}{\beta_t^2} \right \|^2 ]$
+
+$= \mathbb{E}_{t \sim Unif,z \sim p_{data},x \sim p_t(\cdot \mid z)}[\left \|  s_t^\theta(\alpha_t z + \beta_t \varepsilon) + \frac{\varepsilon}{\beta_t} \right \|^2 ]$
+
+
+
+
+
+
+
+
+
+
 
 
 

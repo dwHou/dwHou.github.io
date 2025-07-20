@@ -1812,7 +1812,24 @@ FOMM vs. RegionMM vs. This paper
 
 & LIA (Latent Image Animator)：提供motion latent space，被本文认为比pixel-based latent spaces合适。
 
+> LIA 作为 Motion Latent Auto-encoder，将图像解耦成motion和appearance特征。
+
+> VASA-1 也是用Megaportraits的motion latent。
+
  属于flow matching generative model，可以回顾下刘星超的Rectified Flow的介绍。
+
+> [!NOTE]
+>
+> 本文还比较了流模型方法：
+>
+> - 归一化流：直接学映射函数
+>
+>   像修一条高速公路。你得明确规划每个路口（映射函数），并且每段必须符合标准设计（可逆、结构简单、Jacobian 可计算）。
+>
+> - 流匹配：学导数（vector field）
+>   像使用GPS。你不关心路具体长什么样，只要告诉我每个时刻往哪个方向走（向量场），然后用 ODE 把路径积分出来，就能从出发点走到终点。
+
+这儿使用OT（最优传输路径）的flow
 
 基于LIA这个工作。其中附录的A.2. Improving Fidelity of Facial Components值得研究下。因为它牙齿生成效果确实不错。
 
