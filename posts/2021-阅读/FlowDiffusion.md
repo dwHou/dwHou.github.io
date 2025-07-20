@@ -941,7 +941,7 @@ $s_t^\theta \approx \nabla \log p_t$
 
 由于边际得分函数和边际向量场的（边缘化）公式非常类似，这儿的推导也是类似的，即将证明：$\mathcal{L}_{sm}(\theta) = \mathcal{L}_{dsm}(\theta) + C$
 
-> [!TIP]
+> [!NOTE]
 >
 > 人们习惯将条件得分匹配损失，称作<font color="blue">去噪得分匹配损失</font>。实则是一回事。
 
@@ -967,7 +967,7 @@ $\Rightarrow$ ②  $\nabla_\theta \mathcal{L}_{dsm}(\theta) = \nabla_\theta L_{s
 
 ###### 3.3.4 算法（通用）
 
-算法3：得分匹配训练过程（通用）
+算法5：得分匹配训练过程（通用）
 
 输入：一个样本 $z \sim p_{data}$ 数据集，得分网络 $s_t^{\theta}$
 
@@ -999,13 +999,130 @@ $\mathcal{L}_{dsm}(\theta) = \mathbb{E}_{t \sim Unif,z \sim p_{data},x \sim p_t(
 
 $= \mathbb{E}_{t \sim Unif,z \sim p_{data},x \sim p_t(\cdot \mid z)}[\left \|  s_t^\theta(\alpha_t z + \beta_t \varepsilon) + \frac{\varepsilon}{\beta_t} \right \|^2 ]$
 
+> [!TIP]
+>
+> 现在你应该理解，为什么它被称为 去噪得分匹配，是因为被发现对于高斯概率路径，我们只是学习预测用于破坏数据点的噪声。
 
 
 
+###### 3.3.6 算法（高斯概率路径）
+
+**Score Matching Training for Gaussian probability path**
+
+算法6：得分匹配训练过程（高斯概率路径）
+
+输入：一个样本 $z \sim p_{data}$ 数据集，得分网络（或称 噪声预测器） $s_t^{\theta}$ 
+
+输入：Schedulers $\alpha_t$, $\beta_t$ with $\alpha_0 = \beta_1 = 0$, $\alpha_1 = \beta_0 = 1$
+
+对每个最小批次（mini-batch）的数据循环：
+
+​	采样$z \sim p_{data}$
+
+​	采样$t \sim \mathcal{Unif}_{[0, 1]}$
+
+​	采样噪声 $\varepsilon \sim \mathcal{N}(0, I_d)$
+
+​	设 $x = \alpha_tz + \beta_t \varepsilon$
+
+​	计算损失 $L (\theta)= \left \|  s_t^\theta(x_t) + \frac{\varepsilon}{\beta_t} \right \|^2$
+
+​      （选择一种优化器）梯度下降更新模型参数
+
+循环结束
+
+> [!NOTE]
+>
+> 值得一提的是，对于较小的$\beta_t$，$\frac{\varepsilon}{\beta_t}$在数值上是不稳定的。所以对于$t$接近1时，损失可能不稳定。
+>
+> 扩散模型研发的早期就意识到这点，并且有一些技巧可以解决。在课堂笔记里有介绍。  但得分匹配是在扩散模型之前就提出的，那时人们反对这种匹配具有高方差。
+
+问答：
+
+> [!NOTE]
+>
+> 问：我们能否避免同时学习它们（流匹配网络 和 得分匹配网络）？
+>
+> 答：其实我稍后会讲到这个。答案是肯定的。
+>
+> 原则上，对于一般情况，你必须同时学习它们。
+>
+> 但是，在最重要的特定的高斯概率路径，我们可以将它们相互转换。
+>
+> 但即使你必须同时学习它们，请记住，我们可以将它们放在同一个网络中，也就是为一个图像的每个像素制作两个输出，所以它的计算成本不会那么高。
 
 
 
+###### 3.3.7 采样算法
 
+扩散模型的随机采样：
+
+我们将训练好的新网络插入到SDE：
+
+$X_0 \sim p_{init}, \quad dX_t = [u_t^{target}(X_t) + \frac{\sigma_t^2}{2}\textcolor{blue}{\nabla \log p_t(x_t)}]dt + \sigma_tdW_t$
+
+$\downarrow$ 插入 表示向量场的网络 和 得分网络
+
+$X_0 \sim p_{init}, \quad dX_t = [u_t^{\theta}(X_t) + \frac{\sigma_t^2}{2}s_t^{\theta}(x_t)]dt + \sigma_tdW_t$
+
+经过训练 $\Rightarrow X_t \sim p_t$
+
+###### 3.3.8 去噪扩散模型（DDMs）
+
+**术语**
+
+去噪扩散模型 = 高斯概率路径$\mathcal{N}(\alpha_t z, \beta_t^2I_d)$（我们的标准例子）的扩散模型
+
+通用术语中 Terminology（by many people）
+
+去噪扩散模型 = 扩散模型
+
+> 也就是说，许多人提到扩散模型，就是指的这个特定的实例。人们会用不同的方式谈论同一件事。
+>
+> 当和你的同事交谈时，他们会用一种完全不同的语言，不要感到困惑。这并不奇怪，因为算法是通过许多不同的方式发现的。
+
+**特殊性质**
+
+向量场和得分函数 可以 相互转换。 所以同一个网络即可完成 流匹配 和 得分匹配。
+
+<font color="blue">$\because$ 向量场 和 得分函数 都是 $x$ 和 $z$ 的某种加权</font>
+
+$\lambda_1 z + \lambda_2 x$，$\lambda_1' z + \lambda_2' x$
+
+经过代数，就能得出它们能相互转换：
+
+<img src="assets/image-20250720153027234.png" alt="image-20250720153027234" style="zoom:50%;" />
+
+训练后的边际向量场 可以转换为 得分网络，反之亦然。
+
+即，得分是免费获取的。
+
+> [!TIP]
+>
+> 所以第一代的扩散模型文章，只讨论 得分匹配。 因为它们隐式地依赖于高斯概率路径的去噪扩散模型。然后可以将东西相互转换。
+
+**总结**
+
+我们在这里得到一个完整的端到端训练和采样算法。我们有一个通用的模型，可以从数据分布中生成样本。
+
+下周的课程将更加注重应用，我们将讨论针对特定应用可以做出的具体选择：
+
+- 神经网络架构，即$u_t^{\theta}$、$s_t^{\theta}$这些函数具体是什么
+- 基于提示词的条件
+-  图像生成器 或 视频生成器
+- 其他应用：机器人技术、蛋白质设计
+
+我们可以将任意分布相互转换，任意的 $p_{init}$ 和 $p_{data}$，所以我们<font color="brown">不仅仅是关心去噪扩散模型（DDMs）</font>。因为DDMs总是从某种高斯噪声作为 $p_{init}$ 开始。
+
+但可能还有其他情况，你的初始分布要有趣得多，而且有很多人在探索这一点。
+
+在图像空间、音频空间以及科学领域，许多时候，你的初始分布本身就很有意义，例如：
+
+<img src="assets/image-20250720160712054.png" alt="image-20250720160712054" style="zoom:50%;" />
+
+> 我觉得可以预测转换域的东西，定义清楚这个转换，是光流？是高频残差？等等。 有意义的输入则作为参考信息。
+
+## 第四章 构建一个图像生成器
 
 
 
