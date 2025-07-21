@@ -1124,6 +1124,147 @@ $\lambda_1 z + \lambda_2 x$，$\lambda_1' z + \lambda_2' x$
 
 ## 第四章 构建一个图像生成器
 
+为了避免混乱，本章只以流模型为例，进行介绍。但所讲述的内容都可扩展到扩散模型。
+
+议程：
+
+1. 将生成模型框架从 无条件生成 延伸到 有条件生成。
+2. 开发用于条件采样的无分类器引导（classifier-free guidance）方法。
+3. 讨论图像生成这一典型案例中的架构选择，并综述当前主流模型。
+
+#### 4.1 条件生成和引导
+
+无条件 也可以 称作 无引导（Unguided）
+
+有条件 也可以 称作 有引导（Guided）
+
+<img src="assets/image-20250721213103970.png" alt="image-20250721213103970" style="zoom:50%;" />
+
+###### 4.1.1 有引导的条件匹配目标函数 $\mathcal{L}_{cfm}^{guided}$
+
+观察：当 $y$ 固定时，我们实际退化为无引导生成：
+
+> 此时 $y$ 可以理解为 超参数。 
+
+$\mathcal{L}_{cfm}^{guided}(\theta ; y) =\mathbb{E}_{\square}[\left \|  u_t^\theta(x) - u_t^{target}(x \mid z)\right \|^2 ]$，
+
+$\square = \textcolor{blue}{z \sim p_{data}(z \mid y)}, t \sim \mathcal{U}[0,1), x \sim p_t(x\mid z)$
+
+观察：当让 $y$ 变化时：
+
+$\mathcal{L}_{cfm}^{guided}(\theta) =\mathbb{E}_{\square}[\left \|  u_t^\theta(x) - u_t^{target}(x \mid z)\right \|^2 ]$，
+
+$\square = \textcolor{red}{(z, y) \sim p_{data}(z, y)}, t \sim \mathcal{U}[0,1), x \sim p_t(x\mid z)$
+
+
+
+###### 4.1.2 无分类器引导（CFG）
+
+| 名称                                          | 定义                                                         | 是否使用条件？ | 是否用分类器？ |
+| --------------------------------------------- | ------------------------------------------------------------ | -------------- | -------------- |
+| **无引导生成** (*unconditional generation*)   | 不提供任何条件，模型自由生成样本                             | ❌ 否           | ❌ 否           |
+| **有引导生成** (*conditional generation*)     | 提供条件（如文本、类别）来控制生成                           | ✅ 是           | ✅ / ❌          |
+| **有分类器引导** (*classifier guidance*)      | 使用独立的分类器来引导生成趋向目标类别                       | ✅ 是           | ✅ 是           |
+| **无分类器引导** (*classifier-free guidance*) | 不使用分类器，而是训练一个能同时进行有/无条件生成的模型，在推理时人为混合 | ✅ 是           | ❌ 否           |
+
+**无引导生成**：用于评估模型的基础能力；或生成多样化样本；
+
+**有引导生成**：
+
+- **有分类器引导**：早期的方法，但需要训练或提供外部分类器；
+
+  **用另一个分类器告诉模型“图像像不像 $y$”**，然后往“更像 $y$”方向走。
+
+  - 本质：**用分类器给的方向来指导生成**
+  - 实现：要给图像打分，然后反向传播出“变得更像 y”的梯度
+  - 缺点：**慢，要用梯度反传，还要额外训练一个分类器**
+
+- **无分类器引导**：现代主流方法，易实现且效果好。
+
+  **用模型自己预测“有条件”和“没条件”两种方向，然后人为混合**，走向更像 y 的方向。
+
+  - 本质：**用模型自己两个版本的预测结果做“加权”**
+
+  - 实现：直接：
+
+    $\tilde{u}(x \mid y) = (1-w)u(x \mid \emptyset) + w u(x \mid y)$
+
+  - 优点：**快！只用一个模型，不用分类器也不用反传梯度**
+
+> [!TIP]
+>
+> 问：为什么不能对有分类器引导也这么加权？
+>
+> 答：因为它的“引导方向”是用分类器反传出来的梯度（方向），**不是一个完整的预测向量场**，你没法跟另一个向量直接相加。
+>  而 classifier-free guidance 是两个完整的模型输出，当然可以直接加。
+>
+> - **无分类器引导（Classifier-Free Guidance）** 是一种 **启发式方法**，通过**线性组合**模型在**有条件**与**无条件**下的预测结果，来构造一个引导向量场，以实现条件控制。
+>
+> - **有分类器引导（Classifier Guidance）** 是一种 **理论驱动的方法**，直接利用一个额外分类器 $C(x)$ 对条件概率 $p(y \mid x)$ 的梯度 $\nabla_x \log p(y \mid x)$，来增强模型生成结果对条件 $y$ 的符合
+>
+> - 相当于对于 $\nabla_x \log p(x \mid y) = \nabla_x \log p(x) +  w \nabla_x \log p(y \mid x)$，
+>
+>   <font color="brown">有分类器引导的$w \nabla_x \log p(y \mid x)$是实际反向传播分类器获得的。而无分类器引导里只是推导过程中的一个式子，可以继续拆解、推导。</font>
+
+###### 4.1.3 CFG推导
+
+$\log p(x \mid y) = \log p(x) + \log p(y \mid x) - \log p(y)$ 
+
+对两边求导有：
+
+$\nabla_x \log p(x \mid y) = \nabla_x \log p(x) + \nabla_x \log p(y \mid x) - \underbrace{\nabla_x \log p(y)}_{\text{= 0}}$
+
+其中
+
+$\nabla_x \log p(x)$ 是**无条件（边际）数据分布**的对数梯度，
+
+$\nabla_x \log p(y \mid x)$是**条件信息（如分类器）提供的额外梯度**。
+
+实际操作中，直接用上式做采样，往往会弱化条件的引导效果，所以提出了引入一个超参数 $w$ 调节条件梯度的强度：
+
+$\nabla_x \log p(x \mid y) = \nabla_x \log p(x) +  w \nabla_x \log p(y \mid x)$
+
+$= \nabla_x \log p(x) + w(\underbrace{\nabla_x \log p(y)}_{=0} + \nabla_x \log p(x \mid y) - \nabla_x \log p(x))$
+
+$= \nabla_x \log p(x) + w \nabla_x \log p(x \mid y) - w \nabla_x \log p(x)$
+
+$= (1 - w)\nabla_x \log p(x) + w \nabla_x \log p(x \mid y)$
+
+> 因为 $p(y)$ 与 $x$ 无关，对 $x$ 的梯度是0。
+
+> [!NOTE]
+>
+> $\nabla_x$ 读作：“对 $x$ 的梯度” 或 “在 $x$ 方向上的梯度”。
+>
+> 符号 $\nabla_x \log p(x)$ 通常称为得分函数（score function），也叫对数梯度。它描述“朝着高概率区域改变 $x$ 的方向和速率的向量”。
+
+$\therefore \tilde{u}_t(x\mid y) = (1 - w)u_t^{target}(x) + wu_t^{target}(x \mid y)$
+
+推出 无分类器引导（classifier-free guidance）的 核心思想在向量场形式上的表达。
+
+> 我们用有条件和无条件的向量场按比例加权，得到一个“折中”方向，来引导采样过程。
+
+- $w = 0$：完全不考虑条件，相当于 **无引导生成**。
+- $w = 1$：完全使用有条件引导，相当于普通 **条件生成**。
+- $w > 1$：**放大条件影响力**，常用于生成更契合提示的样本
+
+###### 4.1.4 CFG训练
+
+观察：我们可以将无引导的向量场视为没有任何条件的情况。
+ 但“没有条件”也是一种条件：
+
+$u_t^{target}(x) = u_t^{target}(x\mid y = \emptyset)$
+
+我们现在可以训练一个单一模型 $u_t^{\theta}(x \mid y)$，其中 $y \in \mathcal{Y} \cup \{\emptyset\}$，通过重复使用$\mathcal{L}_{cfm}^{guided}(\theta)$，并偶尔将 $y$ 设为 $\emptyset$：
+
+$\mathcal{L}_{cfm}^{CFG}(\theta) =\mathbb{E}_{\square}[\left \|  u_t^\theta(x) - u_t^{target}(x \mid z)\right \|^2 ]$，
+
+$\square = (z, y) \sim p_{data}(z, y), \textcolor{red}{\text{with prob.} \eta , y \leftarrow \emptyset}, t \sim \mathcal{U}[0,1), x \sim p_t(x\mid z)$
+
+###### 4.1.5 CFG采样
+
+每一步都调用模型两次（无条件 & 有条件），计算量是原来的两倍。但是工程上有些优化方法。
+
 
 
 
