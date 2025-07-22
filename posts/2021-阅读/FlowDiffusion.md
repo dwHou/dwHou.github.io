@@ -1265,7 +1265,25 @@ $\square = (z, y) \sim p_{data}(z, y), \textcolor{red}{\text{with prob.} \eta , 
 
 每一步都调用模型两次（无条件 & 有条件），计算量是原来的两倍。但是工程上有些优化方法。
 
+算法——CFG采样过程
 
+输入：训练好的有引导的向量场$u_t^{\theta}(x \mid y)$
 
+1. 选择一个提示词 $y \in \mathcal{Y}$，以及一个 $y = \emptyset$ 用于无引导采样
+2. 选择一个引导尺度<font color="brown"> $w \gt 1$ </font>
+3. 初始化 $X_0 \sim p_{init}$
+4. 从$t=0$ 到 $t=1$ 模拟 $dX_t = [(1-w)u_t^{\theta}(X_t \mid \emptyset) + w u_t^{\theta}(X_t \mid y)]dt$ 
 
+<img src="assets/image-20250722223728725.png" alt="image-20250722223728725" style="zoom:50%;" />
 
+<img src="assets/image-20250722223949275.png" alt="image-20250722223949275" style="zoom:50%;" />
+
+#### 4.2 图像生成的网络架构考量
+
+对于图像这种高维的对象，多层感知机（MLP）是不够的。
+
+我们将探索两种选择：U-Nets（基于卷积）和 DiT（基于注意力）
+
+留意 引导变量 $y$ 是如何编码、嵌入 和 处理的。
+
+###### 4.2.1 U-Net
