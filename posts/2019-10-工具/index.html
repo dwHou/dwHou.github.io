@@ -268,6 +268,7 @@ Note：如果有同类型的密钥，会自动重命名。
 Note：ssh-add -d命令不会删除密钥文件本身,它只会从SSH代理程序(通常是ssh-agent)的密钥列表中删除指定的密钥。而直接删除密钥文件是更加"破坏性"的操作。在实际工作中,通常更建议使用 ssh-add -d 来暂时删除密钥,保留密钥文件。只有在确实不再需要该密钥时,才考虑直接删除密钥文件。
 4. ssh-add ~/.ssh/newsecret 添加新的可识别密钥。
 5. 再次查看当前可被识别的密钥ssh-add -l 。
+6. Tips：git config core.sshCommand "ssh -i ~/.ssh/id_rsa_personal -F /dev/null" 命令，可以在当前 Git 仓库里，强制 Git 使用指定的 SSH key（~/.ssh/id_rsa_personal）进行远程操作，并忽略系统默认的 SSH 配置文件。在多 Git 账号（个人 & 公司）、多人共用机器 等场景省去麻烦。
 </pre>
 
 
