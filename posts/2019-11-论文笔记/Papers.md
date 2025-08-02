@@ -1470,6 +1470,19 @@ Confidence: Confidence is a score of how much closer the mean feature-wise dista
 
 #### :page_with_curl:MuseTalk
 
+两阶段训练。
+
+stage2 和 stage1主要差异（全由yaml配置指定）：
+
+- 首先，stage2的unet由stage1预训练得到
+- stage2使用dynamic_margin_crop_resize的方式剪裁人头区域，防止模型通过上半张脸推理口型。
+- stage2的显存消耗更大，所以配置更小的batchsize，且使用梯度累积技术。
+- stage2为多帧训练，stage1是单帧训练。
+- stage2筛掉了一些小脸，注重数据质量。而stage1的筛选阈值则更宽松。
+- stage2在stage1的基础上，额外增加了gan loss、mouth-gan loss 和 syncnet loss。
+- stage1学习率2e5，stage2学习率5e6。
+- 
+
 
 
 ### 2. PhotoAnimate
