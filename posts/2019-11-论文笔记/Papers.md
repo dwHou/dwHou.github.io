@@ -1481,7 +1481,50 @@ stage2 和 stage1主要差异（全由yaml配置指定）：
 - stage2筛掉了一些小脸，注重数据质量。而stage1的筛选阈值则更宽松。
 - stage2在stage1的基础上，额外增加了gan loss、mouth-gan loss 和 syncnet loss。
 - stage1学习率2e5，stage2学习率5e6。
-- 
+
+训练：
+
+- 仍然是单帧生成的框架，只是 (b f) c h w 来支持时域损失。
+
+- vae使用的Diffusers里的AutoencoderKL，预训练权重；
+
+  unet使用的Diffusers里的UNet2DConditionModel，权重需要训练；
+
+  ```python
+  model_dict['vae'].requires_grad_(False)
+  model_dict['unet'].requires_grad_(True)
+  ```
+
+- 如下：
+
+  ```shell
+  ./models/
+  ├── musetalk # UNet2DConditionModel
+  │   └── musetalk.json
+  │   └── pytorch_model.bin # 由该工作训练
+  ├── musetalkV15
+  │   └── musetalk.json
+  │   └── unet.pth # 由该工作训练
+  ├── syncnet
+  │   └── latentsync_syncnet.pt
+  ├── dwpose
+  │   └── dw-ll_ucoco_384.pth
+  ├── face-parse-bisent
+  │   ├── 79999_iter.pth
+  │   └── resnet18-5c106cde.pth
+  ├── sd-vae # AutoencoderKL
+  │   ├── config.json
+  │   └── diffusion_pytorch_model.bin
+  # https://huggingface.co/stabilityai/sd-vae-ft-mse/tree/main
+  └── whisper
+      ├── config.json
+      ├── pytorch_model.bin
+      └── preprocessor_config.json
+  ```
+
+- 由于是单步的扩散模型，训练中timesteps永远输入的0。
+
+- 没有训练LDM经验的同学，记得latent要通过缩放因子进行[标准化](https://github.com/huggingface/diffusers/blob/v0.34.0/src/diffusers/models/autoencoders/autoencoder_kl.py#L57C9-L63C101)。
 
 
 
@@ -1649,6 +1692,14 @@ $B_{id}$,  $B_{exp}$,  $B_t$分别是身份、表情和纹理PCA的基。
 > blendshapes, such as FaceWarehouse [9], FaceScape [53] and Feafa [52].
 
 https://github.com/peterjiang4648/BFM_model/releases/tag/1.0 有人分享了mat文件。可以不用自行下载和matlab得到BFM.mat了。
+
+#### :page_with_curl:SMIRK: 3D Facial Expressions through Analysis-by-Neural-Synthesis
+
+https://github.com/sicxu/Deep3DFaceRecon_pytorch
+
+https://github.com/georgeretsi/smirk
+
+
 
 #### :computer: face3d: Python tools for processing 3D face
 
