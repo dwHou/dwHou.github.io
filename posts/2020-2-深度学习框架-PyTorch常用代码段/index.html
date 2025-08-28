@@ -523,6 +523,38 @@ https://github.com/pytorch/pytorch/issues/48915
         Yeah, my advice to all my students is to never trust any image processing these libraries do. And always, ALWAYS verify visually that you get expected behavior, no matter how “trivial” the operation
       </pre>
 
+      <li>显存碎片化导致CUDA OOM</li>
+      <pre>
+        ・现象特征：
+            reserved >> allocated 且 reserved - allocated > try to allocate，但报OOM
+
+        ・机制理解：
+            CUDA 驱动 只知道两类显存：
+            used（已被某些程序占用）
+            free（完全空闲）
+            PyTorch caching allocator 在 CUDA 上申请大块显存以后，会自己做二次管理。
+            部分被张量实际用掉 → allocated
+            部分暂时闲置，但 PyTorch 缓存着准备以后复用（好处是减少频繁 malloc/free） → reserved - allocated
+            👉 如果 reserved ≫ allocated，说明 PyTorch 抢了很多显存，但没用完，大部分在缓存池里“碎片化”。造成free pool太小了，reserved pool又太碎片化，大块内存申请不下来。
+
+
+        ・造成结果：
+            虽然try to allocate的显存很小，
+            一方面 reserved - allocated，虽然大，但是碎片化严重，导致拿不出一整块大于try to allocate的block。
+            另一方面，free < try to allocate，因为除了PyTorch reserved，NCCL/cudnn/cublas context + workspace也会占用很多显存。
+            可以观察，训练程序刚启动，就直接吃掉的显存，那就是 NCCL/cudnn/cublas context + workspace。如果运行过程中慢慢涨上去，那就是缓存/碎片。
+
+        ・解决方案：
+            可以设置max_split_size_mb < try to allocate，限制缓存池里最大可切分 block 的大小。令本身比较大块的空闲block能保留下来，不被随意分割。（PyTorch的默认策略是所有大小的空闲Block都可以被分割）
+            也可按经验值设置：256 ~ 512 MB 通常足够
+
+        ・具体用法：
+            方式一：export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+            方式二：
+            # 在 import torch 之前设置
+            os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:512"
+      </pre>
+
       <li>装饰器</li>
       <pre>
         注册器的预备知识 ———— 装饰器

@@ -1,6 +1,6 @@
 # Cursor
 
-
+## 安全相关
 
 **敏感代码库的定义**
  如果满足以下任一条件，代码库将被归类为敏感代码库：
@@ -38,5 +38,32 @@
 - [Cursor Ignore Files](https://docs.cursor.com/context/ignore-files)
 - [GitLab CODEOWNERS Reference](https://docs.gitlab.com/user/project/codeowners/reference/)
 
+## 使用之道
 
+1. `/Generate Cursor Rules `  命令 +  一些项目架构的关键词，先生成规则文档。会作为该项目的持久的上下文。
+2. 提示词：`请先列出修改计划，等我批准后再写代码。` 避免先斩后奏。
+3. 提问技巧：提供项目背景，@项目代码，描述具体需求
+
+## 使用之术
+
+Do’s ✅
+
+- 将AI作为强大的编程助手，而非自己的替代品
+- 保持对关键技术细节的理解和掌控
+- 利用AI加速学习新技术，但要消化吸收
+- 定期整理和总结AI辅助的工作成果
+
+Don’ts ❌
+
+- 不要完全依赖AI自主完成复杂任务
+- 不要直接使用未经理解的AI代码
+- 不要忽视团队协作中的技术同步
+- 不要让AI的复杂实现影响代码可维护性
+
+AI使用陷阱：
+
+- 自动化偏见（Automation bias）：当使用AI取得一定成功后，开始过度信任AI
+- 沉没成本（Sunk cost fallacy）：迷恋多行自动补全，文件自动生成，舍不得删除或者修改
+- 锚定偏见（Anchoring bias）：一旦看过AI的建议，很难再想到别的解决方案
+- 审查疲劳（Security vigilance）：结合第一点，大量生产的代码很难沉下心来review，容易引入一些似是而非的依赖和代码
 

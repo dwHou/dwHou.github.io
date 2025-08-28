@@ -1460,13 +1460,25 @@ Confidence: Confidence is a score of how much closer the mean feature-wise dista
 
 #### :page_with_curl:KeySync
 
-解决清晰度、表情泄漏、嘴部遮挡等实际挑战。还提出一个LipLeak的指标，来衡量嘴形受表情的影响。
+抛出一个发人深省的问题：为什么看起来音频驱动口型，比音频驱动全脸的任务“简单”，但实际在这个领域的进展更小呢？
+
+因为隐藏一些独特的“坑”，却迟迟未被解决：
+
+> [!IMPORTANT]
+>
+> 视频口型对齐任务还存在一个常被忽视的问题——**表情泄露**，即模型会无意保留原视频中的面部表情。现有方法普遍把唇形同步当作配对音视频上的重建任务，却很少关注**跨同步**场景（用不匹配的音频重新驱动视频）。因此，模型往往在跨同步时表现出严重的表情泄露，导致音视频同步性下降。这一问题尤其影响如自动配音等实际应用，因为其中音频与视频天然不匹配。
 
 > KeySync文章的作者认为，目前驱动照片的工作发展更快，而看似更简单的视频lip-sync相对进展较慢，也是由于这些实际挑战没被攻克。
 
+解决清晰度、表情泄漏、嘴部遮挡等实际挑战。还提出一个LipLeak的指标，来衡量嘴形受表情的影响。
+
+> LipLeak 计算方式是：在静音音频与非静音视频的输入条件下，统计生成结果中**非静音帧**所占的比例。
 
 
-#### :page_with_curl:PersonaTalk
+
+#### :page_with_curl:infiniteTalk
+
+目前看
 
 #### :page_with_curl:MuseTalk
 
@@ -1525,6 +1537,8 @@ stage2 和 stage1主要差异（全由yaml配置指定）：
 - 由于是单步的扩散模型，训练中timesteps永远输入的0。
 
 - 没有训练LDM经验的同学，记得latent要通过缩放因子进行[标准化](https://github.com/huggingface/diffusers/blob/v0.34.0/src/diffusers/models/autoencoders/autoencoder_kl.py#L57C9-L63C101)。
+
+
 
 
 
