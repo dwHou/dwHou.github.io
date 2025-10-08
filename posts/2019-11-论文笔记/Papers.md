@@ -1474,11 +1474,20 @@ Confidence: Confidence is a score of how much closer the mean feature-wise dista
 
 > LipLeak 计算方式是：在静音音频与非静音视频的输入条件下，统计生成结果中**非静音帧**所占的比例。
 
+KeySync提出两阶段潜在扩散方法，都避免：
 
+- **关键帧阶段**：通过遮罩 **主动阻断**下半脸区域的信息传递
+
+  我觉得这个可能在diffusion model有用，毕竟生成能力强大。一般来说是双刃剑，遮罩太大，生成效果是会被牺牲的，比如鼻子也要被生成、时域抖动。
+
+- **插帧阶段**：**完全脱离原始视频**，以前一阶段已净化的关键帧为输入，形成双重隔离。
+
+> - **空间隔离**：遮罩阻断原始表情在下半脸的传播；
+> - **时间隔离**：插值阶段脱离原始视频输入。
 
 #### :page_with_curl:infiniteTalk
 
-目前看
+用了 https://wan.video/ 的基座模型
 
 #### :page_with_curl:MuseTalk
 
@@ -1973,6 +1982,22 @@ FOMM vs. RegionMM vs. This paper
 #### :page_with_curl:GAGAvatar
 
 基于3DGS
+
+#### :page_with_curl:LIA
+
+ICLR 2022
+
+TPAMI 2024
+
+arXiv 2025（LIA-X）
+
+现有工作多基于视频头像的结构化信息、结构表征，来驱动肖像图片。就会存在
+
+1. 需要复杂度更高的模型。
+2. 跨id效果不好。
+3. 依赖有监督学习的先验，在应用时有局限。
+
+LIA绕开结构表征，使用自监督自编码器。
 
 #### :page_with_curl:FLOAT
 
