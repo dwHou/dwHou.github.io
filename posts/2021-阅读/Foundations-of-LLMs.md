@@ -199,6 +199,10 @@ GRU为降低LSTM的计算成本，GRU将遗忘门与输入门进行合并。
 
 典型的支持<font color="brwon">并行输入</font>的模型是Transformer，其是一类基于注意力机制的<font color="brwon">模块化</font>构建的神经网络结构。
 
+[李自然说- Transformer](https://www.youtube.com/watch?v=_VaEjGnHgOI)
+
+论文最重要作者之一的 沙耶尔，后面创建了Character.AI。
+
 两种主要模块
 
 **(1) 注意力模块**
