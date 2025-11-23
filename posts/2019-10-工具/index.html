@@ -842,6 +842,9 @@ git pull
 
 git pull遇到远程有其他协作者的commit，和本地的commit不是fast-forward了。这时可以合并（merge）或者变基（rebase），前者历史记录更完整，后者的提交历史更直线。无论是合并还是变基，都可能遇到冲突，解决冲突的过程类似。
 
+变基：
+Git rebase 的流程是：先确保工作区干净（git stash 或 commit），然后 git fetch 获取远程最新代码，执行 git rebase origin/branch 把你本地的每个 commit 依次“重放”到远程分支上；如果某个 commit 与远程修改冲突，就手动编辑冲突文件、解决冲突后 git add 标记已解决，再执行 <font color="red">git rebase --continue 继续重放，直到所有 commit 都处理完</font>；如果想放弃整个过程可用 git rebase --abort；当 rebase 完成后，因为历史被改写，需要使用 git push --force-with-lease 推送到远程，并让 MR 显示正确的差异。
+
 3、使用场景
 通常情况下，远程操作的第一步，是使用git clone从远程主机克隆一个版本库到本地。
 
