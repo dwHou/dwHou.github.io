@@ -67,3 +67,16 @@ AI使用陷阱：
 - 锚定偏见（Anchoring bias）：一旦看过AI的建议，很难再想到别的解决方案
 - 审查疲劳（Security vigilance）：结合第一点，大量生产的代码很难沉下心来review，容易引入一些似是而非的依赖和代码
 
+Vibe Engineering：**我对每一行代码负全责**：**设计（Design）、品味（Taste）、判断力（Judgment）、清晰的沟通（Clear Communication）**
+
+
+
+https://m.toutiao.com/is/Ur0VKZTIwfg/
+
+斯坦福CS146S 零代码 计算机课：https://mp.weixin.qq.com/s/Qv7vJrS82UZ2dPKGIFjaGA
+
+
+
+Tips：
+
+Cursor现在undo是撤回整个对话记录（直至上次修改），而不是说不采纳代码。所以要谨慎点，这个操作有点反直觉。

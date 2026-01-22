@@ -534,7 +534,6 @@ EWA Volume Splatting 这篇论文引入了一个额外的空间（坐标系）�
   <br>
   <b>Figure 7:</b> Object Space to Ray Space Transformation
 </p>
-
 可以看到，这里的 **Ray Space（光线空间）变换是非线性的**，  
 因为它涉及将相机坐标的水平与垂直分量分别除以深度：
 
