@@ -388,7 +388,35 @@ env | grep -i proxy 可以查看代理的情况。</pre>
 　　conda install numpy=1.93
 　　pip  install numpy==1.93
       </pre>
+
+<pre>
+所有pip版本的导出：
+pip freeze | grep -v " @ file://" > requirements.txt
+（过滤掉本地路径依赖、本地conda的库）
+</pre>
   </ul>
+
+  <h2>uv</h2>
+  <pre>
+    开发环境：
+
+    1. 编辑 src/pyproject.toml → 添加/修改依赖
+    2. 运行 uv lock → 更新 src/uv.lock
+    （也可以指定更新 uv lock --upgrade-package wheel -v）
+    你会看到最后有类似：
+    Resolved 100 packages in 8m 50s
+    warning: `numpy==2.4.0` is yanked (reason: "Backward compatibility bug")
+    Updated wheel v0.45.1 -> v0.46.3
+    DEBUG Released lock at `/root/.cache/uv/.lock`
+    的输出，这儿表示耗时近9分钟。
+    3. 提交两个文件到 Git
+
+    Docker 构建时：
+
+    1. COPY src/ → 复制 pyproject.toml 和 uv.lock
+    2. uv export → 从锁文件导出 requirements.txt
+    3. uv pip install → 安装所有依赖（快速 + 可重现）
+  </pre>
 
   <h2>SSH</h2>
   <ul>

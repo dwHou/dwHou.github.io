@@ -2060,6 +2060,18 @@ FOMM vs. RegionMM vs. This paper
 
 基于DiT
 
+#### :page_with_curl:FlowAct-R1
+
+https://grisoon.github.io/FlowAct-R1/
+
+效果不错。
+
+#### :page_with_curl:StyleAvatar
+
+现有方法面临质量 vs. 可操控性 的两难。2D GAN-based的画质高，但精细可控性不如3D的方法。
+
+分而治之：人脸区域、非人脸前景区域、背景区域
+
 #### :page_with_curl:GAGAvatar
 
 基于3DGS

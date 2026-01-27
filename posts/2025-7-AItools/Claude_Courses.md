@@ -193,6 +193,8 @@
 - [Anthropic 官方学习资源](https://www.anthropic.com/learn)
 - [Anthropic Courses GitHub](https://github.com/anthropics/courses)
 - [Claude Resources](https://platform.claude.com/docs/en/resources/overview)
+- [Recommended Claude Plugin](https://github.com/feiskyer/claude-code-settings/tree/main)
+- [Open-source Claude Code](https://github.com/code-yeongyu/oh-my-opencode)
 
 ---
 
