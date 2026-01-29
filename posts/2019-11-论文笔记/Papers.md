@@ -1728,6 +1728,10 @@ https://github.com/sicxu/Deep3DFaceRecon_pytorch
 
 https://github.com/georgeretsi/smirk
 
+mediapipe看这个SVG图像，索引看得更清晰：
+
+https://7thsoftware.co.uk/misc/mediapipe/index.html?utm_source=chatgpt.com
+
 本文认为现有方法重建3D face效果不错，但面对微表情、极端表情、非对称表情、罕见表情时，还是有不足。提出SMIRK（Spatial Modeling for Image-based Reconstruction of Kinesics(动力学)）
 
 现有方法大多基于可微分渲染，
@@ -2056,7 +2060,7 @@ FOMM的缺陷：
 
 FOMM vs. RegionMM vs. This paper
 
-#### :page_with_curl:OmniHuman-1
+#### :page_with_curl:OmniHuman-1/1.5
 
 基于DiT
 
