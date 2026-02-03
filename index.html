@@ -1,749 +1,1142 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dew Hou's Blog - 首页</title>
 
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Home - Dew Hou's Blog</title>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
 
-        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
-        <link rel="bookmark" href="images/favicon.ico" type="image/x-icon"/>
+    <!-- Modern CSS Reset & Base Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        <link rel="stylesheet" href="./fonts/Serif/cmun-serif.css" />
-        <link rel="stylesheet" href="./fonts/Serif-Slanted/cmun-serif-slanted.css" />
+        :root {
+            /* Color Palette */
+            --primary-color: #2AA7F7;
+            --secondary-color: #1e88e5;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f7fa;
+            --bg-overlay: rgba(255, 255, 255, 0.95);
+            --border-color: #e0e0e0;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-        <!--BOOTSTRAP-->
-        <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <!--mobile first-->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            /* Typography */
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            --font-serif: "Droid Serif", Georgia, serif;
+        }
 
-        <!--removed html from url but still is html-->
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        body {
+            font-family: var(--font-family);
+            background: #ffffff url('images/AboutBG.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-        <!--font awesome-->
-        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-         <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
 
-        <!--fonts: allan & cardo-->
-        <link href="http://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
-        <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-        <link href="./css/sticky-footer-navbar.css" rel="stylesheet">
+        .navbar-brand {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: var(--transition);
+        }
 
-        <link href="./css/default.css" rel="stylesheet">
-        <link href="./css/index.css" rel="stylesheet">
+        .navbar-brand:hover {
+            color: #ffffff;
+        }
 
-        <link href="./css/inlineDisqussions.css" rel="stylesheet">
+        .navbar-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
 
-        <!--Highlight-->
-        <link href="./highlight/styles/github.css" rel="stylesheet">
+        .navbar-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
 
-        <!-- <link href="./favicon.ico" rel="shortcut icon" /> -->
+        .navbar-menu a:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .lang-switch {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .lang-switch:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        /* Mobile Menu Toggle */
+        .navbar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .content-wrapper {
+            background: var(--bg-overlay);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Section Headers */
+        .section-header {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 3rem 0 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--primary-color);
+            position: relative;
+        }
+
+        .section-header::before {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--secondary-color);
+        }
+
+        .section-header:first-child {
+            margin-top: 0;
+        }
+
+        /* Post Grid */
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Post Card */
+        .post-card {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .post-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .post-image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 60%;
+            background: var(--bg-secondary);
+            overflow: hidden;
+        }
+
+        .post-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .post-card:hover .post-image {
+            transform: scale(1.08);
+        }
+
+        .post-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .post-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: auto;
+        }
+
+        /* Text-Only Post Card - 简约书本图案 */
+        .post-card.text-only .post-image-container {
+            background: #f8f9fa;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 淡淡的书本图案 - 使用SVG */
+        .post-card.text-only .post-image-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 130px;
+            height: 130px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a8adb8' stroke-width='1.0' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain;
+            opacity: 0.30;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
+        }
+
+        /* Text-only 卡片的内容样式不变 */
+        .post-card.text-only .post-content {
+            padding: 1.5rem;
+        }
+
+        .post-card.text-only .post-title {
+            font-size: 1.25rem;
+        }
+
+        /* Special Sections */
+        .mottos-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 3rem 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .mottos-section h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .mottos-section p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .links-section {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin: 3rem 0;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .link-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .link-select:hover {
+            border-color: var(--primary-color);
+        }
+
+        .link-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(42, 167, 247, 0.1);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-animation {
+            max-width: 100%;
+        }
 
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 0 1rem;
+            }
 
-  ga('create', 'UA-49811703-1', 'dwHou.github.io');
-  ga('require', 'linkid', 'linkid.js');
-  ga('require', 'displayfeatures');
-  ga('send', 'pageview');
+            .navbar-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(30, 30, 30, 0.98);
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem;
+            }
 
-</script>
+            .navbar-menu.active {
+                display: flex;
+            }
 
+            .navbar-menu a {
+                padding: 1rem;
+            }
 
-        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+            .navbar-toggle {
+                display: block;
+            }
 
-    </head>
+            .content-wrapper {
+                padding: 2rem 1.5rem;
+            }
 
-    <body style="background: #ffffff url('images/AboutBG.jpg') no-repeat center center fixed;-moz-background-size:cover;-webkit-background-size:cover;-o-background-size:cover;background-size:cover; min-width: 394px;">
-        <div id="wrap">
-            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-                <div class="container">
-                    <!--Toggle header for mobile-->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand active" href="./" id="home">De's blog</a>
+            .post-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .section-header {
+                font-size: 1.5rem;
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 0 1rem;
+            }
+
+            .content-wrapper {
+                padding: 1.5rem 1rem;
+                border-radius: 8px;
+            }
+
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Loading Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .post-card {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="./" class="navbar-brand">De's Blog</a>
+            <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="./" data-zh="博客" data-en="Blog">博客</a></li>
+                <li><a href="./about.html" data-zh="关于" data-en="About">关于</a></li>
+                <li><a href="./contact.html" data-zh="联系" data-en="Contact">联系</a></li>
+                <li><a href="./demo.html" data-zh="算法" data-en="ALGO">算法</a></li>
+            </ul>
+            <button class="lang-switch" onclick="toggleLanguage()" id="langBtn">EN</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="content-wrapper">
+
+            <!-- Section: 天气晴朗 -->
+            <h2 class="section-header" data-zh="天气晴朗" data-en="Sunny Days">天气晴朗</h2>
+            <div class="post-grid">
+                <a href="https://distill.pub/2017/research-debt/" class="post-card" target="_blank">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/research-debt.png" alt="Research Debt" class="post-image" loading="lazy">
                     </div>
-                    <!--normal header-->
-                    <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li><a href="./"><span class="glyphicon glyphicon-pencil"></span>  Blog</a></li>
-                            <li><a href="./about.html"><span class="glyphicon glyphicon-user"></span>  About</a></li>
-                            <li><a href="./contact.html"><span class="glyphicon glyphicon-envelope"></span>  Contact</a></li>
-                            <li><a href="./demo.html"><span class="glyphicon glyphicon-play"></span>  ALGO</a></li>
-                        </ul>
-                    </div><!--/.nav-collapse -->
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="Research Debt" data-en="Research Debt">Research Debt</h3>
+                        <p class="post-subtitle" data-zh="转载自Distill" data-en="From Distill">转载自Distill</p>
+                    </div>
+                </a>
+
+                <a href="posts/2020-8-CompareKit" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/Dolby.gif" alt="CompareKit" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="CompareKit" data-en="CompareKit">CompareKit</h3>
+                        <p class="post-subtitle" data-zh="画质主观比较" data-en="Subjective Video Quality Comparison">画质主观比较</p>
+                    </div>
+                </a>
+
+                <div class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/RF.png" alt="Receptive Field Calculator" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="感受野计算器" data-en="Receptive Field Calculator">Receptive field calculator</h3>
+                        <p class="post-subtitle">
+                            <a href="posts/2022-3-感受野工具/index_fig.html" data-zh="图交互" data-en="Visual">图交互</a> |
+                            <a href="posts/2022-3-感受野工具/index_table.html" data-zh="表交互" data-en="Table">表交互</a>
+                        </p>
+                    </div>
                 </div>
-            </nav>
-
-
-            <div class="container">
-                <div class="col-sm-10 col-sm-offset-1" id="indexwrapper">
-
-
-<style>
-
-</style>
-
-
-<h2>天气晴朗</h2>
-
-<br>
-<a href="https://distill.pub/2017/research-debt/">
-<div class="post">
-<img style="width:100%; height: 100%; margin-left: 0%; margin-top: 8%; margin-bottom: 8%;" src="images/post-covers/research-debt.png">
-<h3 style="margin-top:0px; font-size:95%;">Research Debt</h3>
-<h4 style="margin-top:8px;"><i>转载自Distill</i></h4>
-</div>
-</a>
-
-<a href="posts/2020-8-CompareKit">
-<div class="post">
-<img src="images/post-covers/Dolby.gif" alt="Dolby Vision" style="width:100%;height:auto; margin-top: 22%; margin-bottom: 23%;">
-<h3 style="margin-top:0px; font-size:95%;">CompareKit</h3>
-<h4 style="margin-top:8px;"><i>画质主观比较</i></h4>
-</div>
-</a>
-
-
-<div class="post">
-<img src="images/post-covers/RF.png" alt="Dolby Vision" style="width:100%;height:auto; margin-top: 21%; margin-bottom: 20%;">
-<h3 style="margin-top:0px; font-size:95%;">Receptive field calculator</h3>
-<h4 style="margin-top:8px;"><i><a href="posts/2022-3-感受野工具/index_fig.html">图交互</a> | <a href="posts/2022-3-感受野工具/index_table.html">表交互</a></i></h4>
-</div>
-
-
-<br style="clear:left;">
-
-<h2>数学之美</h2>
-
-<br>
-<a href="posts/2021-3-DL理论改进">
-<div class="post">
-<img src="images/post-covers/swa.png" style="width:100%;height:auto; margin-top: 16%; margin-bottom: 16%;">
-<h3 style="margin-top:0px; font-size:95%;">深度学习</h3>
-<h4 style="margin-top:8px;"><i>advances in learning theory</i></h4>
-</div>
-</a>
-
-<a href="posts/2021-阅读/FlowDiffusion.html">
-<div class="post">
-<img src="posts/2021-阅读/assets/image-20250715210906306.png" style="width:100%;height:auto; margin-top: 21%; margin-bottom: 21%;">
-<h3 style="margin-top:0px; font-size:95%;">流匹配 & 扩散模型</h3>
-<h4 style="margin-top:8px;"><i>Flow Matching and Diffusion Models</i></h4>
-</div>
-</a>
-
-<a href="posts/2021-3-DL理论改进/2023-1-DM/DDPM.html">
-<div class="post">
-<img src="images/post-covers/DM.png" style="width:100%;height:auto; margin-top: 21%; margin-bottom: 21%;">
-<h3 style="margin-top:0px; font-size:95%;">扩散模型</h3>
-<h4 style="margin-top:8px;"><i>from DDPM to DALLE2</i></h4>
-</div>
-</a>
-
-<div class="post">
-<img src="images/post-covers/DM2.png" style="width:100%;height:auto; margin-top: 16%; margin-bottom: 16%;">
-<h3 style="margin-top:0px; font-size:95%;"><a href="posts/2021-3-DL理论改进/2023-1-DM/DDPM-view.html">DDPM</a> & <a href="posts/2021-3-DL理论改进/2023-1-DM/ScoreBased-view.html">Score-based</a></h3>
-<h4 style="margin-top:8px;"><i>The Principles and Applications of Diffusion Models</i></h4>
-</div>
-
-<a href="posts/2021-3-DL理论改进/2023-2-AIGC/AIGC.html">
-<div class="post">
-<img src="images/post-covers/AIGC.png" style="width:100%;height:auto; margin-top: 23.5%; margin-bottom: 23.5%;">
-<h3 style="margin-top:0px; font-size:95%;">AIGC</h3>
-<h4 style="margin-top:8px;"><i>AI-generated Content</i></h4>
-</div>
-</a>
-
-<a href="posts/2022-5-几种学习">
-<div class="post">
-<img src="images/post-covers/learning.png" style="width:100%;height:auto; margin-top: 18%; margin-bottom: 16%;">
-<h3 style="margin-top:0px; font-size:95%;">对比学习/稳定学习</h3>
-<h4 style="margin-top:8px;"><i>new concepts in learning theory</i></h4>
-</div>
-</a>
-
-<a href="posts/2021-3-非深度学习方法">
-<div class="post">
-<img src="images/post-covers/lena.jpg">
-<h3>非深度学习方法</h3>
-<h4><i>for image enhancement</i></h4>
-</div>
-</a>
-
-<br style="clear:left;">
-
-
-<h2>教育</h2>
-
-<br>
-
-<a href="posts/2019-11-物理教育-书单/">
-<div class="post">
-<img style="width:60%; height: 60%; margin-left: 7.5%; margin-top: 15%;"  src="posts/2019-11-物理教育-书单/物理学与计算机.png">
-<!-- 这次我不能像别的封面那样设置margin-bottom: 21%了，因为这个图本来就高，以它高度的21%作为下边界空白留出，会特别不协调。
-小tips: padding是内边距，margin是外边距。怎么理解呢？
-一个盒子模型分成几部分：
-	- 内容区（content）
-	- 内边距（padding）
-	- 边框（border）
-	- 外边距（margin）
-
--->
-<h3 style="margin-top:0px; font-size:95%;">书单</h3>
-</div>
-</a>
-
-
-<a href="posts/2023-3-TOEFL/TOEFL-prepare.html">
-<div class="post">
-<img src="images/post-covers/TOEFL.png" alt="toefl" style="width:100%;height:auto; margin-top: 30%; margin-bottom: 26%;">
-<h3 style="margin-top:0px; font-size:95%;">托福</h3>
-</div>
-</a>
-
-
-<br style="clear:left;">
-
-
-
-<h2>计算机科学</h2>
-
-<br>
-
-<a href="posts/2020-9-游戏引擎">
-<div class="post">
-<img src="images/post-covers/Graphics.jpeg" style="width:100%;height:auto; margin-top: 24%; margin-bottom: 24%;">
-<!-- 图片尺寸在600x600左右，或者之下，是可以直接使用的。下面文字部分也都不要style-->
-<h3 >渲染</h3>
-<h4><i>Rendering: game & film</i></h4>
-</div>
-
-</a><a href="posts/2022-10-ML/ML.html">
-    <div class="post">
-    <h3 style="margin-top:60%; margin-bottom:20%;">Statistical Learning</h3>
-    <h4 style="margin-top:8px;"><i>统计学习方法</i></h4>
-    </div>
-    </a>
-
-
-<a href="posts/2020-7-Docker">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">Docker and K8s</h3>
-<h4 style="margin-top:8px;"><i>划时代的开源项目</i></h4>
-</div>
-</a>
-
-<a href="posts/2024-8-ComfyUI/Agents.html">
-<div class="post">
-<img src="images/post-covers/Agent.png" alt="ai-agent" style="width:100%;height:auto; margin-top: 21%; margin-bottom: 21%;">
-<h3 style="margin-top:0px; font-size:95%;">AI Agents</h3>
-<h4 style="margin-top:8px;"><i></i></h4>
-</div>
-</a>
-
-<a href="https://dwhou.github.io/Squad/">
-<div class="post">
-<img src="images/post-covers/squad.jpg" alt="Squad Framework" style="width:100%;height:auto;">
-<h3 style="margin-top:0px; font-size:95%;">Squad</h3>
-<h4 style="margin-top:8px;"><i>Elite Multi-Agent Framework</i></h4>
-</div>
-</a>
-
-<a href="posts/2024-8-ComfyUI/ComfyUI.html">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">ComfyUI</h3>
-<h4 style="margin-top:8px;"><i>Visual storytelling</i></h4>
-</div>
-</a>
-
-
-<a href="posts/2020-2-算法刷题回顾/">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">算法刷题回顾</h3>
-<h4 style="margin-top:8px;"><i>python刷题</i></h4>
-</div>
-</a>
-
-<a href="posts/2020-5-CS/">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">Computer Science Courses</h3>
-<h4 style="margin-top:8px;"><i>CS education.</i></h4>
-</div>
-</a>
-
-<a href="posts/2021-阅读/Foundations-of-LLMs.html">
-<div class="post">
-<img src="images/post-covers/encoder_decoder_architecture.png" alt="ai-agent" style="width:100%;height:auto; margin-top: 18%; margin-bottom: 24%;">
-<h3 style="margin-top:0px; font-size:95%;">Foundations of LLMs</h3>
-<h4 style="margin-top:8px;"><i></i></h4>
-</div>
-</a>
-
-
-<a href="posts/2022-9-colorspace">
-<div class="post">
-<img src="images/post-covers/colorspace.jpeg" style="width:100%;height:auto; margin-top: 16%; margin-bottom: 16%;">
-<h3 style="margin-top:0px; font-size:95%;">色彩空间与像素格式</h3>
-<h4 style="margin-top:8px;"><i>Color Space</i></h4>
-</div>
-</a>
-
-
-<a href="posts/2020-8-编解码">
-<div class="post">
-<img src="images/post-covers/ai-video.jpg" alt="ai-media" style="width:100%;height:auto; margin-top: 16%; margin-bottom: 16%;">
-<h3 style="margin-top:0px; font-size:95%;">视频编解码</h3>
-<h4 style="margin-top:8px;"><i>Video Codec</i></h4>
-</div>
-</a>
-
-
-</a><a href="posts/2021-阅读/GitBranching.html">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">Git Branching</h3>
-<h4 style="margin-top:8px;"><i>技术小贴士</i></h4>
-</div>
-</a>
-
-
-<a href="posts/2020-12-TensorRT/">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">TensorRT</h3>
-<h4 style="margin-top:8px;"><i>部署推理</i></h4>
-</div>
-</a>
-
-
-<a href="posts/2020-12-TRT技术栈/">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">torch・onnx・trt</h3>
-<h4 style="margin-top:8px;"><i>技术栈</i></h4>
-</div>
-</a>
-
-<a href="posts/2021-7-NPU_GPU_CPU/">
-<div class="post">
-<img src="images/post-covers/CoreML.png" style="width:100%;height:auto; margin-top: 24%; margin-bottom: 24%;">
-<h3>ML平台部署</h3>
-</div>
-</a>
-
-<a href="posts/2021-3-VR">
-<div class="post">
-<img src="images/post-covers/VR.png" alt="ai-media" style="width:100%;height:auto; margin-top: 16%; margin-bottom: 16%;">
-<h3 style="margin-top:0px; font-size:95%;">Virtual Reality</h3>
-<h4 style="margin-top:8px;"><i></i></h4>
-</div>
-</a>
-
-<a href="posts/2021-3-DL理论改进/2025-2-3DGS/3DGS_OpenCVTeam.html">
-<div class="post">
-<img src="posts/2021-3-DL理论改进/2025-2-3DGS/assets/d_gaussian-3002438.gif" alt="3dgs" style="width:100%;height:auto; margin-top: 16%; margin-bottom: 16%;">
-<h3 style="margin-top:0px; font-size:95%;">3D Gaussian Splatting</h3>
-<h4 style="margin-top:8px;"><i></i></h4>
-</div>
-</a>
-
-
-<a href="posts/2021-3-VMAF/">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">VMAF</h3>
-<h4 style="margin-top:8px;"><i>Netflix, Inc.</i></h4>
-</div>
-</a>
-
-<br style="clear:left;">
-
-
-
-<h2>机器学习与人工智能</h2>
-
-<br>
-
-<a href="posts/2020-3-炼丹指南">
-<div class="post">
-<img src="images/post-covers/topology.png">
-<!-- 图片尺寸在600x600左右，或者之下，是可以直接使用的。下面文字部分也都不要style-->
-<h3 >炼丹指南</h3>
-<h4><i>Troubleshooting Deep Learning</i></h4>
-</div>
-</a>
-
-<a href="posts/2019-11-Pixels">
-<div class="post">
-<img src="images/post-covers/SingingBird.jpg">
-<!-- <img src="posts/2014-12-Groups-Convolution/img/fig.png"> -->
-<h3>Awesome-Super-Resolution</h3>
-<h4><i>reading list</i></h4>
-</div>
-</a>
-
-
-<a href="http://distill.pub/2016/deconv-checkerboard/">
-<div class="post">
-<img style="width:85%; height: 85%; margin-left: 7.5%; margin-top: 7.5%; margin-bottom: 10%;" src="images/post-covers/upsample.png">
-<h3 style="margin-top:0px; font-size:95%;">Deconvolution and Checkerboard Artifacts</h3>
-<h4 style="margin-top:8px;"><i>转载自Distill</i></h4>
-</div>
-</a>
-
-<a href="posts/2020-2-深度学习框架-PyTorch常用代码段/">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">PyTorch框架</h3>
-<h4 style="margin-top:8px;"><i>供查阅</i></h4>
-</div>
-</a>
-
-<a href="posts/2021-2-PyTorch(分布式)数据并行/">
-<div class="post">
-<img src="images/post-covers/Parallel.jpg" alt="ai-media" style="width:100%;height:auto; margin-top: 16%; margin-bottom: 16%;">
-<h3 style="margin-top:0px; font-size:95%;">Distributed Training</h3>
-<h4 style="margin-top:8px;"><i>practice</i></h4>
-</div>
-</a>
-
-
-<a href="posts/2020-1-模型压缩/">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">模型压缩</h3>
-<h4 style="margin-top:8px;"><i>Model Compression and Acceleration</i></h4>
-</div>
-</a>
-
-<a href="posts/2020-1-模型设计/">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">模型设计</h3>
-<h4 style="margin-top:8px;"><i>卷积神经网络的复杂度分析</i></h4>
-</div>
-</a>
-
-
-<a href="posts/2022-11-LLIE/LLIE.html">
-<div class="post">
-<img src="images/post-covers/llie.png" alt="ai-llie" style="width:100%;height:auto; margin-top: 16%; margin-bottom: 16%;">
-<h3 style="margin-top:0px; font-size:95%;">低光照增强与先验知识</h3>
-<h4 style="margin-top:8px;"><i>LLIE and prior knowledge</i></h4>
-</div>
-</a>
-
-
-<!-- <a href="posts/2022-11-LearnedCompression/LC.html">
-<div class="post">
-<img src="images/post-covers/ID-compressAI-logo-750x140.png" style="width:100%;height:auto; margin-top: 37%; margin-bottom: 36%;">
-<h3 style="margin-top:0px; font-size:95%;">智能编码</h3>
-<h4 style="margin-top:8px;"><i>Intelligent compression</i></h4>
-</div>
-</a> -->
-
-
-<br style="clear:left;">
-
-
-
-<h2>随笔</h2>
-
-<a href="posts/2021-3-ZOOM">
-<div class="post">
-<img src="images/post-covers/ZOOM_AI.jpg" alt="ai-media" style="width:100%;height:auto; margin-top: 16%; margin-bottom: 16%;">
-<h3 style="margin-top:0px; font-size:95%;">ZOOM</h3>
-<h4 style="margin-top:8px;"><i>AI & 视频协作</i></h4>
-</div>
-</a>
-
-<a href="posts/2019-10-工具/index.html">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">工具小汇</h3>
-<h4 style="margin-top:8px;"><i>Toolbox</i></h4>
-</div>
-</a>
-
-<a href="posts/2022-10-AItools/AItools.html">
-    <div class="post">
-    <h3 style="margin-top:60%; margin-bottom:20%;">AI工具小汇</h3>
-    <h4 style="margin-top:8px;"><i>AI-research-tools</i></h4>
-    </div>
-    </a>
-
-<a href="posts/2025-7-AItools/Claude_Courses.html">
-    <div class="post">
-    <h3 style="margin-top:60%; margin-bottom:20%;">AI Coding Tool</h3>
-    <h4 style="margin-top:8px;"><i>zerocode vibe coding</i></h4>
-    </div>
-    </a>
-
-<a href="posts/2019-10-填坑记/">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">填坑记</h3>
-<h4 style="margin-top:8px;"><i>配置的‘坑’与解决方案</i></h4>
-</div>
-</a>
-
-<a href="posts/2021-阅读/LearnCpp-part1.html">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%;">C++</h3>
-<h4 style="margin-top:8px;"><i>温故知新(上)</i></h4>
-</div>
-</a>
-
-<a href="posts/2021-阅读/LearnCpp-part2.html">
-    <div class="post">
-    <h3 style="margin-top:60%; margin-bottom:20%;">C++</h3>
-    <h4 style="margin-top:8px;"><i>温故知新(下)</i></h4>
-    </div>
-    </a>
-
-
-
-<br style="clear:left;">
-
-<h2>论文推荐</h2>
-
-<br>
-
-
-<div class="post">
-<img src="images/post-covers/EDVRpost.jpg">
-<h3>EDVR: Video Restoration</h3>
-<h4><i>On ArXiv <a href="https://arxiv.org/pdf/1905.02716v1.pdf"><b class="fa fa-file-pdf-o"></b></a></i></h4>
-</div>
-
-<a href="posts/2019-11-论文笔记/Papers.html">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%; margin-left:10%; margin-right:5%;">Paper Reading List</h3>
-<h4 style="margin-top:8px;"><i></i></h4>
-</div>
-</a>
-
-<a href="https://metaso.cn">
-<div class="post">
-<h3 style="margin-top:60%; margin-bottom:20%; margin-left:10%; margin-right:5%;">秘塔AI</h3>
-<h4 style="margin-top:8px;"><i></i></h4>
-</div>
-</a>
-
-
-<br style="clear:left;">
-
-<br>
-
-<div style="background: #FFF; border-radius: 5px; width: 100%; border: 2px solid black; padding: 16px;">
-<h2 style="margin-top: 8px;">Mottos</h2>
-<p>
-    <b>1-</b>善良大度，追求理想。
-</p>
-<p>
-    <b>2-</b>We are what we repeatedly do. Excellence,then,is not an act but a habit.
-</p>
-
-<p>
-    <b>3-</b>
-</p>
-<!-- 像凌波（Bourne Ling）学习-->
-<!-- 期望有的, match its price. 脱离平庸, enhance your own value. -->
-
-
-<br>
-
-<script language="JavaScript" type="text/JavaScript">
-    function    MM_jumpMenu(targ,selObj,restore){    //v3.0
-    //本窗口打开
-      //eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+" ' ");
-      //alert(selObj.options[selObj.selectedIndex].value)
-      //新窗口打开
-    window.open(selObj.options[selObj.selectedIndex].value);
-      if (restore) selObj.selectedIndex=0
-    }
-</script>
-
-
-
-<h2 style="margin-top: 8px;">Links</h2>
-
-
-<select name="select"onChange="MM_jumpMenu('parent',this,1)">
-    <option selected="selected"><b>Blogroll</b></option>
-    <option color="red" value="https://www.xpixel.group">X-Pixel</option>
-    <option color="red" value="https://graphics.stanford.edu/~levoy/">Marc Levoy</option>
-    <option value="https://renyang-home.github.io">杨韧 </option>
-    <option value="https://zhke.io/">柯章翰 </option>
-    <option value="https://fmentzer.github.io/">Fabian Mentzer </option>
-    <option value="https://ckkelvinchan.github.io/">Kelvin </option>
-    <option value="https://renyurui.github.io/">任俞睿</option>
-    <option value="https://jianzhang.tech/">张健</option>
-    <option value="http://ci.idm.pku.edu.cn/People.htm">施柏鑫</option>
-    <option value="https://zhouyifan.net/">周奕帆</option> <!-- 技术文章写的挺好玩 -->
-    <option value="https://xzhou.me/">周晓巍</option>
-    <option value="http://csrankings.org/">CSRankings</option>
-    <option value="http://airankings.org/">AIRankings</option>
-    <option value="https://aiopenindex.com/">AIOpenIndex</option>
-    <option value="https://docs.meta360.vip/web/#/12/10098">AIBusiness</option>
-    <option value="https://bytedance.feishu.cn/base/AIMAbnJxQaNgSGsBAtwcdAkLnvf?table=tblmZTd8VuUOOONh&view=vew0Eo17BB">AIProducts</option>
-    <option value="https://ai-benchmark.com/ranking_deeplearning_detailed.html">AIBenchmark</option>
-    <option value="https://metaso.cn/">秘塔AI</option>
-
-
-
-</select>
-
-<select name="select"onChange="MM_jumpMenu('parent',this,1)">
-    <option selected="selected"><b>AI Arts</b></option>
-    <option value="https://www.justinpinkney.com/">GAN </option>
-    <option value="https://neural.love/">Old Photos，Talking Head </option>
-    <option value="https://www.artbreeder.com/">Blending</option>
-    <option value="https://www.playform.io/">Playform</option>
-    <option value="https://novelai.net/">NovelAI</option>
-    <option value="https://zhuanlan.zhihu.com/p/572986232">AIpainting</option>
-</select>
-
-<select name="select"onChange="MM_jumpMenu('parent',this,1)">
-    <option selected="selected"><b>Conferences</b></option>
-    <option color="red" value="https://jackietseng.github.io/conference_call_for_paper/conferences.html">Conference Page</option>
-    <option value="https://jackietseng.github.io/conference_call_for_paper/conferences-with-ccf.html">Conference Page(with CCF) </option>
-    <option value="https://aideadlin.es/?sub=CV">Conference Deadlines</option>
-    <option value="https://www.timeanddate.com/calendar/?year=2023&country=41">calendar-china</option>
-    <!--https://www.ablesci.com/journal 期刊-->
-</select>
-
-<select name="select"onChange="MM_jumpMenu('parent',this,1)">
-    <option selected="selected"><b>Challenges</b></option>
-    <option color="red" value="https://coggle.club/">Coggle</option>
-    <option value="https://github.com/SWHL/AI-Competition-Collections">Collections</option>
-
-    <!--https://www.ablesci.com/journal 期刊-->
-</select>
-
-
-<br>
-
-<select name="select"onChange="MM_jumpMenu('parent',this,1)">
-    <option selected="selected"><b>Engineering</b></option>
-    <option color="red" value="https://blog.csdn.net/yjguo2004">郭叶军 - 英特尔</option>
-    <option value="https://www.cnblogs.com/my_life/category/282307.html">N2L - 流媒体</option>
-    <option value="https://www.wave.one/">WaveOne - 智能编码</option>
-    <option value="http://www.52im.net/forum.php?mod=collection&op=all">多媒体采访 - 即时通讯</option>
-    <option value="https://www.cnblogs.com/imstudy/p/13084157.html">Jack Jiang - 即时通讯</option>
-    <option value="https://www.livevideostack.cn/">LiveVideoStack - 多媒体</option>
-    <option value="https://webrtc.org.cn/20200421-cloudgaming1/">WebRTC - RTC技术的代表</option>
-    <option value="https://google.github.io/mediapipe/">MediaPipe - 跨平台ML解决方案</option>
-    <option value="http://www.compression.ru/">MSU大赛 - 视频编码</option>
-    <option value="https://oldpan.me/archives/ai-deploy-study-road-1">老潘 - AI部署</option>
-    <option value="https://www.nvidia.cn/developer/online-training/">NVIDIA Learning</option>
-    <option value="https://www.zoomvip.cn/blogs/list-43-24.html">视频会议</option>
-    <option value="https://www.dpreview.com/reviews/image-comparison/">数码相机比较</option>
-    <option value="https://www.aiuai.cn/aifarm2020.html">AI超分工具</option>
-    <option value="https://smilegate.ai/cn/2020/10/28/ai-media-2020/">ai-media-2020</option>
-    <option value="https://ai.oldpan.me/t/topic/169">LLM</option>
-    <option value="https://kaiyi.cool/">张开翼（AI+Web3）</option>
-    <option value="https://ai.googleblog.com/">ai.googleblog</option>
-    <option value="https://www.synthesia.io/">数字人synthesia</option>
-    <option value="https://www.topazlabs.com/">Topaz</option>
-    <option value="https://blog.zoom.us/">ZOOM</option>
-    <option value="https://www.tavus.io/blog/">Tavus</option>
-    <option value="https://pickle.com/blog/interactive-ai-avatars">Pickle</option>
-    <option value="https://www.goheadroom.com/">headroom</option>
-    <option value="https://rapport.warmly.ai">warmly.ai</option>
-    <option value="https://neat.no/stories/">neat</option>
-    <option value="https://www.poly.com/cn/zh">Poly</option>
-    <option value="https://letsenhance.io/blog/all/computational-photographyfrom-selfies-to-black-holes/">Letsenhance</option>
-    <option value="https://www.cutout.pro/">Picup.ai</option>
-    <option value="https://www.lifesize.com/en/communication-solutions/blog/">Lifesize</option>
-    <option value="https://research.adobe.com/video/behind-the-tech-super-resolution/">Adobe video</option>
-    <option value="https://blog.adobe.com/en/publish/2021/03/10/from-the-acr-team-super-resolution">Adobe blog</option>
-    <option value="https://www.futuretools.io/">AIGC tools</option>
-    <option value="https://www.xiaohu.ai/feed">Xiaohu.ai</option>
-
-
-
-</select>
-
-<select name="select"onChange="MM_jumpMenu('parent',this,1)">
-    <option selected="selected"><b>Reading Lists</b></option>
-    <option value="https://ar5iv.labs.arxiv.org/">Ar5iv</option>
-    <option value="https://tools.meta360.vip">Meta360</option>
-    <option color="red" value="https://www.aiuai.cn/">AIUAI</option>
-    <option value="http://staff.ustc.edu.cn/~zwxiong/">Zhiwei Xiong</option>
-    <!-- <option value="https://kevinj-huang.github.io/">  Resistence </option>
-    <option value="https://zeyuxiao1997.github.io/">  Zeyu Xiao</option>
-    <option value="https://joechann0831.github.io/">  Zhen Cheng</option> -->
-    <option value="https://lilianweng.github.io/">lilianweng</option>
-    <option value="http://www.ruanyifeng.com/blog/">科技爱好者周刊</option>
-    <option value="https://blog.farmostwood.net/">木遥的窗子</option>
-    <option value="http://valser.org/">Valse</option>
-    <option value="https://vas3k.com/blog/computational_photography/">从自拍到黑洞的计算摄影学</option>
-    <option value="https://www.evernote.com/shard/s150/client/snv?noteGuid=3de79ff0-5778-417c-9bcb-6c0111a26694&noteKey=29958003bb71992667ce3f42fd4ca875&sn=https%3A%2F%2Fwww.evernote.com%2Fshard%2Fs150%2Fsh%2F3de79ff0-5778-417c-9bcb-6c0111a26694%2F29958003bb71992667ce3f42fd4ca875&title=%25E4%25B8%25BA%25E4%25BB%2580%25E4%25B9%2588%25E4%25BA%25BA%25E5%2589%258D%25E8%25BF%259B%25E7%259A%2584%25E8%25B7%25AF%25E6%2580%25BB%25E6%2598%25AF%25E8%25A2%25AB%25E8%2587%25AA%25E5%25B7%25B1%25E6%258C%25A1%25E4%25BD%258F">
-        熊辉教授</option>
-    <!-- <option value="https://ridiqulous.com/restaurants-list/#Hangzhou">杭州餐厅打卡</option> -->
-    <option value="posts/2024-7-zhongbaoyan/zhongbaoyan.html">中保研（转载）</option>
-    <option value="https://www.vgchartz.com/charts/platform_totals/Hardware.php">Game DB</option>
-    <option value="posts/2025-11-育婴/mombook.html">Baby Care</option>
-    </option>
-</select>
-
-<select name="select"onChange="MM_jumpMenu('parent',this,1)">
-    <option selected="selected"><b>Reading Books</b></option>
-    <option value="https://zlibrary-global.se/"> z-library </option> <!-- https://singlelogin.se -->
-    <!-- <option value="https://b-ok.com/"> z-library </option> -->  <!-- 更新地址见邮件 -->
-    <option value="posts/2021-阅读/2021书单.html">  书单 </option>
-    <option value="posts/2021-阅读/VR.html"> 译虚拟现实 </option>
-
-</select>
-
-<select name="select"onChange="MM_jumpMenu('parent',this,1)">
-    <option selected="selected"><b>Datasets</b></option>
-    <option value="https://qualinet.github.io/databases/databases/"> qualinet </option> <!-- 更新地址见邮件 -->
-    <option value="https://www.its.bldrdoc.gov/vqeg/video-datasets-and-organizations.aspx"> vqeg </option>
-    <option value="https://homepages.inf.ed.ac.uk/rbf/CVonline/Imagedbase.htm"> CVonline </option>
-    <!-- <option value="https://blog.csdn.net/weixin_41036461/article/details/80667690"> 常用公共数据集 </option> -->
-</select>
-
-
-
-<!-- 容器(div....)用float 里面的东西用text-align -->
-<article style="width: 30%;float:right">
-<br>
-<br>
-<script type="text/javascript" src="http://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
-<script type="text/javascript" id="clustrmaps"
-src="//cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8fU&cl=ffffff&w=a">
-</script>
-</article>
-
-
-<!--<p style="font-weight: bold; font-size: 150%;"><a href="./archive.html">See the complete list of posts.</a> -->
-
-<br>
-
-                </div>
-                <img src="http://readme-typing-svg.herokuapp.com?font=Covered+By+Your+Grace&size=36&color=2AA7F7&width=900&lines=welcome+;and+thanks+for+visiting!+">
             </div>
 
-    <!-- jQuery-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+            <!-- Section: 数学之美 -->
+            <h2 class="section-header" data-zh="数学之美" data-en="Beauty of Mathematics">数学之美</h2>
+            <div class="post-grid">
+                <a href="posts/2021-3-DL理论改进" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/swa.png" alt="深度学习" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="深度学习" data-en="Deep Learning">深度学习</h3>
+                        <p class="post-subtitle" data-zh="学习理论进展" data-en="advances in learning theory">advances in learning theory</p>
+                    </div>
+                </a>
 
-    <script src="./bootstrap/js/bootstrap.min.js"></script>
+                <a href="posts/2021-阅读/FlowDiffusion.html" class="post-card">
+                    <div class="post-image-container">
+                        <img src="posts/2021-阅读/assets/image-20250715210906306.png" alt="流匹配与扩散模型" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="流匹配 & 扩散模型" data-en="Flow Matching & Diffusion Models">流匹配 & 扩散模型</h3>
+                        <p class="post-subtitle" data-zh="Flow Matching and Diffusion Models" data-en="Flow Matching and Diffusion Models">Flow Matching and Diffusion Models</p>
+                    </div>
+                </a>
 
-    <script src="./highlight/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+                <a href="posts/2021-3-DL理论改进/2023-1-DM/DDPM.html" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/DM.png" alt="扩散模型" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="扩散模型" data-en="Diffusion Models">扩散模型</h3>
+                        <p class="post-subtitle" data-zh="从DDPM到DALLE2" data-en="from DDPM to DALLE2">from DDPM to DALLE2</p>
+                    </div>
+                </a>
 
-    <script src="./js/footnotes.js"></script>
+                <div class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/DM2.png" alt="DDPM & Score-based" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title">
+                            <a href="posts/2021-3-DL理论改进/2023-1-DM/DDPM-view.html">DDPM</a> &
+                            <a href="posts/2021-3-DL理论改进/2023-1-DM/ScoreBased-view.html">Score-based</a>
+                        </h3>
+                        <p class="post-subtitle" data-zh="扩散模型的原理与应用" data-en="The Principles and Applications of Diffusion Models">The Principles and Applications of Diffusion Models</p>
+                    </div>
+                </div>
 
-    <script src="./js/inlineDisqussions.js"></script>
+                <a href="posts/2021-3-DL理论改进/2023-2-AIGC/AIGC.html" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/AIGC.png" alt="AIGC" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="AIGC" data-en="AIGC">AIGC</h3>
+                        <p class="post-subtitle" data-zh="AI生成内容" data-en="AI-generated Content">AI-generated Content</p>
+                    </div>
+                </a>
 
-    <noscript>Enable JavaScript for footnotes, Disqus comments, and other cool stuff.</noscript>
+                <a href="posts/2022-5-几种学习" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/learning.png" alt="对比学习/稳定学习" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="对比学习/稳定学习" data-en="Contrastive & Stable Learning">对比学习/稳定学习</h3>
+                        <p class="post-subtitle" data-zh="学习理论新概念" data-en="new concepts in learning theory">new concepts in learning theory</p>
+                    </div>
+                </a>
 
-    </body>
-    <script type="text/javascript" color="#FCFCFC" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+                <a href="posts/2021-3-非深度学习方法" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/lena.jpg" alt="非深度学习方法" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="非深度学习方法" data-en="Traditional Methods">非深度学习方法</h3>
+                        <p class="post-subtitle" data-zh="用于图像增强" data-en="for image enhancement">for image enhancement</p>
+                    </div>
+                </a>
+            </div>
 
+            <!-- Section: 教育 -->
+            <h2 class="section-header" data-zh="教育" data-en="Education">教育</h2>
+            <div class="post-grid">
+                <a href="posts/2019-11-物理教育-书单/" class="post-card">
+                    <div class="post-image-container">
+                        <img src="posts/2019-11-物理教育-书单/物理学与计算机.png" alt="书单" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="书单" data-en="Reading List">书单</h3>
+                        <p class="post-subtitle" data-zh="物理与计算机" data-en="Physics & Computer Science">物理与计算机</p>
+                    </div>
+                </a>
+
+                <a href="posts/2023-3-TOEFL/TOEFL-prepare.html" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/TOEFL.png" alt="托福" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="托福" data-en="TOEFL">托福</h3>
+                        <p class="post-subtitle" data-zh="考试准备" data-en="Test Preparation">考试准备</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Section: 计算机科学 -->
+            <h2 class="section-header" data-zh="计算机科学" data-en="Computer Science">计算机科学</h2>
+            <div class="post-grid">
+                <a href="posts/2020-9-游戏引擎" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/Graphics.jpeg" alt="渲染" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="渲染" data-en="Rendering">渲染</h3>
+                        <p class="post-subtitle" data-zh="游戏与电影" data-en="Rendering: game & film">Rendering: game & film</p>
+                    </div>
+                </a>
+
+                <a href="posts/2022-10-ML/ML.html" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="统计学习" data-en="Statistical Learning">Statistical Learning</h3>
+                        <p class="post-subtitle" data-zh="统计学习方法" data-en="Statistical Learning Methods">统计学习方法</p>
+                    </div>
+                </a>
+
+                <a href="posts/2020-7-Docker" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="Docker和K8s" data-en="Docker and K8s">Docker and K8s</h3>
+                        <p class="post-subtitle" data-zh="划时代的开源项目" data-en="Revolutionary Open Source Projects">划时代的开源项目</p>
+                    </div>
+                </a>
+
+                <a href="posts/2024-8-ComfyUI/Agents.html" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/Agent.png" alt="AI Agents" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="AI智能体" data-en="AI Agents">AI Agents</h3>
+                        <p class="post-subtitle" data-zh="智能代理系统" data-en="Intelligent Agent Systems">Intelligent Agent Systems</p>
+                    </div>
+                </a>
+
+                <a href="https://dwhou.github.io/Squad/" class="post-card" target="_blank">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/squad.jpg" alt="Squad Framework" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="Squad" data-en="Squad">Squad</h3>
+                        <p class="post-subtitle" data-zh="精英多智能体框架" data-en="Elite Multi-Agent Framework">Elite Multi-Agent Framework</p>
+                    </div>
+                </a>
+
+                <a href="posts/2024-8-ComfyUI/ComfyUI.html" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="ComfyUI" data-en="ComfyUI">ComfyUI</h3>
+                        <p class="post-subtitle" data-zh="视觉叙事" data-en="Visual storytelling">Visual storytelling</p>
+                    </div>
+                </a>
+
+                <a href="posts/2020-2-算法刷题回顾/" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="算法刷题回顾" data-en="Algorithm Practice Review">算法刷题回顾</h3>
+                        <p class="post-subtitle" data-zh="Python刷题" data-en="Python practice">python刷题</p>
+                    </div>
+                </a>
+
+                <a href="posts/2020-5-CS/" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="计算机科学课程" data-en="Computer Science Courses">Computer Science Courses</h3>
+                        <p class="post-subtitle" data-zh="CS教育" data-en="CS education">CS education</p>
+                    </div>
+                </a>
+
+                <a href="posts/2021-阅读/Foundations-of-LLMs.html" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/encoder_decoder_architecture.png" alt="大语言模型基础" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="大语言模型基础" data-en="Foundations of LLMs">Foundations of LLMs</h3>
+                        <p class="post-subtitle" data-zh="Transformer架构" data-en="Transformer Architecture">Transformer Architecture</p>
+                    </div>
+                </a>
+
+                <a href="posts/2022-9-colorspace" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/colorspace.jpeg" alt="色彩空间" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="色彩空间与像素格式" data-en="Color Space & Pixel Format">色彩空间与像素格式</h3>
+                        <p class="post-subtitle" data-zh="Color Space" data-en="Color Space">Color Space</p>
+                    </div>
+                </a>
+
+                <a href="posts/2020-8-编解码" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/ai-video.jpg" alt="视频编解码" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="视频编解码" data-en="Video Codec">视频编解码</h3>
+                        <p class="post-subtitle" data-zh="Video Codec" data-en="Video Codec">Video Codec</p>
+                    </div>
+                </a>
+
+                <a href="posts/2021-阅读/GitBranching.html" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="Git分支管理" data-en="Git Branching">Git Branching</h3>
+                        <p class="post-subtitle" data-zh="技术小贴士" data-en="Tech Tips">技术小贴士</p>
+                    </div>
+                </a>
+
+                <a href="posts/2020-12-TensorRT/" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="TensorRT" data-en="TensorRT">TensorRT</h3>
+                        <p class="post-subtitle" data-zh="部署推理" data-en="Deployment & Inference">部署推理</p>
+                    </div>
+                </a>
+
+                <a href="posts/2020-12-TRT技术栈/" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="torch・onnx・trt" data-en="torch・onnx・trt">torch・onnx・trt</h3>
+                        <p class="post-subtitle" data-zh="技术栈" data-en="Tech Stack">技术栈</p>
+                    </div>
+                </a>
+
+                <a href="posts/2021-7-NPU_GPU_CPU/" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/CoreML.png" alt="ML平台部署" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="ML平台部署" data-en="ML Platform Deployment">ML平台部署</h3>
+                        <p class="post-subtitle" data-zh="NPU/GPU/CPU" data-en="NPU/GPU/CPU">NPU/GPU/CPU</p>
+                    </div>
+                </a>
+
+                <a href="posts/2021-3-VR" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/VR.png" alt="虚拟现实" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="虚拟现实" data-en="Virtual Reality">Virtual Reality</h3>
+                        <p class="post-subtitle" data-zh="VR技术" data-en="VR Technology">VR Technology</p>
+                    </div>
+                </a>
+
+                <a href="posts/2021-3-DL理论改进/2025-2-3DGS/3DGS_OpenCVTeam.html" class="post-card">
+                    <div class="post-image-container">
+                        <img src="posts/2021-3-DL理论改进/2025-2-3DGS/assets/d_gaussian-3002438.gif" alt="3D高斯溅射" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="3D高斯溅射" data-en="3D Gaussian Splatting">3D Gaussian Splatting</h3>
+                        <p class="post-subtitle" data-zh="3D重建技术" data-en="3D Reconstruction">3D Reconstruction</p>
+                    </div>
+                </a>
+
+                <a href="posts/2021-3-VMAF/" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="VMAF" data-en="VMAF">VMAF</h3>
+                        <p class="post-subtitle" data-zh="Netflix视频质量评估" data-en="Netflix, Inc.">Netflix, Inc.</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Section: 机器学习与人工智能 -->
+            <h2 class="section-header" data-zh="机器学习与人工智能" data-en="Machine Learning & AI">机器学习与人工智能</h2>
+            <div class="post-grid">
+                <a href="posts/2020-3-炼丹指南" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/topology.png" alt="炼丹指南" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="炼丹指南" data-en="Deep Learning Guide">炼丹指南</h3>
+                        <p class="post-subtitle" data-zh="深度学习故障排除" data-en="Troubleshooting Deep Learning">Troubleshooting Deep Learning</p>
+                    </div>
+                </a>
+
+                <a href="posts/2019-11-Pixels" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/SingingBird.jpg" alt="超分辨率" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="Awesome超分辨率" data-en="Awesome-Super-Resolution">Awesome-Super-Resolution</h3>
+                        <p class="post-subtitle" data-zh="阅读列表" data-en="reading list">reading list</p>
+                    </div>
+                </a>
+
+                <a href="http://distill.pub/2016/deconv-checkerboard/" class="post-card" target="_blank">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/upsample.png" alt="反卷积与棋盘伪影" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="反卷积与棋盘伪影" data-en="Deconvolution and Checkerboard Artifacts">Deconvolution and Checkerboard Artifacts</h3>
+                        <p class="post-subtitle" data-zh="转载自Distill" data-en="From Distill">转载自Distill</p>
+                    </div>
+                </a>
+
+                <a href="posts/2020-2-深度学习框架-PyTorch常用代码段/" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="PyTorch框架" data-en="PyTorch Framework">PyTorch框架</h3>
+                        <p class="post-subtitle" data-zh="供查阅" data-en="Reference Guide">供查阅</p>
+                    </div>
+                </a>
+
+                <a href="posts/2021-2-PyTorch(分布式)数据并行/" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/Parallel.jpg" alt="分布式训练" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="分布式训练" data-en="Distributed Training">Distributed Training</h3>
+                        <p class="post-subtitle" data-zh="实践指南" data-en="practice">practice</p>
+                    </div>
+                </a>
+
+                <a href="posts/2020-1-模型压缩/" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="模型压缩" data-en="Model Compression">模型压缩</h3>
+                        <p class="post-subtitle" data-zh="模型压缩与加速" data-en="Model Compression and Acceleration">Model Compression and Acceleration</p>
+                    </div>
+                </a>
+
+                <a href="posts/2020-1-模型设计/" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="模型设计" data-en="Model Design">模型设计</h3>
+                        <p class="post-subtitle" data-zh="卷积神经网络的复杂度分析" data-en="CNN Complexity Analysis">卷积神经网络的复杂度分析</p>
+                    </div>
+                </a>
+
+                <a href="posts/2022-11-LLIE/LLIE.html" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/llie.png" alt="低光照增强" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="低光照增强与先验知识" data-en="LLIE and Prior Knowledge">低光照增强与先验知识</h3>
+                        <p class="post-subtitle" data-zh="LLIE and prior knowledge" data-en="LLIE and prior knowledge">LLIE and prior knowledge</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Section: 随笔 -->
+            <h2 class="section-header" data-zh="随笔" data-en="Essays">随笔</h2>
+            <div class="post-grid">
+                <a href="posts/2021-3-ZOOM" class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/ZOOM_AI.jpg" alt="ZOOM" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="ZOOM" data-en="ZOOM">ZOOM</h3>
+                        <p class="post-subtitle" data-zh="AI与视频协作" data-en="AI & Video Collaboration">AI & 视频协作</p>
+                    </div>
+                </a>
+
+                <a href="posts/2019-10-工具/index.html" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="工具小汇" data-en="Toolbox">工具小汇</h3>
+                        <p class="post-subtitle" data-zh="Toolbox" data-en="Toolbox">Toolbox</p>
+                    </div>
+                </a>
+
+                <a href="posts/2022-10-AItools/AItools.html" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="AI工具小汇" data-en="AI Research Tools">AI工具小汇</h3>
+                        <p class="post-subtitle" data-zh="AI-research-tools" data-en="AI-research-tools">AI-research-tools</p>
+                    </div>
+                </a>
+
+                <a href="posts/2025-7-AItools/Claude_Courses.html" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="AI编程工具" data-en="AI Coding Tool">AI Coding Tool</h3>
+                        <p class="post-subtitle" data-zh="零代码编程" data-en="zerocode vibe coding">zerocode vibe coding</p>
+                    </div>
+                </a>
+
+                <a href="posts/2019-10-填坑记/" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="填坑记" data-en="Troubleshooting">填坑记</h3>
+                        <p class="post-subtitle" data-zh="配置的'坑'与解决方案" data-en="Configuration Issues & Solutions">配置的'坑'与解决方案</p>
+                    </div>
+                </a>
+
+                <a href="posts/2021-阅读/LearnCpp-part1.html" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="C++（上）" data-en="C++ (Part 1)">C++</h3>
+                        <p class="post-subtitle" data-zh="温故知新(上)" data-en="Review (Part 1)">温故知新(上)</p>
+                    </div>
+                </a>
+
+                <a href="posts/2021-阅读/LearnCpp-part2.html" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="C++（下）" data-en="C++ (Part 2)">C++</h3>
+                        <p class="post-subtitle" data-zh="温故知新(下)" data-en="Review (Part 2)">温故知新(下)</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Section: 论文推荐 -->
+            <h2 class="section-header" data-zh="论文推荐" data-en="Paper Recommendations">论文推荐</h2>
+            <div class="post-grid">
+                <div class="post-card">
+                    <div class="post-image-container">
+                        <img src="images/post-covers/EDVRpost.jpg" alt="EDVR" class="post-image" loading="lazy">
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="EDVR: 视频修复" data-en="EDVR: Video Restoration">EDVR: Video Restoration</h3>
+                        <p class="post-subtitle">
+                            <a href="https://arxiv.org/pdf/1905.02716v1.pdf" target="_blank" data-zh="在ArXiv上" data-en="On ArXiv">On ArXiv<b class="fa fa-file-pdf-o"></b></a>
+                        </p>
+                    </div>
+                </div>
+
+                <a href="posts/2019-11-论文笔记/Papers.html" class="post-card text-only">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="论文阅读列表" data-en="Paper Reading List">Paper Reading List</h3>
+                        <p class="post-subtitle" data-zh="精选论文" data-en="Curated Papers">精选论文</p>
+                    </div>
+                </a>
+
+                <a href="https://metaso.cn" class="post-card text-only" target="_blank">
+                    <div class="post-image-container"></div>
+                    <div class="post-content">
+                        <h3 class="post-title" data-zh="秘塔AI" data-en="Metaso AI">秘塔AI</h3>
+                        <p class="post-subtitle" data-zh="AI搜索引擎" data-en="AI Search Engine">AI搜索引擎</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Mottos Section -->
+            <div class="mottos-section">
+                <h2 data-zh="箴言" data-en="Mottos">Mottos</h2>
+                <p><strong>1-</strong> <span data-zh="善良大度，追求理想。" data-en="Be kind and generous, pursue your ideals.">善良大度，追求理想。</span></p>
+                <p><strong>2-</strong> <span data-zh="我们是重复行为的结果。因此，卓越不是一种行为，而是一种习惯。" data-en="We are what we repeatedly do. Excellence, then, is not an act but a habit.">We are what we repeatedly do. Excellence, then, is not an act but a habit.</span></p>
+            </div>
+
+            <!-- Links Section -->
+            <div class="links-section">
+                <h2 data-zh="友情链接" data-en="Links">Links</h2>
+                <div class="links-grid">
+                    <select class="link-select" onchange="jumpTo(this)">
+                        <option selected data-zh="博客圈" data-en="Blogroll">Blogroll</option>
+                        <option value="https://www.xpixel.group">X-Pixel</option>
+                        <option value="https://graphics.stanford.edu/~levoy/">Marc Levoy</option>
+                        <option value="https://renyang-home.github.io">杨韧</option>
+                        <option value="https://zhke.io/">柯章翰</option>
+                        <option value="https://fmentzer.github.io/">Fabian Mentzer</option>
+                        <option value="https://ckkelvinchan.github.io/">Kelvin</option>
+                        <option value="https://renyurui.github.io/">任俞睿</option>
+                        <option value="https://jianzhang.tech/">张健</option>
+                        <option value="http://ci.idm.pku.edu.cn/People.htm">施柏鑫</option>
+                        <option value="https://zhouyifan.net/">周奕帆</option>
+                        <option value="https://xzhou.me/">周晓巍</option>
+                        <option value="http://csrankings.org/">CSRankings</option>
+                        <option value="http://airankings.org/">AIRankings</option>
+                        <option value="https://aiopenindex.com/">AIOpenIndex</option>
+                        <option value="https://docs.meta360.vip/web/#/12/10098">AIBusiness</option>
+                        <option value="https://bytedance.feishu.cn/base/AIMAbnJxQaNgSGsBAtwcdAkLnvf?table=tblmZTd8VuUOOONh&view=vew0Eo17BB">AIProducts</option>
+                        <option value="https://ai-benchmark.com/ranking_deeplearning_detailed.html">AIBenchmark</option>
+                        <option value="https://metaso.cn/">秘塔AI</option>
+                    </select>
+
+                    <select class="link-select" onchange="jumpTo(this)">
+                        <option selected data-zh="AI艺术" data-en="AI Arts">AI Arts</option>
+                        <option value="https://www.justinpinkney.com/">GAN</option>
+                        <option value="https://neural.love/">Old Photos, Talking Head</option>
+                        <option value="https://www.artbreeder.com/">Blending</option>
+                        <option value="https://www.playform.io/">Playform</option>
+                        <option value="https://novelai.net/">NovelAI</option>
+                        <option value="https://zhuanlan.zhihu.com/p/572986232">AIpainting</option>
+                    </select>
+
+                    <select class="link-select" onchange="jumpTo(this)">
+                        <option selected data-zh="学术会议" data-en="Conferences">Conferences</option>
+                        <option value="https://jackietseng.github.io/conference_call_for_paper/conferences.html">Conference Page</option>
+                        <option value="https://jackietseng.github.io/conference_call_for_paper/conferences-with-ccf.html">Conference Page (with CCF)</option>
+                        <option value="https://aideadlin.es/?sub=CV">Conference Deadlines</option>
+                        <option value="https://www.timeanddate.com/calendar/?year=2023&country=41">Calendar - China</option>
+                    </select>
+
+                    <select class="link-select" onchange="jumpTo(this)">
+                        <option selected data-zh="竞赛" data-en="Challenges">Challenges</option>
+                        <option value="https://coggle.club/">Coggle</option>
+                        <option value="https://github.com/SWHL/AI-Competition-Collections">Collections</option>
+                    </select>
+
+                    <select class="link-select" onchange="jumpTo(this)">
+                        <option selected data-zh="工程技术" data-en="Engineering">Engineering</option>
+                        <option value="https://blog.csdn.net/yjguo2004">郭叶军 - 英特尔</option>
+                        <option value="https://www.cnblogs.com/my_life/category/282307.html">N2L - 流媒体</option>
+                        <option value="https://www.wave.one/">WaveOne - 智能编码</option>
+                        <option value="http://www.52im.net/forum.php?mod=collection&op=all">多媒体采访 - 即时通讯</option>
+                        <option value="https://www.cnblogs.com/imstudy/p/13084157.html">Jack Jiang - 即时通讯</option>
+                        <option value="https://www.livevideostack.cn/">LiveVideoStack - 多媒体</option>
+                        <option value="https://webrtc.org.cn/20200421-cloudgaming1/">WebRTC - RTC技术的代表</option>
+                        <option value="https://google.github.io/mediapipe/">MediaPipe - 跨平台ML解决方案</option>
+                        <option value="http://www.compression.ru/">MSU大赛 - 视频编码</option>
+                        <option value="https://oldpan.me/archives/ai-deploy-study-road-1">老潘 - AI部署</option>
+                        <option value="https://www.nvidia.cn/developer/online-training/">NVIDIA Learning</option>
+                        <option value="https://www.zoomvip.cn/blogs/list-43-24.html">视频会议</option>
+                        <option value="https://www.dpreview.com/reviews/image-comparison/">数码相机比较</option>
+                        <option value="https://www.aiuai.cn/aifarm2020.html">AI超分工具</option>
+                        <option value="https://smilegate.ai/cn/2020/10/28/ai-media-2020/">ai-media-2020</option>
+                        <option value="https://ai.oldpan.me/t/topic/169">LLM</option>
+                        <option value="https://kaiyi.cool/">张开翼（AI+Web3）</option>
+                        <option value="https://ai.googleblog.com/">ai.googleblog</option>
+                        <option value="https://www.synthesia.io/">数字人synthesia</option>
+                        <option value="https://www.topazlabs.com/">Topaz</option>
+                        <option value="https://blog.zoom.us/">ZOOM</option>
+                        <option value="https://www.tavus.io/blog/">Tavus</option>
+                        <option value="https://pickle.com/blog/interactive-ai-avatars">Pickle</option>
+                        <option value="https://www.goheadroom.com/">headroom</option>
+                        <option value="https://rapport.warmly.ai">warmly.ai</option>
+                        <option value="https://neat.no/stories/">neat</option>
+                        <option value="https://www.poly.com/cn/zh">Poly</option>
+                        <option value="https://letsenhance.io/blog/all/computational-photographyfrom-selfies-to-black-holes/">Letsenhance</option>
+                        <option value="https://www.cutout.pro/">Picup.ai</option>
+                        <option value="https://www.lifesize.com/en/communication-solutions/blog/">Lifesize</option>
+                        <option value="https://research.adobe.com/video/behind-the-tech-super-resolution/">Adobe video</option>
+                        <option value="https://blog.adobe.com/en/publish/2021/03/10/from-the-acr-team-super-resolution">Adobe blog</option>
+                        <option value="https://www.futuretools.io/">AIGC tools</option>
+                        <option value="https://www.xiaohu.ai/feed">Xiaohu.ai</option>
+                    </select>
+
+                    <select class="link-select" onchange="jumpTo(this)">
+                        <option selected data-zh="阅读列表" data-en="Reading Lists">Reading Lists</option>
+                        <option value="https://ar5iv.labs.arxiv.org/">Ar5iv</option>
+                        <option value="https://tools.meta360.vip">Meta360</option>
+                        <option value="https://www.aiuai.cn/">AIUAI</option>
+                        <option value="http://staff.ustc.edu.cn/~zwxiong/">Zhiwei Xiong</option>
+                        <option value="https://lilianweng.github.io/">lilianweng</option>
+                        <option value="http://www.ruanyifeng.com/blog/">科技爱好者周刊</option>
+                        <option value="https://blog.farmostwood.net/">木遥的窗子</option>
+                        <option value="http://valser.org/">Valse</option>
+                        <option value="https://vas3k.com/blog/computational_photography/">从自拍到黑洞的计算摄影学</option>
+                        <option value="https://www.evernote.com/shard/s150/client/snv?noteGuid=3de79ff0-5778-417c-9bcb-6c0111a26694&noteKey=29958003bb71992667ce3f42fd4ca875&sn=https%3A%2F%2Fwww.evernote.com%2Fshard%2Fs150%2Fsh%2F3de79ff0-5778-417c-9bcb-6c0111a26694%2F29958003bb71992667ce3f42fd4ca875&title=%25E4%25B8%25BA%25E4%25BB%2580%25E4%25B9%2588%25E4%25BA%25BA%25E5%2589%258D%25E8%25BF%259B%25E7%259A%2584%25E8%25B7%25AF%25E6%2580%25BB%25E6%2598%25AF%25E8%25A2%25AB%25E8%2587%25AA%25E5%25B7%25B1%25E6%258C%25A1%25E4%25BD%258F">熊辉教授</option>
+                        <option value="posts/2024-7-zhongbaoyan/zhongbaoyan.html">中保研（转载）</option>
+                        <option value="https://www.vgchartz.com/charts/platform_totals/Hardware.php">Game DB</option>
+                        <option value="posts/2025-11-育婴/mombook.html">Baby Care</option>
+                    </select>
+
+                    <select class="link-select" onchange="jumpTo(this)">
+                        <option selected data-zh="阅读书籍" data-en="Reading Books">Reading Books</option>
+                        <option value="https://zlibrary-global.se/">z-library</option>
+                        <option value="posts/2021-阅读/2021书单.html">书单</option>
+                        <option value="posts/2021-阅读/VR.html">译虚拟现实</option>
+                    </select>
+
+                    <select class="link-select" onchange="jumpTo(this)">
+                        <option selected data-zh="数据集" data-en="Datasets">Datasets</option>
+                        <option value="https://qualinet.github.io/databases/databases/">qualinet</option>
+                        <option value="https://www.its.bldrdoc.gov/vqeg/video-datasets-and-organizations.aspx">vqeg</option>
+                        <option value="https://homepages.inf.ed.ac.uk/rbf/CVonline/Imagedbase.htm">CVonline</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Visitor Statistics - Clustrmaps -->
+            <div style="text-align: center; margin: 3rem auto; padding: 2rem 0;">
+                <script type="text/javascript" src="http://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+                <script type="text/javascript" id="clustrmaps"
+                src="//cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8fU&cl=ffffff&w=a">
+                </script>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Language Toggle
+        let currentLang = 'zh';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            updateLanguage();
+            document.getElementById('langBtn').textContent = currentLang === 'zh' ? 'EN' : '中文';
+        }
+
+        function updateLanguage() {
+            const elements = document.querySelectorAll('[data-zh][data-en]');
+            elements.forEach(el => {
+                if (el.tagName === 'OPTION') {
+                    el.textContent = el.getAttribute(`data-${currentLang}`);
+                } else {
+                    const text = el.getAttribute(`data-${currentLang}`);
+                    if (text) {
+                        // Preserve inner HTML structure for links
+                        if (el.children.length === 0) {
+                            el.textContent = text;
+                        } else {
+                            // For elements with children, only update text nodes
+                            const firstTextNode = Array.from(el.childNodes).find(node => node.nodeType === 3);
+                            if (firstTextNode) {
+                                firstTextNode.textContent = text;
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Update HTML lang attribute
+            document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+        }
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Jump to URL
+        function jumpTo(select) {
+            const url = select.value;
+            if (url && url !== select.options[0].value) {
+                window.open(url, '_blank');
+                select.selectedIndex = 0;
+            }
+        }
+
+        // Google Analytics
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-49811703-1', 'dwHou.github.io');
+        ga('require', 'linkid', 'linkid.js');
+        ga('require', 'displayfeatures');
+        ga('send', 'pageview');
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navbar = document.querySelector('.navbar');
+            const menu = document.getElementById('navMenu');
+            const toggle = document.querySelector('.navbar-toggle');
+
+            if (menu.classList.contains('active') && !navbar.contains(event.target)) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Lazy loading images (native browser support)
+        if ('loading' in HTMLImageElement.prototype) {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            images.forEach(img => {
+                img.src = img.src;
+            });
+        }
+    </script>
+
+</body>
 </html>
