@@ -1,1 +1,135 @@
-html, body{height:100%}body{background:url('../images/grass.jpg') no-repeat center center fixed;-moz-background-size:cover;-webkit-background-size:cover;-o-background-size:cover;background-size:cover}#indexwrapper{background-color:rgba(245,245,245,.8);margin-bottom:-9999px;padding-bottom:9999px;padding-top:20px;padding-left:20px;padding-right:20px}.container{min-height:100%;overflow:hidden}a:link{color:black}a:visited{color:black}a:hover{color:black}a:active{color:black}.post{width:250px;min-height:330px;margin-bottom:20px;margin-left:15px;margin-right:15px;float:left;border:2px solid black;background-color:white;border-radius:5px}.post h3{margin:5px;font-size:100%;text-align:center}.post h4{margin:0px;font-size:85%;text-align:center}.post img{margin:0px;padding:2px;margin-bottom:10px;width:100%;height:245px}
+html, body {
+    height: 100%;
+}
+
+body {
+    background: url('../images/grass.jpg') no-repeat center center fixed;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#indexwrapper {
+    background-color: rgba(245, 245, 245, .8);
+    margin-bottom: -9999px;
+    padding-bottom: 9999px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.container {
+    min-height: 100%;
+    overflow: hidden;
+}
+
+a:link {
+    color: black;
+}
+
+a:visited {
+    color: black;
+}
+
+a:hover {
+    color: black;
+}
+
+a:active {
+    color: black;
+}
+
+.post {
+    width: 250px;
+    height: 330px;
+    margin-bottom: 20px;
+    margin-left: 15px;
+    margin-right: 15px;
+    float: left;
+    border: 2px solid black;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.post .post-image {
+    width: 100%;
+    height: 160px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+}
+
+.post img {
+    margin: 0px;
+    padding: 2px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.post .post-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Book icon pattern using SVG for text-only posts */
+.post .post-placeholder::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 130px;
+    height: 130px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a8adb8' stroke-width='1.0' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    opacity: 0.30;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05));
+}
+
+.post .post-content {
+    flex: 1;
+    display: grid;
+    grid-template-rows: 60px 1fr; /* Fixed h3 area (60px) + flexible h4 area */
+    padding: 10px;
+    padding-top: 30px; /* Fixed top padding for consistent title positioning */
+}
+
+.post h3 {
+    margin: 0;
+    font-size: 95%;
+    text-align: center;
+    height: 60px; /* Fixed height for title area - accommodates 2 lines */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    line-height: 1.3;
+}
+
+.post h4 {
+    margin: 0;
+    margin-top: 8px; /* Space between h3 and h4 */
+    font-size: 85%;
+    text-align: center;
+    display: flex;
+    align-items: flex-start; /* Align to top of subtitle area */
+    justify-content: center;
+    overflow: hidden;
+    line-height: 1.3;
+}
