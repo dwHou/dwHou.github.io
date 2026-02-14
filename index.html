@@ -21,12 +21,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
         <!--font awesome-->
-        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-         <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+        <link href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
 
         <!--fonts: allan & cardo-->
-        <link href="http://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css">
-        <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Droid+Serif&display=swap" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Droid+Sans&display=swap" rel="stylesheet" type="text/css">
 
         <link href="./css/sticky-footer-navbar.css" rel="stylesheet">
 
@@ -40,6 +39,14 @@
 
         <!-- <link href="./favicon.ico" rel="shortcut icon" /> -->
 
+        <!-- Preconnect to external resources -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://cdn.staticfile.org">
+        <link rel="preconnect" href="https://ajax.googleapis.com">
+        <link rel="preconnect" href="https://www.google-analytics.com">
+        <link rel="dns-prefetch" href="https://cdn.mathjax.org">
+        <link rel="dns-prefetch" href="https://cdn.bootcss.com">
+        <link rel="dns-prefetch" href="https://cdn.clustrmaps.com">
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -55,7 +62,7 @@
 </script>
 
 
-        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
 
     </head>
 
@@ -119,6 +126,48 @@
 .navbar-nav > li > .lang-switch-btn {
     margin-top: 8px;
 }
+
+/* Image Loading Placeholder */
+.post-placeholder {
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s ease-in-out infinite;
+    border-radius: 4px;
+    position: relative;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.post-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.post-image img {
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+.post-image img.loaded {
+    opacity: 1;
+}
+
+.post-image .post-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.post-image .post-placeholder.hidden {
+    display: none;
+}
 </style>
 
 
@@ -128,7 +177,8 @@
 <a href="https://distill.pub/2017/research-debt/">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/research-debt.png">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/research-debt.png" loading="lazy" alt="Research Debt">
 </div>
 <div class="post-content">
 <h3 data-zh="Research Debt" data-en="Research Debt">Research Debt</h3>
@@ -140,7 +190,8 @@
 <a href="posts/2020-8-CompareKit">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/Dolby.gif" alt="Dolby Vision">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/Dolby.gif" loading="lazy" alt="Dolby Vision">
 </div>
 <div class="post-content">
 <h3 data-zh="CompareKit" data-en="CompareKit">CompareKit</h3>
@@ -152,7 +203,8 @@
 
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/RF.png" alt="Dolby Vision">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/RF.png" loading="lazy" alt="Receptive Field Calculator">
 </div>
 <div class="post-content">
 <h3 data-zh="感受野计算器" data-en="Receptive Field Calculator">感受野计算器</h3>
@@ -169,7 +221,8 @@
 <a href="posts/2021-3-DL理论改进">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/swa.png">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/swa.png" loading="lazy" alt="Deep Learning">
 </div>
 <div class="post-content">
 <h3 data-zh="深度学习" data-en="Deep Learning">深度学习</h3>
@@ -181,7 +234,8 @@
 <a href="posts/2021-阅读/FlowDiffusion-slidown.html">
 <div class="post">
 <div class="post-image">
-<img src="posts/2021-阅读/assets/image-20250715210906306.png">
+<div class="post-placeholder"></div>
+<img src="posts/2021-阅读/assets/image-20250715210906306.png" loading="lazy" alt="Flow Matching & Diffusion Models">
 </div>
 <div class="post-content">
 <h3 data-zh="流匹配 & 扩散模型" data-en="Flow Matching & Diffusion Models">流匹配 & 扩散模型</h3>
@@ -193,7 +247,8 @@
 <a href="posts/2021-3-DL理论改进/2023-1-DM/DDPM.html">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/DM.png">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/DM.png" loading="lazy" alt="Diffusion Models">
 </div>
 <div class="post-content">
 <h3 data-zh="扩散模型" data-en="Diffusion Models">扩散模型</h3>
@@ -204,7 +259,8 @@
 
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/DM2.png">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/DM2.png" loading="lazy" alt="DDPM & Score-based">
 </div>
 <div class="post-content">
 <h3><a href="posts/2021-3-DL理论改进/2023-1-DM/DDPM-view.html">DDPM</a> & <a href="posts/2021-3-DL理论改进/2023-1-DM/ScoreBased-view.html">Score-based</a></h3>
@@ -215,7 +271,8 @@
 <a href="posts/2021-3-DL理论改进/2023-2-AIGC/AIGC.html">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/AIGC.png">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/AIGC.png" loading="lazy" alt="AIGC">
 </div>
 <div class="post-content">
 <h3 data-zh="AIGC" data-en="AIGC">AIGC</h3>
@@ -227,7 +284,8 @@
 <a href="posts/2022-5-几种学习">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/learning.png">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/learning.png" loading="lazy" alt="Contrastive & Stable Learning">
 </div>
 <div class="post-content">
 <h3 data-zh="对比学习/稳定学习" data-en="Contrastive & Stable Learning">对比学习/稳定学习</h3>
@@ -239,7 +297,8 @@
 <a href="posts/2021-3-非深度学习方法">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/lena.jpg">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/lena.jpg" loading="lazy" alt="Traditional Methods">
 </div>
 <div class="post-content">
 <h3 data-zh="非深度学习方法" data-en="Traditional Methods">非深度学习方法</h3>
@@ -258,7 +317,8 @@
 <a href="posts/2019-11-物理教育-书单/">
 <div class="post">
 <div class="post-image">
-<img src="posts/2019-11-物理教育-书单/物理学与计算机.png">
+<div class="post-placeholder"></div>
+<img src="posts/2019-11-物理教育-书单/物理学与计算机.png" loading="lazy" alt="Reading List">
 </div>
 <div class="post-content">
 <h3 data-zh="书单" data-en="Reading List">书单</h3>
@@ -271,7 +331,8 @@
 <a href="posts/2023-3-TOEFL/TOEFL-prepare.html">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/TOEFL.png" alt="toefl">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/TOEFL.png" loading="lazy" alt="TOEFL">
 </div>
 <div class="post-content">
 <h3 data-zh="托福" data-en="TOEFL">托福</h3>
@@ -292,7 +353,8 @@
 <a href="posts/2020-9-游戏引擎">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/Graphics.jpeg">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/Graphics.jpeg" loading="lazy" alt="Rendering">
 </div>
 <div class="post-content">
 <h3 data-zh="渲染" data-en="Rendering">渲染</h3>
@@ -328,7 +390,8 @@
 <a href="posts/2024-8-ComfyUI/Agents.html">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/Agent.png" alt="ai-agent">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/Agent.png" loading="lazy" alt="AI Agents">
 </div>
 <div class="post-content">
 <h3 data-zh="AI智能体" data-en="AI Agents">AI智能体</h3>
@@ -340,7 +403,8 @@
 <a href="https://dwhou.github.io/Squad/">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/squad.jpg" alt="Squad Framework">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/squad.jpg" loading="lazy" alt="Squad Framework">
 </div>
 <div class="post-content">
 <h3 data-zh="Squad" data-en="Squad">Squad</h3>
@@ -389,7 +453,8 @@
 <a href="posts/2021-阅读/Foundations-of-LLMs-slidown.html">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/encoder_decoder_architecture.png" alt="ai-agent">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/encoder_decoder_architecture.png" loading="lazy" alt="Foundations of LLMs">
 </div>
 <div class="post-content">
 <h3 data-zh="大语言模型基础" data-en="Foundations of LLMs">大语言模型基础</h3>
@@ -402,7 +467,8 @@
 <a href="posts/2022-9-colorspace">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/colorspace.jpeg">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/colorspace.jpeg" loading="lazy" alt="Color Space">
 </div>
 <div class="post-content">
 <h3 data-zh="色彩空间与像素格式" data-en="Color Space & Pixel Format">色彩空间与像素格式</h3>
@@ -415,7 +481,8 @@
 <a href="posts/2020-8-编解码">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/ai-video.jpg" alt="ai-media">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/ai-video.jpg" loading="lazy" alt="Video Codec">
 </div>
 <div class="post-content">
 <h3 data-zh="视频编解码" data-en="Video Codec">视频编解码</h3>
@@ -466,7 +533,8 @@
 <a href="posts/2021-7-NPU_GPU_CPU/">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/CoreML.png">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/CoreML.png" loading="lazy" alt="ML Platform Deployment">
 </div>
 <div class="post-content">
 <h3 data-zh="ML平台部署" data-en="ML Platform Deployment">ML平台部署</h3>
@@ -478,7 +546,8 @@
 <a href="posts/2021-3-VR">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/VR.png" alt="ai-media">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/VR.png" loading="lazy" alt="Virtual Reality">
 </div>
 <div class="post-content">
 <h3 data-zh="虚拟现实" data-en="Virtual Reality">虚拟现实</h3>
@@ -490,7 +559,8 @@
 <a href="posts/2021-3-DL理论改进/2025-2-3DGS/3DGS_OpenCVTeam-slidown.html">
 <div class="post">
 <div class="post-image">
-<img src="posts/2021-3-DL理论改进/2025-2-3DGS/assets/d_gaussian-3002438.gif" alt="3dgs">
+<div class="post-placeholder"></div>
+<img src="posts/2021-3-DL理论改进/2025-2-3DGS/assets/d_gaussian-3002438.gif" loading="lazy" alt="3D Gaussian Splatting">
 </div>
 <div class="post-content">
 <h3 data-zh="3D高斯溅射" data-en="3D Gaussian Splatting">3D高斯溅射</h3>
@@ -523,7 +593,8 @@
 <a href="posts/2020-3-炼丹指南">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/topology.png">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/topology.png" loading="lazy" alt="Deep Learning Guide">
 </div>
 <div class="post-content">
 <h3 data-zh="炼丹指南" data-en="Deep Learning Guide">炼丹指南</h3>
@@ -535,7 +606,8 @@
 <a href="posts/2019-11-Pixels">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/SingingBird.jpg">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/SingingBird.jpg" loading="lazy" alt="Awesome-Super-Resolution">
 </div>
 <div class="post-content">
 <h3 data-zh="Awesome超分辨率" data-en="Awesome-Super-Resolution">Awesome超分辨率</h3>
@@ -548,7 +620,8 @@
 <a href="http://distill.pub/2016/deconv-checkerboard/">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/upsample.png">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/upsample.png" loading="lazy" alt="Deconvolution and Checkerboard Artifacts">
 </div>
 <div class="post-content">
 <h3 data-zh="反卷积与棋盘伪影" data-en="Deconvolution and Checkerboard Artifacts">反卷积与棋盘伪影</h3>
@@ -572,7 +645,8 @@
 <a href="posts/2021-2-PyTorch(分布式)数据并行/">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/Parallel.jpg" alt="ai-media">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/Parallel.jpg" loading="lazy" alt="Distributed Training">
 </div>
 <div class="post-content">
 <h3 data-zh="分布式训练" data-en="Distributed Training">分布式训练</h3>
@@ -610,7 +684,8 @@
 <a href="posts/2022-11-LLIE/LLIE.html">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/llie.png" alt="ai-llie">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/llie.png" loading="lazy" alt="LLIE and Prior Knowledge">
 </div>
 <div class="post-content">
 <h3 data-zh="低光照增强与先验知识" data-en="LLIE and Prior Knowledge">低光照增强与先验知识</h3>
@@ -638,7 +713,8 @@
 <a href="posts/2021-3-ZOOM">
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/ZOOM_AI.jpg" alt="ai-media">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/ZOOM_AI.jpg" loading="lazy" alt="ZOOM">
 </div>
 <div class="post-content">
 <h3 data-zh="ZOOM" data-en="ZOOM">ZOOM</h3>
@@ -730,7 +806,8 @@
 
 <div class="post">
 <div class="post-image">
-<img src="images/post-covers/EDVRpost.jpg">
+<div class="post-placeholder"></div>
+<img src="images/post-covers/EDVRpost.jpg" loading="lazy" alt="EDVR Video Restoration">
 </div>
 <div class="post-content">
 <h3 data-zh="EDVR: 视频修复" data-en="EDVR: Video Restoration">EDVR: 视频修复</h3>
@@ -943,9 +1020,8 @@
 <article style="width: 30%;float:right">
 <br>
 <br>
-<script type="text/javascript" src="http://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
 <script type="text/javascript" id="clustrmaps"
-src="//cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8fU&cl=ffffff&w=a">
+src="https://cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8fU&cl=ffffff&w=a" defer>
 </script>
 </article>
 
@@ -955,21 +1031,26 @@ src="//cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8f
 <br>
 
                 </div>
-                <img src="http://readme-typing-svg.herokuapp.com?font=Covered+By+Your+Grace&size=36&color=2AA7F7&width=900&lines=welcome+;and+thanks+for+visiting!+">
+                <img src="https://readme-typing-svg.herokuapp.com?font=Covered+By+Your+Grace&size=36&color=2AA7F7&width=900&lines=welcome+;and+thanks+for+visiting!+" loading="lazy" alt="Welcome">
             </div>
 
     <!-- jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
     <script src="./bootstrap/js/bootstrap.min.js"></script>
 
-    <script src="./highlight/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="./highlight/highlight.pack.js" defer></script>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof hljs !== 'undefined') {
+                hljs.initHighlightingOnLoad();
+            }
+        });
+    </script>
 
-    <script src="./js/footnotes.js"></script>
+    <script src="./js/footnotes.js" defer></script>
 
-    <script src="./js/inlineDisqussions.js"></script>
+    <script src="./js/inlineDisqussions.js" defer></script>
 
     <noscript>Enable JavaScript for footnotes, Disqus comments, and other cool stuff.</noscript>
 
@@ -1011,7 +1092,40 @@ src="//cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8f
         }
     </script>
 
+    <!-- Image Lazy Loading Handler -->
+    <script>
+        // Lazy load images with placeholder
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.post-image img[loading="lazy"]');
+
+            images.forEach(img => {
+                const placeholder = img.previousElementSibling;
+
+                // Handle images that are already loaded
+                if (img.complete) {
+                    img.classList.add('loaded');
+                    if (placeholder && placeholder.classList.contains('post-placeholder')) {
+                        placeholder.classList.add('hidden');
+                    }
+                } else {
+                    // Handle images that need to load
+                    img.addEventListener('load', function() {
+                        img.classList.add('loaded');
+                        if (placeholder && placeholder.classList.contains('post-placeholder')) {
+                            placeholder.classList.add('hidden');
+                        }
+                    });
+
+                    img.addEventListener('error', function() {
+                        // Keep placeholder visible on error
+                        console.warn('Failed to load image:', img.src);
+                    });
+                }
+            });
+        });
+    </script>
+
     </body>
-    <script type="text/javascript" color="#FCFCFC" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script>
+    <script type="text/javascript" color="#FCFCFC" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js" defer></script>
 
 </html>
