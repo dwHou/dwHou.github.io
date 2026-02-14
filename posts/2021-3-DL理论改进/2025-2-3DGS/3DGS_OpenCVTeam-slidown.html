@@ -1,0 +1,2077 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资源</title>
+
+    <!-- KaTeX for LaTeX math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMath()"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a2e;
+            --cyan: #00d4ff;
+            --magenta: #ff00ff;
+            --green: #00ff88;
+            --yellow: #ffff00;
+            --orange: #ff8800;
+            --red: #ff4444;
+            --text-primary: #e0e0e0;
+            --text-secondary: #888;
+            --grid-color: rgba(0, 212, 255, 0.03);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'JetBrains Mono', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Matrix grid background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Scanline effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1),
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.3;
+        }
+
+        /* Presentation container */
+        .presentation {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Individual slides */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(100px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .slide.exit {
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Orbitron', 'Noto Sans SC', sans-serif;
+            font-size: 4.4rem;
+            font-weight: 700;
+            color: var(--cyan);
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+            margin-bottom: 24px;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-family: 'Orbitron', 'Noto Sans SC', sans-serif;
+            font-size: 2.75rem;
+            font-weight: 600;
+            color: var(--cyan);
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            margin-bottom: 36px;
+            padding-bottom: 18px;
+            border-bottom: 2px solid var(--cyan);
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.75rem;
+            color: var(--magenta);
+            margin: 30px 0 18px 0;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+        }
+
+        h4 {
+            font-size: 1.5rem;
+            color: var(--green);
+            margin: 24px 0 12px 0;
+        }
+
+        h5, h6 {
+            font-size: 1.3rem;
+            color: var(--yellow);
+            margin: 20px 0 10px 0;
+        }
+
+        p, li {
+            font-size: 1.4rem;
+            line-height: 1.9;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        /* Code blocks */
+        pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--cyan);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 18px 0;
+            font-size: 1.2rem;
+            overflow-x: auto;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1),
+                        inset 0 0 30px rgba(0, 0, 0, 0.5);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--green);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            font-size: 1em;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 1.2rem;
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            color: var(--cyan);
+            padding: 18px;
+            text-align: left;
+            border: 1px solid var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+        }
+
+        td {
+            padding: 15px 18px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            background: var(--bg-secondary);
+        }
+
+        tr:hover td {
+            background: var(--bg-tertiary);
+            box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 18px 0 18px 36px;
+        }
+
+        li {
+            margin: 12px 0;
+            position: relative;
+        }
+
+        li::marker {
+            color: var(--cyan);
+        }
+
+        /* Links */
+        a {
+            color: var(--cyan);
+            text-decoration: none;
+            text-shadow: 0 0 10px var(--cyan);
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--magenta);
+            text-shadow: 0 0 15px var(--magenta);
+        }
+
+        /* Images */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 2px solid var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            margin: 18px 0;
+        }
+
+        /* Blockquotes */
+        blockquote {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--cyan);
+            padding: 18px 24px;
+            margin: 18px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        /* Blockquote headings - prevent oversized fonts */
+        blockquote h1 { font-size: 1.2rem !important; font-weight: 600; margin: 0.5em 0; }
+        blockquote h2 { font-size: 1.1rem !important; font-weight: 600; margin: 0.5em 0; }
+        blockquote h3 { font-size: 1rem !important; font-weight: 600; margin: 0.5em 0; }
+        blockquote h4 { font-size: 0.95rem !important; font-weight: 600; margin: 0.5em 0; }
+        blockquote h5 { font-size: 0.9rem !important; font-weight: 600; margin: 0.5em 0; }
+        blockquote h6 { font-size: 0.85rem !important; font-weight: 600; margin: 0.5em 0; }
+
+        /* Blockquote heading colors */
+        blockquote h1,
+        blockquote h2,
+        blockquote h3,
+        blockquote h4,
+        blockquote h5,
+        blockquote h6 {
+            color: var(--cyan);
+            font-style: normal;
+            text-shadow: none;
+        }
+
+        /* Horizontal rule */
+        hr {
+            border: none;
+            border-top: 2px solid var(--cyan);
+            margin: 36px 0;
+            box-shadow: 0 0 10px var(--cyan);
+        }
+
+        /* Progress bar */
+        .progress-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--bg-secondary);
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cyan), var(--magenta));
+            box-shadow: 0 0 20px var(--cyan);
+            transition: width 0.3s ease;
+        }
+
+        /* Footer - centered bottom, semi-transparent */
+        .footer-text {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.85rem;
+            color: rgba(136, 136, 136, 0.5);
+            opacity: 0.5;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        /* Page number - right bottom corner */
+        .page-number {
+            position: fixed;
+            bottom: 15px;
+            right: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--cyan);
+            background: rgba(18, 18, 26, 0.5);
+            padding: 5px 12px;
+            border-radius: 15px;
+            text-shadow: 0 0 10px var(--cyan);
+            z-index: 50;
+            pointer-events: none;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Navigation hints */
+        .nav-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 30px;
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            z-index: 100;
+        }
+
+        .nav-hint kbd {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--cyan);
+            border-radius: 4px;
+            padding: 4px 10px;
+            margin: 0 4px;
+        }
+
+        /* Title slide special */
+        .slide.title-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide.title-slide h1 {
+            font-size: 6.25rem;
+            margin-bottom: 36px;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 30px rgba(0, 212, 255, 0.5); }
+            50% { text-shadow: 0 0 50px rgba(0, 212, 255, 0.8), 0 0 80px rgba(0, 212, 255, 0.4); }
+        }
+
+        /* Fullscreen button */
+        .fullscreen-btn {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            padding: 12px 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Noto Sans SC', 'JetBrains Mono', monospace;
+            font-size: 1.05rem;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .fullscreen-btn:hover {
+            background: var(--cyan);
+            color: var(--bg-primary);
+            box-shadow: 0 0 20px var(--cyan);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .slide {
+                padding: 48px;
+            }
+
+            h1 {
+                font-size: 3.1rem;
+            }
+
+            h2 {
+                font-size: 2.25rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 36px 24px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 1.9rem;
+            }
+
+            table {
+                font-size: 1rem;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+        }
+
+        /* Single-tier chapter navigation (flattened) */
+        .chapter-nav {
+            position: fixed;
+            bottom: 50px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 100;
+            padding: 10px 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .chapter-nav::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .chapter-nav::-webkit-scrollbar-thumb {
+            background: rgba(0, 217, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .chapter-nav .chapter {
+            cursor: pointer;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #888;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .chapter-nav .chapter:hover {
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        .chapter-nav .chapter.active {
+            color: #00D9FF;
+            font-weight: 600;
+            border-bottom: 2px solid #00D9FF;
+            text-shadow: 0 0 15px var(--cyan);
+        }
+
+        .chapter-nav .chapter[data-level="1"] {
+            font-weight: 500;
+        }
+
+        .chapter-nav .chapter[data-level="2"] {
+            font-size: 0.85rem;
+        }
+
+        .chapter-nav .chapter[data-level="3"] {
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        .chapter-nav .separator {
+            color: #444;
+            padding: 0 8px;
+            display: inline-block;
+        }
+
+        /* TOC Icon */
+        .toc-icon {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(18, 18, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--cyan);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 200;
+            transition: all 0.3s ease;
+            color: #888;
+        }
+
+        .toc-icon:hover {
+            background: rgba(0, 217, 255, 0.2);
+            color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* TOC Panel */
+        .toc-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 320px;
+            max-height: 80vh;
+            background: rgba(18, 18, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--cyan);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 217, 255, 0.2);
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .toc-panel.active {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .toc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        .toc-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--cyan);
+            font-weight: 600;
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        .toc-close {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.8rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .toc-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .toc-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 0;
+        }
+
+        .toc-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .toc-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 217, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .toc-item {
+            display: flex;
+            align-items: baseline;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #aaa;
+            border-left: 3px solid transparent;
+        }
+
+        .toc-item:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-left-color: var(--cyan);
+            color: #fff;
+        }
+
+        .toc-item.active {
+            background: rgba(0, 217, 255, 0.15);
+            border-left-color: var(--cyan);
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        .toc-item[data-level="1"] {
+            padding-left: 20px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .toc-item[data-level="2"] {
+            padding-left: 40px;
+            font-size: 0.85rem;
+        }
+
+        .toc-item[data-level="3"] {
+            padding-left: 60px;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        .toc-item[data-level="4"] {
+            padding-left: 80px;
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        .toc-item[data-level="5"] {
+            padding-left: 100px;
+            font-size: 0.7rem;
+            color: #888;
+            font-style: italic;
+        }
+
+        .toc-title {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 1024px) {
+            .chapter-nav {
+                bottom: 45px;
+                padding: 8px 16px;
+            }
+
+            .chapter-nav .chapter {
+                font-size: 0.85rem;
+                padding: 5px 10px;
+            }
+
+            .toc-panel {
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chapter-nav {
+                bottom: 40px;
+                padding: 6px 12px;
+            }
+
+            .chapter-nav .chapter {
+                font-size: 0.75rem;
+                padding: 4px 8px;
+            }
+
+            .footer-text {
+                font-size: 0.7rem;
+            }
+
+            .page-number {
+                font-size: 0.8rem;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .toc-panel {
+                width: calc(100vw - 40px);
+                left: 20px;
+                right: 20px;
+            }
+
+            .toc-icon {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg"></div>
+    <div class="scanlines"></div>
+
+    <button class="fullscreen-btn" onclick="toggleFullscreen()">[ F11 全屏 ]</button>
+
+    <div class="presentation">
+        <!-- Slide 1 -->
+        <div class="slide active" data-slide="1" data-chapter="资源">
+<h2 id="_1">资源</h2>
+<ul>
+<li>官方教程：https://3dgstutorial.github.io/</li>
+<li>PPT 资料：https://3dgstutorial.github.io/</li>
+<li><a href="https://www.bilibili.com/video/BV1o4UUYbEdW/?share_source=copy_web&amp;vd_source=f26f3b6f5d88e251cea5e8fa6c584e4a">3DGS (3D Gaussian Splatting) 原理介绍</a></li>
+<li>Awesome 3DGS：https://github.com/MrNeRF/awesome-3D-gaussian-splatting</li>
+<li>3DGS 历程：https://www.youtube.com/watch?v=DjOqkVIlEGY</li>
+<li>精读教程：https://learnopencv.com/3d-gaussian-splatting/</li>
+<li>配套代码：https://github.com/spmallick/learnopencv/tree/master/3D-Gaussian-Splatting-Code/</li>
+</ul>
+<hr />
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide" data-slide="2" data-chapter="3D GS原理理解">
+<h2 id="3d-gs">3D GS原理理解</h2>
+<h3 id="nerf3d-gs">NeRF到3D GS的演变</h3>
+<h4 id="nerf">简要回顾NeRF原理</h4>
+<p><strong>核心流程：</strong></p>
+<ol>
+<li>由相机内参c2w和随机采样的像素pixels确定一条射线 $r(t)=o+td$，沿射线采样</li>
+<li>将采样点 $x_i$ 的位置信息 $(x, y, z)$ 和视角方向信息 $(\theta, \varphi)$ 编码</li>
+<li>输入神经网络【隐式辐射场】中预测采样点 $x_i$ 的颜色与体密度信息</li>
+<li>通过体渲染得到沿该射线 $r(t)$ 可观测的最终颜色</li>
+<li>根据渲染图与真实图的误差，梯度下降更新，优化神经网络参数</li>
+</ol>
+<h4 id="point-nerfnerf">Point-NeRF：NeRF与<font color="brown">点云</font>的初遇</h4>
+<p><strong>核心思想：</strong></p>
+<ol>
+<li>
+<p><strong>神经点云</strong>：为每个点赋予<strong>神经特征</strong>，该特征代表对周围局部3D场景几何和外观的编码，由CNN提取。</p>
+</li>
+<li>
+<p><strong>体渲染过程</strong>：射线采样点周边搜索半径r内的点的<strong>特征融合</strong>，得到的特征解码得到采样点的颜色和体密度。</p>
+</li>
+</ol>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide" data-slide="3" data-chapter="3D GS原理理解">
+<ol>
+<li><strong>自适应点云的生长和剔除</strong>：在射线具有<strong>最高不透明度的位置</strong>且周围没有点的情况下添加新点；每10k迭代，基于点位于物体表面的概率，设定阈值剔除无用点。</li>
+</ol>
+<h4 id="plenoxelsnerf">Plenoxels：无神经网络NeRF+球谐函数</h4>
+<p>基于稀疏体素网格表示场景，每个体素格点存储体密度和球谐函数系数。</p>
+<p>射线采样点的颜色值和体密度，由其所在体素网格的八个格点三线性插值计算。</p>
+<p><strong>球谐函数（Spherical Harmonics, SH）：</strong></p>
+<p>简称SH函数，可以看成球坐标系中的傅里叶级数，可用于拟合球面分布，例如光强，记录空间中某个点从不同方向看过去的不同颜色。阶数越高，拟合能力越强。</p>
+<hr />
+<h4 id="3d-gaussian-splatting">3D Gaussian Splatting的简要介绍</h4>
+<p>3D Gaussian Splatting（3D高斯泼溅）使用大量的3D高斯基元来表示场景，可视作<font color="brown">参数化点云</font>，每个基元包含以下信息：</p>
+<ul>
+<li>位置（Position）</li>
+<li>大小（Size）</li>
+<li>方向（Orientation）</li>
+<li>颜色信息（球谐函数系数）</li>
+<li>不透明度（Opacity）</li>
+</ul>
+<p><strong>渲染速度优势：</strong></p>
+<p><img src="../../../images/typora-images/image-20250618163027486.png" alt="image-20250618163027486" style="zoom:50%;" /></p>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide" data-slide="4" data-chapter="3D GS原理理解">
+<hr />
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide" data-slide="5" data-chapter="OpenCV Team 讲座笔记">
+<h2 id="opencv-team">OpenCV Team 讲座笔记</h2>
+<blockquote>
+<p>以下内容为 OpenCV Team 关于 3D Gaussian Splatting 的讲座笔记</p>
+</blockquote>
+<hr />
+<h3 id="3d-gs">3D GS 引子</h3>
+<h4 id="_1">核心问题</h4>
+<p><img src="../../../images/typora-images/image-20250618171234127.png" alt="image-20250618171234127" style="zoom:50%;" /></p>
+<ol>
+<li>3D GS高斯椭球形状为什么受协方差矩阵控制？</li>
+<li>3D GS高斯椭球如何从3D空间投影到2D空间？</li>
+<li>3D GS基于图像块（Tile）的光栅化图像渲染</li>
+</ol>
+<h4 id="_2">技术回顾</h4>
+<h5 id="0-nerf-3d">0. 摄影测量、NeRF 与 3D 高斯泼溅的对比</h5>
+<p>基于多视角的三维重建一直是三维视觉与图形领域的长期难题！它的目标是根据从不同视角拍摄的一组二维图像来生成场景的三维表示。</p>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide" data-slide="6" data-chapter="OpenCV Team 讲座笔记">
+<p><strong>演进历程：</strong></p>
+<p>经典的解决方案是 <strong>摄影测量（Photogrammetry）</strong>。然而在 2020 年，<strong>Neural Radiance Fields（NeRF）</strong> 出现，提供了一种更具真实感与更强鲁棒性的替代方案。尽管 NeRF 推动了巨大进步，但它仍然存在一些限制：</p>
+<ul>
+<li>渲染速度慢</li>
+<li>存在伪影 / 浮点噪声（floaters）</li>
+<li>难以有效重建较大规模场景</li>
+<li>等等</li>
+</ul>
+<p>最终，在 2023 年，<strong>3D Gaussian Splatting</strong> 被提出，并成功解决了 NeRF 面临的许多问题。</p>
+<p><img src="assets/colmap_nerf_3dgs_compare.webp" alt="colmap_nerf_3dgs" style="zoom:80%;" /></p>
+<h5 id="1">1. 摄影测量</h5>
+<p><strong>方法概述：</strong></p>
+<p>这一问题最初通过三维计算机视觉方法来解决，例如 <strong>运动推断结构（SfM）</strong>、<strong>多视图立体（MVS）</strong> 和 <strong>稠密重建</strong>。这些方法通常是基于特征点的：它们从输入图像中提取特征点，然后要么在整个图像序列中跟踪这些点，要么在新图像中重新提取特征点并尝试与先前关键帧（key-frames）中的特征进行匹配。</p>
+<p>这些特征点随后用于计算 <strong>本质矩阵（Essential Matrix）</strong>，以推求相机位姿，然后再通过<strong>三角测量（Triangulation）</strong>获得场景的三维点。</p>
+<p><strong>优缺点：</strong></p>
+<p>摄影测量虽然具有<strong>最高的几何精度</strong>，但也存在一些缺点：</p>
+<ul>
+<li>渲染速度较慢</li>
+<li>难以处理反光或透明表面</li>
+</ul>
+        </div>
+
+        <!-- Slide 7 -->
+        <div class="slide" data-slide="7" data-chapter="OpenCV Team 讲座笔记">
+<ul>
+<li>在缺乏纹理的区域精度下降</li>
+<li>重建点云中可能出现离群点（outliers）</li>
+</ul>
+<p><strong>相关阅读：</strong></p>
+<p>我们也有一篇关于 <a href="https://learnopencv.com/monocular-slam-in-python/">视觉 SLAM</a> 的详细文章和代码示例，它与 SfM 和 MVS 在思路上非常相似。</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p>相机轨迹 + 稀疏/稠密三维点云 = SfM(离线、多视角图像集)</p>
+<p>稠密点云 / 网格 = MVS(已知相机位姿 + 图像)</p>
+<p>实时相机/机器人位姿 + 可用的地图 = SLAM(连续传感器数据: 相机/IMU/LiDAR)</p>
+<p>SfM、MVS、SLAM之间的联系：</p>
+<ul>
+<li><strong>SfM 得到相机位姿和稀疏点</strong></li>
+</ul>
+</blockquote>
+        </div>
+
+        <!-- Slide 8 -->
+        <div class="slide" data-slide="8" data-chapter="OpenCV Team 讲座笔记">
+<blockquote>
+<ul>
+<li><strong>MVS 在此基础上做稠密重建</strong></li>
+<li><strong>SLAM 在实时条件下做类似 SfM 的事情</strong></li>
+</ul>
+<p>```<br />
+        SfM                  MVS<br />
+  (相机位姿 + 稀疏点云)  →   (稠密重建)<br />
+               ↑<br />
+     SLAM（实时做 SfM，并形成可用地图）</p>
+<p>```</p>
+</blockquote>
+<h5 id="2-nerf">2. NeRF (神经辐射场)</h5>
+<p><strong>核心思想：</strong></p>
+<p>Neural Radiance Field（NeRF）用于三维重建和新视角合成。它是一个非常优雅的思想：使用一个<strong>简单的 MLP 神经网络</strong>结合体渲染（volumetric rendering）技术来生成三维场景。NeRF 的核心基于场景参数化的概念。</p>
+<p><strong>优缺点：</strong></p>
+<p>尽管 NeRF 能生成<strong>高度逼真的图像</strong>并具有良好的几何精度，但它在处理<strong>大规模场景</strong>时会遇到困难，并且<strong>渲染速度较慢</strong>。</p>
+<p><strong>相关阅读：</strong></p>
+        </div>
+
+        <!-- Slide 9 -->
+        <div class="slide" data-slide="9" data-chapter="OpenCV Team 讲座笔记">
+<p>我们有一篇完整的文章专门介绍 <a href="https://learnopencv.com/annotated-nerf-pytorch/">NeRF</a>，其中详细讲解了它的内部机制和 PyTorch 实现代码。</p>
+<h5 id="3-3d">3. 3D高斯泼溅</h5>
+<p><strong>核心方法：</strong></p>
+<p>3D Gaussian Splatting 是一种基于光栅化（Rasterization）的渲染方法，它能够在仅有少量输入图像的情况下，实现场景的<strong>实时、照片级真实感渲染</strong>。与传统光栅化使用三角网格不同，3DGS 使用<strong>数以百万计的三维高斯分布</strong>来表示场景。</p>
+<p><strong>流程步骤：</strong></p>
+<ol>
+<li>
+<p><strong>初始化高斯</strong>：利用 <strong>运动推断结构（SfM）</strong> 生成的稀疏点云，初始化一组 3D 高斯分布。</p>
+</li>
+<li>
+<p><strong>自适应密度控制（Adaptive Density Control）</strong>：通过优化阶段不断调整高斯的数量、大小和位置，使其更好地拟合场景几何与外观。</p>
+</li>
+<li>
+<p><strong>可微分的基于 Tile 的光栅化器（Tile-based Differentiable Rasterizer）</strong>：用于高效渲染这些高斯，同时使训练过程可端到端优化。其训练速度可与最新的辐射场方法相媲美。</p>
+</li>
+</ol>
+<p>训练完成后，系统便可以对高度细节化、视觉效果逼真的 3D 场景进行<strong>实时探索与交互</strong>。</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p>如果"<strong>自适应密度控制</strong>"、"<strong>基于 Tile 的光栅化器</strong>"等术语暂时不清楚，也不用担心——我们会在接下来的章节中详细解释这些概念 :)</p>
+</blockquote>
+<hr />
+<h3 id="3d-gs">3D GS概览</h3>
+<h4 id="_1">概览</h4>
+        </div>
+
+        <!-- Slide 10 -->
+        <div class="slide" data-slide="10" data-chapter="OpenCV Team 讲座笔记">
+<p>3D 高斯点渲染（3D Gaussian Splatting）提出了一种基于光栅化（rasterization-based）的重建辐射场的方法。该方法既能得到高品质的重建效果，又具有显著的速度和性能优势，甚至适用于移动设备。我们不再需要在质量与速度之间做妥协，这一事实促使从业者构建大量工具和应用。3DGS（3D Gaussian Splatting）也已被集成到 Unity、Unreal、three.js 和 NeRFStudio 等框架中。此外，利用 3DGS 展开的大量研究已经发表，涵盖不同主题：动态与人体重建、SLAM、三维生成模型（3D Generative Models）等许多方向。在本教程中，我们将首先解释 3DGS 及其为何迅速风靡研究界，接着给出在研究场景中使用若干有用工具的实用建议，并讨论该研究领域的进展。</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p><strong>3D Gaussian Splatting（3DGS）</strong>：想象把三维空间里的物体用大量小的、带有模糊边界的“高斯云点”（每个点像小模糊球）表示。渲染时把这些云点投影到图像上并混合，得到最终画面。</p>
+<p><strong>基于光栅化（rasterization-based）</strong>：光栅化是一种从几何（点、线、三角形）快速生成像素图像的传统渲染方法，常用于实时渲染（比如游戏）。这里意味着 3DGS 使用类似游戏中那种把东西快速变成像素的方法来做重建，而不是更慢的逐光线跟踪方法。</p>
+<p><strong>重建辐射场（radiance field）</strong>：辐射场可以理解为“从任意位置和方向看，场景应当发出怎样的光”，也就是能合成新视角图像的隐式场表示。NeRF（神经辐射场）就是这类概念的典型代表。</p>
+<p><strong>整体意思</strong>：这句说的是 3DGS 提出用“高斯云点 + 光栅化”的方式来重建那种能合成新视角图像的光照／颜色场。</p>
+<p>[!TIP]<br />
+</p>
+</blockquote>
+        </div>
+
+        <!-- Slide 11 -->
+        <div class="slide" data-slide="11" data-chapter="OpenCV Team 讲座笔记">
+<blockquote>
+<p><strong>传统光栅化</strong>：会计算每个三角形在屏幕上的位置（即透视投影），确定其覆盖的像素范围，并为这些像素记录颜色、深度等属性，存入 Z-buffer。当新的三角形绘制到同一像素时，比较深度值，只保留距离相机更近的那个。最终，再根据 Z-buffer 中的光照、材质、法线等信息计算每个像素的最终颜色。</p>
+<p><strong>3DGS 中的光栅化：</strong>同样会计算每个高斯体在屏幕上的位置（即透视投影），但 3DGS 不使用传统的“硬性遮挡”式 Z-buffer。由于高斯体是半透明、具有体积感的元素，多个高斯在重叠时，其颜色会<strong>按深度连续混合（blending）</strong>，而不是“前者覆盖后者”。渲染时，3DGS 会根据每个高斯的颜色、透明度和深度等属性，对它们进行深度排序与 α 混合，逐层累积，得到最终像素颜色。</p>
+<p>简而言之，传统光栅化强调表面可见性（只渲染最前方的几何），而 3DGS 的光栅化强调体积累积效应（所有高斯对最终颜色都有贡献）。与传统渲染依赖“材质 + 灯光”模型不同，3DGS 直接学习场景的整体外观，也就是辐射场本身。基础版的 3DGS 不需要显式的光照、材质或法线信息，因为大多数数据集的光照条件是固定的；不过，一些扩展变体会在此基础上进一步显式建模光照或表面属性。</p>
+</blockquote>
+<p><strong>技术对比：</strong></p>
+<p>对于熟悉传统计算机图形学的人来说：</p>
+<ul>
+<li><strong>NeRF</strong>：从概念上更接近光线追踪（ray tracing）技术，采用 backward mapping，基于光线追踪的体积采样</li>
+<li><strong>3DGS</strong>：概念上更接近光栅化（rasterization）技术，采用 forward mapping，一批高斯体进行 $\alpha$ 混合，基于光栅化的体积投影</li>
+</ul>
+        </div>
+
+        <!-- Slide 12 -->
+        <div class="slide" data-slide="12" data-chapter="OpenCV Team 讲座笔记">
+<p><img src="assets/image-20251030105414395-1792859.png" alt="image-20251030105414395" style="zoom:80%;" /></p>
+<h4 id="_1">要点</h4>
+<p>3D Gaussian Splatting（3DGS）的实现包含许多关键且精细的步骤，理解这些步骤对于掌握其工作原理非常重要。</p>
+<p><strong>核心内容包括：</strong></p>
+<ul>
+<li>将三维高斯投影到二维图像平面上</li>
+<li>优化高斯，使其能够精确表达场景</li>
+<li>对三维高斯进行自适应密度控制</li>
+<li>将高斯在二维图像平面上进行高效渲染</li>
+<li>使用球谐函数（Spherical Harmonics）实现视角相关的外观表示</li>
+</ul>
+<p><strong>术语总结：</strong></p>
+        </div>
+
+        <!-- Slide 13 -->
+        <div class="slide" data-slide="13" data-chapter="OpenCV Team 讲座笔记">
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>总结</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>投影</strong></td>
+<td>决定高斯在屏幕上的二维形状和位置</td>
+</tr>
+<tr>
+<td><strong>渲染</strong></td>
+<td>决定如何把高斯真正画到图像上</td>
+</tr>
+<tr>
+<td><strong>优化高斯</strong></td>
+<td>优化每个高斯的参数以拟合真实场景</td>
+</tr>
+<tr>
+<td><strong>密度控制</strong></td>
+<td>增减高斯数量以提高场景模型质量与效率</td>
+</tr>
+<tr>
+<td><strong>球谐函数（Spherical Harmonics）</strong></td>
+<td>让高斯的颜色与亮度随观察视角变化而改变，使画面更真实</td>
+</tr>
+</tbody>
+</table>
+<p>我们将对这篇3DGS论文进行详细的梳理，依次讲解上述关键点，并带你一步一步推导相关公式和计算过程。</p>
+<hr />
+<h3 id="3d-gs">3D GS要点详解</h3>
+<h4 id="_1">投影</h4>
+        </div>
+
+        <!-- Slide 14 -->
+        <div class="slide" data-slide="14" data-chapter="OpenCV Team 讲座笔记">
+<p>通常，三维数据主要有三种常用的表示方式：点云（point clouds）、网格（meshes）和体素网格（voxel grids）。在这些表示中，传统的光栅化方法通常基于网格进行渲染，而网格一般使用三角形作为基本元来表示三维场景。然而，对于像头发、毛发、烟雾这类具有<strong>体积细节（volumetric details）</strong>的对象，用三角形来表现往往困难重重；并且传统光栅化方法在处理大型或高精细网格时，会占用大量的内存和计算资源。</p>
+<p>为了解决这些问题，作者需要一种既<strong>可微分（differentiable）</strong>、又能够支持<strong>高速渲染</strong>的基本表示元件（primitive）。作者选择了 <strong>3D 高斯（Gaussian）</strong> 作为场景表示，它由一个三维协方差矩阵 $\Sigma$ 定义，并以均值 $\mu$ 为中心。这些高斯不仅是可微分的，还可以方便地投影到二维，形成 <strong>2D splats（斑点）</strong>，并通过高效的 <strong>α-混合（alpha-blending）</strong> 实现渲染。</p>
+<p><img src="assets/d_gaussian-3002438.gif" alt="3D gaussian equation 3D Gaussian Splatting in volumetric image rendering  " style="zoom:50%;" /></p>
+<h4 id="_1">传统渲染管线</h4>
+<p><strong>传统的图像生成（Traditional Image Formation）</strong></p>
+<p>假设我们已经使用 <strong>3D 高斯分布（3D Gaussians）</strong> 表示了三维场景。 <br />
+那么，接下来我们该如何从这个三维场景生成一张二维图像（渲染）呢？ <br />
+其实，这个过程与 <strong>传统的图像成像原理</strong> 类似，主要包括以下步骤：  </p>
+<p align="center">
+        </div>
+
+        <!-- Slide 15 -->
+        <div class="slide" data-slide="15" data-chapter="OpenCV Team 讲座笔记">
+<p><img src="assets/trad_image_formation-1024x361.webp" width="700"><br />
+  <br><br />
+  <b>Figure 5:</b> Traditional Image Formation<br />
+</p></p>
+<hr />
+<p><strong>1. 坐标变换（Coordinate Transformation）</strong></p>
+<p>这一步是将点从 <strong>世界坐标系（world/object space）</strong> 转换到 <strong>相机坐标系（camera space）</strong>。 <br />
+该变换由 <font color="brown"><strong>外参矩阵（extrinsic matrix）</strong></font>完成，其中 $R$ 表示旋转矩阵，$T$ 表示平移向量。 <br />
+它们一起描述了相机与世界之间的线性（仿射）变换关系。  </p>
+<p>设：<br />
+- $a_{\text{world}} = [a_0, a_1, a_2]$：世界坐标系中的一点<br />
+- $u_{\text{camera}} = [u_0, u_1, u_2]$：对应的相机坐标系中的点  </p>
+<p>它们的关系为（仿射变换）：  </p>
+$$
+u_{\text{camera}} = E_{\text{world}}^{\text{camera}} \, a_{\text{world}} = R a_{\text{world}} + T
+$$
+
+<hr />
+        </div>
+
+        <!-- Slide 16 -->
+        <div class="slide" data-slide="16" data-chapter="OpenCV Team 讲座笔记">
+<p><strong>2. 相机投影（Camera Projection）</strong></p>
+<p>接下来是将三维的相机坐标（camera space）投影到二维的图像坐标（screen/image space）。 <br />
+这个变换由 <font color="brown"><strong>内参矩阵（intrinsic matrix）</strong> $K$ </font>实现。  </p>
+<p>矩阵 $K$ 由 <strong>焦距（focal length）</strong> 与 <strong>光学中心（optical center）</strong> 组成：  </p>
+$$
+c_x = W / 2, \quad c_y = H / 2
+$$
+
+<p>其中 $W, H$ 分别为图像的宽和高。  </p>
+<p><img alt="3D Gaussian Splatting What is 3D Gaussian Splatting and how does it work? " src="assets/camera_proj-1024x429-3003315.webp" /></p>
+<p>通过该投影矩阵，就可以将 3D 空间中的点映射到相机平面的 2D 像素坐标上。  </p>
+<hr />
+<p>是不是很简单？实际上，<strong>3D Gaussian Splatting</strong> 也是基于非常相似的成像管线来工作的。接下来我们看看它是如何应用这一过程的！</p>
+<hr />
+<h4 id="_1">仿射变换矩阵</h4>
+<blockquote>
+<p>[!NOTE]</p>
+<h6 id="r">🧭 仿射变换矩阵中的 R：旋转、缩放、剪切的几何意义与分解</h6>
+<ul>
+<li>$R$：3×3 线性部分（旋转 + 缩放 + 剪切）  </li>
+</ul>
+</blockquote>
+        </div>
+
+        <!-- Slide 17 -->
+        <div class="slide" data-slide="17" data-chapter="OpenCV Team 讲座笔记">
+<blockquote>
+<ul>
+<li>$t$：平移向量<br />
+每一列 $r_i$：表示原坐标轴在新空间的方向与长度。</li>
+<li>若 $R^T R = I$ 且 $\det(R)=1$：表示纯旋转<br />
+其中 $S$ 含缩放 + 剪切。</li>
+<li>$R_{\text{rot}}$：旋转矩阵  </li>
+<li>$S$：对称矩阵（缩放+剪切）</li>
+<li>$U, V$：正交矩阵（旋转）  </li>
+<li>$\Sigma$：对角矩阵（缩放）</li>
+<li>$R_{\text{rot}}$：旋转  </li>
+<li>$R_{\text{upper}}$：上三角矩阵（缩放+剪切）<br />
+如何分解$R$：<br />
+| 旋转 | 正交矩阵 $R^TR=I$ | 改变方向 |<br />
+| 平移 | 向量 $t$          | 改变位置 |</li>
+<li>$R$ 同时编码旋转、缩放、剪切；单看元素无法直接区分。</li>
+</ul>
+</blockquote>
+        </div>
+
+        <!-- Slide 18 -->
+        <div class="slide" data-slide="18" data-chapter="OpenCV Team 讲座笔记">
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>变换矩阵</th>
+<th>向量</th>
+<th>能表示的变换</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2D</td>
+<td>2×2</td>
+<td>(x, y)</td>
+<td>旋转、缩放、剪切</td>
+</tr>
+<tr>
+<td>2D (齐次坐标)</td>
+<td>3×3</td>
+<td>(x, y, 1)</td>
+<td>旋转、缩放、剪切、平移</td>
+</tr>
+<tr>
+<td>3D</td>
+<td>3×3</td>
+<td>(x, y, z)</td>
+<td>旋转、缩放、剪切</td>
+</tr>
+<tr>
+<td>3D (齐次坐标)</td>
+<td>4×4</td>
+<td>(x, y, z, 1)</td>
+<td>旋转、缩放、剪切、平移</td>
+</tr>
+</tbody>
+</table>
+<p>1️⃣ 仿射变换结构</p>
+<p>在齐次坐标中：</p>
+$$
+> T =
+> \begin{bmatrix}
+> R & t \\
+> 0 & 1
+> \end{bmatrix}
+> $$
+<hr />
+<p>2️⃣ R 矩阵的几何意义<br />
+$$
+> R =
+> \begin{bmatrix}
+> | & | & | \\
+> r_1 & r_2 & r_3 \\
+> | & | & |
+> \end{bmatrix}
+> $$</p>
+<p>🌀 旋转（Rotation）</p>
+<ul>
+<li>各轴保持垂直、长度不变（刚体绕原点旋转）</li>
+</ul>
+<p>例子：绕z轴的二维旋转：<br />
+$$
+> R_z(\theta)=
+> \begin{bmatrix}
+> \cos\theta & -\sin\theta & 0\\
+> \sin\theta & \cos\theta & 0\\
+> 0 & 0 & 1
+> \end{bmatrix}
+> $$</p>
+<h6 id="scaling">📏 缩放（Scaling）</h6>
+<ul>
+<li>对角矩阵表示独立缩放：</li>
+</ul>
+$$
+> R=
+> \begin{bmatrix}
+> s_x & 0 & 0\\
+> 0 & s_y & 0\\
+> 0 & 0 & s_z
+> \end{bmatrix}
+> $$
+<ul>
+<li>改变轴长度，不改变方向</li>
+</ul>
+<p>🔶 剪切（Shear）</p>
+<ul>
+<li>非对角元素非零时表示剪切（改变轴间夹角）</li>
+</ul>
+$$
+> R=
+> \begin{bmatrix}
+> 1 & k_{xy} & 0\\
+> 0 & 1 & 0\\
+> 0 & 0 & 1
+> \end{bmatrix}
+> $$
+<hr />
+<p>3️⃣ 已知 R，如何分解出旋转、缩放、剪切</p>
+<p>目标：</p>
+$$
+> R = R_{\text{rot}} \cdot R_{\text{shear}} \cdot R_{\text{scale}}
+> $$
+<p>或常用极分解形式：</p>
+$$
+> R = R_{\text{rot}} \cdot S
+> $$
+<p>✅ 极分解（Polar Decomposition）<br />
+$$
+> S = \sqrt{R^T R}, \quad R_{\text{rot}} = R S^{-1}
+> $$</p>
+<p>✅ 奇异值分解（SVD）<br />
+$$
+> R = U \Sigma V^T
+> $$</p>
+<p>取：</p>
+$$
+> R_{\text{rot}} = U V^T,\quad R_{\text{scale}} = \Sigma
+> $$
+<p>✅ QR / RQ 分解<br />
+$$
+> R = R_{\text{rot}} \cdot R_{\text{upper}}
+> $$<br />
+常用于相机标定。</p>
+<hr />
+<p>4️⃣ 伪代码：</p>
+$$
+> R =
+> \begin{bmatrix}
+> a_{11} & a_{12} & a_{13} \\
+> a_{21} & a_{22} & a_{23} \\
+> a_{31} & a_{32} & a_{33}
+> \end{bmatrix}
+> $$
+<p>```python</p>
+<h1 id="step-1">Step 1: 提取列向量</h1>
+<p>x = [a11, a21, a31]<br />
+y = [a12, a22, a32]<br />
+z = [a13, a23, a33]</p>
+<h1 id="step-2-scale">Step 2: 计算缩放（scale）</h1>
+<p>s_x = ||x||<br />
+x = x / s_x</p>
+<h1 id="step-3-shear_xy">Step 3: 计算剪切（shear_xy）</h1>
+<p>shear_xy = dot(x, y)<br />
+y = y - shear_xy * x<br />
+s_y = ||y||<br />
+y = y / s_y<br />
+shear_xy = shear_xy / s_y</p>
+<h1 id="step-4-shear_xz-shear_yz">Step 4: 计算剪切（shear_xz, shear_yz）</h1>
+<p>shear_xz = dot(x, z)<br />
+shear_yz = dot(y, z)<br />
+z = z - shear_xz * x - shear_yz * y<br />
+s_z = ||z||<br />
+z = z / s_z<br />
+shear_xz = shear_xz / s_z<br />
+shear_yz = shear_yz / s_z</p>
+<h1 id="step-5">Step 5: 计算旋转矩阵</h1>
+<p>R_rot = [x, y, z]  # 每一列是单位方向向量<br />
+```</p>
+<p><code>R_rot</code>：旋转矩阵（正交）</p>
+<p><code>s_x, s_y, s_z</code>：缩放因子</p>
+<p><code>shear_xy, shear_xz, shear_yz</code>：剪切量</p>
+<hr />
+<p>5️⃣ 总结表</p>
+<table>
+<thead>
+<tr>
+<th>成分</th>
+<th>数学特征</th>
+<th>几何意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>缩放</td>
+<td>对角矩阵</td>
+<td>改变长度</td>
+</tr>
+<tr>
+<td>剪切</td>
+<td>上三角非对角项</td>
+<td>改变夹角</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>🧠 <strong>要点</strong><br />
+- 常用分解方法：<strong>极分解（Polar）</strong>、<strong>SVD</strong>、<strong>RQ/QR</strong>。<br />
+- 实践中优先用极分解或 SVD 来分离旋转与形变（缩放/剪切）。</p>
+</blockquote>
+        </div>
+
+        <!-- Slide 19 -->
+        <div class="slide" data-slide="19" data-chapter="OpenCV Team 讲座笔记">
+<hr />
+<h4 id="3d-2d">高斯泼溅中的3D 到 2D 的投影</h4>
+<h5 id="_1">视角变换</h5>
+<p>假设我们需要将一个三维高斯分布  $ \mathcal{N}(x, \Sigma) $ 投影到二维空间。</p>
+<p>如前文所述，第一步是 <strong>仿射变换</strong>：</p>
+$$
+\phi(x) = W a + P
+$$
+
+<p>其中：</p>
+<ul>
+<li>$W$ 是一个 $3 \times 3$ 的旋转矩阵（rotation matrix）</li>
+<li>$P$ 是一个 $1 \times 3$ 的平移向量（translation vector）</li>
+</ul>
+<p>这个变换会将三维空间中的点：</p>
+$$
+\mathbf{a} = [a_0, a_1, a_2]^T
+$$
+        </div>
+
+        <!-- Slide 20 -->
+        <div class="slide" data-slide="20" data-chapter="OpenCV Team 讲座笔记">
+<p>从 <strong>物体坐标系（object space）</strong> 映射到 <strong>相机坐标系（camera space）</strong>。</p>
+<p>对于高斯分布，有以下对应关系：</p>
+<p><font color="brown">$a \sim \mathcal{N}(\mu, \Sigma) \rightarrow \phi(a) \sim \mathcal{N}(W \mu + P, W \Sigma W^T)$</font></p>
+<p>这里：</p>
+<ul>
+<li>$u = \phi(a) = [u_0, u_1, u_2]^T$，表示相机坐标系中的三维点  </li>
+<li>$\Sigma_{\text{camera}} = W \Sigma W^T$，表示在相机空间中经过仿射变换后的协方差矩阵  </li>
+</ul>
+<p>在完成这个变换之后，并不会立刻进行相机投影（Camera Projection）。<br />
+在此之前，还会有一个中间步骤，称为 <strong>光线空间变换（Ray Space Transformation）</strong>，记为 $m(u)$。 </p>
+<blockquote>
+<p>[!IMPORTANT] </p>
+<p>请注意：这一步仍然是 <strong>3D → 3D 的映射</strong>。</p>
+</blockquote>
+<p>这种前向渲染（Forward Rendering）流程最早由论文 <strong>“EWA Volume Splatting”</strong> 引入， 其中 <strong>EWA</strong> 指的是 <em>Elliptical Weighted Average</em>（椭圆加权平均）。</p>
+<h5 id="_1">投影变换</h5>
+<p align="center">
+  <img src="assets/forward_Rendering-1024x303.png" width="700">
+  <br>
+        </div>
+
+        <!-- Slide 21 -->
+        <div class="slide" data-slide="21" data-chapter="OpenCV Team 讲座笔记">
+<p><b>Figure 6:</b> Forward Rendering Pipeline from Paper “EWA Volume Splatting”<br />
+</p></p>
+<p>EWA Volume Splatting 这篇论文引入了一个额外的空间（坐标系），称为 <strong>光线空间（Ray Space）</strong>。<br />
+ 在这个坐标系中，所有<font color="brown">光线都被对齐为与某一坐标轴平行</font>，从而使得沿光线方向进行<font color="brown">积分</font>变得更加容易。</p>
+<p align="center">
+  <img src="assets/ray_space_cam_space_trf-1-1024x475.webp" width="700">
+  <br>
+  <b>Figure 7:</b> Object Space to Ray Space Transformation
+</p>
+<p>可以看到，这里的 <strong>Ray Space（光线空间）变换是非线性的</strong>，<br />
+因为它涉及将相机坐标的水平与垂直分量分别除以深度：</p>
+<ul>
+<li>$x_0 = u_0 / u_2$</li>
+<li>$x_1 = u_1 / u_2$</li>
+</ul>
+<p>正由于这种除法操作，这个映射不再是线性的，因此我们 <strong>无法直接应用仿射变换的规则</strong>。</p>
+<p>为了解决这个问题，我们在均值点 $\mathbf{u}_k$ 附近 <br />
+对映射 $\mathbf{m}(\mathbf{u})$ 进行 <strong>一阶泰勒展开（first-order Taylor expansion）</strong>， 从而对其进行线性化处理。</p>
+        </div>
+
+        <!-- Slide 22 -->
+        <div class="slide" data-slide="22" data-chapter="OpenCV Team 讲座笔记">
+<p>$\mathbf{m}<em>{\mathbf{u}_k}(\mathbf{u})<br />
+= \mathbf{x}_k + \mathbf{J}</em>{\mathbf{u}_k} \, (\mathbf{u} - \mathbf{u}_k)$</p>
+<p>$\mathbf{J}_{\mathbf{u}_k}<br />
+= \frac{\partial \mathbf{m}}{\partial \mathbf{u}}(\mathbf{u}_k), \quad x_k = m(u_k)$</p>
+<h5 id="_1">线性化投影：泰勒展开与雅可比矩阵</h5>
+<p>当从相机坐标 $u=[u_0,u_1,u_2]^T$ 映射到光线空间 $m(u)$ 时，由于该变换包含非线性除法：</p>
+<ul>
+<li>$x_0 = \frac{u_0}{u_2}$</li>
+<li>$x_1 = \frac{u_1}{u_2}$</li>
+</ul>
+<p>因此 <strong>不能直接对高斯应用仿射变换规则</strong>。</p>
+<p>为处理高斯在非线性函数下的投影，我们对 $m(u)$ 在均值点 $u_k$ 处进行一阶泰勒展开，将其近似为局部线性变换：</p>
+$$
+m_{u_k}(u) = x_k + J_{u_k} \,(u - u_k)
+$$
+
+<p>其中：</p>
+<ul>
+<li>$x_k = m(u_k)$ 为映射后的中心点  </li>
+<li>$J_{u_k}$ 为雅可比矩阵：</li>
+</ul>
+        </div>
+
+        <!-- Slide 23 -->
+        <div class="slide" data-slide="23" data-chapter="OpenCV Team 讲座笔记">
+$$
+J_{u_k} = \frac{\partial m}{\partial u}(u_k)
+$$
+
+<p>为什么需要这个公式？</p>
+<p>高斯经过线性变换时仍然保持高斯性质； 但 <strong>非线性变换会破坏高斯形式</strong>。</p>
+<p>为了继续把 3D 高斯投影为 2D 高斯，需要将非线性函数 $m(u)$ 在局部区域<strong>线性化</strong>。 <br />
+一阶泰勒展开正是最常用的线性化方法：</p>
+$$
+f(x) \approx f(a) + f'(a)(x-a)
+$$
+
+<p>在多维情况下，导数变为 <strong>雅可比矩阵</strong>（Jacobian）。</p>
+$$
+J =
+\begin{bmatrix}
+\frac{\partial x_0}{\partial u_0} & \frac{\partial x_0}{\partial u_1} & \frac{\partial x_0}{\partial u_2} \\
+\frac{\partial x_1}{\partial u_0} & \frac{\partial x_1}{\partial u_1} & \frac{\partial x_1}{\partial u_2} \\
+\frac{\partial x_2}{\partial u_0} & \frac{\partial x_2}{\partial u_1} & \frac{\partial x_2}{\partial u_2}
+\end{bmatrix}
+$$
+        </div>
+
+        <!-- Slide 24 -->
+        <div class="slide" data-slide="24" data-chapter="OpenCV Team 讲座笔记">
+<blockquote>
+<p>[!NOTE]</p>
+<p>雅可比矩阵的意义</p>
+<p>雅可比矩阵 $J$ 是多变量函数的梯度推广，描述函数在局部的 <strong>线性变化率</strong>。  </p>
+<p>若 $m(u)$ 是从 $\mathbb{R}^3 \to \mathbb{R}^3$ 的映射，则雅可比为 $3\times 3$ 矩阵：</p>
+<ul>
+<li>第 $i$ 行表示输出分量 $m_i$</li>
+<li>第 $j$ 列表示对输入 $u_j$ 的偏导</li>
+</ul>
+<p>因此 $J$ 表示在点 $u_k$ 附近，输出如何随输入线性变化。<br />
+用于把非线性变换近似为局部的线性变换，从而可以继续对高斯分布做协方差变换。</p>
+</blockquote>
+<p>协方差矩阵在 Ray Space 中的变换  </p>
+<p>（Covariance Matrix Transformation in Ray Space）</p>
+        </div>
+
+        <!-- Slide 25 -->
+        <div class="slide" data-slide="25" data-chapter="OpenCV Team 讲座笔记">
+<p>我们已经理解了：一个三维点（均值）在经过 Ray Space 的投影映射后是如何变化的。 <br />
+那么问题来了：<strong>协方差矩阵（Covariance Matrix）如何变化？</strong> <br />
+也就是说：从 Camera Space 映射到 Ray Space 时，高斯分布的形状如何被变换？</p>
+<p>接下来通过几个步骤说明这一点。</p>
+<ol>
+<li>从 3D 到 2D 的高斯投影  </li>
+</ol>
+<p>二维投影会把一个 <strong>3D 高斯分布</strong> 转换成 <strong>2D 高斯分布</strong>。 <br />
+   投影后的协方差矩阵为：</p>
+$$
+\Sigma' = J \, \Sigma_{\text{camera}} \, J^T
+$$
+
+<ol>
+<li>代入从三维物体空间到相机空间的变换  </li>
+</ol>
+<p>已知相机空间中的协方差是：</p>
+$$
+\Sigma_{\text{camera}} = W \Sigma W^T
+$$
+
+<p>其中：<br />
+- $W$：从物体空间到相机空间的旋转矩阵<br />
+- $\Sigma$：原始 3D 高斯的协方差矩阵  </p>
+<p>代入可得投影后的协方差：</p>
+        </div>
+
+        <!-- Slide 26 -->
+        <div class="slide" data-slide="26" data-chapter="OpenCV Team 讲座笔记">
+$$
+\Sigma' = J \,(W \Sigma W^T)\, J^T
+$$
+
+<ul>
+<li>$$\Sigma_{\text{camera}}$$ 表示从物体空间变换到相机空间后的协方差矩阵。</li>
+<li><strong>J</strong>：用于将光线空间变换到屏幕空间的变换矩阵。</li>
+<li><strong>J^T</strong>：用于确保最终得到的协方差矩阵保持对称（协方差矩阵的重要性质）。</li>
+</ul>
+<p>总结一句话</p>
+<p>高斯分布在坐标变化下的协方差变换遵循：</p>
+$$
+\Sigma' = A \Sigma A^T
+$$
+
+<p>在 3D Gaussian Splatting 中，这个 $A$ 对应的是：</p>
+$$
+A = J W
+$$
+
+<p>即：先从物体坐标 → 相机坐标，再从相机坐标 → 光线坐标</p>
+        </div>
+
+        <!-- Slide 27 -->
+        <div class="slide" data-slide="27" data-chapter="OpenCV Team 讲座笔记">
+<p>总结：</p>
+<ul>
+<li>光线空间变换 $m(u)$ 是非线性的  </li>
+<li>高斯无法直接应用非线性变换  </li>
+<li>使用一阶泰勒展开将 $m(u)$ 线性化  </li>
+<li>雅可比矩阵提供局部的线性近似  </li>
+<li>线性化后可以用线性高斯变换规则继续计算协方差与投影</li>
+</ul>
+<p>这种方法使 3D Gaussian Splatting 可以在非线性投影下仍保持渲染的解析性与可微性。</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p><strong>泰勒展开解释（Taylor Expansion Explained）</strong></p>
+<p>这里简单回顾一下泰勒展开和雅可比矩阵。</p>
+<p><strong>泰勒展开（Taylor expansion）</strong> 是一种用于将非线性函数在某个特定点 ( x = a ) 附近进行 <strong>线性近似</strong> 的数学工具。 <br />
+它通过使用函数在该点的导数（高阶导数）构成的一系列项，来构建对原函数的近似表达。</p>
+</blockquote>
+        </div>
+
+        <!-- Slide 28 -->
+        <div class="slide" data-slide="28" data-chapter="OpenCV Team 讲座笔记">
+<blockquote>
+<p><font color="brown">$f(x) \approx f(a) + {f}'(a)(x-a)$</font></p>
+<ul>
+<li>$f(a)$：函数在点 <strong>a</strong> 处的取值，是泰勒近似中的常数项。</li>
+<li>${f}'(a)(x − a)$：线性项，表示当 <strong>x</strong> 在 <strong>a</strong> 附近变化时，函数的变化趋势。</li>
+</ul>
+<p>这实际上形成了一条在 $x = a$ 处与函数相切的直线，使其成为一个局部近似，并且当 $x$ 接近 $a$ 时效果很好。</p>
+</blockquote>
+<hr />
+<p>由于这个设计，我们不需要像 NeRF 那样在每条光线上进行点采样。</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p>EWA 体素散射（volume splatting）论文中提到：</p>
+<p>“高斯在仿射映射和卷积下是闭合的，沿某一个坐标轴对三维高斯积分会得到二维高斯。”</p>
+<p>因此，如果我们跳过 $\Sigma'$ 的第三行和第三列，就可以得到一个 $2 \times 2$ 的方差矩阵（$\hat{\Sigma'}$），它的结构和性质与从平面点及法向量开始得到的结果相同。</p>
+</blockquote>
+        </div>
+
+        <!-- Slide 29 -->
+        <div class="slide" data-slide="29" data-chapter="OpenCV Team 讲座笔记">
+<p>当我们<strong>沿某个坐标轴（通常是视线方向 z 轴）积分</strong>或者忽略这一轴时，相当于投影到 2D 屏幕空间：</p>
+$$
+\Sigma' =
+\begin{pmatrix}
+a & b & c \\
+b & d & e \\
+c & e & f
+\end{pmatrix}
+\quad \Longleftrightarrow \quad
+\hat{\Sigma'} =
+\begin{pmatrix}
+a & b \\
+b & d
+\end{pmatrix}
+$$
+
+<p><strong>总结：</strong></p>
+<p>从光线空间到屏幕空间的最终变换，则负责生成最终的渲染图像，包括深度（depth）、颜色（color）以及光照（shading）。</p>
+<hr />
+<h5 id="_1">协方差矩阵的必要性质</h5>
+        </div>
+
+        <!-- Slide 30 -->
+        <div class="slide" data-slide="30" data-chapter="OpenCV Team 讲座笔记">
+<table>
+<thead>
+<tr>
+<th>性质</th>
+<th>直观含义</th>
+<th>为什么协方差矩阵必须满足</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>对称</strong></td>
+<td>(X) 和 (Y) 的相关程度与顺序无关</td>
+<td>Cov(X,Y) = Cov(Y,X)</td>
+</tr>
+<tr>
+<td><strong>正半定（PSD）</strong></td>
+<td>任意线性组合的方差不会是负数</td>
+<td>方差永远 ≥ 0</td>
+</tr>
+</tbody>
+</table>
+<p>因此协方差矩阵 <strong>必须同时具备对称性 + 正半定性</strong>，否则就不再是一个合法的协方差矩阵。</p>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li>早期中文数学教材 也称之为 半正定</li>
+<li>若一个对称矩阵所有特征值 ≥ 0，则它是正半定（PSD）。</li>
+</ul>
+</blockquote>
+<h5 id="3d">3D 高斯到椭球</h5>
+<p><strong>问题提出：</strong></p>
+<p>协方差矩阵只有在正半定（PSD, Positive Semi-Definite）的情况下才具有物理意义。然而，在优化协方差矩阵 $\Sigma$ 以在辐射场中表示 3D 高斯时，作者使用了梯度下降的方法。这种方法会使得确保矩阵保持有效变得具有挑战性，因为更新步骤和梯度很容易生成无效的协方差矩阵。</p>
+<p>那么，我们如何表示 $\Sigma$，才能在优化过程中保证它始终保持正半定呢？</p>
+<p><strong>解决方案：</strong></p>
+<p>为了解决这个问题，作者将 3D 高斯表示为一个 <strong>3D 椭球</strong>，因为 3D 高斯的协方差矩阵 $\Sigma$ 编码了形状、大小和朝向，这些信息共同定义了 3D 空间中的一个椭球。其中：</p>
+<ol>
+<li>$\Sigma$ 的特征值决定了椭球主轴的长度</li>
+<li>$\Sigma$ 的特征向量决定了这些主轴在 3D 空间中的朝向</li>
+</ol>
+        </div>
+
+        <!-- Slide 31 -->
+        <div class="slide" data-slide="31" data-chapter="OpenCV Team 讲座笔记">
+<h3 id="3d-gs">3D GS技术解读</h3>
+<h4 id="_1">基本定义</h4>
+<p>一个三维高斯（3D Gaussian）由一个三维协方差矩阵 $\Sigma$ 定义，并以点（均值）$\mu$ 为中心。</p>
+<p><strong>可学习的参数包括：</strong></p>
+<ol>
+<li>均值（Mean）</li>
+<li>各向异性协方差（Anisotropic Covariance）</li>
+<li>不透明度（Opacity）</li>
+<li>球谐系数（Spherical Harmonic, SH coefficients）</li>
+</ol>
+<h4 id="3d">深入理解 3D 高斯溅射</h4>
+<p>3D 高斯溅射是一种<strong>光栅化（rasterization）技术</strong>，它使用数百万个高斯分布来表示场景，而不是使用三角形。</p>
+<h4 id="_2">主要步骤</h4>
+<h5 id="1initialization">步骤 1：初始化（Initialization）</h5>
+<p>无论我们从运动结构中找到什么点云，我们用它作为初始化。我们所做的就是使高斯的均值等于点的坐标。</p>
+        </div>
+
+        <!-- Slide 32 -->
+        <div class="slide" data-slide="32" data-chapter="OpenCV Team 讲座笔记">
+<h5 id="2optimization">步骤 2：优化（Optimization）</h5>
+<p><strong>自适应密度控制（Adaptive Density Control）</strong></p>
+<p>动态调节高斯的数量与分布密度。</p>
+<p><strong>优化目标：</strong></p>
+<ul>
+<li>控制高斯数量，防止密度过高</li>
+<li>自适应地删除冗余高斯或分裂新高斯</li>
+<li>保持视觉质量不变的情况下优化渲染效率</li>
+</ul>
+<p>它本质上是一个 <strong>密度正则化 + 动态采样平衡</strong> 过程。</p>
+<p><strong>具体操作：</strong></p>
+<ol>
+<li>
+<p><strong>Pruning（剪枝）</strong>：移除不重要或冗余的高斯。</p>
+</li>
+<li>
+<p><strong>Densification（增密）</strong>：在场景细节不足或几何结构复杂区域<strong>增加高斯数量</strong>。分为克隆和拆分两种方式。</p>
+</li>
+</ol>
+<p><strong>触发条件：</strong></p>
+<ul>
+<li><strong>欠重建</strong>：局部渲染误差或该高斯的梯度（对 loss 的贡献）持续较高 → 标记为需要克隆</li>
+<li><strong>过重建</strong>：单个高斯的空间尺度（variance）远大于邻域平均、或该高斯在多个视图投影时覆盖范围异常、或边界贡献下降 → 标记为需要拆分</li>
+<li><strong>剪枝</strong>：opacity 很低且梯度/贡献几乎为零，或长期不被采样/不贡献像素 → 删除</li>
+</ul>
+<p><strong>实现细节：</strong></p>
+        </div>
+
+        <!-- Slide 33 -->
+        <div class="slide" data-slide="33" data-chapter="OpenCV Team 讲座笔记">
+<ul>
+<li><strong>Clone（克隆）</strong>：复制参数（position, scale, orientation, color, alpha），给子副本加小扰动（位置 jitter、尺度小缩放、颜色微扰），在之后的优化中允许它们独立更新</li>
+<li><strong>Split（拆分）</strong>：把一个高斯分成 2（或更多）个子高斯，通常子高斯初始继承父参数但把尺度调小、位置做双向小偏移；也可以把父的权重按比例分配到子高斯上</li>
+<li><strong>Prune（剪枝）</strong>：安全地删除前请做平滑策略（比如标记、延迟删除若干步，以免误删短暂不贡献的高斯）</li>
+</ul>
+<blockquote>
+<p>[!NOTE]</p>
+<p>这儿自适应密度控制的优化方法，属于一种Heuristic（启发式方法） = 一种帮助我们发现或解决问题的经验性方法。</p>
+<p>它并不保证最优解、完美性或严格证明的正确性，<br />
+ 但在复杂、搜索空间巨大或无解析解的情况下，<br />
+<strong>能“比较快地找到一个够好的解”。</strong></p>
+</blockquote>
+<h5 id="3rasterization">步骤 3：光栅化（Rasterization）</h5>
+<p>得到渲染图像，可以用于和GT计算损失。</p>
+<p><strong>核心问题：</strong></p>
+<p>3D立体图形（Gaussians）如何投影到2D平面（camera plane）上？</p>
+<p>3D高斯泼溅投影取自《EWA volume splatting》这篇文章。</p>
+<blockquote>
+<p>[!NOTE]</p>
+</blockquote>
+        </div>
+
+        <!-- Slide 34 -->
+        <div class="slide" data-slide="34" data-chapter="OpenCV Team 讲座笔记">
+<blockquote>
+<p>"Gaussians are closed under affine mappings and convolution, and integrating a 3D Gaussian along one coordinate axis results in a 2D Gaussian."  —— EWA （Elliptical Weighted Average） volume splatting</p>
+<p>“高斯函数在仿射变换和卷积运算下是封闭的，并且将一个三维高斯在某一坐标轴上积分后，得到的结果仍然是一个二维高斯。” —— EWA（基于椭圆加权平均的）体积溅射</p>
+</blockquote>
+<p>这体现了高斯分布在积分/投影运算下的<strong>封闭性（closure property）</strong>：<br />
+ 积分或投影不会破坏其高斯形态，只是维度降低。这个性质非常重要：</p>
+<ul>
+<li>每个 3D 高斯在被投影到 2D 图像平面时（相当于沿视线方向积分）会变成一个 <strong>2D 高斯</strong>；</li>
+<li>因此可以用解析的二维高斯来表示它在屏幕上的光照/颜色分布，而不必进行数值采样。</li>
+</ul>
+<p>👉 这就是 3D Gaussian Splatting 能高效渲染的理论基础之一。</p>
+<blockquote>
+<p>高斯分布的有趣之处，在于它们在数学上如此优美。通常，无论你对高斯函数做什么，最终得到的仍然是高斯函数。</p>
+</blockquote>
+<p><img src="assets/image-20251104134410841-2235053.png" alt="image-20251104134410841" style="zoom:50%;" /></p>
+<p><strong>步骤3.1 世界坐标系 → 相机坐标系</strong></p>
+<p>首先，从物体坐标通过视图转换，本质上是一次仿射变换（乘旋转分量，加平移分量），转换到相机坐标下。</p>
+        </div>
+
+        <!-- Slide 35 -->
+        <div class="slide" data-slide="35" data-chapter="OpenCV Team 讲座笔记">
+<p><img src="assets/image-20251104140259914.png" alt="image-20251104140259914" style="zoom:50%;" /></p>
+<p>高斯分布由均值（位置）和协方差（分布）表示。</p>
+<p>均值（$p_w \to p_c$）和协方差（$\sum \to \sum_c$）就都转换过来了。最后的公式很简单：</p>
+<p>① <font color="brown">$p_c = R_{cw}p_w + t_{cw}$</font></p>
+<p>② <font color="brown">$\sum_c = R_{cw}\sum R_{cw}^T$</font>（这里都是3x3的矩阵）</p>
+<p><strong>步骤3.2 相机坐标系 → 光线坐标系</strong></p>
+<p>在相机坐标系（Camera Space）下，每个点 $p_c = (x, y, z)$ 都是在相机前方的三维空间中。渲染时，我们要把这个点投影到屏幕上的某个像素（也就是光线方向）。</p>
+<p>为了更好地表示这种沿视线方向的投影过程，我们引入了一个中间坐标系——<strong>Ray Space（光线空间）</strong></p>
+<p><strong>设计目的：</strong></p>
+<ul>
+<li>把一个三维高斯的空间分布分解为：</li>
+<li>沿光线方向的分量</li>
+<li>
+<p>在屏幕平面上（垂直于光线）的分量</p>
+</li>
+<li>
+<p>这样可在光线方向上解析积分，得到投影后的 2D 协方差</p>
+</li>
+</ul>
+<p><strong>注意：</strong> 从相机空间到光线空间，是一个非线性变换（non-affine transformation）。</p>
+<hr />
+<h5 id="4loss-calculation-updation">步骤 4：损失计算与更新（Loss Calculation &amp; Updation）</h5>
+        </div>
+
+        <!-- Slide 36 -->
+        <div class="slide" data-slide="36" data-chapter="OpenCV Team 讲座笔记">
+<p>计算渲染图像和GT之间的损失，根据损失计算梯度，然后进行参数更新。</p>
+<p><img alt="3dgs-pipeline" src="assets/3dgs_pipeline_v3-1.webp" /></p>
+<hr />
+<h3 id="3d-gs">3D GS代码实践</h3>
+        </div>
+
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Footer (left bottom) -->
+    <div class="footer-text">Notes by Devonn</div>
+
+    <!-- Page number (right bottom) -->
+    <div class="page-number">
+        <span id="currentSlide">1</span> / <span id="totalSlides">36</span>
+    </div>
+
+    <!-- Navigation hint -->
+    <div class="nav-hint">
+        <kbd>←</kbd> <kbd>→</kbd> 或 <kbd>空格</kbd> 导航
+    </div>
+
+    <!-- TOC Icon -->
+    <div class="toc-icon" id="tocIcon" title="目录">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </div>
+
+    <!-- TOC Panel -->
+    <div class="toc-panel" id="tocPanel">
+        <div class="toc-header">
+            <h3>目录</h3>
+            <button class="toc-close" id="tocClose">×</button>
+        </div>
+        <div class="toc-content">
+        <div class="toc-item" data-level="2" data-slide="1">
+            <span class="toc-title">资源</span>
+        </div>
+        <div class="toc-item" data-level="2" data-slide="2">
+            <span class="toc-title">3D GS原理理解</span>
+        </div>
+        <div class="toc-item" data-level="3" data-slide="2">
+            <span class="toc-title">NeRF到3D GS的演变</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="2">
+            <span class="toc-title">简要回顾NeRF原理</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="2">
+            <span class="toc-title">Point-NeRF：NeRF与&lt;font color=&quot;brown&quot;&gt;点云&lt;/font&gt;的初遇</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="3">
+            <span class="toc-title">Plenoxels：无神经网络NeRF+球谐函数</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="3">
+            <span class="toc-title">3D Gaussian Splatting的简要介绍</span>
+        </div>
+        <div class="toc-item" data-level="2" data-slide="5">
+            <span class="toc-title">OpenCV Team 讲座笔记</span>
+        </div>
+        <div class="toc-item" data-level="3" data-slide="5">
+            <span class="toc-title">3D GS 引子</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="5">
+            <span class="toc-title">核心问题</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="5">
+            <span class="toc-title">技术回顾</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="5">
+            <span class="toc-title">0. 摄影测量、NeRF 与 3D 高斯泼溅的对比</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="6">
+            <span class="toc-title">1. 摄影测量</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="8">
+            <span class="toc-title">2. NeRF (神经辐射场)</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="9">
+            <span class="toc-title">3. 3D高斯泼溅</span>
+        </div>
+        <div class="toc-item" data-level="3" data-slide="9">
+            <span class="toc-title">3D GS概览</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="9">
+            <span class="toc-title">概览</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="12">
+            <span class="toc-title">要点</span>
+        </div>
+        <div class="toc-item" data-level="3" data-slide="13">
+            <span class="toc-title">3D GS要点详解</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="13">
+            <span class="toc-title">投影</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="14">
+            <span class="toc-title">传统渲染管线</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="16">
+            <span class="toc-title">仿射变换矩阵</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="19">
+            <span class="toc-title">高斯泼溅中的3D 到 2D 的投影</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="19">
+            <span class="toc-title">视角变换</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="20">
+            <span class="toc-title">投影变换</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="22">
+            <span class="toc-title">线性化投影：泰勒展开与雅可比矩阵</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="29">
+            <span class="toc-title">协方差矩阵的必要性质</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="30">
+            <span class="toc-title">3D 高斯到椭球</span>
+        </div>
+        <div class="toc-item" data-level="3" data-slide="31">
+            <span class="toc-title">3D GS技术解读</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="31">
+            <span class="toc-title">基本定义</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="31">
+            <span class="toc-title">深入理解 3D 高斯溅射</span>
+        </div>
+        <div class="toc-item" data-level="4" data-slide="31">
+            <span class="toc-title">主要步骤</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="31">
+            <span class="toc-title">步骤 1：初始化（Initialization）</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="32">
+            <span class="toc-title">步骤 2：优化（Optimization）</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="33">
+            <span class="toc-title">步骤 3：光栅化（Rasterization）</span>
+        </div>
+        <div class="toc-item" data-level="5" data-slide="35">
+            <span class="toc-title">步骤 4：损失计算与更新（Loss Calculation &amp; Updation）</span>
+        </div>
+        <div class="toc-item" data-level="3" data-slide="36">
+            <span class="toc-title">3D GS代码实践</span>
+        </div>
+        </div>
+    </div>
+
+    <!-- Chapter navigation (progress bar) -->
+    <div class="chapter-nav">
+        <span class="chapter" data-level="2" data-slide="1">资源</span>
+        <span class="separator">|</span>
+        <span class="chapter" data-level="2" data-slide="2">3D GS原理理解</span>
+        <span class="separator">|</span>
+        <span class="chapter" data-level="2" data-slide="5">OpenCV Team 讲座笔记</span>
+    </div>
+
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 1;
+        const chapters = [{"title": "资源", "slide": 1, "level": 2},{"title": "3D GS原理理解", "slide": 2, "level": 2},{"title": "OpenCV Team 讲座笔记", "slide": 5, "level": 2}];
+
+        // Update chapter navigation highlighting (flattened structure)
+        function updateChapterNav(slideNum) {
+            const chapterElements = document.querySelectorAll('.chapter-nav .chapter');
+            if (chapterElements.length === 0) return;
+
+            // Find which chapter this slide belongs to
+            let activeIndex = -1;
+            for (let i = 0; i < chapters.length; i++) {
+                const nextSlide = i + 1 < chapters.length ? chapters[i + 1].slide : Infinity;
+                if (slideNum >= chapters[i].slide && slideNum < nextSlide) {
+                    activeIndex = i;
+                    break;
+                }
+            }
+
+            // Update active state
+            chapterElements.forEach((el, index) => {
+                if (index === activeIndex) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+        }
+
+        // Update TOC active item
+        function updateTocActive(slideNum) {
+            const tocItems = document.querySelectorAll('.toc-item');
+            if (tocItems.length === 0) return;
+
+            let activeIndex = -1;
+            for (let i = 0; i < chapters.length; i++) {
+                const nextSlide = i + 1 < chapters.length ? chapters[i + 1].slide : Infinity;
+                if (slideNum >= chapters[i].slide && slideNum < nextSlide) {
+                    activeIndex = i;
+                    break;
+                }
+            }
+
+            tocItems.forEach((item, index) => {
+                if (index === activeIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // Navigate to specific slide
+        function goToSlide(slideNum) {
+            if (slideNum < 1 || slideNum > totalSlides) return;
+            updateSlide(slideNum);
+        }
+
+        // Update display
+        function updateSlide(newSlide) {
+            if (newSlide < 1 || newSlide > totalSlides) return;
+
+            const current = document.querySelector('.slide.active');
+            const next = document.querySelector(`[data-slide="${newSlide}"]`);
+
+            if (current) {
+                current.classList.remove('active');
+                current.classList.add('exit');
+                setTimeout(() => current.classList.remove('exit'), 500);
+            }
+
+            if (next) {
+                next.classList.add('active');
+            }
+
+            currentSlide = newSlide;
+            document.getElementById('currentSlide').textContent = currentSlide;
+            document.getElementById('progressBar').style.width =
+                ((currentSlide / totalSlides) * 100) + '%';
+
+            updateChapterNav(currentSlide);
+            updateTocActive(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowRight':
+                case ' ':
+                case 'PageDown':
+                    e.preventDefault();
+                    updateSlide(currentSlide + 1);
+                    break;
+                case 'ArrowLeft':
+                case 'PageUp':
+                    e.preventDefault();
+                    updateSlide(currentSlide - 1);
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    updateSlide(1);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    updateSlide(totalSlides);
+                    break;
+                case 'Escape':
+                    // Close TOC if open
+                    const tocPanel = document.getElementById('tocPanel');
+                    if (tocPanel && tocPanel.classList.contains('active')) {
+                        tocPanel.classList.remove('active');
+                        document.getElementById('tocIcon').style.display = 'flex';
+                    }
+                    break;
+            }
+        });
+
+        // Touch navigation
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    updateSlide(currentSlide + 1);
+                } else {
+                    updateSlide(currentSlide - 1);
+                }
+            }
+        });
+
+        // Fullscreen toggle
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // TOC Icon click handler
+        const tocIcon = document.getElementById('tocIcon');
+        const tocPanel = document.getElementById('tocPanel');
+        const tocClose = document.getElementById('tocClose');
+
+        if (tocIcon && tocPanel) {
+            tocIcon.addEventListener('click', () => {
+                tocPanel.classList.add('active');
+                tocIcon.style.display = 'none';
+            });
+        }
+
+        if (tocClose && tocPanel) {
+            tocClose.addEventListener('click', () => {
+                tocPanel.classList.remove('active');
+                tocIcon.style.display = 'flex';
+            });
+        }
+
+        // Chapter navigation click handlers
+        document.querySelectorAll('.chapter-nav .chapter').forEach((chapter) => {
+            chapter.addEventListener('click', () => {
+                const targetSlide = parseInt(chapter.getAttribute('data-slide'));
+                if (targetSlide && targetSlide > 0) {
+                    goToSlide(targetSlide);
+                }
+            });
+        });
+
+        // TOC item click handlers
+        document.querySelectorAll('.toc-item').forEach((item) => {
+            item.addEventListener('click', () => {
+                const targetSlide = parseInt(item.getAttribute('data-slide'));
+                if (targetSlide && targetSlide > 0) {
+                    goToSlide(targetSlide);
+                    // Close TOC after navigation
+                    tocPanel.classList.remove('active');
+                    tocIcon.style.display = 'flex';
+                }
+            });
+        });
+
+        // Initialize
+        document.getElementById('totalSlides').textContent = totalSlides;
+        updateSlide(1);
+
+        // Render LaTeX math with KaTeX
+        function renderMath() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\[", right: "\\]", display: true},
+                    {left: "\\(", right: "\\)", display: false}
+                ],
+                throwOnError: false,
+                errorColor: '#cc0000',
+                strict: false
+            });
+        }
+    </script>
+</body>
+</html>

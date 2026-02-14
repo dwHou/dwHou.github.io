@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install:*)",
+      "Bash(chmod:*)",
+      "Bash(python:*)",
+      "Bash(ls:*)",
+      "Bash(open:*)",
+      "Bash(python3:*)",
+      "Bash(grep:*)",
+      "Bash(for theme in tech cyberpunk clean fresh corporate)",
+      "Bash(do echo \"Testing theme: $theme\")",
+      "Bash(done)",
+      "Bash(git rm:*)",
+      "Bash(git restore:*)",
+      "Bash(git commit:*)",
+      "Bash(/tmp/toc_verification_summary.txt << 'EOF'\nTOC Implementation Verification Summary\n========================================\n\nTest Date: 2026-02-13\nTest File: /tmp/test_multilevel_toc.md\nCommand: slidown.py --chapter-level 2\n\nExpected Behavior:\n------------------\n1. Progress Bar \\(Bottom\\): Shows only H1 and H2 headings \\(controlled by --chapter-level 2\\)\n2. TOC Panel \\(Top-left\\): Shows ALL headings from H1 to H5 \\(complete document outline\\)\n\nTest Results:\n-------------\n\n1. Progress Bar Content \\(chapter-level = 2\\):\n   ✓ Chapter 1: Introduction \\(H1\\)\n   ✓ 1.1 Overview \\(H2\\)\n   ✓ 1.2 Goals \\(H2\\)\n   ✓ Chapter 2: Architecture \\(H1\\)\n   ✓ 2.1 System Design \\(H2\\)\n   ✓ Chapter 3: Conclusion \\(H1\\)\n   Total: 6 items \\(only H1 and H2\\)\n\n2. TOC Panel Content \\(all levels 1-5\\):\n   Level 1 \\(H1\\): 3 items\n   Level 2 \\(H2\\): 4 items\n   Level 3 \\(H3\\): 4 items\n   Level 4 \\(H4\\): 6 items\n   Level 5 \\(H5\\): 4 items\n   Total: 21 items \\(all heading levels\\)\n\n3. CSS Styles Verified:\n   ✓ Tech theme: H4 \\(80px indent, 0.75rem, #999\\) + H5 \\(100px indent, 0.7rem, #888\\)\n   ✓ Clean theme: H4 \\(80px indent, 0.75rem, --text-muted\\) + H5 \\(100px indent, 0.7rem, --text-muted, 0.8 opacity\\)\n   ✓ Corporate theme: H4 \\(80px indent, 0.75rem, --text-muted\\) + H5 \\(100px indent, 0.7rem, --text-muted, 0.8 opacity\\)\n\nCode Changes:\n-------------\n1. _extract_chapters\\(\\): Now returns tuple \\(nav_chapters, toc_chapters\\)\n   - nav_chapters: Filtered by chapter_level parameter\n   - toc_chapters: All headings level 1-5\n\n2. _generate_chapter_nav\\(\\): Now accepts two parameters\n   - Generates simplified progress bar from nav_chapters\n   - Generates complete TOC panel from toc_chapters\n\n3. CSS: Added H4 and H5 styles to all three themes\n   - Progressive indentation \\(80px for H4, 100px for H5\\)\n   - Smaller font sizes \\(0.75rem for H4, 0.7rem for H5\\)\n   - Muted colors to distinguish from primary headings\n\nImplementation Status: ✓ COMPLETE\nAll tests passed successfully.\nEOF)"
+    ]
+  }
+}
