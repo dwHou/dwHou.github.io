@@ -222,6 +222,11 @@ https://zhuanlan.zhihu.com/p/23599229
       这样进去的用户名默认都是root，如果为了方便主环境管理员，可以把起容器的命令改进，加一组参数-v /etc/passwd:/etc/passwd -u $(id -u):$(id -g)，使得容器内外的用户名一致。
   </pre>
 
+  <pre>小Tips：
+    -p 8880-8890:8880
+    含义：
+    它告诉 Docker：“把容器里的 8880 端口，映射到宿主机 8880 到 8890 之间的某一个空闲端口上”</pre>
+
   <pre>
     相关：新账户的创建
     sudo useradd -m eric -s /bin/bash
@@ -403,6 +408,12 @@ https://zhuanlan.zhihu.com/p/23599229
   <pre>
     除了使用docker镜像，很多时候我们需要制作镜像，来完成服务器部署。
     常见流程：编写dockerfile→jenkins编译→发布到jfrog
+  </pre>
+  <pre>
+    小Tips：
+    ENV DEBIAN_FRONTEND=noninteractive ———— 把 Debian/Ubuntu 系里的软件安装交互界面，设成“非交互模式”
+    这是在编写 Dockerfile（特别是基于 Ubuntu 或 Debian 系统时）非常常见且极为重要的一个环境变量。
+    简单来说，它的作用是：告诉操作系统，“现在是机器自动安装，没有任何人坐在屏幕前，请千万不要弹出任何交互式对话框或提示让我选择！”
   </pre>
 
   <h3>由容器保存镜像</h3>
