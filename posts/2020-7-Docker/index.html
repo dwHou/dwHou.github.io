@@ -419,7 +419,62 @@ https://zhuanlan.zhihu.com/p/23599229
   <h3>由容器保存镜像</h3>
   <a href="https://www.cnblogs.com/kevingrace/p/9599988.html">通过容器提交镜像（docker commit）以及推送镜像（docker push）笔记</a>
 
+  <h3>容器编排（docker compose）</h3>
+  Docker Compose 是建立在 Docker 之上的“多容器应用管理方式”
+  <pre>
+    docker compose：Docker CLI 里的一个命令，用来根据一份 YAML 配置，一次性管理一组容器。
+  </pre>
+  <pre>
+    docker-compose.yml 是一个使用 YAML 格式编写的配置文件，用于定义和运行多容器（Multi-container）的 Docker 应用程序。
 
+    在实际开发和生产中，一个完整的项目通常不会只有一个容器。比如，一个 Web 项目可能需要：
+
+    一个 Nginx 容器做反向代理。
+    一个 Python/Java/Node.js 容器运行后端代码。
+    一个 MySQL 容器做数据库。
+    一个 Redis 容器做缓存。
+    如果仅使用纯 Docker，你需要手动输入好几条冗长复杂的 docker run 命令，并且还要手动配置它们之间的网络连接。
+    有了 docker-compose.yml，你可以把这些容器的配置（镜像、端口映射、环境变量、挂载目录、网络关系等）全部写在这一个文件里。 然后只需一条命令，就能一键启动或停止整个项目。
+  </pre>
+  <pre>
+    Docker Compose 基本工作流
+    使用 Docker Compose 通常分为三个步骤：
+
+    1. 准备应用的运行环境（Dockerfile，非必须）
+    如果你的应用需要自定义镜像，你需要写一个 Dockerfile。如果全都用官方现成的镜像（如 mysql, redis），这一步可以省略。
+
+    2. 编写 docker-compose.yml 文件
+    在你的项目根目录下创建一个 docker-compose.yml 文件，定义你的服务。例如，一个包含 Web 容器和 Redis 容器的简单配置如下：
+    <code style="background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 4px; display: block; padding: 10px; margin: 10px 0;">
+    version: '3.8' # compose 文件版本
+
+    services: # 定义服务
+      web:
+        image: nginx:latest # 使用 nginx 镜像
+        ports:
+          - "8080:80"       # 将宿主机的 8080 端口映射到容器的 80 端口
+        depends_on:
+          - redis           # 声明依赖关系，确保 redis 先启动
+
+      redis:
+        image: redis:alpine # 使用轻量级的 redis 镜像
+        ports:
+          - "6379:6379"
+        </code>
+
+    3. 运行 Docker Compose 命令
+    打开终端，进入 docker-compose.yml 所在的目录，执行命令来管理项目。
+
+    常用命令
+    一键启动所有服务：docker compose up
+    一键停止并删除所有服务（容器、网络等）：docker compose down
+    查看当前项目正在运行的容器：docker compose ps
+    查看服务的运行日志：docker compose logs -f
+    停止服务（不删除容器）：docker compose stop
+    重新启动服务：docker compose start
+
+    总结：docker-compose.yml 极大地简化了多容器部署的复杂度，它是将应用“基础设施代码化（Infrastructure as Code）”的一种极佳实践。
+  </pre>
 
 
 

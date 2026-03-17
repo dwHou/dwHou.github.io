@@ -454,6 +454,34 @@ Terminal <--[<output]--- |       |                \ \
       也可以看看last -F 宕机当天的用户登录情况
   </pre>
 
+  <pre>
+    对于搭载 GPU 的 AI 服务器，环境的绝对稳定是第一要务。非必要绝不轻易执行系统级全局更新（如 apt upgrade）。
+
+    底层原因解析：
+    NVIDIA 驱动属于闭源组件，且与 Linux 内核深度绑定。每次升级内核时，系统会触发 DKMS（动态内核模块支持）机制，在后台尝试重新编译显卡驱动。
+    如果新内核修改了底层 API，而当前的 NVIDIA 驱动代码尚未适配，就会导致编译失败。此时若重启服务器，极易引发致命连锁反应：
+
+    轻则： 显卡驱动加载失败，引发 NVML: Driver/library version mismatch 报错，GPU 彻底罢工。
+    重则： 驱动模块加载冲突导致内核崩溃（Kernel Panic），或者系统卡死在 GRUB 引导菜单界面，机器彻底断网失联，只能依赖物理控制台（接显示器或 IPMI）进行灾难恢复。
+
+    最佳实践：锁定内核与显卡驱动
+    <code style="background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 4px; display: block; padding: 10px; margin: 10px 0;">
+      # 锁定内核和驱动，禁止它们自动更新
+      sudo apt-mark hold linux-image-generic linux-headers-generic
+      # 但不建议在 apt-mark hold 用正则，最好还是获取精确包名并锁定
+      sudo apt-mark hold "^nvidia-.*" "^libnvidia-.*" "^cuda-.*"</code>
+  </pre>
+
+  <h2>审计历史操作记录</h2>
+  <pre>若需排查其他用户对服务器进行的系统级操作，可通过读取其 Bash 历史记录进行审计：
+    <code style="background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 4px; display: block; padding: 10px; margin: 10px 0;">
+      # 查看特定用户（如 summer）的终端执行历史
+      sudo cat /home/summer/.bash_history</code>
+
+    注：只能看到对方已经写入磁盘的 Bash 历史，不是完整审计日志；如果当时没开启 HISTTIMEFORMAT，通常也看不到每条命令的日期。另外，Bash 一般在 shell 退出时才把历史写回 ~/.bash_history。
+  </pre>
+
+
   <h2>编程程序CPU过高</h2>
   <pre>
     <a href="https://piaohua.github.io/post/linux/20240524-top9-cases-behind-100-cpu-usage/">内存不足、忙等待、并发、...</a>
