@@ -909,8 +909,15 @@ git reset origin/master --hard # Force update to old history
     gpgsign = false
 </pre>
 
-
   </ul>
+
+  <h2>多用户ssh key使用Git</h2>
+  <pre>
+    # 第一次指定使用个人密钥
+    GIT_SSH_COMMAND="ssh -i ~/.ssh/my_personal_key" git clone git@github.com:dwHou/xx.git
+    # 之后为项目配置固定的ssh密钥
+    git config core.sshCommand "ssh -i ~/.ssh/my_personal_key -F /dev/null"
+  </pre>
 
   <h2>Git内部原理</h2>
   <pre>
