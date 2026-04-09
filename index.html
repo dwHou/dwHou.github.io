@@ -965,7 +965,7 @@
 
 
 <!-- 容器(div....)用float 里面的东西用text-align -->
-<article style="width: 30%;float:right">
+<article id="clustrmaps-slot" style="width: 30%;float:right">
 <br>
 <br>
 <div id="clustrmaps-container" data-src="https://cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8fU&cl=ffffff&w=a"></div>
@@ -987,7 +987,7 @@
 
     <!-- Language Toggle Script -->
     <script>
-        function loadScript(src, id) {
+        function loadScript(src, id, parent) {
             if (id && document.getElementById(id)) {
                 return;
             }
@@ -997,7 +997,7 @@
             if (id) {
                 script.id = id;
             }
-            document.body.appendChild(script);
+            (parent || document.body).appendChild(script);
         }
 
         function loadDeferredEnhancements() {
@@ -1013,7 +1013,12 @@
                 typingImage.setAttribute('src', typingImage.getAttribute('data-src'));
             }
 
-            loadScript('https://cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8fU&cl=ffffff&w=a', 'clustrmaps');
+            var clustrmapsContainer = document.getElementById('clustrmaps-container');
+            loadScript(
+                'https://cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8fU&cl=ffffff&w=a',
+                'clustrmaps',
+                clustrmapsContainer || document.getElementById('clustrmaps-slot')
+            );
             loadScript('https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js', 'canvas-nest');
             loadScript('https://www.google-analytics.com/analytics.js', 'google-analytics');
 
