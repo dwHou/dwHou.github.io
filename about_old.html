@@ -29,6 +29,7 @@
         <link href="./css/sticky-footer-navbar.css" rel="stylesheet">
 
         <link href="./css/default.css" rel="stylesheet">
+        <link href="./css/content-polish.css" rel="stylesheet">
 
         <link href="./css/bootstrap-carousel.css" rel="stylesheet">
 
@@ -58,23 +59,33 @@
 <style>
 
 .profile {
-    background-color:rgba(245,245,245,.9);
-    width:45%;
-    margin-left:50%;
-    margin-top:5%;
-    padding:20px;
-    border-radius: 20px;
+    background-color: rgba(245, 245, 245, 0.92);
+    max-width: 520px;
+    margin: 56px 0 0 auto;
+    padding: 28px 30px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 20px 45px rgba(13, 28, 46, 0.18);
 }
 
 .profile h2 {
-    margin-top: 10px;
+    margin-top: 0;
+    margin-bottom: 12px;
     font-size: 175%;
 }
 
 .profile p {
+    margin-bottom: 0;
     font-size: 150%;
+    line-height: 1.6;
 }
 
+@media (max-width: 767px) {
+    .profile {
+        margin: 28px auto 0;
+        padding: 24px 20px;
+    }
+}
 
 </style>
 
@@ -108,20 +119,17 @@
             </nav>
 
           
-
-            <div class="profile">
+            <div class="profile content-prose">
                 <h2>Dew Hou</h2>
 
                 <p>A consistent learner.</p>
-                <a href="cv.pdf"><i class="fa fa-grav" style="text-align:right; font-size:36px;color:#191970;margin-right:20px"></i></a>
-                <a href="https://weibo.com/u/"><i class="fa fa-weibo" style="font-size:36px;color:red;margin-right:20px"></i></a>
-                <a href="images/QQ QR.jpeg"><i class="fa fa-qq" style="font-size:36px;color:#6495ED;margin-right:20px"></i></a>
-                <a href="images/Wechat QR.gif"><i class="fa fa-wechat" style="font-size:36px;color:#00FF7F;margin-right:20px"></i></a>
-                <a href="posts/2020-9-CloudGaming/game.html"><i class="fa fa-gamepad" style="font-size:36px;color:#FFAD86;margin-right:20px"></i></a>
-
-
-
-                </p>
+                <div class="content-inline-actions">
+                    <a href="cv.pdf"><i class="fa fa-grav" style="text-align:right; font-size:36px;color:#191970;"></i></a>
+                    <a href="https://weibo.com/u/"><i class="fa fa-weibo" style="font-size:36px;color:red;"></i></a>
+                    <a href="images/QQ QR.jpeg"><i class="fa fa-qq" style="font-size:36px;color:#6495ED;"></i></a>
+                    <a href="images/Wechat QR.gif"><i class="fa fa-wechat" style="font-size:36px;color:#00FF7F;"></i></a>
+                    <a href="posts/2020-9-CloudGaming/game.html"><i class="fa fa-gamepad" style="font-size:36px;color:#FFAD86;"></i></a>
+                </div>
                 <!-- 这google自动获取的矢量图不好看 <a href="https://weibo.com/u/2102134461">
                 <img src="http://www.google.com/s2/u/0/favicons?domain=https://weibo.com/u/2102134461" style="width:30px;height:36px;" /></a> -->
             </div>

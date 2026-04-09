@@ -1,0 +1,114 @@
+.site-navbar {
+  font-family: "CMS", "Droid Sans", Helvetica, Arial, sans-serif;
+}
+
+.site-navbar .navbar-header {
+  min-height: 50px;
+}
+
+.site-navbar .navbar-brand {
+  margin-top: 0 !important;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  height: 50px;
+  font-size: 22px;
+  line-height: 20px;
+  font-family: "CMS", "Droid Sans", Helvetica, Arial, sans-serif;
+}
+
+.site-navbar .navbar-nav > li > a,
+.site-navbar .lang-switch-btn {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 15px 14px;
+  font-family: "CMS", "Droid Sans", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-decoration: none;
+}
+
+.site-navbar .navbar-nav > li > a {
+  gap: 6px;
+}
+
+.site-navbar .navbar-nav > li > a > .glyphicon {
+  top: 0;
+  font-size: 14px;
+}
+
+.site-navbar .navbar-collapse {
+  font-size: 16px;
+}
+
+.site-navbar .lang-switch-item {
+  margin-left: 4px;
+}
+
+.site-navbar .lang-switch-btn {
+  position: relative;
+  min-width: 82px;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.82);
+  cursor: pointer;
+}
+
+.site-navbar .lang-switch-btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-50%);
+}
+
+.site-navbar .lang-switch-btn:hover,
+.site-navbar .lang-switch-btn:focus {
+  color: rgba(255, 255, 255, 0.98);
+  outline: none;
+}
+
+.site-navbar .lang-option {
+  color: rgba(255, 255, 255, 0.56);
+  transition: color 0.2s ease;
+}
+
+.site-navbar .lang-option.is-active {
+  color: rgba(255, 255, 255, 0.98);
+  font-weight: 700;
+}
+
+.site-navbar .lang-switch-separator {
+  margin: 0 6px;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+@media (max-width: 767px) {
+  .site-navbar .navbar-nav > li > a,
+  .site-navbar .lang-switch-btn {
+    height: auto;
+    min-height: 20px;
+    padding: 10px 15px;
+  }
+
+  .site-navbar .lang-switch-item {
+    margin-left: 0;
+  }
+
+  .site-navbar .lang-switch-btn {
+    width: 100%;
+    min-width: 0;
+    justify-content: flex-start;
+    padding-left: 28px;
+  }
+
+  .site-navbar .lang-switch-btn::before {
+    left: 15px;
+  }
+}

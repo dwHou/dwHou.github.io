@@ -1,0 +1,4 @@
+Content presentation verification passed.
+Changed files checked: 4
+Excluded same-named pairs checked: 42
+Polished independent HTML pages: contact.html, demo.html, about_old.html, profile.html

@@ -11,12 +11,15 @@
 <link rel="author" href="dwhou.github.io">
 <title>Dewang Hou's Homepage</title>
 <!-- <link rel="stylesheet" href="style.css"> -->
+<link rel="stylesheet" href="./css/content-polish.css">
 <style>
 body {
-    width: 90%;
-    margin:0 auto;
-    font-family: times new roman;
-    padding-top: 100px;
+    width: min(960px, 92%);
+    margin: 0 auto;
+    font-family: "Times New Roman", serif;
+    padding-top: 120px;
+    color: #1b2a3a;
+    background: linear-gradient(180deg, #f6f8fb 0%, #eef3f9 100%);
   }
   
   h1 {
@@ -51,11 +54,18 @@ body {
   }
   
   .navbar {
-    background-color: #FFFFFF;
+    background-color: rgba(255, 255, 255, 0.96);
     position: fixed;
     top: 0px;
     width: 100%;
-    padding-bottom: 20px;
+    left: 0;
+    padding: 24px 0 18px;
+    box-shadow: 0 10px 30px rgba(20, 37, 63, 0.08);
+  }
+
+  .navbar-inner {
+    width: min(960px, 92%);
+    margin: 0 auto;
   }
   </style>
 <base target="_blank">
@@ -64,29 +74,33 @@ body {
 <body>
 
 <div class="navbar">
-  <h1>Dewang Hou</h1>
-  [<a target="_self" href="index.html">Blog</a>]
-  [<a target="_self" href="about.html">About</a>]
-  [<a target="_self" href="contact.html">Contact</a>]
-  [<a target="_self" href="demo.html">ALGO</a>]
+  <div class="navbar-inner">
+    <h1>Dewang Hou</h1>
+    [<a target="_self" href="index.html">Blog</a>]
+    [<a target="_self" href="about.html">About</a>]
+    [<a target="_self" href="contact.html">Contact</a>]
+    [<a target="_self" href="demo.html">ALGO</a>]
+  </div>
 </div>
 
-<hr>
+<section class="content-panel content-panel--center content-panel--narrow content-prose profile-card">
+  <hr>
 
-<!-- Keep the above content identical in all pages -->
+  <!-- Keep the above content identical in all pages -->
 
-<h2>Bio</h2>
+  <h2>Bio</h2>
 
-<p>
-  Devonn is currently a video engineer at <a href="https://blog.zoom.us/">Zoom</a>, Inc., Hangzhou. 
-  He obtained his MSc (2021) from the <a href="https://english.pku.edu.cn/">Peking University</a>, China, under the supervision of Prof. Ronggang Wang</a>. 
-  Prior to that, he received his BSc (2018) from <a href="https://en.scu.edu.cn/">Sichuan University</a>, China. 
-  <!--He has worked in <a href="https://research.samsung.com/aicenter_cambridge">Samsung AI Center Cambridge</a>, UK, as a research intern from 2018–19, and in -->
-</p>
+  <p>
+    Devonn is currently a video engineer at <a href="https://blog.zoom.us/">Zoom</a>, Inc., Hangzhou. 
+    He obtained his MSc (2021) from the <a href="https://english.pku.edu.cn/">Peking University</a>, China, under the supervision of Prof. Ronggang Wang</a>. 
+    Prior to that, he received his BSc (2018) from <a href="https://en.scu.edu.cn/">Sichuan University</a>, China. 
+    <!--He has worked in <a href="https://research.samsung.com/aicenter_cambridge">Samsung AI Center Cambridge</a>, UK, as a research intern from 2018–19, and in -->
+  </p>
 
-<p>
-  <!-- Devonn's research centers around the development of -->
-</p>
+  <p>
+    <!-- Devonn's research centers around the development of -->
+  </p>
+</section>
 
 <br><br>
 </body>

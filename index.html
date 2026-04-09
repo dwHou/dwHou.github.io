@@ -20,55 +20,19 @@
         <!--removed html from url but still is html-->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-        <!--font awesome-->
-        <link href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
-
-        <!--fonts: allan & cardo-->
-        <link href="https://fonts.googleapis.com/css?family=Droid+Serif&display=swap" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Droid+Sans&display=swap" rel="stylesheet" type="text/css">
-
         <link href="./css/sticky-footer-navbar.css" rel="stylesheet">
 
         <link href="./css/default.css" rel="stylesheet">
         <link href="./css/index.css" rel="stylesheet">
-
-        <link href="./css/inlineDisqussions.css" rel="stylesheet">
-
-        <!--Highlight-->
-        <link href="./highlight/styles/github.css" rel="stylesheet">
+        <link href="./css/navbar-consistency.css" rel="stylesheet">
 
         <!-- <link href="./favicon.ico" rel="shortcut icon" /> -->
-
-        <!-- Preconnect to external resources -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://cdn.staticfile.org">
-        <link rel="preconnect" href="https://ajax.googleapis.com">
-        <link rel="preconnect" href="https://www.google-analytics.com">
-        <link rel="dns-prefetch" href="https://cdn.mathjax.org">
-        <link rel="dns-prefetch" href="https://cdn.bootcss.com">
-        <link rel="dns-prefetch" href="https://cdn.clustrmaps.com">
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-49811703-1', 'dwHou.github.io');
-  ga('require', 'linkid', 'linkid.js');
-  ga('require', 'displayfeatures');
-  ga('send', 'pageview');
-
-</script>
-
-
-        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
 
     </head>
 
     <body style="background: #ffffff url('images/AboutBG.jpg') no-repeat center center fixed;-moz-background-size:cover;-webkit-background-size:cover;-o-background-size:cover;background-size:cover; min-width: 394px;">
         <div id="wrap">
-            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <nav class="navbar navbar-inverse navbar-static-top site-navbar" role="navigation">
                 <div class="container">
                     <!--Toggle header for mobile-->
                     <div class="navbar-header">
@@ -87,7 +51,13 @@
                             <li><a href="./about.html"><span class="glyphicon glyphicon-user"></span>  <span data-zh="关于" data-en="About">关于</span></a></li>
                             <li><a href="./contact.html"><span class="glyphicon glyphicon-envelope"></span>  <span data-zh="联系" data-en="Contact">联系</span></a></li>
                             <li><a href="./demo.html"><span class="glyphicon glyphicon-play"></span>  <span data-zh="算法" data-en="ALGO">算法</span></a></li>
-                            <li><button id="langBtn" class="lang-switch-btn" onclick="toggleLanguage()">EN</button></li>
+                            <li class="lang-switch-item">
+                                <button id="langBtn" class="lang-switch-btn" type="button" onclick="toggleLanguage()" aria-label="Switch language">
+                                    <span id="langZh" class="lang-option is-active">中</span>
+                                    <span class="lang-switch-separator">/</span>
+                                    <span id="langEn" class="lang-option">EN</span>
+                                </button>
+                            </li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -99,32 +69,9 @@
 
 
 <style>
-/* Language Toggle Button */
-.lang-switch-btn {
-    background: #2AA7F7;
-    color: white;
-    border: none;
-    padding: 6px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    margin-top: -3px;
-}
-
-.lang-switch-btn:hover {
-    background: #1e88e5;
-    transform: scale(1.05);
-}
-
-.lang-switch-btn:focus {
-    outline: none;
-}
-
-/* Make the button inline with navbar items */
-.navbar-nav > li > .lang-switch-btn {
-    margin-top: 8px;
+.lang-option.is-active {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
 }
 
 /* Image Loading Placeholder */
@@ -811,7 +758,7 @@
 </div>
 <div class="post-content">
 <h3 data-zh="EDVR: 视频修复" data-en="EDVR: Video Restoration">EDVR: 视频修复</h3>
-<h4><i><a href="https://arxiv.org/pdf/1905.02716v1.pdf" target="_blank" data-zh="在ArXiv上" data-en="On ArXiv">在ArXiv上<b class="fa fa-file-pdf-o"></b></a></i></h4>
+<h4><i><a href="https://arxiv.org/pdf/1905.02716v1.pdf" target="_blank" data-zh="在ArXiv上" data-en="On ArXiv">在ArXiv上<span class="glyphicon glyphicon-file"></span></a></i></h4>
 </div>
 </div>
 
@@ -1021,9 +968,7 @@
 <article style="width: 30%;float:right">
 <br>
 <br>
-<script type="text/javascript" id="clustrmaps"
-src="https://cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8fU&cl=ffffff&w=a" defer>
-</script>
+<div id="clustrmaps-container" data-src="https://cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8fU&cl=ffffff&w=a"></div>
 </article>
 
 
@@ -1032,38 +977,85 @@ src="https://cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVN
 <br>
 
                 </div>
-                <img src="https://readme-typing-svg.herokuapp.com?font=Covered+By+Your+Grace&size=36&color=2AA7F7&width=900&lines=welcome+;and+thanks+for+visiting!+" loading="lazy" alt="Welcome">
+                <img data-src="https://readme-typing-svg.herokuapp.com?font=Covered+By+Your+Grace&size=36&color=2AA7F7&width=900&lines=welcome+;and+thanks+for+visiting!+" loading="lazy" decoding="async" alt="Welcome">
             </div>
 
     <!-- jQuery-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="./posts/2024-7-zhongbaoyan/vendors/bower_components/jquery/dist/jquery.min.js"></script>
 
     <script src="./bootstrap/js/bootstrap.min.js"></script>
 
-    <script src="./highlight/highlight.pack.js" defer></script>
-    <script defer>
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof hljs !== 'undefined') {
-                hljs.initHighlightingOnLoad();
-            }
-        });
-    </script>
-
-    <script src="./js/footnotes.js" defer></script>
-
-    <script src="./js/inlineDisqussions.js" defer></script>
-
-    <noscript>Enable JavaScript for footnotes, Disqus comments, and other cool stuff.</noscript>
-
     <!-- Language Toggle Script -->
     <script>
+        function loadScript(src, id) {
+            if (id && document.getElementById(id)) {
+                return;
+            }
+            var script = document.createElement('script');
+            script.src = src;
+            script.defer = true;
+            if (id) {
+                script.id = id;
+            }
+            document.body.appendChild(script);
+        }
+
+        function loadDeferredEnhancements() {
+            var typingImage = document.querySelector('img[data-src]');
+            if (window.location.protocol === 'file:') {
+                if (typingImage) {
+                    typingImage.style.display = 'none';
+                }
+                return;
+            }
+
+            if (typingImage && !typingImage.getAttribute('src')) {
+                typingImage.setAttribute('src', typingImage.getAttribute('data-src'));
+            }
+
+            loadScript('https://cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVNzK2N8fU&cl=ffffff&w=a', 'clustrmaps');
+            loadScript('https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js', 'canvas-nest');
+            loadScript('https://www.google-analytics.com/analytics.js', 'google-analytics');
+
+            window.ga = window.ga || function() {
+                (window.ga.q = window.ga.q || []).push(arguments);
+            };
+            window.ga.l = +new Date();
+            ga('create', 'UA-49811703-1', 'dwHou.github.io');
+            ga('require', 'linkid', 'linkid.js');
+            ga('require', 'displayfeatures');
+            ga('send', 'pageview');
+        }
+
+        window.addEventListener('load', function() {
+            if ('requestIdleCallback' in window) {
+                window.requestIdleCallback(loadDeferredEnhancements, { timeout: 1500 });
+            } else {
+                window.setTimeout(loadDeferredEnhancements, 1200);
+            }
+        });
+
         // Language Toggle
         let currentLang = 'zh';
+
+        function updateLanguageSwitchState() {
+            var zhLabel = document.getElementById('langZh');
+            var enLabel = document.getElementById('langEn');
+            var toggle = document.getElementById('langBtn');
+
+            if (!zhLabel || !enLabel || !toggle) {
+                return;
+            }
+
+            zhLabel.classList.toggle('is-active', currentLang === 'zh');
+            enLabel.classList.toggle('is-active', currentLang === 'en');
+            toggle.setAttribute('aria-label', currentLang === 'zh' ? 'Switch language to English' : '切换到中文');
+        }
 
         function toggleLanguage() {
             currentLang = currentLang === 'zh' ? 'en' : 'zh';
             updateLanguage();
-            document.getElementById('langBtn').textContent = currentLang === 'zh' ? 'EN' : '中文';
+            updateLanguageSwitchState();
         }
 
         function updateLanguage() {
@@ -1090,6 +1082,7 @@ src="https://cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVN
 
             // Update HTML lang attribute
             document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+            updateLanguageSwitchState();
         }
     </script>
 
@@ -1127,6 +1120,5 @@ src="https://cdn.clustrmaps.com/map_v2.js?d=FU7uNIma8dDKdAxQZabFO10WFIkGBNt7RqVN
     </script>
 
     </body>
-    <script type="text/javascript" color="#FCFCFC" src="https://cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js" defer></script>
 
 </html>
