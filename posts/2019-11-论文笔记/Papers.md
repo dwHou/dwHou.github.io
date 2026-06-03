@@ -1458,6 +1458,36 @@ Confidence: Confidence is a score of how much closer the mean feature-wise dista
 
 
 
+#### :page_with_curl:FlashLips
+
+https://arxiv.org/pdf/2512.20033
+
+
+
+#### :computer: SyncTalk_2D
+
+https://github.com/ZiqiaoPeng/SyncTalk_2D
+
+代码解读：
+
+#### :computer: SyncTalk
+
+CVPR 2024 NeRF-based
+
+提出id - 嘴形 - 表情 - 头部位姿需要同步。
+
+・现有方法：GAN的id保持不好，甚至帧间出现id变化；NeRF的lipsync不好。
+
+SyncTalk：
+
+基于NeRF，用tri-plane hash representations来维持id。
+
+#### :computer: Ultralight-Digital-Human
+
+
+
+### 2. Diffusion Avatar
+
 #### :page_with_curl:KeySync
 
 抛出一个发人深省的问题：为什么看起来音频驱动口型，比音频驱动全脸的任务“简单”，但实际在这个领域的进展更小呢？
@@ -1553,11 +1583,19 @@ stage2 和 stage1主要差异（全由yaml配置指定）：
 
 - 没有训练LDM经验的同学，记得latent要通过缩放因子进行[标准化](https://github.com/huggingface/diffusers/blob/v0.34.0/src/diffusers/models/autoencoders/autoencoder_kl.py#L57C9-L63C101)。
 
+#### :page_with_curl:Avatar V (Heygen)
+
+https://www.heygen.com/research/avatar-v-model
+
+#### :page_with_curl:TAVR (Heygen)
+
+https://www.heygen.com/research/tavr
 
 
 
 
-### 2. PhotoAnimate
+
+### 3. PhotoAnimate
 
 #### :page_with_curl:LivePortrait
 

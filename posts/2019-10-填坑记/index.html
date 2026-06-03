@@ -566,6 +566,12 @@ Terminal <--[<output]--- |       |                \ \
     其他和睡眠模式相关的：
     可以查看/sys/power/mem_sleep，以前是s1、s2、s3，新系统可能是shallow、s2idle、deep
   </pre>
+  <pre>
+    ubuntu-drivers list --gpgpu 是查看服务器/GPU 计算场景可用 NVIDIA 驱动；
+    ubuntu-drivers install --gpgpu 是自动安装 Ubuntu 认为最适合服务器/GPU 计算场景的驱动；(AI、无头服务器、算力集群建议用这个)
+    ubuntu-drivers install 是自动安装普通/桌面通用场景的推荐驱动；
+    ubuntu-drivers autoinstall 是旧式/自动安装推荐驱动的命令，效果接近 ubuntu-drivers install，但现在官方文档更推荐用 install。因为autoinstall 没有 --gpgpu 这样的过滤选项，它极易在服务器上引起图形依赖链冲突。
+  </pre>
 
   <h2>关于显卡的温度监控</h2>
   <pre>
