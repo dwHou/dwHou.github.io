@@ -69,6 +69,24 @@ AI使用陷阱：
 
 Vibe Engineering：**我对每一行代码负全责**：**设计（Design）、品味（Taste）、判断力（Judgment）、清晰的沟通（Clear Communication）**
 
+可以用V.I.B.E的缩写来描述它的最佳实践：Vision, Interfaces, Build Loop, and Enforcement. 
+
+- **愿景（Vision）**
+
+  在启动任何项目或任务前，应先明确愿景，即最终目标。若你希望 AI 协助编写某个函数，应清楚其预期输出和使用场景；若是在创建全新应用，则应对最终产品形态有清晰定义。
+
+- **接口（Interfaces）**
+
+  将工作委托给 LLM 时，需要明确项目边界，即代码将与哪些系统或数据交互。LLM 可以使用哪些数据？生成的代码又会对接哪些组件或环境？
+
+- **构建循环（Build Loop）**
+
+  Vibe Coding 是一个迭代过程。为获得更有效的结果，应向 LLM 提出小范围、可验证的代码请求。控制任务范围，确保生成内容在你可理解和审查的范围内。持续迭代，并在每一步进行验证。
+
+- **约束与审查（Enforcement）**
+
+  在任何 AI 辅助开发中，都应保持人工参与。将生成代码视为未经信任的输入，直到验证其可靠性。开发者应亲自测试、审查并整合结果。
+
 
 
 https://m.toutiao.com/is/Ur0VKZTIwfg/
