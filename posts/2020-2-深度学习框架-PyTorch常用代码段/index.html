@@ -767,6 +767,76 @@ https://github.com/pytorch/pytorch/issues/48915
         reduce(lambda x, y: x * y, li) # 1*2*3*4*5 = 120
       </pre>
 
+      <li>每个epoch反复出现大量warning</li>
+      在复杂的环境中（多进程、第三方库内部修改过滤器），简单的 `filterwarnings("ignore")` 可能无效。
+      <pre>
+        一个 warning 发生时，Python 会拿着这个警告的特征（消息内容、类型、模块名、行号），去跟规则清单里从上到下挨个比对。
+
+
+        <code style="background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 4px; display: block; padding: 10px; margin: 10px 0;">
+        # 过滤器格式：(action, message, category, module, lineno)
+        filters = [
+            ('ignore', None, DeprecationWarning, None, 0),  # 第一个匹配此规则：
+            # message=None：不限制 warning 文本，什么内容都行；
+            # category=DeprecationWarning：只要是 DeprecationWarning，或它的子类，就符合；
+            # module=None：不限制来自哪个文件/模块；
+            # lineno=0：不限制发生在哪一行；
+            # action='ignore'：符合后忽略。
+            ('default', None, DeprecationWarning, None, 0), # 如果第一个不匹配，尝试此规则
+            ...
+        ]
+        </code>
+
+        匹配规则
+
+        1. 从前往后遍历过滤器栈
+        2. 找到第一个匹配的过滤器
+        3. 执行对应的 action（ignore/default/always/once/error）
+
+        Actions 说明
+        - ignore: 永远不显示
+        - default: 同一条 warning、同一位置，通常只显示一次
+        - once: 同类同信息的 warning，整个进程通常只显示一次
+        - always: 每次触发都显示
+
+        
+        遇到的问题: 即使加了once或ignore，仍然大量报警
+        root cause: 某些库为了确保重要信息被看到，会强制设置 warnings 过滤器，这会覆盖用户的配置。
+        如kornia：
+        源码位置（kornia/core/_compat.py）：
+        <code style="background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 4px; display: block; padding: 10px; margin: 10px 0;">
+        # kornia 使用 `simplefilter("always")` 确保其 deprecation warnings 总是能打印。
+        def _emit_deprecation_warning(name, replace_with, version, extra_reason):
+            warnings.simplefilter("always", DeprecationWarning) # 在过滤器列表最前面插入新规则
+            try:
+                warnings.warn(msg, category=DeprecationWarning, stacklevel=3)
+            finally:
+                warnings.simplefilter("default", DeprecationWarning) # finally 块恢复到 `"default"` 而非用户的 `"ignore"`
+        </code>
+
+        注：
+        simplefilter() 和 filterwarnings() 本质上做的是同一件事：往 warnings.filters 这个“警告处理规则列表”里添加一条规则。 区别在于：
+
+        simplefilter()：简单、粗粒度，只能按「警告类别 + 行号」过滤；
+        filterwarnings()：精细、可定向，还可以按「警告文本 + 来源模块 + 行号」过滤。
+
+        解决方案：
+        1. 使用正确的 API（推荐）
+        <code style="background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 4px; display: block; padding: 10px; margin: 10px 0;">
+        from kornia.utils import draw_convex_polygon  # ❌ 已弃用
+        from kornia.image import draw_convex_polygon  # ✅ 正确
+        </code>
+        2. Monkey Patch（临时方案）
+        <code style="background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 4px; display: block; padding: 10px; margin: 10px 0;">
+        # 在所有 import 之前
+        import kornia.core._compat as compat
+        compat._emit_deprecation_warning = lambda *args, **kwargs: None # 把原本用于发出弃用警告的函数 _emit_deprecation_warning，替换成一个什么都不做的匿名函数。
+        </code>
+
+        注：猴子补丁（Monkey Patch）是一种编程技巧，指在程序运行（Runtime）期间动态修改或替换类、函数、模块等内容，而不需要去修改原始的源代码文件
+
+      </pre>
+
 
 
   </ul>

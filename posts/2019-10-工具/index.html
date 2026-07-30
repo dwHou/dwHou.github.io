@@ -920,6 +920,56 @@ git reset origin/master --hard # Force update to old history
     git config core.sshCommand "ssh -i ~/.ssh/my_personal_key -F /dev/null"
   </pre>
 
+  <h2>Git compare</h2>
+  <ul>
+  <li><b>Git / GitHub / GitLab 中的两点对比与三点对比</b></li>
+  在开发过程中，我们需要频繁查看代码差异。特别是在<b>一次性查看连续提交多个 Commit 后的总变更</b>时，对比（Compare）功能非常高效。
+
+  <li><b>Git 分支演进图示</b></li>
+  <pre>
+    A --- B  (main 分支最新状态)
+   /
+--- O (共同祖先 / Merge Base)
+   \
+    C --- D  (feature 特性分支最新状态)</pre>
+
+  <li><b>为什么”两点对比”和”三点对比”都是必要的？</b></li>
+
+  <li><font color=”brown”>两点对比 (..)</font></li>
+  <pre>
+对比算法: 直接将 B 点 和 D 点 的文件快照进行硬对比（相当于 diff(B, D)）
+
+应用场景: 【绝对状态对比】
+  适用于: 同一分支对比多个 Commit 增量、或者只关心”此刻这两个版本文件代码物理上有何不同”
+  缺点: 对比不同分支时，主干新合并的代码（A、B）会被错当成”被删除的代码”</pre>
+
+  <li><font color=”blue”>三点对比 (...)</font></li>
+  <pre>
+对比算法: 先找到共同祖先 O 点，再对比 O 点 与 D 点 的差异（相当于 diff(O, D)）
+
+应用场景: 【代码评审 / PR / MR】
+  适用于: 分支合并前 Review 代码
+  优势: 自动过滤掉主干分支后来演进的代码（A、B），让评审者只聚焦于该特性分支自身独立贡献的代码（C、D）</pre>
+
+  <li><b>GitHub 与 GitLab Compare 功能的 URL 格式</b></li>
+
+  <li>GitHub:</li>
+      <li>三点对比 (默认 PR 逻辑): <br>
+          https://github.com/&lt;owner&gt;/&lt;repo&gt;/compare/&lt;from_commit&gt;...&lt;to_commit&gt;</li>
+      <li>两点对比 (直接对比物理差异): <br>
+          https://github.com/&lt;owner&gt;/&lt;repo&gt;/compare/&lt;from_commit&gt;..&lt;to_commit&gt;</li>
+
+  <li>GitLab:</li>
+      <li>默认 Compare 逻辑 (3-dot): <br>
+          https://gitlab.com/&lt;owner&gt;/&lt;repo&gt;/-/compare/&lt;from_commit&gt;...&lt;to_commit&gt;</li>
+      <li>说明与切换: GitLab 的 URL 同样遵循此标准。如果因 3-dot 导致页面显示 “There are no changes”，可尝试在 UI 的设置下拉菜单中更改 Diff 模式，或者直接把 URL 中的 ... 手动改成 ..</li>
+
+  <li>总结技巧</li>
+  <pre>
+如果要看 “一个分支合并会带来什么变化” → 用 三点对比 (...)
+如果要看 “任意两个 Commit 节点之间代码有什么不同” → 用 两点对比 (..)</pre>
+  </ul>
+
   <h2>Git内部原理</h2>
   <pre>
   经常有人说Git简单，Pull&Commit&Push，又经常有人说Git复杂难懂。最经常听到的抱怨是Git的命令容易混淆。

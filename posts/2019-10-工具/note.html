@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+  .git-note-container {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: #24292e;
+    max-width: 850px;
+    margin: 20px auto;
+    padding: 24px;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .git-note-container h2 {
+    border-bottom: 2px solid #eaecef;
+    padding-bottom: 8px;
+    color: #0366d6;
+    margin-top: 0;
+  }
+  .git-note-container h3 {
+    margin-top: 20px;
+    color: #1f2328;
+  }
+  .git-dag-box {
+    background-color: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 16px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    white-space: pre;
+    overflow-x: auto;
+    line-height: 1.4;
+    color: #0969da;
+  }
+  .git-highlight-tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+  }
+  .bg-blue { background-color: #0969da; }
+  .bg-purple { background-color: #8250df; }
+  
+  table.compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+  }
+  table.compare-table th, table.compare-table td {
+    border: 1px solid #d0d7de;
+    padding: 10px 14px;
+    text-align: left;
+  }
+  table.compare-table th {
+    background-color: #f6f8fa;
+  }
+  code {
+    background-color: rgba(175,184,193,0.2);
+    padding: 0.2em 0.4em;
+    border-radius: 6px;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 85%;
+  }
+  .tip-box {
+    background-color: #ddf4ff;
+    border-left: 4px solid #0969da;
+    padding: 12px 16px;
+    margin: 16px 0;
+    border-radius: 0 6px 6px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="git-note-container">
+  <h2>📌 Git / GitHub / GitLab 中的两点对比与三点对比指南</h2>
+
+  <p>在开发过程中，我们需要频繁查看代码差异。特别是在<strong>一次性查看连续提交多个 Commit 后的总变更</strong>时，对比（Compare）功能非常高效。</p>
+
+  <h3>1. Git 分支分支演进图示</h3>
+  <div class="git-dag-box">
+      A --- B  (main 分支最新状态)
+     /
+--- O (共同祖先 / Merge Base)
+     \
+      C --- D  (feature 特性分支最新状态)
+  </div>
+
+  <h3>2. 为什么“两点对比”和“三点对比”都是必要的？</h3>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>对比类型</th>
+        <th>对比算法逻辑</th>
+        <th>典型应用场景与必要性</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <span class="git-highlight-tag bg-purple">两点对比 (..)</span>
+        </td>
+        <td>直接将 <strong>B 点</strong> 和 <strong>D 点</strong> 的文件快照进行硬对比（相当于 <code>diff(B, D)</code>）。</td>
+        <td>
+          <strong>【绝对状态对比】</strong><br>
+          适用于：<strong>同一分支对比多个 Commit 增量</strong>、或者只关心“此刻这两个版本文件代码物理上有何不同”。<br>
+          <em>缺点：对比不同分支时，主干新合并的代码（A、B）会被错当成“被删除的代码”。</em>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span class="git-highlight-tag bg-blue">三点对比 (...)</span>
+        </td>
+        <td>先找到共同祖先 <strong>O 点</strong>，再对比 <strong>O 点</strong> 与 <strong>D 点</strong> 的差异（相当于 <code>diff(O, D)</code>）。</td>
+        <td>
+          <strong>【代码评审 / PR / MR】</strong><br>
+          适用于：<strong>分支合并前 Review 代码</strong>。<br>
+          <em>优势：自动过滤掉主干分支后来演进的代码（A、B），让评审者<strong>只聚焦于该特性分支自身独立贡献的代码（C、D）</strong>。</em>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>3. GitHub 与 GitLab Compare 功能的 URL 格式</h3>
+
+  <h4>🐙 GitHub</h4>
+  <ul>
+    <li><strong>三点对比 (默认 PR 逻辑):</strong><br>
+      <code>https://github.com/&lt;owner&gt;/&lt;repo&gt;/compare/&lt;from_commit&gt;...&lt;to_commit&gt;</code>
+    </li>
+    <li><strong>两点对比 (直接对强撞物理差异):</strong><br>
+      <code>https://github.com/&lt;owner&gt;/&lt;repo&gt;/compare/&lt;from_commit&gt;..&lt;to_commit&gt;</code>
+    </li>
+  </ul>
+
+  <h4>🦊 GitLab</h4>
+  <ul>
+    <li><strong>默认 Compare 逻辑 (3-dot):</strong><br>
+      <code>https://gitlab.com/&lt;owner&gt;/&lt;repo&gt;/-/compare/&lt;from_commit&gt;...&lt;to_commit&gt;</code>
+    </li>
+    <li><strong>说明与切换:</strong><br>
+      GitLab 的 URL 同样遵循此标准。如果因 3-dot 导致页面显示 <i>"There are no changes"</i>，可尝试在 UI 的设置下拉菜单中更改 Diff 模式，或者直接把 URL 中的 <code>...</code> 手动改成 <code>..</code>。
+    </li>
+  </ul>
+
+  <div class="tip-box">
+    <strong>💡 总结技巧：</strong><br>
+    <ul>
+      <li>如果要看 <strong>“一个分支合并会带来什么变化”</strong> ➔ 用 <strong>三点对比 <code>...</code></strong>。</li>
+      <li>如果要看 <strong>“任意两个 Commit 节点之间代码有什么不同”</strong> ➔ 用 <strong>两点对比 <code>..</code></strong>。</li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

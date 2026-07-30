@@ -2,3 +2,5 @@
 .claude
 .codex
 openspec
+__pycache__/
+*.py[cod]
