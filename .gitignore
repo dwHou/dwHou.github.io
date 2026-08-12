@@ -1,6 +1,7 @@
 .cursor
 .claude
 .codex
+.agents
 openspec
 __pycache__/
 *.py[cod]
