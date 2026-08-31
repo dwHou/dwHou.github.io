@@ -650,6 +650,20 @@ def download(ytb_id, args, proxy=None):
   git rm -r --cached folder 先取消folder的跟踪 重命名folder 然后git add folder
 </pre>
 
+<h2>GPG报错</h2>
+<pre>
+  error: gpg failed to sign the data 是 Git 给出的总括错误：Git 调用 gpg 签名，只要 GPG 进程返回失败，Git 就只报这两行，并不会告诉你到底是：
+
+  没有对应私钥；
+  passphrase 错；
+  pinentry 无法连接当前终端；
+  key 过期/撤销；
+  Git 指向了错误的 key；
+  GPG agent 配置问题。
+
+  所以比较坑，你需要用 echo "test" | gpg --clearsign -u &lt;YOUR_KEY_ID&gt; 来查原因。
+</pre>
+
 <h2>远程主机不满足运行 VS Code 服务器的先决条件</h2>
 <pre>
   从 VS Code 版本 1.99（2025 年 3 月）开始，由 VS Code 分发的预构建服务器仅与基于 glibc 2.28 或更高版本的 Linux 发行版兼容。例如，这些包括 Debian 10、RHEL 8 或 Ubuntu 20.04。

@@ -1410,6 +1410,12 @@ face embedder的组成也是warppingnet+attention。一个得到displacement fie
 
 后续还有[SadTalker](https://github.com/OpenTalker/SadTalker)，[StyleSync](https://github.com/guanjz20/StyleSync_PyTorch)，[DINet](https://github.com/MRzzm/DINet)，[FaceFormer](https://github.com/EvelynFan/FaceFormer)，[CodeTalker](https://github.com/Doubiiu/CodeTalker)等新的SOTA。
 
+用类似俞睿师兄的PIRender来做canonical expression，同时也能控制表情。
+
+lipsync的网络用了Fast Fourier Convolution.
+
+
+
 产业界可以关注：
 
 [https://aman-agarwal.com/2022/07/01/deepfake-videos-kristof-szabo-colossyan/](https://www.google.com/url?q=https://aman-agarwal.com/2022/07/01/deepfake-videos-kristof-szabo-colossyan/&sa=D&source=docs&ust=1696838688057700&usg=AOvVaw1DRSXTs2lZf5W7CNtDd8y7)
@@ -1417,6 +1423,22 @@ face embedder的组成也是warppingnet+attention。一个得到displacement fie
 现有方法：恢复牙齿使用teeth proxy
 
 本文方法：使用预训练的人脸解析网络，配合GFP-GAN修复牙齿
+
+
+
+#### :page_with_curl:GANimation
+
+连续表情编辑网络
+
+
+
+#### :page_with_curl:Adversarially Disentangled Audio-Visual Representation
+
+作者Yu Liu创业做可交互生成（包括[数字人](https://vivix.ai/tech-report-vivix-a1)）了，估值很高。
+
+
+
+
 
 #### :page_with_curl:DINet
 
@@ -1839,6 +1861,8 @@ https://7thsoftware.co.uk/misc/mediapipe/index.html?utm_source=chatgpt.com
 > 而不像过去的方式，还预测albedo参数，完全由参数化人脸模型（BFM、FLAME，它们也都被称为3DMM）渲染出重建人脸。
 >
 > 相较之下，Smirk的方法 避免了重建人脸 和 自然人脸的 domain gap，继而避免了复杂的loss设计。
+
+还提出cycle loss，也就是换了表情后重建的图片，提取表情要一致。
 
 #### :page_with_curl:PersonaTalk
 
