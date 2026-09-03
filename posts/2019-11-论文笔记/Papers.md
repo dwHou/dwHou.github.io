@@ -1436,7 +1436,56 @@ lipsync的网络用了Fast Fourier Convolution.
 
 作者Yu Liu创业做可交互生成（包括[数字人](https://vivix.ai/tech-report-vivix-a1)）了，估值很高。
 
+核心创新就是 domain-adversarial / gradient-reversal 方法的利用。
 
+> 这也是语音转换里speaker-independent content encoder、人脸重演里identity/expression disentangle 等任务里的经典方法。
+
+其实思想和GRL很像，GRL来自Unsupervised Domain Adaptation by Backpropagation
+
+> 个人认为 在生成任务（主任务）上用处不大，这个主要还是在DANN/不变性上用得较多。
+
+Viseme-Invariant Source Encoder的实验尝试：
+
+1. 第一版：
+
+$$ \mathcal{L}_{\mathrm{inv}}^{\mathrm{L1}} = \bigl\| E(c_A) - E(c_B) \bigr\|_1. $$
+
+`src_encoder(companionA)` = `src_encoder(companionB)`
+
+使得`src_encoder`编码器要对teacher 实际随音频改的东西无感，留下两边共有的：id、背景、头姿、光照。 **去表情，存身份。**
+
+> 不变性的encoder里加了attetion map，用于可视化。发现会对高频信息压制，而不单纯对viseme压制。不然上半张脸不应该压制的。
+
+2. 第二版
+
+$$ \min_{E}\max_{D}\; \mathbb{E}\bigl[ \log D(h_B) + \log\bigl(1 - D(h_A)\bigr) \bigr]. $$
+
+用对抗损失来实现类似的目标。让判别器不可分 $h_B$和 $h_A$。
+
+> 注：D是以音频为条件的条件判别器
+
+3. 第三版
+
+$$ \mathrm{GRL}_{\lambda}(h) = h, \qquad \frac{\partial\,\mathrm{GRL}_{\lambda}(h)}{\partial h} = -\lambda I. $$
+
+GRL方法也是做这个事情。
+
+$$ \nabla_{\theta_D}\mathcal{L}=+\nabla_{\theta_D}\mathcal{L}_{D}, \qquad \nabla_{\theta_E}\mathcal{L}_{\mathrm{adv}} = -\lambda\,\nabla_{\theta_E}\mathcal{L}_{D}. $$
+
+> Unsupervised Domain Adaptation by Backpropagation
+>
+> 在生成任务（主任务）上用处不大，这个主要还是在DANN/不变性上用得较多。
+
+$$ \begin{align} \mathcal{L}_{\mathrm{inv}}^{\mathrm{L1}} &= \bigl\| h_A - h_B \bigr\|_1, \\ \mathcal{L}_{\mathrm{inv}}^{\mathrm{adv}} &= \ell_{\mathrm{BCE}}\bigl(D(h_A), 1\bigr) + \ell_{\mathrm{BCE}}\bigl(D(h_B), 0\bigr), \\ \mathcal{L}_{\mathrm{inv}}^{\mathrm{GRL}} &= \ell_{\mathrm{BCE}}\bigl(D(\mathrm{GRL}_{\lambda}(h_A)), 0\bigr) + \ell_{\mathrm{BCE}}\bigl(D(\mathrm{GRL}_{\lambda}(h_B)), 1\bigr). \end{align} $$
+
+考虑到推理时用真实分布，所以也需要D在真实分布上能判别viseme：
+
+| 样本对                                                     | 标签   | 音频来源                       |
+| ---------------------------------------------------------- | ------ | ------------------------------ |
+| ($h_A$, $a_A$)、($h_B$, $a_B$)                             | 同步   | teacher whisper                |
+| ($h_A$, $a_B$)、($h_B$, $a_A$)                             | 不同步 | A/B 对换                       |
+| ($h_{\mathrm{src}}$, $a_{\mathrm{src}}$)                   | 同步   | 本帧真实语音（源视频 whisper） |
+| ($h_{\mathrm{src}}$, $a_A$) 或 ($h_{\mathrm{src}}$, $a_B$) | 不同步 | 随机 teacher 音频              |
 
 
 
@@ -1484,7 +1533,15 @@ Confidence: Confidence is a score of how much closer the mean feature-wise dista
 
 https://arxiv.org/pdf/2512.20033
 
+核心idea是借用SDXL VAE来实现mask-free。
 
+但我认为本质没有变，只是在latent空间做。关键在于构建一个改口型的latent，和src的latent是同一个domain。 然后训练时都用改口型的latent制造companion输入，推理时则用src。
+
+其实和我们在图像空间做companion video是一个道理。
+
+> 个人感受是它在latent space制造companion（其它口型的输入），我们通用模型是在image space制造companion。 本质上差别不大，但在latent space可能对图像线索的泄漏要少一点。
+>
+> 相关知识参考From Inpainting to Editing.
 
 #### :computer: SyncTalk_2D
 
