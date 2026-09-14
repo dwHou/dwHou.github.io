@@ -500,6 +500,15 @@ Terminal <--[<output]--- |       |                \ \
       http://blog.itpub.net/25311408/viewspace-686412
   </pre>
 
+  <h2>NFS文件误删除的快照找回方式</h2>
+  <pre>
+    其实可以在.snapshot这个路径下找到历史备份，有很多时间命名的文件夹（写时重定向技术）。
+
+    但是直接ls -la是看不到这个.snapshot的，但你可以直接当作这个路径存在，直接cd进去或ls它路径下的内容：
+
+    NFS 快照隐藏机制（Snapshot Directory Hiding）：NetApp、EMC 等企业级存储为防止 find/du/rsync/DataLoader 等脚本因递归遍历历史镜像而卡死或污染数据，在目录遍历（readdir）时会主动隐藏 .snapshot（ls -la 不可见）；但存储底层支持按需解析（lookup），只要显式输入 cd /path/.snapshot 即可动态挂载并访问只读历史版本，因此误删文件时无需依赖 ls 搜索，直接盲敲 cd <目录>/.snapshot 即可按时间点拷回数据。
+  </pre>
+
 
   <h2>Chrome连接问题</h2>
   <pre>

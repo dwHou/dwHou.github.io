@@ -815,6 +815,9 @@ git push -u origin master
 1. 建议git commit前先试试能不能通过编译（记得所有的依赖库都pull到最新）。
 2. 建议git push前先看看diff，git diff HEAD^1是当前工作区和上次commit的区别（如果刚commit马上查看，当前工作区相当于就是HEAD，等同于git diff HEAD^1 HEAD，所以一般简写），HEAD~2是上2次，依次类推。SourceTree软件里默认是git diff SHA^1 SHA。
 <font color="blue">git diff a b, diff显示的结果表示 后一个(b) 相对于 前一个(a)的修改。省略后一个时，后一个默认是workspace。</font>
+<font color="red">git diff有两个实用的命令：
+  git diff --cached --stat
+  git diff --cached --summary</font>
 
 补充建议：
 3. 一般git push会提示merge request的网址。建议在PR或MR的GitLab页面再一次检查下change（就是git diff）。
