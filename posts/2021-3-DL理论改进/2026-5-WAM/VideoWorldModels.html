@@ -1,0 +1,983 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+
+<link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+.mac-os-11 { --title-bar-height: 28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5 { white-space: pre-wrap; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.428571; overflow-x: hidden; background: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; font-width: inherit; font-size: inherit; line-height: inherit; font-family: inherit; font-size-adjust: inherit; font-kerning: inherit; font-variant-alternates: inherit; font-variant-ligatures: inherit; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-variant-position: inherit; font-variant-emoji: inherit; font-feature-settings: inherit; font-optical-sizing: inherit; font-variation-settings: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+thead, tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { -webkit-user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+svg { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; border-color: transparent !important; padding-top: 0px !important; padding-bottom: 0px !important; }
+  .typora-export * { print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  #write > p:nth-child(1) { margin-top: 0px; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+  figure { overflow-x: visible; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: medium; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.reversefootnote { font-family: ui-monospace, sans-serif; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: medium !important; border-style: none !important; border-color: currentcolor !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: medium; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background: inherit; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex: 2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; overflow-wrap: anywhere; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.428571rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left: 28px solid transparent; border-right: 28px solid transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right: 8px solid transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+mjx-container { break-inside: avoid; }
+.md-alert.md-alert-note { border-left-color: rgb(9, 105, 218); }
+.md-alert.md-alert-important { border-left-color: rgb(130, 80, 223); }
+.md-alert.md-alert-warning { border-left-color: rgb(154, 103, 0); }
+.md-alert.md-alert-tip { border-left-color: rgb(31, 136, 61); }
+.md-alert.md-alert-caution { border-left-color: rgb(207, 34, 46); }
+.md-alert { padding: 0px 1em; margin-bottom: 16px; color: inherit; border-left: 0.25em solid rgb(0, 0, 0); }
+.md-alert-text-note { color: rgb(9, 105, 218); }
+.md-alert-text-important { color: rgb(130, 80, 223); }
+.md-alert-text-warning { color: rgb(154, 103, 0); }
+.md-alert-text-tip { color: rgb(31, 136, 61); }
+.md-alert-text-caution { color: rgb(207, 34, 46); }
+.md-alert-text { font-size: 0.9rem; font-weight: 700; }
+.md-alert-text svg { fill: currentcolor; position: relative; top: 0.125em; margin-right: 1ch; overflow: visible; }
+.md-alert-text-container::after { content: attr(data-text); text-transform: capitalize; pointer-events: none; margin-right: 1ch; }
+
+
+.CodeMirror { height: auto; }
+.CodeMirror.cm-s-inner { background: inherit; }
+.CodeMirror-scroll { overflow: auto hidden; z-index: 3; }
+.CodeMirror-gutter-filler, .CodeMirror-scrollbar-filler { background-color: rgb(255, 255, 255); }
+.CodeMirror-gutters { border-right: 1px solid rgb(221, 221, 221); background: inherit; white-space: nowrap; }
+.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }
+.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }
+.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }
+.cm-s-inner .cm-number { color: rgb(17, 102, 68); }
+.cm-s-inner .cm-def { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-variable { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }
+.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }
+.cm-s-inner .cm-string { color: rgb(170, 17, 17); }
+.cm-s-inner .cm-property { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }
+.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }
+.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }
+.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }
+.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }
+.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }
+.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }
+.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }
+.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }
+.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }
+.cm-negative { color: rgb(221, 68, 68); }
+.cm-positive { color: rgb(34, 153, 34); }
+.cm-header, .cm-strong { font-weight: 700; }
+.cm-del { text-decoration: line-through; }
+.cm-em { font-style: italic; }
+.cm-link { text-decoration: underline; }
+.cm-error { color: red; }
+.cm-invalidchar { color: red; }
+.cm-constant { color: rgb(38, 139, 210); }
+.cm-defined { color: rgb(181, 137, 0); }
+div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }
+div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
+.cm-s-inner .CodeMirror-activeline-background { background: inherit; }
+.CodeMirror { position: relative; overflow: hidden; }
+.CodeMirror-scroll { height: 100%; outline: 0px; position: relative; box-sizing: content-box; background: inherit; }
+.CodeMirror-sizer { position: relative; }
+.CodeMirror-gutter-filler, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-vscrollbar { position: absolute; z-index: 6; display: none; outline: 0px; }
+.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow: hidden; }
+.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow: auto hidden; }
+.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }
+.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }
+.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 10px; z-index: 3; overflow-y: hidden; }
+.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }
+.CodeMirror-gutter-wrapper { position: absolute; z-index: 4; background: 0px 0px !important; border: medium !important; }
+.CodeMirror-gutter-background { position: absolute; top: 0px; bottom: 0px; z-index: 4; }
+.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }
+.CodeMirror-lines { cursor: text; }
+.CodeMirror pre { border-radius: 0px; border-width: 0px; background: 0px 0px; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; overflow-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; }
+.CodeMirror-wrap pre { overflow-wrap: break-word; white-space: pre-wrap; word-break: normal; }
+.CodeMirror-code pre { border-right: 30px solid transparent; width: fit-content; }
+.CodeMirror-wrap .CodeMirror-code pre { border-right: medium; width: auto; }
+.CodeMirror-linebackground { position: absolute; inset: 0px; z-index: 0; }
+.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }
+.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }
+.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }
+.CodeMirror-measure pre { position: static; }
+.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right: medium; width: 0px; }
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }
+.cm-searching { background: rgba(255, 255, 0, 0.4); }
+span.cm-underlined { text-decoration: underline; }
+span.cm-strikethrough { text-decoration: line-through; }
+.cm-tw-syntaxerror { color: rgb(255, 255, 255); background-color: rgb(153, 0, 0); }
+.cm-tw-deleted { text-decoration: line-through; }
+.cm-tw-header5 { font-weight: 700; }
+.cm-tw-listitem:first-child { padding-left: 10px; }
+.cm-tw-box { border-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-color: inherit; border-top-width: 0px !important; }
+.cm-tw-underline { text-decoration: underline; }
+@media print {
+  .CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+}
+
+
+/* meyer reset -- http://meyerweb.com/eric/tools/css/reset/ , v2.0 | 20110126 | License: none (public domain) */
+
+@include-when-export url(https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext);
+
+/* =========== */
+
+/* pt-serif-regular - latin */
+/* pt-serif-italic - latin */
+/* pt-serif-700 - latin */
+/* pt-serif-700italic - latin */
+:root {
+	--active-file-bg-color: #dadada;
+	--active-file-bg-color: rgba(32, 43, 51, 0.63);
+	--active-file-text-color: white;
+	--bg-color: #f3f2ee;
+	--text-color: #1f0909;
+	--control-text-color: #444;
+	--rawblock-edit-panel-bd: #e5e5e5;
+
+	--select-text-bg-color: rgba(32, 43, 51, 0.63);
+  --select-text-font-color: white;
+}
+
+pre {
+	--select-text-bg-color: #36284e;
+	--select-text-font-color: #fff;
+}
+
+html {
+	font-size: 16px;
+	-webkit-font-smoothing: antialiased;
+}
+
+html, body {
+	background-color: #f3f2ee;
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+	color: #1f0909;
+	line-height: 1.5em;
+}
+
+/*#write {
+	overflow-x: auto;
+    max-width: initial;
+	padding-left: calc(50% - 17em);
+    padding-right: calc(50% - 17em);
+}
+
+@media (max-width: 36em) {
+ 	#write {
+ 		padding-left: 1em;
+    	padding-right: 1em;
+ 	}
+}*/
+
+#write {
+	max-width: 40em;
+}
+
+@media only screen and (min-width: 1400px) {
+	#write {
+			max-width: 914px;
+	}
+}
+
+ol li {
+	list-style-type: decimal;
+	list-style-position: outside;
+}
+ul li {
+	list-style-type: disc;
+	list-style-position: outside;
+}
+
+ol,
+ul {
+	list-style: none;
+}
+
+blockquote,
+q {
+	quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* styles */
+
+/* ====== */
+
+/* headings */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: bold;
+}
+h1 {
+	font-size: 1.875em;
+	/*30 / 16*/
+	line-height: 1.6em;
+	/* 48 / 30*/
+	margin-top: 2em;
+}
+h2,
+h3 {
+	font-size: 1.3125em;
+	/*21 / 16*/
+	line-height: 1.15;
+	/*24 / 21*/
+	margin-top: 2.285714em;
+	/*48 / 21*/
+	margin-bottom: 1.15em;
+	/*24 / 21*/
+}
+h3 {
+	font-weight: normal;
+}
+h4 {
+	font-size: 1.125em;
+	/*18 / 16*/
+	margin-top: 2.67em;
+	/*48 / 18*/
+}
+h5,
+h6 {
+	font-size: 1em;
+	/*16*/
+}
+h1 {
+	border-bottom: 1px solid;
+	margin-bottom: 1.875em;
+	padding-bottom: 0.8125em;
+}
+/* links */
+
+a {
+	text-decoration: none;
+	color: #065588;
+}
+a:hover,
+a:active {
+	text-decoration: underline;
+}
+/* block spacing */
+
+p,
+blockquote,
+.md-fences {
+	margin-bottom: 1.5em;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-bottom: 1.5em;
+}
+/* blockquote */
+
+blockquote {
+	font-style: italic;
+	border-left: 5px solid;
+	margin-left: 2em;
+	padding-left: 1em;
+}
+/* lists */
+
+ul,
+ol {
+	margin: 0 0 1.5em 1.5em;
+}
+/* tables */
+.md-meta,.md-before, .md-after {
+	color:#999;
+}
+
+table {
+	margin-bottom: 1.5em;
+	/*24 / 16*/
+	font-size: 1em;
+	/* width: 100%; */
+}
+thead th,
+tfoot th {
+	padding: .25em .25em .25em .4em;
+	text-transform: uppercase;
+}
+th {
+	text-align: left;
+}
+td {
+	vertical-align: top;
+	padding: .25em .25em .25em .4em;
+}
+
+code,
+.md-fences {
+	background-color: #dadada;
+}
+
+code {
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.md-fences {
+	margin-left: 2em;
+	margin-bottom: 3em;
+	padding-left: 1ch;
+	padding-right: 1ch;
+}
+
+pre,
+code,
+tt {
+	font-size: .875em;
+	line-height: 1.714285em;
+}
+/* some fixes */
+
+h1 {
+	line-height: 1.3em;
+	font-weight: normal;
+	margin-bottom: 0.5em;
+}
+
+p + ul,
+p + ol{
+	margin-top: .5em;
+}
+
+h3 + ul,
+h4 + ul,
+h5 + ul,
+h6 + ul,
+h3 + ol,
+h4 + ol,
+h5 + ol,
+h6 + ol {
+	margin-top: .5em;
+}
+
+li > ul,
+li > ol {
+	margin-top: inherit;
+	margin-bottom: 0;
+}
+
+li ol>li {
+	list-style-type: lower-alpha;
+}
+
+li li ol>li{
+	list-style-type: lower-roman;
+}
+
+h2,
+h3 {
+	margin-bottom: .75em;
+}
+hr {
+	border-top: none;
+	border-right: none;
+	border-bottom: 1px solid;
+	border-left: none;
+}
+h1 {
+	border-color: #c5c5c5;
+}
+blockquote {
+	border-color: #bababa;
+	color: #656565;
+}
+
+blockquote ul,
+blockquote ol {
+	margin-left:0;
+}
+
+.ty-table-edit {
+	background-color: transparent;
+}
+thead {
+	background-color: #dadada;
+}
+tr:nth-child(even) {
+	background: #e8e7e7;
+}
+hr {
+	border-color: #c5c5c5;
+}
+.task-list{
+	padding-left: 1rem;
+}
+
+.md-task-list-item {
+	padding-left: 1.5rem;
+	list-style-type: none;
+}
+
+.md-task-list-item > input:before {
+	content: '\221A';
+	display: inline-block;
+	width: 1.25rem;
+  	height: 1.6rem;
+	vertical-align: middle;
+	text-align: center;
+	color: #ddd;
+	background-color: #F3F2EE;
+}
+
+.md-task-list-item > input:checked:before,
+.md-task-list-item > input[checked]:before{
+	color: inherit;
+}
+
+#write pre.md-meta-block {
+	min-height: 1.875rem;
+	color: #555;
+	border: 0px;
+	background: transparent;
+	margin-top: -4px;
+	margin-left: 1em;
+	margin-top: 1em;
+}
+
+.md-image>.md-meta {
+	color: #9B5146;
+}
+
+.md-image>.md-meta{
+	font-family: Menlo, 'Ubuntu Mono', Consolas, 'Courier New', 'Microsoft Yahei', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', serif;
+}
+
+
+#write>h3.md-focus:before{
+	left: -1.5rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h4.md-focus:before{
+	left: -1.5rem;
+	top: .25rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h5.md-focus:before{
+	left: -1.5rem;
+	top: .0.3125rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h6.md-focus:before{
+	left: -1.5rem;
+	top: 0.3125rem;
+	color:#999;
+	border-color:#999;
+}
+
+.md-toc:focus .md-toc-content{
+	margin-top: 19px;
+}
+
+.md-toc-content:empty:before{
+	color: #065588;
+}
+.md-toc-item {
+	color: #065588;
+}
+#write div.md-toc-tooltip {
+	background-color: #f3f2ee;
+}
+
+#typora-sidebar {
+	background-color: #f3f2ee;
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+  	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+}
+
+.pin-outline #typora-sidebar {
+	background: inherit;
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+.pin-outline #typora-sidebar:hover .outline-title-wrapper {
+	border-left:1px dashed;
+}
+
+.outline-item:hover {
+  background-color: #dadada;
+  border-left: 28px solid #dadada;
+  border-right: 18px solid #dadada;
+}
+
+.typora-node .outline-item:hover {
+  	border-right: 28px solid #dadada;
+}
+
+.outline-expander:before {
+  content: "\f0da";
+  font-family: FontAwesome;
+  font-size:14px;
+  top: 1px;
+}
+
+.outline-expander:hover:before,
+.outline-item-open>.outline-item>.outline-expander:before {
+  content: "\f0d7";
+}
+
+.modal-content {
+	background-color: #f3f2ee;
+}
+
+.auto-suggest-container ul li {
+	list-style-type: none;
+}
+
+/** UI for electron */
+
+.megamenu-menu,
+#top-titlebar, #top-titlebar *,
+.megamenu-content {
+	background: #f3f2ee;
+	color: #1f0909;
+}
+
+.megamenu-menu-header {
+	border-bottom: 1px dashed #202B33;
+}
+
+.megamenu-menu {
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+header, .context-menu, .megamenu-content, footer {
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+    color: #1f0909;
+}
+
+#megamenu-back-btn {
+	color: #1f0909;
+	border-color: #1f0909;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title:before {
+	color: #1f0909;
+}
+
+.megamenu-menu-list li a:hover, .megamenu-menu-list li a.active {
+	color: inherit;
+	background-color: #e8e7df;
+}
+
+.long-btn:hover {
+	background-color: #e8e7df;
+}
+
+#recent-file-panel tbody tr:nth-child(2n-1) {
+    background-color: transparent !important;
+}
+
+.megamenu-menu-panel tbody tr:hover td:nth-child(2) {
+    color: inherit;
+}
+
+.megamenu-menu-panel .btn {
+	background-color: #D2D1D1;
+}
+
+.btn-default {
+	background-color: transparent;
+}
+
+.typora-sourceview-on #toggle-sourceview-btn,
+.ty-show-word-count #footer-word-count {
+	background: #c7c5c5;
+}
+
+#typora-quick-open {
+    background-color: inherit;
+}
+
+.md-diagram-panel {
+	margin-top: 8px;
+}
+
+.file-list-item-file-name {
+	font-weight: initial;
+}
+
+.file-list-item-summary {
+	opacity: 1;
+}
+
+.file-list-item {
+	color: #777;
+}
+
+.file-list-item.active {
+	background-color: inherit;
+	color: black;
+}
+
+.ty-side-sort-btn.active {
+	background-color: inherit;
+}
+
+.file-list-item.active .file-list-item-file-name  {
+	font-weight: bold;
+}
+
+.file-list-item{
+    opacity:1 !important;
+}
+
+.file-library-node.active>.file-node-background{
+	background-color: rgba(32, 43, 51, 0.63);
+	background-color: var(--active-file-bg-color);
+}
+
+.file-tree-node.active>.file-node-content{
+	color: white;
+	color: var(--active-file-text-color);
+}
+
+.md-task-list-item>input {
+	margin-left: -1.7em;
+	margin-top: calc(1rem - 12px);
+	-webkit-appearance: button;
+}
+
+input {
+	border: 1px solid #aaa;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title,
+.megamenu-menu-header:hover, 
+.megamenu-menu-header:focus {
+	color: inherit;
+}
+
+.dropdown-menu .divider {
+	border-color: #e5e5e5;
+	opacity: 1;
+}
+
+/* https://github.com/typora/typora-issues/issues/2046 */
+.os-windows-7 strong,
+.os-windows-7 strong  {
+	font-weight: 760;
+}
+
+.ty-preferences .btn-default {
+	background: transparent;
+}
+
+.ty-preferences .window-header {
+	border-bottom: 1px dashed #202B33;
+	box-shadow: none;
+}
+
+#sidebar-loading-template, #sidebar-loading-template.file-list-item {
+	color: #777;
+}
+
+.searchpanel-search-option-btn.active {
+	background: #777;
+	color: white;
+}
+
+.export-detail, .light .export-detail, 
+.light .export-item.active, 
+.light .export-items-list-control {
+	background: #e0e0e0;
+	border-radius: 2px;
+	font-weight: 700;
+	color: inherit
+}
+
+ @media print { @page {margin: 0 0 0 0;} body.typora-export {padding-left: 0; padding-right: 0;} #write {padding:0;}}
+</style><title>VideoWorldModels</title>
+</head>
+<body class='typora-export typora-export-show-outline typora-export-no-collapse-outline'><div class='typora-export-content'>
+<div class="typora-export-sidebar"><div class="outline-content"><li class="outline-item-wrapper outline-h1"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#迈向视频世界模型">迈向视频世界模型</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#1-什么是世界模型-理解世界与模拟世界">1. 什么是世界模型？ 理解世界与模拟世界</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#2-视频世界模型">2. 视频世界模型</a></div><ul class="outline-children"><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#因果关系">因果关系</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#可交互的">可交互的</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#持久的">持久的</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#实时性">实时性</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#物理精确性">物理精确性</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h3"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#概括">概括</a></div><ul class="outline-children"></ul></li></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#3-世界模拟的其他方法">3. 世界模拟的其他方法</a></div><ul class="outline-children"></ul></li><li class="outline-item-wrapper outline-h2"><div class="outline-item"><span class="outline-expander"></span><a class="outline-label" href="#4-结论">4. 结论</a></div><ul class="outline-children"></ul></li></ul></li></div></div><div id='write'  class=''><p><a href='https://www.xunhuang.me/blogs/world_model.html' target='_blank' class='url'>https://www.xunhuang.me/blogs/world_model.html</a></p><h1 id='迈向视频世界模型'><span>迈向视频世界模型</span></h1><p><span>“世界模型”一词在2025年变得相当流行，但至今仍缺乏一个清晰且普遍认可的定义。在这篇博文中，我将首先厘清这个术语，阐明一些通常被称为世界模型的不同范式。然后，我将重点讨论视频世界模型，这是一类旨在通过视频预测方法模拟世界的特殊世界模型。此外，我还会探讨为什么流行的视频生成器（例如OpenAI的Sora或Google的Veo3）目前还不能称之为真正的世界模型，并概述在视频生成框架中弥合这一差距的途径。</span></p><h2 id='1-什么是世界模型-理解世界与模拟世界'><span>1. 什么是世界模型？ 理解世界与模拟世界</span></h2><p><img src="assets/image-20261016133759369.png" alt="image-20261016133759369" style="zoom:50%;" /></p><figure style="text-align:center;">
+  <img src="assets/image-20261016135454336.png" alt="图1" width="80%" />
+  <figcaption>
+    图1:人脑中预测粗略未来的内部“世界模型”,与旨在模拟现实每一个细节的外部“世界模型”的对比。该图改编自<a href="https://leshouches2022.github.io/SLIDES/compressed-yann-1.pdf" target="_blank">Yann LeCun的幻灯片</a>。
+  </figcaption>
+</figure><p>&nbsp;</p><p><span>一般来说，世界模型能够预测在给定当前状态和特定行动的情况下，世界将如何演变；换句话说，它学习一个函数，该函数以当前世界状态和特定行动为输入，并输出下一个状态。然而，对于这个状态的构成，目前尚无共识。一些研究者将其定义为世界的抽象表征，在这种情况下，世界模型反映了人脑中用于预测高语义层面事件的认知世界模型（cognitive world model）。而另一些研究者则认为世界状态是对世界的详细完整描述。在这种情况下，世界模型是一个完全逼真的世界模拟器，类似于</span><em><span>电影《黑客帝国》</span></em><span> ——一个与现实几乎无法区分的高保真模拟。</span><strong><span>尽管目标和方法各不相同，但这两种范式通常都被称为“世界模型</span></strong><span>” 。</span></p><p>&nbsp;</p><figure style="text-align:center;">
+  <img src="assets/image-20261016140236932.png" alt="图2" width="80%" />
+  <figcaption>
+    图 2：世界模型的不同定义和方法的分类。
+  </figcaption>
+</figure><p>&nbsp;</p><p><span>第一类世界模型需要能够内化世界知识并在语义空间中进行推理和预测的架构。尽管LLM被认为是一条很有前景的道路，但许多人</span><a href='https://sergeylevine.substack.com/p/language-models-in-platos-cave'><span>认为</span></a><span>它仅仅依赖文本知识，导致其对现实的理解存在重大缺陷。 一个真正扎根于现实世界的模型必须超越文本，通过视觉、行动和交互来与世界互动。近年来，一些基于长上下文文本和视频训练的多模态模型，例如</span><a href='https://arxiv.org/abs/2402.08268'><span>LWM</span></a><span>，在这方面展现出了潜力。同样，LeCun 的 JEPA 系列模型（</span><a href='https://arxiv.org/abs/2402.08268'><span>例如</span></a><em><span>V</span></em><span> </span><a href='https://ai.meta.com/blog/v-jepa-2-world-model-benchmarks/'><span>-JEPA 2</span></a><span>）通过预测掩码抽象视频表示，也推进了这一目标的实现。</span></p><p><span>尽管模拟</span><font color="brown"><span>像素级细节</span></font><span>对于智能而言并非必要——</span><a href='https://www.facebook.com/share/p/1BBDeNBe8g/'><span>正如LeCun所论证的那样</span></a><span>——但仍有许多应用需要高保真度的世界模拟器。逼真的模拟使机器人能够在无需承担现实世界交互的成本和限制的情况下学习复杂任务，同时也能为人类用户提供沉浸式的交互体验。在这两种情况下，高质量的视觉效果都至关重要：机器人需要精细的视觉输入来弥合模拟与现实之间的差距，而人类则需要逼真的视觉效果来体验真正的沉浸感。在机器人学习中，内部世界理解模型和外部模拟模型可以协同工作——机器人可以利用通过与模拟环境的外部世界模型交互而学习到的内部世界模型进行规划和行动（plan and act）。</span></p><div class="md-alert md-alert-note note"><p><span class='md-alert-text md-alert-text-note'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</span><br></p><p><strong><span>关键洞见：</span></strong><span> “世界模型”是一个含义丰富的术语，既可以指</span><font color="blue"><span>内部世界理解模型</span></font><span>，也可以指</span><font color="blue"><span>外部世界模拟模型</span></font><span>。在具身人工智能的背景下，这两种模型可以协同工作。</span></p></div><p><span>构建高保真世界模拟器有多种方法，包括</span><strong><span>视频世界模型</span></strong><span>、基于物理的仿真平台以及神经3D/4D建模技术。在接下来的章节中，我将重点介绍视频世界模型，并概述从当前最先进的视频生成系统到真实世界模型的演进路径。</span></p><p>&nbsp;</p><h2 id='2-视频世界模型'><span>2. 视频世界模型</span></h2><p><span>过去几年，视频生成技术取得了显著进步，目前最先进的系统能够生成具有逼真细节和物理真实感的动态效果（例如谷歌的Veo3）。谷歌DeepMind首席执行官Demis Hassabis暗示，利用视频生成技术可以开发出具有游戏应用潜力的交互式世界模型。</span></p><iframe
+  src="https://platform.twitter.com/embed/Tweet.html?id=1940248521111961988&lang=zh-cn&theme=light&dnt=true"
+  width="550" height="350"
+  frameborder="0" scrolling="no"
+  style="display:block;margin:0 auto;border:none;overflow:hidden;">
+</iframe><p><span>但为什么当前的视频生成模型还不能被视为真正的世界模型呢？究竟缺少什么？我们又该如何弥合这一差距？我认为，一个真正的视频世界模型必须具备</span><font color="brown"><strong><span>因果性（Causal）、交互性（Interactive）、持久性（Persistent）、实时性（Real-Time）和物理精确性（Physically Accurate）</span></strong></font><span>。在接下来的章节中，我将详细探讨每个属性，强调其重要性并回顾相关研究。</span></p><h3 id='因果关系'><span>因果关系</span></h3><p><span>Causal</span></p><blockquote style="box-sizing:border-box; max-width:680px; margin:8px 0; padding:10px 14px; background:#0b0b0b; border:2px solid #00ee00; border-radius:8px; color:#00ee00;">
+  <p style="margin:0; font-size:14px; line-height:1.6;">“你看，世间只有一个恒常不变、放之四海皆准的真理：因果律。行动与反应，原因与结果。”</p>
+  <p style="margin:6px 0 0; color:#a0dba0; font:12px/1.5 'Courier New',monospace;">"You see, there is only one constant, one universal, it is the only real truth: causality. Action. Reaction. Cause and effect."</p>
+  <p style="margin:7px 0 0; text-align:right; font-size:12px; color:#00cc00;">—— Merovingian，《黑客帝国2：重装上阵》</p>
+</blockquote><p><span>因果性</span><sup class='md-footnote'><a href='#dfref-footnote-1' name='ref-footnote-1'>1</a></sup><span>是宇宙的基本属性。然而，目前最先进的视频生成模型主要采用扩散变换器（DiT），它使用非因果的双向注意力机制同时生成一组固定的帧。这种双向注意力机制允许未来的帧信息影响过去的帧，从而违背了现实固有的时间不对称性。因此，在生成初始帧之后，整个视频序列就被预先设定，用户无法动态地与后续事件进行交互或影响。</span></p><p><span>将因果依赖关系和自回归逐帧生成能力引入视频生成系统，是</span><strong><span>构建真实世界模型的第一步</span></strong><span>。没有它，实时交互就无从谈起。虽然LLM风格的自回归模型本质上具有因果性，并且已被应用于视频生成，</span><em><span>例如</span></em><a href='https://arxiv.org/abs/2205.15868'><span>CogVideo</span></a><span>和</span><a href='https://sites.research.google/videopoet/'><span>VideoPoet</span></a><span> ，但由于它们依赖于有损矢量量化来获得离散的潜在空间，因此其质量受到严重限制。此外，一次生成一个标记的速度很慢，而且难以并行化，这使得实现实时速度变得非常困难。</span></p><p><span>如果能兼具扩散模型的生成质量与速度，以及自回归模型的因果性，那将非常理想。</span><a href='https://arxiv.org/abs/2407.01392'><span>Diffusion Forcing</span></a><span> 表明，在训练扩散模型时为每一帧独立设置噪声水平，可以使模型具备自回归生成能力。</span></p><p><span>尽管 Chen 等人的实验主要基于在合成数据集上训练的简单 RNN 架构，</span><a href='https://causvid.github.io/'><span>CausVid</span></a><span>进一步表明：在互联网规模的视频数据集上预训练、采用双向注意力机制的视频扩散 Transformer，可以成功改造为采用因果注意力机制的自回归扩散 Transformer（AR-DiT）。</span><a href='https://github.com/SandAI-org/MAGI-1'><span>MAGI-1</span></a><span> 则探索了如何从零开始预训练这类 AR-DiT，并提出了多项针对这一架构的基础设施改进。</span></p><figure style="text-align:center;">
+  <img src="assets/image-20261018223444764-2334087.png" alt="图3" width="80%" />
+  <figcaption>
+    图 3：CausVid将具有双向注意力的预训练视频扩散模型转换为具有因果注意力的几步自回归视频扩散模型。
+  </figcaption>
+</figure><p><span>缺乏交互式控制的因果生成模型是一个被动的世界模拟器，以观察者模式运行。要真正发挥实际作用，世界模型必须支持交互式控制，使用户或代理能够与模拟环境进行实时交互。</span></p><h3 id='可交互的'><span>可交互的</span></h3><p><span>Interactive</span></p><p><span>交互式可控性是视频世界模型的一个关键特征。它指的是</span><font color="green"><strong><span>通过动态注入的动作来影响未来的能力。</span></strong></font><span>不同应用中动作的性质各不相同：游戏玩家可以移动角色和操控物体，机器人必须执行硬件支持的运动指令，而自动驾驶车辆则需要做出转向和加速决策。这些不同场景的共同之处在于，它们都要求世界模型能够动态响应外部干预，并随着新动作的引入而调整其预测。</span></p><p><span>早期研究主要探索游戏动作控制，并通常采用循环变分自编码器作为生成世界模型（</span><a href='https://worldmodels.github.io/'><span>Ha 和 Schmidhuber，2018</span></a><span>；</span><a href='https://arxiv.org/abs/1912.01603'><span>Hafner 等，2020</span></a><span>；</span><a href='https://research.google/blog/mastering-atari-with-discrete-world-models/'><span>Hafner 等，2021</span></a><span>）。近年来，研究方向转向基于交互动作的（自回归）扩散模型（</span><a href='https://gamengen.github.io/'><span>Valevski 等，2024</span></a><span>；</span><a href='https://diamond-wm.github.io/'><span>Alonso 等，2024</span></a><span>），这些模型通常在日益逼真的游戏环境中进行训练（</span><a href='https://thematrix1999.github.io/'><span>Feng 等，2024</span></a><span>；</span><a href='https://gamegen-x.github.io/'><span>Che 等，2025</span></a><span>；</span><a href='https://hunyuan-gamecraft.github.io/'><span>Li 等，2025</span></a><span>）。此外，研究还探索了其他特定应用场景的动作空间，例如自动驾驶车辆的驾驶操作（</span><a href='https://wayve.ai/science/gaia/'><span>Hu 等，2023</span></a><span>）和导航机器人的运动动作（</span><a href='https://www.amirbar.net/nwm/'><span>Bar 等，2025</span></a><span>）。</span></p><p><span>实现交互式控制的核心挑战在于获取能够将视频帧与相应动作对齐的训练数据。虽然可以从游戏环境中获取带标注的数据，但如何利用未标注的、互联网规模的视频来训练交互式世界模型仍然是一个开放性问题。Genie</span><a href='https://sites.google.com/view/genie-2024/home'><span>探索</span></a><span>了从未标注视频中进行无监督动作学习的方法，而其后续版本</span><a href='https://deepmind.google/discover/blog/genie-2-a-large-scale-foundation-world-model/'><span>Genie-2</span></a><span>通过利用 AR-DiT 架构展现了令人瞩目的成果。</span></p><h3 id='持久的'><span>持久的</span></h3><p><span>Persistent</span></p><p><span>对于大多数世界模拟应用而言，仅生成几秒钟的视频是远远不够的。理想情况下，视频世界模型应该能够生成无限长的视频——或者至少能够生成</span><strong><span>足够长的</span></strong><span>视频以支持有意义的任务。更重要的是，该模型必须确保</span><strong><span>时间上的一致性</span></strong><span>，与之前生成的视频保持连贯性。我称之为</span><font color="green"><span>持久性</span></font><span>的这一特性，是视频世界模型的另一项基本要求。</span></p><p><span>乍一看，生成时长较长且一致的视频似乎仅仅是一个扩展性问题：理论上，一个拥有极长上下文窗口、并基于足够长时长数据训练的Transformer模型应该能够保持时间上的连贯性。然而，世界模型的另一个关键要求——实时响应能力（我稍后会讨论）——使这个问题变得复杂。与用户可以容忍随着上下文窗口增大而增加的推理时间的LLM应用不同，视频世界模型面临着严格的延迟限制。对于游戏等交互式应用而言，系统随时间推移而变慢是不可接受的。一个随着时间推移变得越来越卡顿的世界模型将使游戏体验变得无法进行。</span></p><p><span>研究人员提出了多种技术来应对这一挑战。一种常见的策略是引入归纳偏置，以积极压缩时间上相距较远的帧，例如</span><a href='https://farlongctx.github.io/'><span>FAR</span></a><span>和</span><a href='https://lllyasviel.github.io/frame_pack_gitpage/'><span>FramePack</span></a><span>。虽然这种方法在最近帧包含足够预测信息的场景下效果良好，但当关键细节隐藏在较早的帧中时，它可能会失效——这类似于 LLM 中的“大海捞针”问题。另一项研究将视频生成与持续的 3D 条件相结合（</span><a href='https://research.nvidia.com/labs/toronto-ai/GEN3C/'><span>Ren 等人，2025</span></a><span>；</span><a href='https://zqh0253.github.io/wvd/'><span>Zhang 等人，2025</span></a><span>；</span><a href='https://spmem.github.io/'><span>Wu 等人，2025</span></a><span>；</span><a href='https://arxiv.org/abs/2505.05495'><span>Zhou 等人，2024</span></a><span>）。虽然这些方法在静态场景中有效，但由于表示明确的 4D 结构的复杂性，它们难以对动态环境进行建模。最后，一个很有前景的方向是使用线性循环神经网络（RNN），例如状态空间模型，来捕获长程时间依赖性，而不会增加每帧的生成时间，</span><a href='https://ryanpo.com/ssm_wm/'><span>Po 等人（2025</span></a><span> ）首次探索了这种方法。他们的方法将线性 RNN 与 3D 隐藏状态相结合，并融入了局部注意力机制，这让人想起Transformer 时代之前广泛用于视频预测的 经典</span><a href='https://proceedings.neurips.cc/paper_files/paper/2015/file/07563a3fe3bbe7e3ba84431ad9d055af-Paper.pdf'><span>ConvLSTM架构。</span></a></p><figure style="text-align:center;">
+  <img src="assets/image-20261018225032276-2335035-2335039.png" alt="图3" width="80%" />
+  <figcaption>
+    图 5：状态空间视频世界模型（State-Space Video World Model, Po et al., 2025.）将分块 SSM 扫描与 3D 隐藏状态相结合，以实现长期记忆，并结合局部注意力机制来增强视觉保真度。
+  </figcaption>
+</figure><h3 id='实时性'><span>实时性</span></h3><p><span>Real-Time</span></p><p><span>旨在为用户提供交互式体验的视频世界模型需要实时运行，但在此语境下，“实时”究竟意味着什么？要评估模型是否实时运行，需要考虑两个指标：</span><font color="green"><strong><span>吞吐量</span></strong><span>和</span><strong><span>延迟</span></strong></font><span>。吞吐量指的是模型每秒生成的帧数，而延迟指的是每次交互操作与响应帧之间的延迟。实现实时吞吐量——即模型生成的帧数等于或高于用户消费帧数——是提供实时体验的必要条件。</span></p><p><span>然而，</span><strong><span>实时吞吐量还不够</span></strong><span>。模型的延迟也必须足够低，用户无法察觉。延迟通常需要小于一秒，而具体的延迟阈值因应用而异。例如，</span><a href='https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4654242'><span>研究</span></a><span>表明，直播可接受的延迟约为1秒，游戏为 0.1 秒，虚拟现实为 0.01 秒。这也是因果/自回归生成对视频世界模型至关重要的另一个原因：一个具有非因果（non-causal）依赖关系的模型，每次生成 t 秒的视频，其对逐帧交互操作的响应最小延迟为 t 秒。因此，无论模型的吞吐量有多快， </span><strong><span>非因果扩散模型永远无法实现真正的实时延迟。</span></strong></p><p><span>为了实现实时体验，关键在于将</span><strong><span>逐帧因果自回归建模与快速、少步骤的蒸馏扩散</span></strong><span>过程相结合，从而生成每一帧。CausVid 是这一领域的先驱，它引入了使用分布匹配蒸馏 (DMD) 训练的 AR-DiT</span><a href='https://causvid.github.io/'><span>模型</span></a><a href='https://tianweiy.github.io/dmd/'><span>。</span></a><span>后续工作</span><a href='https://self-forcing.github.io/'><span>Self-Forcing</span></a><span>通过在训练过程中模拟推理过程（使用键值缓存的自回归展开）进一步提升了质量和速度。它在单个 GPU 上实现了实时吞吐量 (17FPS) 和亚秒级延迟，同时达到了与最先进的开源视频扩散模型相当的质量。APT2</span><a href='https://seaweed-apt.com/2'><span>探索</span></a><span>了类似的训练时展开思路，并进一步证明了此类实时视频模型可以通过交互式控制进行微调。虽然</span><a href='https://oasis.decart.ai/welcome'><span>Decart</span></a><span>、</span><a href='https://experience.odyssey.world/'><span>Odyssey</span></a><span>、</span><a href='https://wayfarerlabs.ai/blog'><span>Wayfarer Labs</span></a><span>和</span><a href='https://blog.dynamicslab.ai/'><span>Dynamics Lab</span></a><span>等初创公司也进行过演示，但总体而言，其质量和通用性仍然落后于最先进的视频生成模型。</span></p><div class="md-alert md-alert-important important"><p><span class='md-alert-text md-alert-text-important'><svg viewBox="0 0 16 16" version="1.1" width="1em" height="1em" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</span><br></p><p><strong><span>causal, frame-by-frame autoregressive modeling with a fast, few-step distilled diffusion</span></strong><span> </span></p></div><h3 id='物理精确性'><span>物理精确性</span></h3><p><span>Physically Accurate</span></p><p><span>视频世界模型的最终目标是成为一个与现实世界难分彼此的世界模拟器。这要求模型不仅要生成视觉上令人愉悦的像素，还要遵循真实世界的物理规律。虽然随着数据和参数的增加，这些模型的物理真实性通常会得到提升，但目前尚不清楚现有模型是否能够真正学习到可泛化和外推的物理定律。Kang</span><a href='https://phyworld.github.io/'><span>等人</span></a><span>引入了一个通过物理模拟器生成的简单二维数据集，并评估了基于该数据集训练的视频模型的泛化能力。他们发现，尽管组合泛化是可以实现的，但现有模型在观测到的物理属性（</span><em><span>例如</span></em><span>速度、质量）超出分布范围的外推场景中仍然无法有效泛化。</span></p><p><span>虽然这个结果似乎预示着一个黯淡的未来，但这并不意味着视频世界模型在大多数实际场景中无法有效地模拟世界。除非你试图模拟前沿的物理实验，否则其应用场景的构成很可能与大型互联网视频数据集中的场景类似。毕竟，如果训练分布覆盖了整个世界，那么就没有任何东西会超出分布范围。😉</span></p><p><img src="assets/image-20261018230834374.png" alt="image-20261018230834374" style="zoom:50%;" /></p><p><span>除了简单地扩展模型规模之外，还有多种技术被提出用于增强视频世界模型的物理真实性。VideoJAM指出</span><a href='https://hila-chefer.github.io/videojam-paper.github.io/'><span>，</span></a><span>扩散模型中常用的像素重建目标不足以捕捉物理连贯性。为了解决这个问题，它引入了一种联合训练方法，该方法结合了额外的光流去噪目标。另一种方法是数据集整理，以突出那些物理精度更为重要的罕见且分布外的事件。例如，</span><a href='https://anthonygosselin.github.io/Ctrl-Crash-ProjectPage/'><span>Ctrl-Crash</span></a><span>使用车祸视频素材来微调视频扩散模型，而</span><a href='https://github.com/vision-x-nyu/pisa-experiments'><span>PISA 则</span></a><span>使用合成或真实世界的物体掉落视频来微调该模型。</span></p><h3 id='概括'><span>概括</span></h3><p><span>我概述了视频世界模型的五个关键属性：因果性、交互性、持久性、实时响应性和物理精度，大致按从最基本到最具挑战性的顺序排列。前两个属性——因果性和交互性——是硬性约束。世界模型必须具有因果性和交互性，其中因果性更为根本，是实现交互控制的前提。持久性是一个软性约束，存在于一个连续的谱系中；理想的世界模型需要生成无限长且完全一致的视频，但即使是持久性适中的模型在许多应用中也很有价值。</span><strong><span>实时响应性和物理精度（后两个属性）之间存在权衡</span></strong><span>：较大的模型往往具有更高的物理精度，但速度较慢，而较小的模型是实现实时响应的必要条件，但物理精度较低。我预计</span><strong><span>不同的世界建模应用会优先考虑其中一项属性</span></strong><span>。对于人类娱乐而言，实时响应性至关重要，而物理精度只需足够欺骗人眼即可。对于机器人学习而言，物理精度是最重要的，而模型训练期间的实时仿真并非真正必要。</span></p><figure style="text-align:center;">
+  <img src="assets/image-20261018231235304-2336358.png" alt="图3" width="80%" />
+  <figcaption>
+    图 8：视频世界模型的层级结构呈双头金字塔形。实时响应性和物理精确性之间存在权衡，我预计不同的应用会优先考虑其中一项。
+  </figcaption>
+</figure><p>&nbsp;</p><h2 id='3-世界模拟的其他方法'><span>3. 世界模拟的其他方法</span></h2><p><span>视频世界模型为模拟世界提供了一种极具前景的新方法，但这仅仅是众多途径之一。传统的模拟器将用于动力学的物理引擎与用于图像渲染的渲染器相结合；诸如</span><a href='https://github.com/google-deepmind/mujoco'><span>MuJoCo</span></a><span>、</span><a href='https://developer.nvidia.com/isaac'><span>Isaac</span></a><span>和</span><a href='https://github.com/Genesis-Embodied-AI/Genesis'><span>Genesis</span></a><span>等平台可以无缝集成到机器人学习流程中。然而，在这些引擎中创建逼真的场景和特定任务的世界通常需要大量的人工操作，并且限制了灵活性。最近的研究开始探索使用 LLM 代理自动生成环境，这有望实现快速、按需创建新场景。</span></p><p><span>另一种世界建模方法是使用神经网络生成明确的 3D/4D 世界表示，例如 3D/4D 高斯散射。该领域的最新研究成果包括</span><a href='https://snap-research.github.io/wonderland/'><span>Wonderland</span></a><span>、</span><a href='https://kovenyu.com/wonderworld/'><span>WonderWorld</span></a><span>、</span><a href='https://szymanowiczs.github.io/bolt3d'><span>Bolt3D</span></a><span>等。World </span><a href='https://www.worldlabs.ai/blog'><span>Labs</span></a><span>和</span><a href='https://www.spaitial.ai/'><span>SpAItial</span></a><span>等初创公司似乎也在朝着这个方向努力。</span></p><div style="max-width:760px; margin:18px auto; overflow-x:auto;">
+<table style="width:100%; border-collapse:separate; border-spacing:2px; background:#fff; font-size:14px; line-height:1.4; text-align:center;">
+  <thead>
+    <tr style="background:#4e73b9; color:#fff;">
+      <th style="width:25%; padding:10px 8px; border:0;"></th>
+      <th style="width:25%; padding:10px 8px; border:0;">Simulation Platform</th>
+      <th style="width:25%; padding:10px 8px; border:0;">Neural 3D/4D</th>
+      <th style="width:25%; padding:10px 8px; border:0;">Video World Model</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background:#d0d6e7;">
+      <td style="padding:9px 8px; border:0; color:#202735; font-weight:600;">Dynamic Physics</td>
+      <td style="padding:9px 8px; border:0; color:#587b42; font-weight:600;">Good</td>
+      <td style="padding:9px 8px; border:0; color:#ad2929; font-weight:600;">N/A</td>
+      <td style="padding:9px 8px; border:0; color:#b56732; font-weight:600;">Mid</td>
+    </tr>
+    <tr style="background:#e8ebf3;">
+      <td style="padding:9px 8px; border:0; color:#202735; font-weight:600;">3D Consistency</td>
+      <td style="padding:9px 8px; border:0; color:#587b42; font-weight:600;">High</td>
+      <td style="padding:9px 8px; border:0; color:#587b42; font-weight:600;">High</td>
+      <td style="padding:9px 8px; border:0; color:#ad2929; font-weight:600;">Low</td>
+    </tr>
+    <tr style="background:#d0d6e7;">
+      <td style="padding:9px 8px; border:0; color:#202735; font-weight:600;">Photorealism</td>
+      <td style="padding:9px 8px; border:0; color:#b56732; font-weight:600;">Mid</td>
+      <td style="padding:9px 8px; border:0; color:#b56732; font-weight:600;">Mid</td>
+      <td style="padding:9px 8px; border:0; color:#587b42; font-weight:600;">High</td>
+    </tr>
+    <tr style="background:#e8ebf3;">
+      <td style="padding:9px 8px; border:0; color:#202735; font-weight:600;">Speed</td>
+      <td style="padding:9px 8px; border:0; color:#b56732; font-weight:600;">Mid</td>
+      <td style="padding:9px 8px; border:0; color:#587b42; font-weight:600;">High</td>
+      <td style="padding:9px 8px; border:0; color:#ad2929; font-weight:600;">Low</td>
+    </tr>
+    <tr style="background:#d0d6e7;">
+      <td style="padding:9px 8px; border:0; color:#202735; font-weight:600;">Generalizability</td>
+      <td style="padding:9px 8px; border:0; color:#ad2929; font-weight:600;">Low</td>
+      <td style="padding:9px 8px; border:0; color:#b56732; font-weight:600;">Mid</td>
+      <td style="padding:9px 8px; border:0; color:#587b42; font-weight:600;">High</td>
+    </tr>
+  </tbody>
+</table>
+<p style="margin:10px 0 0; text-align:center; color:#777; font-size:13px; font-style:italic;">不同世界模拟方法的优缺点。</p>
+</div><p>&nbsp;</p><p><span>不同的方法各有优缺点。基于物理的模拟器在生成一致且符合物理规律的结果方面更为有效，但通常需要人工设计特定任务场景。此外，传统的渲染流程在实时计算的限制下难以实现完全逼真的效果。神经3D方法能够生成渲染速度快且符合3D规律的表示，但它们在模拟动态场景方面通常面临挑战。而基于视频的世界模型则具有高度的适应性，能够生成视觉效果惊艳、逼真的输出。然而，如何在实时渲染的同时实现3D一致性——我之前称之为“持久性”和“实时性”的挑战——仍然是一个尚未解决的问题。短期来看，开发结合不同范式优势的混合模型或许是一个有益的方案。例如，</span><a href='https://kyleleey.github.io/WonderPlay/'><span>WonderPlay</span></a><span>将基于物理的模拟器、3D高斯表示和视频扩散模型结合起来，生成具有物理精确动态效果的逼真世界。</span></p><p><strong><span>免责声明：</span></strong><span>作者并非基于物理的模拟或神经渲染领域的专家。请谨慎看待我在此提出的观点。</span></p><p>&nbsp;</p><h2 id='4-结论'><span>4. 结论</span></h2><p><span>“世界模型”一词含义丰富：它既可以指预测高层次结果的抽象模型，也可以指与现实难以区分的精细模拟。在这篇博文中，我将重点讨论后一种定义，概述从视频生成过渡到真正的视频世界建模所需的关键特性。这是一个激动人心的时代，因为由世界模型驱动的交互式媒体有望成为内容创作的下一个前沿领域（继图像和视频生成之后），同时，世界模型也将推动机器人学习领域出现变革性的新范式。</span></p><p><span>引用</span></p><p><span>如果您觉得这篇文章有用，请考虑引用：</span></p><pre class="md-fences md-end-block md-fences-with-lineno ty-contain-cm modeLoaded" spellcheck="false" lang="latex"><div class="CodeMirror cm-s-inner cm-s-null-scroll CodeMirror-wrap" lang="latex"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 10px; left: 32px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: medium;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 28px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: medium;"><div class="CodeMirror-measure"><div class="CodeMirror-linenumber CodeMirror-gutter-elt"><div>6</div></div></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: -28px; width: 28px;"></div><div class="CodeMirror-gutter-wrapper CodeMirror-activeline-gutter" style="left: -28px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt CodeMirror-linenumber-show" style="left: 0px; width: 19px;">1</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">@misc<span class="cm-bracket">{</span>huang2025towards,</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -28px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 19px;">2</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  title=<span class="cm-bracket">{</span>迈向视频世界模型<span class="cm-bracket">}</span>,</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -28px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 19px;">3</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  author=<span class="cm-bracket">{</span>黄迅<span class="cm-bracket">}</span>,</span></pre></div><div style="position: relative;" class=""><div class="CodeMirror-gutter-wrapper" style="left: -28px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 19px;">4</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  year=<span class="cm-bracket">{</span><span class="cm-atom">2025</span><span class="cm-bracket">}</span>,</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -28px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 19px;">5</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">  url=<span class="cm-bracket">{</span>https://www.xunhuang.me/blogs/world_model.html<span class="cm-bracket">}</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -28px;"><div class="CodeMirror-linenumber CodeMirror-gutter-elt CodeMirror-linenumber-show" style="left: 0px; width: 19px;">6</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-bracket">}</span></span></pre></div></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 144px;"></div><div class="CodeMirror-gutters" style="height: 144px; left: 0px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 27px;"></div></div></div></div></pre><p>&nbsp;</p><div class='footnotes-area'  ><hr/>
+<div class='footnote-line'><span class='md-fn-count'>1</span> <strong><span>因果性(Causality)</span></strong><span>:在此语境下,因果性指时间的单向性,即过去决定未来,而不是相反。它不同于因果机器学习中的概念,后者关注的是如何区分因果关系与相关性。</span> <a name='dfref-footnote-1' href='#ref-footnote-1' title='回到文档' class='reversefootnote' >↩</a></div></div></div></div>
+
+<script>(function(){var e=document.body.parentElement,t=[],n=null,i=document.body.classList.contains("typora-export-collapse-outline"),r=function(e,t,n){document.addEventListener(e,function(e){if(!e.defaultPrevented)for(var i=e.target;i&&i!=this;i=i.parentNode)if(i.matches(t)){!1===n.call(i,e)&&(e.preventDefault(),e.stopPropagation());break}},!1)};function o(){return e.scrollTop}r("click",".outline-expander",function(e){var t=this.closest(".outline-item-wrapper").classList;return t.contains("outline-item-open")?t.remove("outline-item-open"):t.add("outline-item-open"),d(),!1}),r("click",".outline-item",function(e){var t=this.querySelector(".outline-label");if(location.hash="#"+t.getAttribute("href"),i){var n=this.closest(".outline-item-wrapper").classList;n.contains("outline-item-open")||n.add("outline-item-open"),c(),n.add("outline-item-active")}});var a,s,l=function(){var e=o();n=null;for(var i=0;i<t.length&&t[i][1]-e<60;i++)n=t[i]},c=function(){document.querySelectorAll(".outline-item-active").forEach(e=>e.classList.remove("outline-item-active")),document.querySelectorAll(".outline-item-single.outline-item-open").forEach(e=>e.classList.remove("outline-item-open"))},d=function(){if(n){c();var e=document.querySelector('.outline-label[href="#'+(CSS.escape?CSS.escape(n[0]):n[0])+'"]');if(e)if(i){var t=e.closest(".outline-item-open>ul>.outline-item-wrapper");if(t)t.classList.add("outline-item-active");else{for(var r=(e=e.closest(".outline-item-wrapper")).parentElement.closest(".outline-item-wrapper");r;)r=(e=r).parentElement.closest(".outline-item-wrapper");e.classList.add("outline-item-active")}}else e.closest(".outline-item-wrapper").classList.add("outline-item-active")}};window.addEventListener("scroll",function(e){a&&clearTimeout(a),a=setTimeout(function(){l(),d()},300)});var u=function(){s=setTimeout(function(){!function(){t=[];var e=o();document.querySelector("#write").querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(n=>{var i=n.getAttribute("id");t.push([i,e+n.getBoundingClientRect().y])})}(),l(),d()},300)};window.addEventListener("resize",function(e){s&&clearTimeout(s),u()}),u()})();</script></body>
+</html>

@@ -29,6 +29,8 @@
         <link href="../../css/sticky-footer-navbar.css" rel="stylesheet">
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/default.css" rel="stylesheet">
+        <link href="../../css/content-polish.css" rel="stylesheet">
+        <link href="../../css/navbar-consistency.css" rel="stylesheet">
 
         <link href="../../css/bootstrap-carousel.css" rel="stylesheet">
 
@@ -70,9 +72,9 @@
 
     </head>
 
-    <body>
+    <body class="legacy-demo">
         <div id="wrap">
-            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <nav class="navbar navbar-inverse navbar-static-top site-navbar" role="navigation">
                 <div class="container">
                     <!--Toggle header for mobile-->
                     <div class="navbar-header">
@@ -90,7 +92,7 @@
                             <li><a href="../../"><span class="glyphicon glyphicon-pencil"></span>  Blog</a></li>
                             <li><a href="../../about.html"><span class="glyphicon glyphicon-user"></span>  About</a></li>
                             <li><a href="../../contact.html"><span class="glyphicon glyphicon-envelope"></span>  Contact</a></li>
-                            <li><a href="../../demo.html"><span class="glyphicon glyphicon-play"></span>  ALGO</a></li>
+                            <li class="active"><a href="../../demo.html"><span class="glyphicon glyphicon-play"></span>  ALGO</a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -103,6 +105,7 @@
                         <div class="col-md-8"> -->
 
 
+                            <a class="demo-back" href="../../demo.html">← All demos</a>
                             <h2>Video Enhancement</h2>
                             <!--
                             <a href="https://www.encoding.com/">
@@ -111,6 +114,7 @@
 
                             <h3>Reference-based restoration for mixed-resolution video coding</h3>
                             <li>Example (using the 1st frame as reference)</li>
+                            <div class="demo-clip demo-clip--single">
                             <video
                                 id="r3n-video"
                                 class="video-js vjs-fluid "
@@ -121,7 +125,7 @@
                                 poster="images/R3N.png"
                                 data-setup="{}"
                               >
-                                <source src="video/compare.mp4" type="video/mp4" />
+                                <source src="video/demo1_compare.mp4" type="video/mp4" />
                                 <!-- <source src="video/.webm" type="video/webm" /> -->
                                 <p class="vjs-no-js">
                                   To view this video please enable JavaScript, and consider upgrading to a
@@ -131,10 +135,12 @@
                                   >
                                 </p>
                             </video>
+                            </div>
 
                             <br>
 
                             <li>Ablation: Deformable convolutions</li>
+                            <div class="demo-clip demo-clip--single">
                             <video
                                 id="r2n_r3n"
                                 class="video-js vjs-fluid "
@@ -145,7 +151,7 @@
                                 poster="images/R2vsR3.png"
                                 data-setup="{}"
                               >
-                                <source src="video/R2vsR3.mp4" type="video/mp4" />
+                                <source src="video/demo1_r2_vs_r3.mp4" type="video/mp4" />
                                 <!-- <source src="video/.webm" type="video/webm" /> -->
                                 <p class="vjs-no-js">
                                   To view this video please enable JavaScript, and consider upgrading to a
@@ -155,6 +161,7 @@
                                   >
                                 </p>
                             </video>
+                            </div>
 
                             <script src="https://vjs.zencdn.net/7.8.4/video.js"></script>
 

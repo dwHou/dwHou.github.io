@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" width="680" height="380" role="img" aria-label="System harness diagram: Conductor (CPU) and Performer (GPU) stream synced audio and video.">
+  <style>
+    text { font-family: Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-weight: 500; }
+    .title { fill: #fafafa; font-size: 15px; }
+    .node-text { fill: #fafafa; font-size: 13px; }
+    .label { fill: #a1a1aa; font-size: 12px; }
+    .label-sm { fill: #a1a1aa; font-size: 11px; }
+    .badge-text { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; }
+    .panel { fill: rgba(255,255,255,0.02); stroke: rgba(255,255,255,0.15); stroke-width: 2; }
+    .node { fill: rgba(255,255,255,0.04); stroke: rgba(255,255,255,0.15); stroke-width: 2; }
+    .queue { fill: none; stroke: rgba(255,255,255,0.2); stroke-width: 2; }
+    .blue { fill: rgba(96,165,250,0.6); }
+    .green { fill: rgba(74,222,128,0.6); }
+    .divider line { stroke: rgba(255,255,255,0.08); stroke-width: 1.5; }
+    .arrow { fill: none; stroke: rgba(255,255,255,0.35); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .spinner { fill: none; stroke: rgba(255,255,255,0.45); stroke-width: 2; stroke-linecap: round;
+               transform-box: fill-box; transform-origin: center; animation: spin 4s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+  <!-- 背景(想要透明就删掉这一行) -->
+  <rect width="680" height="380" fill="#0a0a0a"/>
+
+  <!-- Conductor -->
+  <rect class="panel" x="96" y="28" width="216" height="340" rx="20"/>
+  <text class="title" x="118" y="59">Conductor</text>
+  <rect x="196.4" y="45" width="42" height="19" rx="6" fill="rgba(59,130,246,0.1)" stroke="rgba(59,130,246,0.4)" stroke-width="1.5"/>
+  <text class="badge-text" x="217.4" y="58" text-anchor="middle" fill="#93c5fd">CPU</text>
+
+  <!-- Performer -->
+  <rect class="panel" x="504" y="96" width="168" height="164" rx="20"/>
+  <text class="title" x="526" y="127">Performer</text>
+  <rect x="604.4" y="113" width="42" height="19" rx="6" fill="rgba(34,197,94,0.1)" stroke="rgba(34,197,94,0.4)" stroke-width="1.5"/>
+  <text class="badge-text" x="625.4" y="126" text-anchor="middle" fill="#4ade80">GPU</text>
+
+  <!-- Raw audio buffer -->
+  <text class="label" x="204" y="91" text-anchor="middle">Raw audio buffer</text>
+  <rect class="blue" x="151" y="103" width="22" height="24" rx="5"/>
+  <rect class="blue" x="207" y="103" width="22" height="24" rx="5"/>
+  <rect class="blue" x="235" y="103" width="22" height="24" rx="5"/>
+  <g class="divider">
+    <line x1="148" y1="101" x2="148" y2="129"/><line x1="176" y1="101" x2="176" y2="129"/>
+    <line x1="204" y1="101" x2="204" y2="129"/><line x1="232" y1="101" x2="232" y2="129"/>
+    <line x1="260" y1="101" x2="260" y2="129"/>
+  </g>
+  <rect class="queue" x="120" y="100" width="168" height="30" rx="8"/>
+
+  <!-- A/V syncer -->
+  <rect class="node" x="138" y="216" width="132" height="48" rx="12"/>
+  <path class="spinner" d="M164 232 A8 8 0 1 1 157.07 236"/>
+  <text class="node-text" x="182" y="244.5">A/V syncer</text>
+
+  <!-- Output A/V buffer -->
+  <text class="label" x="204" y="342" text-anchor="middle">Output A/V buffer</text>
+  <rect class="green" x="123" y="293" width="22" height="24" rx="5"/>
+  <rect class="green" x="151" y="293" width="22" height="24" rx="5"/>
+  <rect class="green" x="207" y="293" width="22" height="24" rx="5"/>
+  <g class="divider">
+    <line x1="148" y1="291" x2="148" y2="319"/><line x1="176" y1="291" x2="176" y2="319"/>
+    <line x1="204" y1="291" x2="204" y2="319"/><line x1="232" y1="291" x2="232" y2="319"/>
+    <line x1="260" y1="291" x2="260" y2="319"/>
+  </g>
+  <rect class="queue" x="120" y="290" width="168" height="30" rx="8"/>
+
+  <!-- Job queue -->
+  <text class="label" x="406" y="91" text-anchor="middle">Job queue</text>
+  <rect class="blue" x="409" y="103" width="18.67" height="24" rx="5"/>
+  <rect class="blue" x="433.67" y="103" width="18.67" height="24" rx="5"/>
+  <rect class="blue" x="458.33" y="103" width="18.67" height="24" rx="5"/>
+  <g class="divider">
+    <line x1="356.67" y1="101" x2="356.67" y2="129"/><line x1="381.33" y1="101" x2="381.33" y2="129"/>
+    <line x1="406" y1="101" x2="406" y2="129"/><line x1="430.67" y1="101" x2="430.67" y2="129"/>
+    <line x1="455.33" y1="101" x2="455.33" y2="129"/>
+  </g>
+  <rect class="queue" x="332" y="100" width="148" height="30" rx="8"/>
+
+  <!-- Result queue -->
+  <text class="label" x="406" y="216" text-anchor="middle">Result queue</text>
+  <rect class="green" x="335" y="228" width="18.67" height="24" rx="5"/>
+  <rect class="green" x="359.67" y="228" width="18.67" height="24" rx="5"/>
+  <g class="divider">
+    <line x1="356.67" y1="226" x2="356.67" y2="254"/><line x1="381.33" y1="226" x2="381.33" y2="254"/>
+    <line x1="406" y1="226" x2="406" y2="254"/><line x1="430.67" y1="226" x2="430.67" y2="254"/>
+    <line x1="455.33" y1="226" x2="455.33" y2="254"/>
+  </g>
+  <rect class="queue" x="332" y="225" width="148" height="30" rx="8"/>
+
+  <!-- Inference -->
+  <rect class="node" x="522" y="154" width="132" height="48" rx="12"/>
+  <path class="spinner" d="M548 170 A8 8 0 1 1 541.07 174"/>
+  <text class="node-text" x="566" y="182.5">Inference</text>
+
+  <!-- 输入/输出文字与箭头 -->
+  <text class="label" x="6" y="101">Input audio</text>
+  <path class="arrow" d="M14 115 L116 115 M111.5 110.5 L116 115 L111.5 119.5"/>
+  <text class="label" x="6" y="291">Synced A/V</text>
+  <path class="arrow" d="M116 305 L14 305 M18.5 300.5 L14 305 L18.5 309.5"/>
+
+  <!-- 内部箭头 -->
+  <path class="arrow" d="M292 115 L328 115 M323.5 110.5 L328 115 L323.5 119.5"/>
+  <path class="arrow" d="M484 115 L490 115 Q498 115 498 123 L498 158 Q498 166 506 166 L518 166 M513.5 161.5 L518 166 L513.5 170.5"/>
+  <path class="arrow" d="M522 190 L506 190 Q498 190 498 198 L498 232 Q498 240 490 240 L484 240 M488.5 235.5 L484 240 L488.5 244.5"/>
+  <path class="arrow" d="M328 240 L274 240 M278.5 235.5 L274 240 L278.5 244.5"/>
+  <text class="label-sm" x="301" y="230" text-anchor="middle">frames</text>
+  <path class="arrow" d="M204 134 L204 212 M199.5 207.5 L204 212 L208.5 207.5"/>
+  <text class="label-sm" x="214" y="177">audio</text>
+  <path class="arrow" d="M204 268 L204 286 M199.5 281.5 L204 286 L208.5 281.5"/>
+</svg>

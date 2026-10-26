@@ -29,6 +29,8 @@
         <link href="../../css/sticky-footer-navbar.css" rel="stylesheet">
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/default.css" rel="stylesheet">
+        <link href="../../css/content-polish.css" rel="stylesheet">
+        <link href="../../css/navbar-consistency.css" rel="stylesheet">
 
         <link href="../../css/bootstrap-carousel.css" rel="stylesheet">
 
@@ -70,9 +72,9 @@
 
     </head>
 
-    <body>
+    <body class="legacy-demo">
         <div id="wrap">
-            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <nav class="navbar navbar-inverse navbar-static-top site-navbar" role="navigation">
                 <div class="container">
                     <!--Toggle header for mobile-->
                     <div class="navbar-header">
@@ -90,7 +92,7 @@
                             <li><a href="../../"><span class="glyphicon glyphicon-pencil"></span>  Blog</a></li>
                             <li><a href="../../about.html"><span class="glyphicon glyphicon-user"></span>  About</a></li>
                             <li><a href="../../contact.html"><span class="glyphicon glyphicon-envelope"></span>  Contact</a></li>
-                            <li><a href="../../demo.html"><span class="glyphicon glyphicon-play"></span>  ALGO</a></li>
+                            <li class="active"><a href="../../demo.html"><span class="glyphicon glyphicon-play"></span>  ALGO</a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -103,6 +105,7 @@
                         <div class="col-md-8"> -->
 
 
+                            <a class="demo-back" href="../../demo.html">← All demos</a>
                             <h2>Zoom Video Quality</h2>
                             <!--
                             <a href="https://www.encoding.com/">
@@ -111,6 +114,7 @@
 
                             <li>Real-time super-resolution in Zoom video conferencing <a href="https://zoom.us/download">(Released)</a></li>
                             The left side is the result of a specific cubic convolution interpolation, and the right side is our SR method used in the Zoom products. (Note: The video embedded in this web page has been recompressed.)
+                            <div class="demo-clip demo-clip--single">
                             <video
                                 id="video_chat"
                                 class="video-js vjs-fluid "
@@ -120,7 +124,7 @@
                                 height="256"
                                 data-setup="{}"
                               >
-                                <source src="video/zoom-sr.mp4" type="video/mp4" />
+                                <source src="video/demo3_zoom_sr.mp4" type="video/mp4" />
                                 <!-- <source src="video/.webm" type="video/webm" /> -->
                                 <p class="vjs-no-js">
                                   To view this video please enable JavaScript, and consider upgrading to a
@@ -130,6 +134,7 @@
                                   >
                                 </p>
                             </video>
+                            </div>
 
                             <br>
                             <li>Minimum hardware is Intel® HD Graphics 520</li>

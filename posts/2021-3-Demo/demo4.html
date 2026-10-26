@@ -29,6 +29,8 @@
         <link href="../../css/sticky-footer-navbar.css" rel="stylesheet">
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/default.css" rel="stylesheet">
+        <link href="../../css/content-polish.css" rel="stylesheet">
+        <link href="../../css/navbar-consistency.css" rel="stylesheet">
 
         <link href="../../css/bootstrap-carousel.css" rel="stylesheet">
 
@@ -70,9 +72,9 @@
 
     </head>
 
-    <body>
+    <body class="legacy-demo">
         <div id="wrap">
-            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <nav class="navbar navbar-inverse navbar-static-top site-navbar" role="navigation">
                 <div class="container">
                     <!--Toggle header for mobile-->
                     <div class="navbar-header">
@@ -90,7 +92,7 @@
                             <li><a href="../../"><span class="glyphicon glyphicon-pencil"></span>  Blog</a></li>
                             <li><a href="../../about.html"><span class="glyphicon glyphicon-user"></span>  About</a></li>
                             <li><a href="../../contact.html"><span class="glyphicon glyphicon-envelope"></span>  Contact</a></li>
-                            <li><a href="../../demo.html"><span class="glyphicon glyphicon-play"></span>  ALGO</a></li>
+                            <li class="active"><a href="../../demo.html"><span class="glyphicon glyphicon-play"></span>  ALGO</a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -103,6 +105,7 @@
                         <div class="col-md-8"> -->
 
 
+                            <a class="demo-back" href="../../demo.html">← All demos</a>
                             <h2>Zoom Chat Avatar</h2>
                             <!--
                             <a href="https://www.encoding.com/">
@@ -113,6 +116,7 @@
                             <!-- We wanted to share with you our thoughts on the future of AI Chat. Recently, Chat-GPT has made significant progress in natural language understanding and generation, but we believe that it's important for AI to have an image, identity, and voice in order to truly engage with users.
 
                             To achieve this, we propose combining new generation chatbot, text-to-speech, and conversational head generation technologies to create a customizable portrait and voice for knowledgeable AI. This would have numerous applications, including in products like ZoomIQ and Zoom meetings.-->
+                            <div class="demo-clip demo-clip--single">
                             <video
                                 id="video_chat"
                                 class="video-js vjs-fluid "
@@ -122,7 +126,7 @@
                                 height="256"
                                 data-setup="{}"
                               >
-                                <source src="video/chatavatar.mp4" type="video/mp4" />
+                                <source src="video/demo4_chat_avatar.mp4" type="video/mp4" />
                                 <!-- <source src="video/.webm" type="video/webm" /> -->
                                 <p class="vjs-no-js">
                                   To view this video please enable JavaScript, and consider upgrading to a
@@ -132,6 +136,7 @@
                                   >
                                 </p>
                             </video>
+                            </div>
 
                             <br>
                             <li>support by Claude @ Anthropic</li>

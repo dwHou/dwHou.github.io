@@ -831,6 +831,14 @@ ECCV 2022
 
 本文方法：因为人脸的结构性信息非常强，人脸复原的效果（本文用GPEN）远远好于自然图像复原的效果。所以我们可以先复原人脸，然后再反推降质方法，应用到整张自然图像上。
 
+
+
+#### :computer: some NR-IQA methods
+
+微软用到的无参质量评价：
+
+MANIQA, MUSIQ, CLIPQA
+
 ## 人脸复原
 
 #### :page_with_curl:DFDNet
@@ -1529,6 +1537,22 @@ Confidence: Confidence is a score of how much closer the mean feature-wise dista
 
 
 
+#### :page_with_curl:LiveSync
+
+<img src="assets/image-20261022151927954.png" alt="image-20261022151927954" style="zoom:50%;" />
+
+> SyncAnyone [27] and X-Dub [9] explicitly construct the missing supervision: a mask-based generator synthesizes pseudo pairs, which train a separate mask-free model. 
+>
+> We ask whether better editing supervision can instead improve the same mask-based model. 
+>
+> Unlike two-model bootstrapping, the same model is refined throughout, without a separate mask-free student.
+
+感觉这个方法的好处，主要是形成了基于一套mask-based模型的不断迭代训练，形成提升效果的飞轮：模型构造的pseudo self-reference质量越好，则模型把它作为数据集训练的模型效果越好，从而使pseudo self-reference的质量更好。
+
+提到了boundary-aware padding的技巧，如果desired face box超出了画面外，如果直接resize，可能会使得数据OOD，造成时域上的抖动或几何形变。其实就是超出的部分填黑。
+
+
+
 #### :page_with_curl:FlashLips
 
 https://arxiv.org/pdf/2512.20033
@@ -1542,6 +1566,12 @@ https://arxiv.org/pdf/2512.20033
 > 个人感受是它在latent space制造companion（其它口型的输入），我们通用模型是在image space制造companion。 本质上差别不大，但在latent space可能对图像线索的泄漏要少一点。
 >
 > 相关知识参考From Inpainting to Editing.
+
+
+
+#### :page_with_curl:DC-VAE
+
+Real-Time Generation of Streamable Talking Portrait Video with Reference-Guided Deep Compression VAEs
 
 #### :computer: SyncTalk_2D
 
@@ -1666,11 +1696,13 @@ stage2 和 stage1主要差异（全由yaml配置指定）：
 
 https://www.heygen.com/research/avatar-v-model
 
-#### :page_with_curl:TAVR (Heygen)
+#### :computer:TAVR (Heygen)
+
+SIGGRAPH Asia 2026
 
 https://www.heygen.com/research/tavr
 
-
+https://github.com/heygen-com/TAVR
 
 #### :page_with_curl:EditYourself
 
@@ -1707,6 +1739,20 @@ mask-based inpainting model 来引导 mask-free editing model。因为mask会带
 1. high noise，主要是flow-matching loss训练生成器。
 2. mid noise，主要是syncnet loss训练LoRA。
 3. low noise，主要是identity loss训练另一个LoRA。
+
+
+
+#### :computer:CWM (lemonslice)
+
+[character world model](https://lemonslice.com/blog/what-is-a-character-world-model) 角色世界模型
+
+角色世界模型是以角色为中心的世界模型，该角色能够实时聆听、说话和做出反应。
+
+diffusion步数压缩，参考论文：[CausVid](https://github.com/tianweiy/CausVid)、[Self-Forcing](https://github.com/guandeh17/Self-Forcing)，还有自研一些sparse attention（我觉得[MonarchRT](https://github.com/Infini-AI-Lab/MonarchRT)这些可能类似，都可以参考）
+
+可以依次研究这一系列论文，都是开源代码，把这个领域打通。
+
+[xun huang](https://www.xunhuang.me/) 关于世界模型的研究可以追踪下。
 
 
 
