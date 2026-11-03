@@ -1551,6 +1551,14 @@ Confidence: Confidence is a score of how much closer the mean feature-wise dista
 
 提到了boundary-aware padding的技巧，如果desired face box超出了画面外，如果直接resize，可能会使得数据OOD，造成时域上的抖动或几何形变。其实就是超出的部分填黑。
 
+#### :page_with_curl:SyncAnyone
+
+认为mask-inpainting-based方法，mask小了模型会找图像线索的捷径，mask大了导致关键的背景和id信息丢失。
+
+这个工作提出了Progressive Self-Correction，
+
+其实和X-Dub就类似，只是该工作把数据构造的mask-based的diffusion网络进行了蒸馏，用了Distribution Matching Distillation (DMD)技术，不然在线数据合成太慢了。
+
 
 
 #### :page_with_curl:FlashLips
@@ -1567,7 +1575,7 @@ https://arxiv.org/pdf/2512.20033
 >
 > 相关知识参考From Inpainting to Editing.
 
-
+可以复现出基础效果。
 
 #### :page_with_curl:DC-VAE
 
@@ -1593,7 +1601,13 @@ SyncTalk：
 
 #### :computer: Ultralight-Digital-Human
 
+#### :computer: jumpcut-smoothing
 
+jumpcut通常结合Video infill + lip-sync技术。
+
+We treat the cut as an inpainting problem in time. and we **always run Video Regenerate over the bridge to correct the lip-sync**.
+
+https://descriptinc.github.io/jumpcut-smoothing/
 
 ### 2. Diffusion Avatar
 
@@ -1755,6 +1769,10 @@ diffusion步数压缩，参考论文：[CausVid](https://github.com/tianweiy/Cau
 [xun huang](https://www.xunhuang.me/) 关于世界模型的研究可以追踪下。
 
 
+
+#### :computer:TAVUS
+
+To build it, we distilled a large, bidirectional, many-step diffusion model into a few-step autoregressive generator. The generator takes a reference image together with streaming audio and controls, and produces one latent at a time. The distillation ran in three stages. First, we distilled the teacher into a few-step student with Distribution Matching Distillation. This student is fast but not autoregressive; it generates a long video as a single long chunk. Second, we converted it into an autoregressive model with teacher forcing, so as to arrive in an architecture that can generate in a few steps one latent at a time. Third, we trained with Self-Forcing so that we can run long autoregressive rollouts without drift, and we added a mechanism acting on the history frames, the previously generated frames the model continues from, to improve stability.
 
 ### 3. PhotoAnimate
 
